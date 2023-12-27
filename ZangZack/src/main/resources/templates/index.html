@@ -1,301 +1,312 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-
-<style>
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-
-
-a {
-    text-decoration: none;
-}
-
-.wrap {
-    padding: 40px 0;
-    display:inline-block;
-    width:300px;
-    background-color:rgba(173,178,169,0.5);
-    position: absolute;
-    left: 500px;
-    top:70px;
-    height:700px;
-    max-height: 700px; /* 최대 높이를 지정 (원하는 값으로 조절) */
-    overflow-y: auto; /* 세로 스크롤이 필요한 경우 자동으로 생성 */
-    
-}
-.test{
- 	position: absolute;
- 	top:70px;
-}
-
-.move_test{
-	position: absolute;
-	top:100px;
-	left: 400px;
-	z-index: 0;
-}
-.wrap .chat {
-    display: flex;
-    align-items: flex-start;
-    padding: 20px;
-}
-
-.wrap .chat .icon {
-    position: relative;
-    overflow: hidden;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #F2ECE3;
-}
-
-.wrap .chat .icon i {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    font-size: 2.5rem;
-    color: #F2ECE3;
-    transform: translateX(-50%);
-}
-
-.wrap .chat .textbox {
-    position: relative;
-    display: inline-block;
-    max-width: calc(100% - 70px);
-    padding: 10px;
-    margin-top: 7px;
-    font-size: 13px;
-    border-radius: 10px;
-}
-
-.wrap .chat .textbox::before {
-    position: absolute;
-    display: block;
-    top: 0;
-    font-size: 1.5rem;
-}
-
-.wrap .ch1 .textbox {
-    margin-left: 20px;
-    background-color: #F2ECE3;
-}
-
-.wrap .ch1 .textbox::before {
-    left: -15px;
-    content: "◀";
-    color: #F2ECE3;
-}
-
-.wrap .ch2 {
-    flex-direction: row-reverse;
-}
-
-.wrap .ch2 .textbox {
-    margin-right: 20px;
-    background-color: #2B3004;
-    color: #F2ECE3;
-}
-
-.wrap .ch2 .textbox::before {
-    right: -15px;
-    content: "▶";
-    color: #2B3004;
-}
-
- .chat-title {
-        display: flex;
-        padding: 10px;
-        position: absolute;
-        left: 800px;
-        top:70px;
-        width: 220px;
-        height:70px;
-        background: linear-gradient(to bottom, #2B3004,#2B3004, #000); /* 그라데이션 추가 */
-        box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.0);
-        color: #F2ECE3;
-        z-index: 3;
-        font-size: 27px;
-}
-
-
-
- .chat-input {
-        display: flex;
-        position: absolute;
-        padding-top:4px;
-        left: 0;
-        top:670px;
-        width: 800px;
-        height:100px;
-        background-color: #F2ECE3;
-        box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.0);
-}
-
-  .chat-input input {
-      flex: 1;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 0px;
-      
-  }
-
-  .chat-input button {
-      padding: 8px 16px;
-      background-color: #F9612B;
-      color: #fff;
-      border: none;
-      border-radius: 0px;
-      cursor: pointer;
-  }
-  .img-style{
-  	width: 2000px;
-  	height: 1000px;
-  	background-color:#F2ECE3;
-  }
+  <meta charset="UTF-8">
+  <title>Insert title here</title>
   
-  .chat-list {
-    display: flex;
-    flex-direction: column;
-    width: 220px;
-    height:630px;
-    position: absolute;
-    left: 800px;
-    top: 140px;
-    padding: 10px;
-    background-color: rgba(173, 178, 169, 0.5);
-    max-height: 770px;
-    overflow-y: auto;
-    text-align: center;
-}
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+  <link href="css/admin/memberList.css" rel="stylesheet">
+  <style>
+  .modal {
+        position: absolute;
+        top: 0;
+        left: 0;
 
-.chat-list-item {
-    margin-bottom: 5px;
-    padding: 5px;
-    background-color: rgba(173, 178, 169, 0);
-    border-radius: 5px;
-    border-bottom: 1px solid rgba(173, 178, 169);
-    
-}
+        width: 100%;
+        height: 100%;
 
-/* 스크롤바 디자인 변경 */
-.chat-list::-webkit-scrollbar {
-    width: 10px; /* 스크롤바의 너비 */
-    min-height: 20px;
-    max-height: 30px; 
-}
+        display: none;
 
-.chat-list::-webkit-scrollbar-thumb {
-    background-color: #2B3004; /* 스크롤바 색상 */
-    border: 2px solid #2B3010; /* 스크롤바 막대 테두리 설정  */
-    
-    
-}
+        background-color: rgba(0, 0, 0, 0.4);
+      }
 
-.chat-list::-webkit-scrollbar-track {
-    background-color: #ADB2A9; /* 스크롤바 트랙 색상 */
-    
-}
+      .modal.show {
+        display: block;
+      }
 
-/* 스크롤바 디자인 변경 */
-.wrap::-webkit-scrollbar {
-    width: 10px; /* 스크롤바의 너비 */
-    min-height: 20px;
-    max-height: 30px; 
-}
-
-.wrap::-webkit-scrollbar-thumb {
-    background-color: #2B3004; /* 스크롤바 색상 */
-    border: 2px solid #2B3010; /* 스크롤바 막대 테두리 설정  */
-    
-    
-}
-
-.wrap::-webkit-scrollbar-track {
-    background-color: #ADB2A9; /* 스크롤바 트랙 색상 */
-    
-}
-
-</style>
-
+      .modal_body {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 500px;
+        height: 700px;
+        padding: 40px;
+        background-color: rgb(255, 255, 255);
+        border-radius: 10px;
+        box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+        transform: translateX(-50%) translateY(-50%);
+      }
+      .modal_title{
+      	text-align: center;
+      	font-size: 2em;
+      	font-weight: bold;
+      	padding-bottom: 5px;
+      }
+      .modal_body p{
+      	padding: 7px;
+      }
+  </style>
 </head>
 <body>
-	<div th:insert="~{common/navbar :: navbar}"></div>
-	<div class="img-style">
+	<div th:replace="~{common/adminNav :: adminNav}"></div>
+	
+	<div style="height:100px; width:100%;"></div>
+	<div id="orderListWrapped">
+      <h1>회원 관리</h1>
+      
+      <button class="cateBtn active">회원 목록</button>      
+      <div style="float:right;">
+         <div class="nav-item dropdown">
+		    <button class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-expanded="false">회원 검색</button>
+		    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+		        <li><a class="dropdown-item" href="#" onclick="showSearch('search1', 'ID 검색')">ID 검색</a></li>
+		        <li><a class="dropdown-item" href="#" onclick="showSearch('search2', '이름 검색')">이름 검색</a></li>
+		        <li><a class="dropdown-item" href="#" onclick="showSearch('search3', '연락처 검색')">연락처 검색</a></li>
+		    </ul>
+          </div>
+         
+         <div class="search" id="search1">
+            <input type="text" placeholder="ID 입력">
+              <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+         </div>
+         <div class="search" id="search2" style="display: none;">
+            <input type="text" placeholder="이름 입력">
+              <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+         </div>
+         <div class="search" id="search3" style="display: none;">
+            <input type="text" placeholder="연락처 입력">
+              <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+         </div>
+         
+      </div>
+      
+      
+      <table id="allOrder">
+         <tr>
+            <th class="td1"><input type="checkbox" id="allSelect" onclick="toggleAllCheckboxes('allOrder', 'allSelect')"></th>
+            <th class="td2">아이디</th>
+            <th class="td3">이름</th>
+            <th class="td4">닉네임</th>
+            <th class="td5">주소</th>
+            <th class="td6">전화번호</th>
+            <th class="td7">탈퇴여부</th>
+         </tr>
+         
+         <tr>
+            <td class="td1"><input type="checkbox"></td>
+            <td class="td2">ming</td>
+            <td class="td3">김민경</th>
+            <td class="td4">ming</th>
+            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
+            <td class="td6">01012345678</td>
+            <td class="td7">Y</td>
+         </tr>
+         
+        <tr>
+            <td class="td1"><input type="checkbox"></td>
+            <td class="td2">ming</td>
+            <td class="td3">김민경</th>
+            <td class="td4">ming</th>
+            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
+            <td class="td6">01012345678</td>
+            <td class="td7">Y</td>
+         </tr>
+         
+         <tr>
+            <td class="td1"><input type="checkbox"></td>
+            <td class="td2">ming</td>
+            <td class="td3">김민경</th>
+            <td class="td4">ming</th>
+            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
+            <td class="td6">01012345678</td>
+            <td class="td7">Y</td>
+         </tr>
+         
+         <tr>
+            <td class="td1"><input type="checkbox"></td>
+            <td class="td2">ming</td>
+            <td class="td3">김민경</th>
+            <td class="td4">ming</th>
+            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
+            <td class="td6">01012345678</td>
+            <td class="td7">Y</td>
+         </tr>
+         
+         <tr>
+            <td class="td1"><input type="checkbox"></td>
+            <td class="td2">ming</td>
+            <td class="td3">김민경</th>
+            <td class="td4">ming</th>
+            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
+            <td class="td6">01012345678</td>
+            <td class="td7">Y</td>
+         </tr>
+         
+         <tr>
+            <td class="td1"><input type="checkbox"></td>
+            <td class="td2">ming</td>
+            <td class="td3">김민경</th>
+            <td class="td4">ming</th>
+            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
+            <td class="td6">01012345678</td>
+            <td class="td7">Y</td>
+         </tr>
+         
+         <tr>
+            <td class="td1"><input type="checkbox"></td>
+            <td class="td2">ming</td>
+            <td class="td3">김민경</th>
+            <td class="td4">ming</th>
+            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
+            <td class="td6">01012345678</td>
+            <td class="td7">Y</td>
+         </tr>
+         
+         <tr>
+            <td class="td1"><input type="checkbox"></td>
+            <td class="td2">ming</td>
+            <td class="td3">김민경</th>
+            <td class="td4">ming</th>
+            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
+            <td class="td6">01012345678</td>
+            <td class="td7">Y</td>
+         </tr>
+         
+         <tr>
+            <td class="td1"><input type="checkbox"></td>
+            <td class="td2">ming</td>
+            <td class="td3">김민경</th>
+            <td class="td4">ming</th>
+            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
+            <td class="td6">01012345678</td>
+            <td class="td7">Y</td>
+         </tr>
+         
+         <tr>
+            <td class="td1"><input type="checkbox"></td>
+            <td class="td2">ming</td>
+            <td class="td3">김민경</th>
+            <td class="td4">ming</th>
+            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
+            <td class="td6">01012345678</td>
+            <td class="td7">Y</td>
+         </tr>
+         
+         
+      </table>
+      
+      <nav class="nav2" aria-label="Page navigation example" style="float: right;">
+          <ul class="pagination">
+             <li class="page-item">
+               <a class="page-link" href="#" aria-label="Previous">
+                 <span aria-hidden="true">&laquo;</span>
+               </a>
+             </li>
+             <li class="page-item"><a class="page-link" href="#">1</a></li>
+             <li class="page-item"><a class="page-link" href="#">2</a></li>
+             <li class="page-item"><a class="page-link" href="#">3</a></li>
+             <li class="page-item"><a class="page-link" href="#">4</a></li>
+             <li class="page-item"><a class="page-link" href="#">5</a></li>
+             <li class="page-item">
+             <a class="page-link" href="#" aria-label="Next">
+                 <span aria-hidden="true">&raquo;</span>
+             </a>
+             </li>
+          </ul>
+      </nav>
+   </div>
+	
+	<div class="modal">
+		<div class="modal_body">
+			<p class="modal_title">회원정보</p>
+			<img src="/image/ming/icons8-프로필-사진-96.png" style="width: 80px; position: relative; left: 170px;"></img>
+			<p>ID : ming</p>
+			<p>NAME : 김민경</p>
+			<p>NICKNAME : ming</p>
+			<p>EMAIL : ming@naver.com</p>
+			<p>생일</p>
+			<p>PHONE</p>
+			<p>ADDRESS</p>
+			<p>가입일</p>
+		 </div>
 	</div>
-	
-	<div class="move_test">
-		<div class="chat-title">
-			<img src="image/icon1.png">
-            <div class="chat-list-title">GLAMPING</div>
-        </div>
-		<div class="test">
-			<img src="image/back2.gif"/>
-		</div>
+   <script>
+      //체크박스 전체 선택/해제
+        function toggleAllCheckboxes(tableId, selectId) {
+         const checkboxes = document.querySelectorAll(`#${tableId} input[type="checkbox"]:not(#${selectId})`);
+         const selectAll = document.getElementById(selectId);
+         const allChecked = selectAll.checked;
+   
+         checkboxes.forEach(checkbox => {
+             checkbox.checked = allChecked;
+         });
+     }
+      
+      
+      //전체내역/ 환불요청내역
+      function toggleTable(showId, hideId, element) {
+        document.getElementById(showId).classList.remove('hidden');
+        document.getElementById(hideId).classList.add('hidden');
+        
+      }
+      
+      const buttons = document.querySelectorAll('.cateBtn');
+     buttons.forEach(btn => btn.addEventListener('click', () => {
+       buttons.forEach(otherBtn => {
+           if (otherBtn !== btn) {
+               otherBtn.classList.remove('active');
+           }
+       });
+   
+       btn.classList.add('active');
+   }));
+      
+      
+      
+      //드롭다운 변경
+      function showSearch(searchId, dropdownText) {
+            document.querySelectorAll('.search').forEach(function(searchElement) {
+                searchElement.style.display = 'none';
+            });
+            document.getElementById(searchId).style.display = 'block';
+            document.getElementById('dropdownMenuButton').innerText = dropdownText;
+        };
+        
+        
+        //모달창 열기
+          const body = document.querySelector('body');
+	      const modal = document.querySelector('.modal');
+	      const tds = document.getElementsByTagName('td');
 		
-		<!-- 채팅 목록 -->
-        <div class="chat-list">
-            <div class="chat-list-item">채팅자1</div>
-            <div class="chat-list-item">채팅자2</div>
-            <div class="chat-list-item">채팅자3</div>
-            <div class="chat-list-item">채팅자1</div>
-            <div class="chat-list-item">채팅자2</div>
-            <div class="chat-list-item">채팅자3</div>
-            <div class="chat-list-item">채팅자1</div>
-            <div class="chat-list-item">채팅자2</div>
-            <div class="chat-list-item">채팅자3</div>
-            <div class="chat-list-item">채팅자1</div>
-            <div class="chat-list-item">채팅자2</div>
-            <div class="chat-list-item">채팅자3</div>
-            <div class="chat-list-item">채팅자1</div>
-            <div class="chat-list-item">채팅자2</div>
-            <div class="chat-list-item">채팅자3</div>
-            <div class="chat-list-item">채팅자1</div>
-            <div class="chat-list-item">채팅자2</div>
-            <div class="chat-list-item">채팅자3</div>
-            <div class="chat-list-item">채팅자1</div>
-            <div class="chat-list-item">채팅자2</div>
-            <div class="chat-list-item">채팅자3</div>
-            <div class="chat-list-item">채팅자1</div>
-            <div class="chat-list-item">채팅자2</div>
-            <div class="chat-list-item">채팅자3</div>
-            <!-- 원하는 만큼 채팅자 목록을 추가할 수 있습니다. -->
-        </div>
+	      console.log(tds.length);
+	      for(let i = 0; i <tds.length; i++ ){
+	    	  const indet = i % 7;
+	    	  if(indet != 0){
+			      tds[i].addEventListener('dblclick', () => {
+			        modal.classList.toggle('show');
+			
+			        if (modal.classList.contains('show')) {
+			          body.style.overflow = 'hidden';
+			        }
+			        
+			      })
+	    	  }
+			
+	      };
+	      
+	       // 모달창 외부를 클릭했을때 창 닫기
+	      modal.addEventListener('click', (event) => {
+	        if (event.target === modal) {
+	          modal.classList.toggle('show');
 	
-	    <div class="wrap">
-	    
-	    
-	        <div class="chat ch1">
-	            <div class="icon"><i class="fa-solid fa-user"></i></div>
-	            <div class="textbox">안녕하세요. 반갑습니다.</div>
-	        </div>
-	        <div class="chat ch2">
-	            <div class="icon"><i class="fa-solid fa-user"></i></div>
-	            <div class="textbox">안녕하세요. 친절한효자손입니다. 그동안 잘 지내셨어요?</div>
-	        </div>
-	        <div class="chat ch1">
-	            <div class="icon"><i class="fa-solid fa-user"></i></div>
-	            <div class="textbox">아유~ 너무요너무요! 요즘 어떻게 지내세요?</div>
-	        </div>
-	        <div class="chat ch2">
-	            <div class="icon"><i class="fa-solid fa-user"></i></div>
-	            <div class="textbox">뭐~ 늘 똑같은 하루 하루를 보내는 중이에요. 코로나가 다시 극성이어서 모이지도 못하구 있군요 ㅠㅠ 얼른 좀 잠잠해졌으면 좋겠습니다요!</div>
-	        </div>
-	        <div class="chat ch1">
-	            <div class="icon"><i class="fa-solid fa-user"></i></div>
-	            <div class="textbox">안녕하세요!!</div>
-	        </div>
-	    </div>
-	    
-	     <div class="chat-input">
-            <input type="text" placeholder="메시지를 입력하세요...">
-            <button>전송</button>
-        </div>
-    </div>
+	          if (!modal.classList.contains('show')) {
+	            body.style.overflow = 'auto';
+	          }
+	        }
+	     })
+    </script>
 </body>
+
 </html>
