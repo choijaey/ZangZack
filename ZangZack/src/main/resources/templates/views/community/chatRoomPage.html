@@ -24,7 +24,8 @@ a {
     position: absolute;
     left: 500px;
     top:70px;
-    max-height: 600px; /* 최대 높이를 지정 (원하는 값으로 조절) */
+    height:700px;
+    max-height: 700px; /* 최대 높이를 지정 (원하는 값으로 조절) */
     overflow-y: auto; /* 세로 스크롤이 필요한 경우 자동으로 생성 */
     
 }
@@ -36,7 +37,8 @@ a {
 .move_test{
 	position: absolute;
 	top:100px;
-	left: 400px;
+	left: 490px;
+	z-index: 0;
 }
 .wrap .chat {
     display: flex;
@@ -119,6 +121,7 @@ a {
         color: #F2ECE3;
         z-index: 3;
         font-size: 27px;
+        text-align: center;
 }
 
 
@@ -152,9 +155,10 @@ a {
       cursor: pointer;
   }
   .img-style{
-  	width: 2000px;
-  	height: 1000px;
-  	background-color:#F2ECE3;
+  	margin-top:9px;
+  	width: 30px;
+  	height: 30px;
+  	
   }
   
   .chat-list {
@@ -172,6 +176,7 @@ a {
     text-align: center;
 }
 
+
 .chat-list-item {
     margin-bottom: 5px;
     padding: 5px;
@@ -179,6 +184,13 @@ a {
     border-radius: 5px;
     border-bottom: 1px solid rgba(173, 178, 169);
     
+}
+
+.chat-list-title{
+	align-items: center;
+	padding-top: 15px;
+	padding-left:15px;
+	font-size: 15px;
 }
 
 /* 스크롤바 디자인 변경 */
@@ -224,13 +236,12 @@ a {
 </head>
 <body>
 	<div th:insert="~{common/navbar :: navbar}"></div>
-	<div class="img-style">
-	</div>
+	
 	
 	<div class="move_test">
 		<div class="chat-title">
-			<img src="image/icon1.png">
-            <div class="chat-list-title">GLAMPING</div>
+			<img src="image/icon1.png" class="img-style">
+            <div class="chat-list-title">AUTOCAMPING</div>
         </div>
 		<div class="test">
 			<img src="image/back2.gif"/>
