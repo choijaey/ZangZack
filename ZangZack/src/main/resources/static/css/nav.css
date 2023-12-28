@@ -1,16 +1,28 @@
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+@font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+#nav-body{
+    font-family: 'GmarketSansMedium';
+    margin: 0 auto;
+}
+/* 헤더 - 높이, 색상 */
+#header {
+    height: 50px;
+    background: #F3F4F6;
+    padding: 0px 2.5%;
+    font-family: 'GmarketSansMedium';
+    margin: 0 auto;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+}
+
+#header ul{
+    font-family: 'GmarketSansMedium';
     margin: 0 auto;
     padding: 0;
     border: 0;
@@ -19,56 +31,13 @@ time, mark, audio, video {
     vertical-align: baseline;
 }
 
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-display: block;
-width: 100%;
-min-width: 1467px;
-position: relative;
-}
-
-body {
-line-height: 1;
-padding: 5;
-}
-
-ol, ul {
-list-style: none;
-position:absolute;
-}
-
-blockquote, q {
-quotes: none;
-}
-
-blockquote:before, blockquote:after,
-q:before, q:after {
-content: '';
-content: none;
-}
-
-table {
-border-collapse: collapse;
-border-spacing: 0;
-}
-
-/* box-sizing */
-* {
-box-sizing: border-box;
--moz-box-sizing: border-box;
--webkit-box-sizing: border-box;
-}
-
-
-/* 헤더 - 높이, 색상 */
-header {
-    height: 50px;
-    background-color: #464D0F;
-    padding: 0px 2.5%;
-}
-
-header li {
+#header li {
+    font-family: 'GmarketSansMedium';
+    margin: 0 auto;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+    list-style: none;
     height: 65px;
     line-height: 50px;
     position: relative;
@@ -76,13 +45,13 @@ header li {
 }
 
 /* 정렬 - 하위메뉴 들여쓰기 */
-header li a {
+#header li.main-menu a.main-menu-name{
     padding-left: 20px;
     text-decoration: none;
-    color: #ffffff;
+    color: #000;
     font-weight: 500;
     display: block;
-    padding: 0px 150px;
+    padding: 0px 158px;
     text-align: center; /* 변경된 부분 */
 }
 
@@ -91,19 +60,48 @@ header li a {
     display: inline-block;
 }
 
+
+
 .main-menu li {
-    background-color: #F2ECE3;
-    a {
-        color: black;
-        display: block; /* 변경된 부분 */
-    }
+    background-color: rgba(243,244,246,0.5);
+    align-items: center;
+    text-align: center;
 }
 
-.main-menu li>a:hover {
-	text-decoration : underline;
-	text-decoration-thickness : 2px;
-	 text-underline-offset: 5px;
-	
+.main-menu li a {
+    color: black;
+    display: inline-block;
+    padding: 0;
+    position: relative;
+    text-align: center;
+    white-space: nowrap;
+    text-decoration-line:none;
+}
+
+.pointImg2  {
+    width: 140px; /* 원하는 너비로 조절 */
+    height: 80px; /* 원하는 높이로 조절 */
+    display: none;
+    position: absolute;
+    margin-right: 105%;
+    margin-left: -100%;
+    top: 55%;
+    right: -20px;
+    transform: translateY(-50%);
+}
+
+.main-menu li.sub-menu-1>a.sub-menu-name:hover {
+    padding-left: 0;
+    text-decoration : underline;
+    text-decoration-thickness : 2px;
+    text-underline-offset: 5px;
+    
+    .pointImg2{
+       width: 140px; /* 원하는 너비로 조절 */
+       height: 80px; /* 원하는 높이로 조절 */
+        display: inline-block;
+    }
+    
 }
 
 /* 1단 */
@@ -120,18 +118,54 @@ header li a {
     width: 100%;
 }
 
+
 .menu-wrap li.main-menu ul li>a {
-    padding: 0px 30px;
+    padding: 0px 0px;
 }
 
 /* 이미지를 중앙에 배치하는 CSS */
-p {
+.logo {
+   background:#fff;
+    margin: 0 auto;
     text-align: center;
-    background-color: #F2ECE3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px; /* 원하는 높이로 조정 */
 }
 
-p a img {
-    display: block;
+.logo img {
+    display: inline-block;
+    position : absolute;
     margin: 0 auto;
 }
+ 
+#my_menu {
+    position: absolute;
+    font-size : 12px;
+    top: 0.3%; /* 원하는 수치로 조정 */
+    right: 1%; /* 원하는 수치로 조정 */
+    height: 300px; /* 높이 설정 */
+    width: auto; /* 너비 설정 */
+}
   
+#my_menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: auto; /* 또는 필요한 너비로 설정 */
+    white-space: nowrap; 
+  }
+  
+  #my_menu li {
+    display: inline-block;
+    margin: 1px;
+  }
+  
+  #my_menu li a {
+    padding: 5px 7px;
+    line-height: 30px;
+    color: black;
+    text-decoration-line : none;
+    white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 설정 */
+  }

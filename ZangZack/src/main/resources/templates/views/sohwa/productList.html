@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<link href="css/sohwa/productList.css" rel="stylesheet">
+<title>Insert title here</title>
+</head>
+<body>
+	<div th:replace="~{common/navbar :: navbar}"></div>
+	<br><br>
+	<p id="category">캠핑물품판매 >> 텐트</p>
+	<div class="gallery">
+		<div class="thumbnails">
+	        <img src="image/sohwa/tent1core1.png" alt="Thumbnail 1" class="thumbnail" onmouseover="changeImage(this)">
+	        <img src="image/sohwa/tent1core2.png" alt="Thumbnail 2" class="thumbnail" onmouseover="changeImage(this)">
+	        <img src="image/sohwa/tent1core3.png" alt="Thumbnail 3" class="thumbnail" onmouseover="changeImage(this)">
+	        <img src="image/sohwa/tent1core4.png" alt="Thumbnail 4" class="thumbnail" onmouseover="changeImage(this)">
+	    </div>
+	    
+	    <div class="main-image">
+	      <img src="image/sohwa/tent1core1.png" alt="Main Image">
+	    </div>
+	    
+	    <div id="explain">
+			<span style="font-size: 15px; color:gray;">모비가든</span>
+			<h1>캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용</h1>
+			<div class="star-rating">
+				  <span class="fa fa-star checked"></span>
+				  <span class="fa fa-star checked"></span>
+				  <span class="fa fa-star checked"></span>
+				  <span class="fa fa-star checked"></span>
+				  <span class="fa fa-star checked"></span>
+			</div>
+		    4.7
+		    <br>
+			<span id="price">410,000</span>원
+			<span class="badge text-bg-secondary">무료배송</span><br><br>
+			<p>배송</p>
+			<div style="display: inline-block;">무료배송<br>일반택배<br>☝지역별 차등배송비&nbsp;✌제주도/도서산간 지역 7,000원</br></div>
+			<br><br>
+			
+			<div id="enoDiv">&nbsp;&nbsp;&nbsp;캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용
+				<br><br>
+				<div class="quantity-input">&nbsp;&nbsp;&nbsp;
+				    <button class="quantity-btn" id="decrementBtn">-</button>
+		            <input type="text" class="quantity" value="1" min="1">
+		            <button class="quantity-btn" id="incrementBtn">+</button>
+		            <div id="resultPrice"></div>
+				</div>
+			</div>
+			
+			<div class="btns" style="margin-left:80px;">
+				<button class="btn-hover color-1" style="color:gray;">장바구니</button>
+				<button class="btn-hover color-2">바로구매</button>
+			</div>
+			
+		</div>
+	</div>
+	
+	
+	<br><br><br>
+	
+	
+	<a id="back-to-top"><img src="image/sohwa/icons8-scroll-up-64 (1).png"></a>
+	<div id="fixedDiv" >
+		<br>
+		<span>주문금액</span><span id="resultPrice2"></span>
+		<div class="btns">
+			<button class="btn-hover color-1" style="color:gray;">장바구니</button>
+			<button class="btn-hover color-2">바로구매</button>
+		</div>
+		
+	</div>
+	
+	<div id="cateDiv">
+        <ul>
+          <li><a href="#detail">상세정보</a></li>
+          <li><a href="#reviews">리뷰</a></li>
+          <li><a href="#questions">문의</a></li>
+          <li><a href="#shipping">배송정보</a></li>
+        </ul>
+    </div>
+    
+    <div id="underDiv">
+		<main>
+			
+	    <!-- 상품 상세 정보 섹션 -->
+	      <section id="detail">
+	        <img src="image/sohwa/tent1Detail1.jpg">
+	        <img src="image/sohwa/tent1Detail2.jpg">
+	      </section>
+	
+	
+	    <!-- 리뷰 섹션 -->
+	      <section id="reviews">
+	      	   <div id="review">
+					<span style="margin-left:5%;">리뷰 </span><span style="color:#F9612B;"> 15</span><a href="#" id="openReviewModal" onclick="openModal()">리뷰쓰기</a>
+				    <div id="reviewContainer">
+							<div class="star-rating">
+								  <span class="fa fa-star checked"></span>
+								  <span class="fa fa-star checked"></span>
+								  <span class="fa fa-star checked"></span>
+								  <span class="fa fa-star checked"></span>
+								  <span class="fa fa-star checked"></span>
+							</div>
+						    <span style="font-size:27px;">4.7</span>
+						    
+					   </div>
+						<!--모달-->
+						<div class="modal" id="reviewModal">
+					  		<div class="modal-content" style="margin-bottom:30px;">
+					    		<span class="close" onclick="closeModal()">&times;</span>
+					    		<div class="bg-gray-50">
+									<div class="max-w-2xl mx-auto p-6">
+								        <h1 class="text-2xl font-bold mb-4">리뷰 등록</h1>
+								        <div class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
+								            <div class="p-4 flex">
+								                <img class="w-20 h-20 object-cover rounded-full" src="image/sohwa/tent1core1.png" alt="Product">
+								                <div class="ml-4">
+								                    <h2 class="text-lg font-semibold">모비가든</h2>
+								                    <p class="text-sm text-gray-600">캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용</p><hr>
+								                    <p>410,000원</p>
+								                </div>
+								            </div>
+								            <div class="border-t border-gray-200">
+								                <div class="p-4">
+								                    <h3 class="text-lg font-semibold mb-2">별점등록</h3>
+								                    <div class="flex items-center mb-4">
+														
+														
+								                        <div id="starRating">
+															  <span class="fa fa-star"></span>
+															  <span class="fa fa-star"></span>
+															  <span class="fa fa-star"></span>
+															  <span class="fa fa-star"></span>
+															  <span class="fa fa-star"></span>
+														</div>
+								                        
+								                        
+								                    </div>
+								                    <!-- 파일 미리보기 영역 -->
+								                    <div id="imagePreview">
+								                        <img id="preview" src="image/sohwa/icons8-screenshot-64.png">
+								                    </div>
+								                    <br>
+								                    <div id="addPhoto">
+														<img src="image/sohwa/icons8-camera-80.png">사진첨부
+													</div>
+								                    <br>
+								                    
+								                    <div class="mb-4">
+								                        <label for="review" class="text-sm font-semibold">Write a review</label>
+								                        <textarea id="review" rows="3" class="mt-1 p-2 w-full border rounded-md" style="height:250px; overflow: scroll; resize: none;"></textarea>
+								                    </div>
+								                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" style="float:right; margin-bottom:30px;">
+								                        리뷰등록
+								                    </button>
+								                </div>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+						    </div>
+						</div>
+						
+						<div id="reviewCate">
+							<hr>
+							
+							<div id="onlyPhoto"><img src="image/sohwa/icons8-picture-16.png"><span>&nbsp;사진리뷰</span></div>
+							
+							<hr>
+						</div>
+						
+						
+					   <div class="bg-gray-50"> 
+						   
+						   
+						    <div class="container mx-auto px-4 py-8">
+						        <div class="space-y-6">
+									
+									<div class="reviewItem">
+										<div class="bg-white shadow rounded-lg p-4">
+							                <div class="flex items-center space-x-4">
+							                    <div class="w-12 h-12 rounded-full overflow-hidden">
+							                        <img src="https://unsplash.it/100" alt="Profile" class="object-cover w-full h-full">
+							                    </div>
+							                    <div class="flex-1">
+							                        <div class="font-bold">User Name</div>
+							                        <div class="text-sm text-gray-600">2023-01-01 - Review Title</div>
+							                    </div>
+							                    <div class="text-sm text-gray-500">별점: 
+							                       <div id="starRating">
+														  <span class="fa fa-star checked"></span>
+														  <span class="fa fa-star checked"></span>
+														  <span class="fa fa-star checked"></span>
+														  <span class="fa fa-star checked"></span>
+														  <span class="fa fa-star checked"></span>
+													</div>
+							                    </div>
+							                </div>
+							                <div class="mt-4 text-gray-700">
+							                    This is a sample review content. The user can share their experience with the product here. They can also upload a photo of the product.
+							                </div>
+							                <div class="mt-4">
+							                    <img src="image/sohwa/fire2core1.png" alt="Product" class="rounded">
+							                </div>
+							            </div>
+									</div>
+						            
+						            
+						            
+						            <div class="reviewItem">
+										<div class="bg-white shadow rounded-lg p-4">
+							                <div class="flex items-center space-x-4">
+							                    <div class="w-12 h-12 rounded-full overflow-hidden">
+							                        <img src="https://unsplash.it/100" alt="Profile" class="object-cover w-full h-full">
+							                    </div>
+							                    <div class="flex-1">
+							                        <div class="font-bold">User Name</div>
+							                        <div class="text-sm text-gray-600">2023-01-01 - Review Title</div>
+							                    </div>
+							                    <div class="text-sm text-gray-500">별점: 
+							                       <div class="star-rating">
+														  <input type="radio" id="star5" name="rating2" value="1" />
+														  <label for="star5">★</label>
+														  <input type="radio" id="star4" name="rating2" value="2" />
+														  <label for="star4">★</label>
+														  <input type="radio" id="star3" name="rating2" value="3" />
+														  <label for="star3">★</label>
+														  <input type="radio" id="star2" name="rating2" value="4" />
+														  <label for="star2">★</label>
+														  <input type="radio" id="star1" name="rating2" value="5" />
+														  <label for="star1">★</label>
+												    </div>
+							                    </div>
+							                </div>
+							                <div class="mt-4 text-gray-700">
+							                    This is a sample review content. The user can share their experience with the product here. They can also upload a photo of the product.
+							                </div>
+							                <div class="mt-4">
+							                    <img src="image/sohwa/fire2core1.png" alt="Product" class="rounded">
+							                </div>
+							            </div>
+									</div>
+									
+									<div class="reviewItem">
+										<div class="bg-white shadow rounded-lg p-4">
+							                <div class="flex items-center space-x-4">
+							                    <div class="w-12 h-12 rounded-full overflow-hidden">
+							                        <img src="https://unsplash.it/100" alt="Profile" class="object-cover w-full h-full">
+							                    </div>
+							                    <div class="flex-1">
+							                        <div class="font-bold">User Name</div>
+							                        <div class="text-sm text-gray-600">2023-01-01 - Review Title</div>
+							                    </div>
+							                    <div class="text-sm text-gray-500">별점: 
+							                       <div class="star-rating">
+														  <input type="radio" id="star5" name="rating2" value="1" />
+														  <label for="star5">★</label>
+														  <input type="radio" id="star4" name="rating2" value="2" />
+														  <label for="star4">★</label>
+														  <input type="radio" id="star3" name="rating2" value="3" />
+														  <label for="star3">★</label>
+														  <input type="radio" id="star2" name="rating2" value="4" />
+														  <label for="star2">★</label>
+														  <input type="radio" id="star1" name="rating2" value="5" />
+														  <label for="star1">★</label>
+												    </div>
+							                    </div>
+							                </div>
+							                <div class="mt-4 text-gray-700">
+							                    This is a sample review content. The user can share their experience with the product here. They can also upload a photo of the product.
+							                </div>
+							                <div class="mt-4">
+							                    <img src="image/sohwa/fire2core1.png" alt="Product" class="rounded">
+							                </div>
+							            </div>
+									</div>
+							
+						            <!-- Pagination -->
+						            <div class="flex justify-center space-x-1">
+										<a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200"><</a>
+						                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">1</a>
+						                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">2</a>
+						                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">3</a>
+						                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">4</a>
+						                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">5</a>
+						                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">></a>
+						            </div>
+						        </div>
+						  </div>
+						  
+						  
+						  
+					</div>
+			   </div>
+	      </section>
+	
+	
+	    <!-- 문의 섹션 -->
+	      <section id="questions">
+			  
+			  <div id="question">
+				  <span style="margin-left:5%;">문의 </span><span style="color:#F9612B;"> 15</span><a href="#" id="qnaOpenModal">문의등록</a>
+				  
+				  
+					  <div class="modal" id="qnaModal">
+						  		<div class="modal-content" style="margin-bottom:30px;">
+						    		<span class="close" onclick="closeModal2()">&times;</span>
+						    		<div class="bg-gray-50">
+										<div class="max-w-2xl mx-auto p-6">
+									        <h1 class="text-2xl font-bold mb-4">문의 등록</h1>
+									        <div class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
+									            <div class="p-4 flex">
+									                <img class="w-20 h-20 object-cover rounded-full" src="image/sohwa/tent1core1.png" alt="Product">
+									                <div class="ml-4">
+									                    <h2 class="text-lg font-semibold">모비가든</h2>
+									                    <p class="text-sm text-gray-600">캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용</p><hr>
+									                    <p>410,000원</p>
+									                </div>
+									            </div>
+									            <div class="border-t border-gray-200">
+									                <div class="p-4">
+									                    
+									                    <div class="mb-4">
+									                        <label for="review" class="text-sm font-semibold">문의를 작성해주세요. 쓰발럼아</label>
+									                        <textarea id="review" rows="3" class="mt-1 p-2 w-full border rounded-md" style="height:250px; overflow: scroll; resize: none;"></textarea>
+									                    </div>
+									                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" style="float:right; margin-bottom:30px;">
+									                        리뷰등록
+									                    </button>
+									                </div>
+									            </div>
+									        </div>
+									    </div>
+									</div>
+							    </div>
+							</div>
+					  <br><br>
+				  
+				  <div id="questionItem">
+					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-q-64.png"></div>
+					  <div style="display: inline-block; margin-top:0px;">
+						  <span style="color:gray; margin-top:0px; height:20px;">상품명 / 등록일자</span><br>
+					  	  <div style="display:inline-flex;">배송기간은 보통 얼마나 소요되나요?</div>
+					  </div>
+					  <br><br>
+					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-a-64.png"></div>
+					  <div style="display: inline-block; margin-top:0px;">
+						  <span>관리자 :</span><br>
+					  	  <div style="display:inline-flex; margin-bottom:20px;">배송기간은 보통 2~3일 소요됩니다.</div>
+					  	  
+					  </div>
+					  <hr>
+				  </div>
+				  
+				  <div id="questionItem">
+					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-q-64.png"></div>
+					  <div style="display: inline-block; margin-top:0px;">
+						  <span style="color:gray; margin-top:0px; height:20px;">상품명 / 등록일자</span><br>
+					  	  <div style="display:inline-flex;">배송기간은 보통 얼마나 소요되나요?</div>
+					  </div>
+					  <br><br>
+					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-a-64.png"></div>
+					  <div style="display: inline-block; margin-top:0px;">
+						  <span>관리자 :</span><br>
+					  	  <div style="display:inline-flex; margin-bottom:20px;">배송기간은 보통 2~3일 소요됩니다.</div>
+					  	  
+					  </div>
+					  <hr>
+				  </div>
+				  
+				  <div id="questionItem">
+					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-q-64.png"></div>
+					  <div style="display: inline-block; margin-top:0px;">
+						  <span style="color:gray; margin-top:0px; height:20px;">상품명 / 등록일자</span><br>
+					  	  <div style="display:inline-flex;">배송기간은 보통 얼마나 소요되나요?</div>
+					  </div>
+					  <br><br>
+					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-a-64.png"></div>
+					  <div style="display: inline-block; margin-top:0px;">
+						  <span>관리자 :</span><br>
+					  	  <div style="display:inline-flex; margin-bottom:20px;">배송기간은 보통 2~3일 소요됩니다.</div>
+					  	  
+					  </div>
+					  <hr>
+				  </div>
+				  
+				  <br>
+				  <div class="flex justify-center space-x-1">
+						<a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200"><</a>
+		                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">1</a>
+		                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">2</a>
+		                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">3</a>
+		                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">4</a>
+		                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">5</a>
+		                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">></a>
+		           </div>
+				  
+			  </div>
+	           
+	      </section>
+	
+	
+	    <!-- 배송정보 섹션 -->
+	      <section id="shipping">
+			  <div id="shippingItem">
+				  <h1 style="font-size: 25px; font-weight: bold;">배송/환불정보</h1>
+				  <div class="bg-gray-100">
+					<div class="max-w-4xl mx-auto py-10 px-6">
+					  
+					  <div class="bg-white shadow rounded-lg p-6 mb-6">
+					    <h2 class="text-xl font-bold mb-4">납부/결제 사유에 대한 요청 가이드</h2>
+					    <p class="mb-4">납부 및 이자 지급에 있어서의 사유를 적는 칸입니다. 배송비, 반품비, 반품지 주소 등을 입력하시면 됩니다. 납부방법을 선택하시기 바랍니다.</p>
+					    <ol class="list-decimal pl-4 mb-4">
+					      <li>구매자는 반품 비용을 상품 수령 후 7일 이내에 (방법: 납부방법 선택)</li>
+					      <li>결제 취소시 납부, 자동납부해지 등 다양한 이유로 인해 상품 수령 후 3개월 이내, 그 사유를 입력해 주시면 됩니다. 상품 수령후 30일 이내. (방법: 납부방법 선택)</li>
+					    </ol>
+					  </div>
+					  <div class="bg-white shadow rounded-lg p-6">
+					    <h2 class="text-xl font-bold mb-4">납부/결제 취소 가능 사유</h2>
+					    <p class="mb-4">아래와 같은 경우 납부/결제가 취소될 수 있습니다.</p>
+					    <ol class="list-decimal pl-4">
+					      <li>반품완료일기준 2년 초과</li>
+					      <li>구매자의 계정 삭제 사유로 인해 5일 이내에 셀러로부터 환불 요청 (예, 판매자의 사업자 등록증 사본이 필요한 경우 등)</li>
+					      <li>구매자의 개인정보유출로 인해 셀러에게 환불이 필요한 경우 (예, 해킹, 바이러스)</li>
+					      <li>구매자의 신용 또는 신뢰 상실에 의하여 셀러가 환불이 필요하다고 요청한 경우 (예, 신용 불량, 불법)</li>
+					      <li>기타 셀러의 신용이나 신뢰에 관하여 셀러로부터 환불 요청이 있었던 경우 (예, 신용 불량, 불법)</li>
+					      <li>구매자로부터의 요청에 의하여 셀러가 환불을 요청하였음</li>
+					      <li>셀러가 사업을 영위할 목적으로 셀러에게 환불 요청 (CD/DVD/GAME/도서류 등 제외 제품)</li>
+					    </ol>
+					  </div>
+					  <div class="bg-white shadow rounded-lg p-6 mt-6">
+					    <h2 class="text-xl font-bold mb-4">판매자 정보</h2>
+					    <div class="grid grid-cols-2 gap-4 mb-4">
+					      <div>
+					        <div class="font-semibold">상호</div>
+					        <div>장작</div>
+					      </div>
+					      <div>
+					        <div class="font-semibold">대표자</div>
+					        <div>김윤박</div>
+					      </div>
+					    </div>
+					    <div class="grid grid-cols-2 gap-4 mb-4">
+					      <div>
+					        <div class="font-semibold">주소</div>
+					        <div>서울특별시 중구 청계천로</div>
+					      </div>
+					      <div>
+					        <div class="font-semibold">고객센터 전화번호</div>
+					        <div>010-9145-7175</div>
+					      </div>
+					    </div>
+					    <div class="grid grid-cols-2 gap-4 mb-4">
+					      <div>
+					        <div class="font-semibold">E-mail</div>
+					        <div>thghk0206@naver.com</div>
+					      </div>
+					      <div>
+					        <div class="font-semibold">사업자 등록번호</div>
+					        <div>111-11-111111</div>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+				</div>
+				  
+			  </div>
+	            
+
+	      </section>
+	      
+	  </main>
+		
+	</div>
+    
+	
+
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+	<input type="file" id="fileUpload" style="display: none;">
+
+
+
+
+
+
+	<script>
+		
+		
+		//별점 등록
+		var stars = document.querySelectorAll('.modal .fa');;
+
+		stars.forEach(function(star, index) {
+		  star.addEventListener('click', function() {
+		    // 클릭된 별을 포함하여 그 앞의 별들을 노란색으로 변경하고, 나머지는 회색으로 유지합니다.
+		    for (var i = 0; i <= index; i++) {
+		      stars[i].classList.add('checked');
+		    }
+		    for (var i = index + 1; i < stars.length; i++) {
+		      stars[i].classList.remove('checked');
+		    }
+		  });
+		});
+		
+		
+		
+		
+		//문의 모달 열기닫기
+		document.getElementById('qnaOpenModal').addEventListener('click',()=>{
+	        var modal = document.getElementById('qnaModal');
+	        modal.style.display = 'block';
+	    });
+	
+	    function closeModal2() {
+	        var modal = document.getElementById('qnaModal');
+	        modal.style.display = 'none';
+	    }
+		
+		
+		
+		
+		
+		
+		
+		//리뷰모달 열기닫기
+		function openModal() {
+	        var modal = document.getElementById('reviewModal');
+	        modal.style.display = 'block';
+	        
+	        // 리뷰쓰기 버튼의 위치를 기준으로 모달 위치 조정
+	        var openBtn = document.getElementById('openReviewModal');
+	        var rect = openBtn.getBoundingClientRect();
+	        modal.style.top = rect.bottom + 'px';
+	        modal.style.left = rect.left + 'px';
+	    }
+	
+	    function closeModal() {
+	        var modal = document.getElementById('reviewModal');
+	        modal.style.display = 'none';
+	    }
+		
+		
+		
+		
+		
+		//리뷰모달
+		// 파일 첨부 요소를 클릭하는 함수
+        document.getElementById('addPhoto').addEventListener('click', function() {
+            document.getElementById('fileUpload').click(); // 파일 업로드 클릭 이벤트 발생
+        });
+        
+		// JavaScript
+		document.getElementById('fileUpload').addEventListener('change', function() {
+		    var file = this.files[0]; // 선택된 파일 가져오기
+		    var reader = new FileReader();  // 파일을 읽기 위한 객체 생성
+		
+		    reader.onload = function(event) {
+		        var imageUrl = event.target.result; // 이미지 URL
+		        var preview = document.getElementById('preview');
+		        preview.src = imageUrl; // 미리보기 이미지 URL 설정
+		        preview.style.width = '200px'; // 이미지 가로 크기 설정
+		        preview.style.height = '200px'; // 이미지 세로 크기 설정
+		    };
+		
+		    if (file) {
+		        reader.readAsDataURL(file); // 파일을 읽어서 Data URL로 변환하여 onload 이벤트 실행
+		    }
+		});
+		
+		
+		
+		
+		
+		
+		
+		//썸네일 hover 이벤트
+		function changeImage(element) {
+		    var mainImage = document.querySelector('.main-image img');
+		    mainImage.src = element.src;
+		 }
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		//위로가기 버튼
+		document.addEventListener('DOMContentLoaded', function() {
+			  const backToTop = document.getElementById('back-to-top');
+			
+			  backToTop.addEventListener('click', function(e) {
+			    e.preventDefault();
+			    window.scrollTo({
+			      top: 0,
+			      behavior: 'smooth'
+			    });
+			  });
+			
+			  window.addEventListener('scroll', function() {
+			    if (window.scrollY > 100) {
+			      backToTop.classList.add('show');
+			    } else {
+			      backToTop.classList.remove('show');
+			    }
+			  });
+			});
+		
+		
+		
+		window.addEventListener('scroll', function() {
+		      var fixedDiv = document.getElementById('fixedDiv');
+		      var scrollPosition = window.scrollY || document.documentElement.scrollTop;
+		
+		      // 특정 위치 (예: 500px) 아래로 스크롤할 때 fixedDiv를 화면에 표시
+		      if (scrollPosition > 500) {
+		        fixedDiv.style.display = 'block';
+		      } else {
+		        fixedDiv.style.display = 'none';
+		      }
+		   });
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		//수량 가격 연동
+		function decreaseQuantity() {
+		    const quantityInput = document.querySelector('.quantity');
+		    let currentValue = parseInt(quantityInput.value, 10);
+		    if (currentValue > 1) {
+		      currentValue--;
+		      quantityInput.value = currentValue;
+		    }
+		}
+		
+		function increaseQuantity() {
+		    const quantityInput = document.querySelector('.quantity');
+		    let currentValue = parseInt(quantityInput.value, 10);
+		    currentValue++;
+		    quantityInput.value = currentValue;
+		}
+		
+		document.addEventListener('DOMContentLoaded', function () {
+        const quantityInput = document.querySelector('.quantity');
+        const priceElement = document.getElementById('price');
+        const resultPriceElement = document.getElementById('resultPrice');
+        const resultPriceElement2 = document.getElementById('resultPrice2');
+        const decrementButton = document.getElementById('decrementBtn');
+        const incrementButton = document.getElementById('incrementBtn');
+
+        // 초기 로드 시 총 가격 계산
+        updateTotalPrice();
+
+        // 수량 변경 이벤트 리스너 추가
+        if (quantityInput) {
+          quantityInput.addEventListener('input', updateTotalPrice);
+        }
+
+        // - 버튼 클릭 시
+        if (decrementButton) {
+          decrementButton.addEventListener('click', function () {
+            changeQuantity(-1);
+          });
+        }
+
+        // + 버튼 클릭 시
+        if (incrementButton) {
+          incrementButton.addEventListener('click', function () {
+            changeQuantity(1);
+          });
+        }
+
+        function changeQuantity(delta) {
+          let currentValue = parseInt(quantityInput.value, 10);
+          currentValue += delta;
+          if (currentValue < 1) {
+            currentValue = 1;
+          }
+          quantityInput.value = currentValue;
+          updateTotalPrice();
+        }
+
+        function updateTotalPrice() {
+          const quantity = parseInt(quantityInput.value, 10);
+          const price = parseInt(priceElement.textContent.replace(/[^0-9]/g, ''), 10);
+
+          const total = quantity * price;
+          resultPriceElement.textContent = formatCurrency(total) + '원';
+          resultPriceElement2.textContent = formatCurrency(total) + '원';
+        }
+
+        function formatCurrency(value) {
+          return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	        }
+	    });
+		
+		
+		
+		
+		// JavaScript로 클릭 시 해당 섹션으로 스크롤되는 기능 구현 (상세정보, 리뷰, 문의, 배송정보)
+	    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+	      anchor.addEventListener('click', function (e) {
+	        e.preventDefault();
+	
+	        const sectionId = this.getAttribute('href').substring(1);
+	        const section = document.getElementById(sectionId);
+	
+	        section.scrollIntoView({
+	          behavior: 'smooth'
+	        });
+	      });
+	    });
+	    
+		
+	</script>
+
+</body>
+</html>
