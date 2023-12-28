@@ -18,7 +18,7 @@ function setResult(){
 
   var resultImg = document.createElement('img');
   const imgDiv = document.querySelector('#resultImg');
-  var imgURL = 'image/ming/image-' + point + '.jpg';
+  var imgURL = 'image/ming/psychologicalTest/image-' + point + '.jpg';
   resultImg.src = imgURL;
   resultImg.alt = point;
   resultImg.classList.add('img-fluid2');
