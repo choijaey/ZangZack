@@ -3,142 +3,152 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- 디버깅 시 'edge(엣지)' 사용, 전체 화면 권장 -->
-  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
-  <title>Top 5 European Football Leagues</title> <!-- 유럽 5대 축구 리그 -->
+  <meta name="viewport"
+    content="user-scalable=no, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
+  <title>상단바</title>
   <link rel="icon" type="image/png" sizes="16x16" href="./image/favicon.ico"> <!-- 웹 페이지 파비콘 16x16-->
-
-  <link rel="stylesheet" type="text/css" href="./css/nav.css"/>
-
+  <link rel="stylesheet" type="text/css" href="./css/nav.css" />
 </head>
-<body>
+
+<body id="nav-body">
   <!-- left Logo --> <!-- text-align:(위치) -->
-  <p style="text-align: left;"><a href="index.html"><img src="./image/zangzack_logo.png" width="120px"/></p> <!-- height="111~120px" -->
+  <div id="logo_area">
+    <p style="text-align: left;" class="logo"><img src="./image/zangzack_logo.png" width="200px" /></p> <!-- height="111~120px" -->
+    <div id="my_menu">
+      <ul>
+        <li>
+          <a href="signIn.me">로그인</a>
+        </li>
+        <li>
+          <span>/</span>
+        </li>
+        <li>
+          <a href="signUp.me">회원가입</a>
+        </li>
+      </ul>
+    </div>
+  </div>
   <!-- header Menu -->
   <header id="header">
-      <div class="menu-wrap">
+    <div class="menu-wrap">
+      <ul>
+        <li class="main-menu">
+          <a  href="#" class="main-menu-name">캠핑장</a>
           <ul>
-              <li class="main-menu">
-                  <a target='_blank' href="#">캠핑장</a>
-                  <ul>
-                      <li class="sub-menu-1">
-                          <a target='_blank' href="#">캠핑장 검색<span class="gt"></span></a>
-                          <ul class="캠핑장 검색">
-                          </ul>
-                      </li>
-                      <li class="sub-menu-1">
-                        <a target='_blank' href="#">캠핑장 추천<span class="gt"></span></a>
-                        <ul class="캠핑장 추천">
-                        </ul>
-                      </li>
-                  </ul>
-              </li>
-              <li class="main-menu">
-                <a target='_blank' href="#">커뮤니티</a>
-                <ul>
-                    <li class="sub-menu-1">
-                        <a target='_blank' href="#">채팅방<span class="gt"></span></a>
-                        <ul class="채팅방">
-                        </ul>
-                    </li>
-                    <li class="sub-menu-1">
-                      <a target='_blank' href="#">캠핑후기게시판<span class="gt"></span></a>
-                      <ul class="캠핑후기게시판">
-                      </ul>
-                    </li>
-                    <li class="sub-menu-1">
-                        <a target='_blank' href="#">캠핑친구모집<span class="gt"></span></a>
-                        <ul class="캠핑친구모집">
-                        </ul>
-                    </li>
-                    <li class="sub-menu-1">
-                        <a target='_blank' href="#">행사정보<span class="gt"></span></a>
-                        <ul class="행사정보">
-                        </ul>
-                    </li>
-                </ul>
+            <li class="sub-menu-1">
+              <a  href="#" class="sub-menu-name">캠핑장 검색<span class="gt"></span>
+                <img src="./image/point.png" alt="포인트 이미지" class="pointImg2">
+              </a>
             </li>
-            <li class="main-menu">
-              <a target='_blank' href="#">캠핑물품판매</a>
-              <ul>
-                  <li class="sub-menu-1">
-                      <a target='_blank' href="#">텐트<span class="gt"></span></a>
-                      <ul class="텐트">
-                      </ul>
-                  </li>
-                  <li class="sub-menu-1">
-                    <a target='_blank' href="#">취침용품<span class="gt"></span></a>
-                    <ul class="취침용품">
-                    </ul>
-                  </li>
-                  <li class="sub-menu-1">
-                      <a target='_blank' href="#">조리도구<span class="gt"></span></a>
-                      <ul class="조리도구">
-                      </ul>
-                  </li>
-                  <li class="sub-menu-1">
-                      <a target='_blank' href="#">발화용품<span class="gt"></span></a>
-                      <ul class="발화용품">
-                      </ul>
-                  </li>
-                  <li class="sub-menu-1">
-                      <a target='_blank' href="#">배낭<span class="gt"></span></a>
-                      <ul class="배낭">
-                      </ul>
-                  </li>
-                  <li class="sub-menu-1">
-                      <a target='_blank' href="#">기타<span class="gt"></span></a>
-                      <ul class="기타">
-                      </ul>
-                  </li>
-              </ul>
-          </li>
-          <li class="main-menu">
-            <a target='_blank' href="#">마니또</a>
-            <ul>
-                <li class="sub-menu-1">
-                    <a target='_blank' href="#">심리테스트<span class="gt"></span></a>
-                    <ul class="심리테스트">
-                    </ul>
-                </li>
-                <li class="sub-menu-1">
-                  <a target='_blank' href="#">체크리스트<span class="gt"></span></a>
-                  <ul class="체크리스트">
-                  </ul>
-                </li>
-                <li class="sub-menu-1">
-                  <a target='_blank' href="#">행사정보<span class="gt"></span></a>
-                  <ul class="행사정보">
-                  </ul>
-                </li>
-            </ul>
+            <li class="sub-menu-1">
+              <a  href="#" class="sub-menu-name">캠핑장 추천<span class="gt"></span>
+                <img src="./image/point.png" alt="포인트 이미지" class="pointImg2">
+              </a>
+            </li>
+          </ul>
         </li>
         <li class="main-menu">
-          <a target='_blank' href="#">게시판</a>
+          <a  href="#" class="main-menu-name">커뮤니티</a>
           <ul>
-              <li class="sub-menu-1">
-                  <a target='_blank' href="#">중고물품<span class="gt"></span></a>
-                  <ul class="중고물품">
-                  </ul>
-              </li>
-              <li class="sub-menu-1">
-                <a target='_blank' href="#">캠핑게시판<span class="gt"></span></a>
-                <ul class="캠핑게시판">
-                </ul>
-              </li>
-              <li class="sub-menu-1">
-                  <a target='_blank' href="#">레시피<span class="gt"></span></a>
-                  <ul class="레시피">
-                  </ul>
-              </li>
+            <li class="sub-menu-1">
+              <a  href="#" class="sub-menu-name">채팅방<span class="gt"></span>
+                <img src="./image/point.png" alt="포인트 이미지" class="pointImg2">
+              </a>
+            </li>
+            <li class="sub-menu-1">
+              <a  href="#" class="sub-menu-name">캠핑후기게시판<span class="gt"></span>
+                <img src="./image/point.png" alt="포인트 이미지" class="pointImg2">
+              </a>
+            </li>
+            <li class="sub-menu-1">
+              <a  href="#" class="sub-menu-name">캠핑친구모집<span class="gt"></span>
+                <img src="./image/point.png" alt="포인트 이미지" class="pointImg2">
+              </a>
+            </li>
+            <li class="sub-menu-1">
+              <a  href="#" class="sub-menu-name">행사정보<span class="gt"></span>
+                <img src="./image/point.png" alt="포인트 이미지" class="pointImg2">
+              </a>
+            </li>
           </ul>
-      </li>
+        </li>
+        <li class="main-menu">
+          <a  href="#" class="main-menu-name">캠핑물품판매</a>
+          <ul>
+            <li class="sub-menu-1">
+              <a  href="productListView.so" class="sub-menu-name">텐트<span class="gt"></span>
+                <img src="./image/point.png" alt="포인트 이미지" class="pointImg2">
+              </a>
+            </li>
+            <li class="sub-menu-1">
+              <a  href="#" class="sub-menu-name">취침용품<span class="gt"></span>
+                <img src="./image/point.png" alt="포인트 이미지" class="pointImg2">
+              </a>
+            </li>
+            <li class="sub-menu-1">
+              <a  href="#" class="sub-menu-name">조리도구<span class="gt"></span>
+                <img src="./image/point.png" alt="포인트 이미지" class="pointImg2">
+              </a>
+            </li>
+            <li class="sub-menu-1">
+              <a  href="#" class="sub-menu-name">발화용품<span class="gt"></span>
+                <img src="./image/point.png" alt="포인트 이미지" class="pointImg2">
+              </a>
+            </li>
+            <li class="sub-menu-1">
+              <a  href="#" class="sub-menu-name">배낭<span class="gt"></span>
+                <img src="./image/point.png" alt="포인트 이미지" class="pointImg2">
+              </a>
+            </li>
+            <li class="sub-menu-1">
+              <a href="#" class="sub-menu-name">기타<span class="gt"></span>
+                <img src="./image/point.png" alt="포인트 이미지" class="pointImg2">
+              </a>
+            </li>
           </ul>
-      </div>
-  </header>   <!-- //header -->
-
-  
-  </div>
+        </li>
+        <li class="main-menu">
+          <a  href="#" class="main-menu-name">마니또</a>
+          <ul>
+            <li class="sub-menu-1">
+              <a  href="#" class="sub-menu-name">심리테스트<span class="gt"></span>
+                <img src="./image/point.png" alt="포인트 이미지" class="pointImg2">
+              </a>
+            </li>
+            <li class="sub-menu-1">
+              <a  href="#" class="sub-menu-name">체크리스트<span class="gt"></span>
+                <img src="./image/point.png" alt="포인트 이미지" class="pointImg2">
+              </a>
+            </li>
+            <li class="sub-menu-1">
+              <a  href="#" class="sub-menu-name">행사정보<span class="gt"></span>
+                <img src="./image/point.png" alt="포인트 이미지" class="pointImg2">
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="main-menu">
+          <a  href="#" class="main-menu-name">게시판</a>
+          <ul>
+            <li class="sub-menu-1">
+              <a  href="#" class="sub-menu-name">중고물품<span class="gt"></span>
+                <img src="./image/point.png" alt="포인트 이미지" class="pointImg2">
+              </a>
+            </li>
+            <li class="sub-menu-1">
+              <a  href="#" class="sub-menu-name">캠핑게시판<span class="gt"></span>
+                <img src="./image/point.png" alt="포인트 이미지" class="pointImg2">
+              </a>
+            </li>
+            <li class="sub-menu-1">
+              <a  href="#" class="sub-menu-name">레시피<span class="gt"></span>
+                <img src="./image/point.png" alt="포인트 이미지" class="pointImg2">
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </header>
 </body>
-
-</body>      
 </html>
