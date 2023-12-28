@@ -84,35 +84,35 @@
 					  </tr>
 					  <tr>
 					     <th class="table-th">
-					         <h5>[강원도]충주 카누 캠핑장캠핑장ㅁㅁㅁㅁㅁㅇㅇㅇ</h5>
+					         <h5>[강원도]zzz</h5>
 					         <h6>인천 서구 정서진로 500 (오류동)</h6>
 					         02)123-123
 					     </th>
 					  </tr>
 					  <tr>
 					     <th class="table-th">
-					         <h5>[강원도]충주 카누 캠핑장캠핑장ㅁㅁㅁㅁㅁㅇㅇㅇ</h5>
+					         <h5>[강원도]fdhdf</h5>
 					         <h6>강원 정선군 신동읍 동강로 916-212</h6>
 					         02)123-123
 					     </th>
 					  </tr>
 					   <tr>
 					     <th class="table-th">
-					         <h5>[강원도]충주 카누 캠핑장캠핑장ㅁㅁㅁㅁㅁㅇㅇㅇ</h5>
+					         <h5>[강원도]tttttttt</h5>
 					         <h6>경기 용인시 처인구 원삼면 원양로591번길 93-34</h6>
 					         02)123-123
 					     </th>
 					  </tr>
 					   <tr>
 					     <th class="table-th">
-					         <h5>[강원도]충주 카누 캠핑장캠핑장ㅁㅁㅁㅁㅁㅇㅇㅇ</h5>
+					         <h5>[강원도]yyyyyyyyyyyyy</h5>
 					         <h6>강원 정선군 신동읍 동강로 916-212</h6>
 					         02)123-123
 					     </th>
 					  </tr>
 					  <tr>
 					     <th class="table-th">
-					         <h5>[강원도]충주 카누 캠핑장캠핑장ㅁㅁㅁㅁㅁㅇㅇㅇ</h5>
+					         <h5>[강원도]hhhhhhhh</h5>
 					         <h6>강원 정선군 신동읍 동강로 916-212</h6>
 					         02)123-123
 					     </th>
@@ -208,21 +208,21 @@ function categoryChange(e) {
 			state.appendChild(opt);
 		}
 	}
-	
-		var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+	    
+		const mapContainer = document.getElementById('map'), // 지도를 표시할 div
 		mapOption = {
 		  center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
 		  level: 3 // 지도의 확대 레벨
 		};
 		
 		// 지도를 생성합니다
-		var map = new kakao.maps.Map(mapContainer, mapOption);
+		const map = new kakao.maps.Map(mapContainer, mapOption);
 		
 		
 		// 주소-좌표 변환 객체를 생성합니다
-		var geocoder = new kakao.maps.services.Geocoder();
+		const geocoder = new kakao.maps.services.Geocoder();
 		
-		var positions = [
+		const positions = [
 			{	title: '카카오',
 				address: '제주특별자치도 제주시 첨단로 242'
 			},
@@ -236,8 +236,13 @@ function categoryChange(e) {
 			}
 	    ];
 		
+		
+		
 		// 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
-		  var bounds = new kakao.maps.LatLngBounds(); //추가한 코드
+		  const bounds = new kakao.maps.LatLngBounds(); //추가한 코드
+		  
+		// 마커를 담을 배열입니다
+		  const markers = [];
 
 		  positions.forEach(function (position) {
 		    // 주소로 좌표를 검색합니다
@@ -246,10 +251,10 @@ function categoryChange(e) {
 		      // 정상적으로 검색이 완료됐으면
 		      if (status === kakao.maps.services.Status.OK) {
 
-		        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+		        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
 		        // 결과값으로 받은 위치를 마커로 표시합니다
-		        var marker = new kakao.maps.Marker({
+		        const marker = new kakao.maps.Marker({
 		          map: map,
 		          position: coords
 		        });
@@ -258,16 +263,16 @@ function categoryChange(e) {
 		        // LatLngBounds 객체에 좌표를 추가합니다
 		        bounds.extend(coords); //추가한 코드, 현재 코드에서 좌표정보는 point[i]가 아닌 coords이다.
 		        
-		     // 마커에 커서가 오버됐을 때 마커 위에 표시할 인포윈도우를 생성합니다
-		        var iwContent = '<div style="width:150px;text-align:center;padding:6px 0;">' + position.title + '<br><a href="campDetail.fo" style="color:blue" target="blank">상세보기</a></div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+		     // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
+		        const iwContent = '<div style="width:150px;text-align:center;padding:6px 0;">' + position.title + '<br><a href="campDetail.fo" style="color:blue" target="blank">상세보기</a></div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
 
 		        // 인포윈도우로 장소에 대한 설명을 표시합니다
-		        var infowindow = new kakao.maps.InfoWindow({
+		        const infowindow = new kakao.maps.InfoWindow({
 		          content: iwContent
 		        });
-		         // 마커에 마우스오버 이벤트를 등록합니다
+		         // 마커에 클릭 이벤트를 등록합니다
 		        kakao.maps.event.addListener(marker, 'click', function() {
-		          // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
+		          // 마커에 클릭 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
 		            infowindow.open(map, marker);
 		        });
 		        // 지도에 클릭 이벤트 추가
@@ -280,9 +285,14 @@ function categoryChange(e) {
 		        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
 		        // map.setCenter(coords); //제거한 코드
 		        setBounds();  //추가한 코드
+		        
+		     // 마커와 인포윈도우를 배열에 추가
+	            markers.push({ marker, infowindow });
 		      }
 		    });
 		  });
+		  
+		
 		  function setBounds() { //추가한 함수
 		    // LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정합니다
 		    // 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
@@ -290,36 +300,95 @@ function categoryChange(e) {
 		  
 		  }
 		  
-		  document.addEventListener('DOMContentLoaded', function () {
-		        var table = document.getElementById('campingTable');
+		  function clearMarkers() {
+			    // 배열에 추가된 마커와 인포윈도우를 모두 지도에서 제거합니다
+			    for (let i = 0; i < markers.length; i++) {
+			        markers[i].marker.setMap(null);
+			        markers[i].infowindow.close();
+			    }
+			    // 배열을 비워줍니다
+			    markers.length = 0;
+			}
+		  
+		  
+		
+		        const table = document.getElementById('campingTable');
 				
 		        const ths = document.getElementsByClassName('table-th');
-		        
-		        
+		      
 		        for(th of ths){
 			        th.addEventListener('click',function(){
 		        	    const campName = this.children[0].textContent;
 		        		const location = this.children[1].textContent;
+		        		clearMarkers();
 		        		
-		        		// 주소로 좌표를 검색합니다
-		        		geocoder.addressSearch(location, function(result, status) {
-
-		        		    // 정상적으로 검색이 완료됐으면 
-		        		     if (status === kakao.maps.services.Status.OK) {
-
-		        		        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-		        		        // 결과값으로 받은 위치를 마커로 표시합니다
-		        		        var marker = new kakao.maps.Marker({
-		        		            map: map,
-		        		            position: coords
-		        		        });
-		        		     }
-		        		})
+		        		// 클릭한 div에 대응되는 새로운 마커 생성
+		        	    createMarker(location, campName);
+		        		
+		        		
+	
 			        })
+			        
+		        }
+		        function createMarker(location, campName) {
+		            // divId에 대응되는 새로운 마커를 생성하고 지도에 표시
+		            const position = getPositionForDivId(location,campName);
+
+		            // 주소-좌표 변환 객체를 생성합니다
+		            const geocoder = new kakao.maps.services.Geocoder();
+
+		            // 주소로 좌표를 검색합니다
+		            geocoder.addressSearch(location, function (result, status) {
+		                // 정상적으로 검색이 완료됐으면
+		                if (status === kakao.maps.services.Status.OK) {
+		                    const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+		                    // 결과값으로 받은 위치를 마커로 표시합니다
+		                    const marker = new kakao.maps.Marker({
+		                        map: map,
+		                        position: coords
+		                    });
+
+		                    // LatLngBounds 객체에 좌표를 추가합니다
+		                    bounds.extend(coords);
+
+		                    // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
+		                    const iwContent = '<div style="width:150px;text-align:center;padding:6px 0;">' + campName + '<br><a href="campDetail.fo" style="color:blue" target="blank">상세보기</a></div>'; 
+		                    const infowindow = new kakao.maps.InfoWindow({
+		                        content: iwContent
+		                    });
+
+		                    // 마커에 클릭 이벤트를 등록합니다
+		                    kakao.maps.event.addListener(marker, 'click', function () {
+		                        // 마커에 클릭 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
+		                        infowindow.open(map, marker);
+		                    });
+		                }
+		            });
 		        }
 		        
-		    });
+		        function getPositionForDivId(location,campName) {
+		            //  대응되는 위치 정보를 반환하는 함수
+		            switch (location,campName) {
+		                case location,campName:
+		                    return {
+		                        title: campName,
+		                        address: location
+		                    };
+		                // 다른 처리를 추가할 수 있습니다.
+		                // case '다른 div의 id':
+		                //     return {
+		                //         title: '다른 마커',
+		                //         address: '다른 주소'
+		                //     };
+		                default:
+		                    return {};
+		            }
+		        }
+		        
+		    
+		        
+		   
 </script>
 
 </body>
