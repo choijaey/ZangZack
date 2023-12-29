@@ -8,6 +8,6 @@ public class ProductController {
 	
 	@GetMapping("productListView.so")
 	public String productListView() {
-		return "views/sohwa/productList";
+		return "views/sohwa/(admin)productList";
 	}
 }
