@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event Listing Prototype - Light Theme</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  .event-card {
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    display: flex; /* 추가: 이미지를 왼쪽에 배치하기 위해 flex 사용 */
+  }
+  .event-image {
+    height: 200px;
+    width: 90%; /* 추가: 이미지가 반 이상을 차지하도록 설정 */
+    background-size: cover;
+  }
+  .event-content {
+    padding: 1rem;
+    width: 50%; /* 추가: 텍스트가 나머지 반을 차지하도록 설정 */
+  }
+  .event-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 0.5rem;
+  }
+  .event-date {
+    font-size: 0.875rem;
+    color: #666666;
+    margin-bottom: 0.25rem;
+  }
+  .event-location {
+    font-size: 0.875rem;
+    color: #666666;
+  }
+</style>
+</head>
+<body class="bg-gray-100 font-sans antialiased">
+<div class="container mx-auto p-4">
+  <div class="grid grid-cols-2 gap-4">
+    <!-- Event Card 1 -->
+    <div class="event-card">
+      <div class="event-image" style="background-image: url('https://source.unsplash.com/random/400x200?event');"></div>
+      <div class="event-content">
+        <div class="event-title">제4회 MICE Festival</div>
+        <div class="event-date">기간: 2021.11.30 - 2023.12.03</div>
+        <div class="event-location">장소: 부산역시 해운대구...</div>
+      </div>
+    </div>
+    <!-- Event Card 1 -->
+    <div class="event-card">
+      <div class="event-image" style="background-image: url('https://source.unsplash.com/random/400x200?event');"></div>
+      <div class="event-content">
+        <div class="event-title">제4회 MICE Festival</div>
+        <div class="event-date">기간: 2021.11.30 - 2023.12.03</div>
+        <div class="event-location">장소: 부산역시 해운대구...</div>
+      </div>
+    </div>
+    <!-- Event Card 1 -->
+    <div class="event-card">
+      <div class="event-image" style="background-image: url('https://source.unsplash.com/random/400x200?event');"></div>
+      <div class="event-content">
+        <div class="event-title">제4회 MICE Festival</div>
+        <div class="event-date">기간: 2021.11.30 - 2023.12.03</div>
+        <div class="event-location">장소: 부산역시 해운대구...</div>
+      </div>
+    </div>
+    <!-- Event Card 1 -->
+    <div class="event-card">
+      <div class="event-image" style="background-image: url('https://source.unsplash.com/random/400x200?event');"></div>
+      <div class="event-content">
+        <div class="event-title">제4회 MICE Festival</div>
+        <div class="event-date">기간: 2021.11.30 - 2023.12.03</div>
+        <div class="event-location">장소: 부산역시 해운대구...</div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+<script>
+  // Any additional JavaScript can be written here
+</script>
+</body>
+</html>

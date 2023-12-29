@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="../css/ming/member/MyPage.css" rel="stylesheet">
+</head>
+<body>
+	<div class="logo">
+		<img src="../image/ming/member/logo.png" alt="logo">
+	</div>
+	<aside class="sidebar">
+		<div class="user">
+			<img src="../image/ming/icons8-프로필-사진-96.png" style="width: 80px;"></img><br><br>
+			<p style="font-weight: bold; font-size: 1.5em;">홍길동</p><br><br>
+		</div>
+		<ul class="links">
+			<hr>
+				<li>
+					<img src="../image/ming/member/프로필수정.png" style="width: 60px;"></img>
+					<a href="#">정보 수정</a>
+				</li>
+				<li>
+					<img src="../image/ming/member/리뷰.png" style="width: 60px;"></img>
+					<a href="#">리뷰</a>
+				</li>
+				<li>
+					<img src="../image/ming/member/택배.png" style="width: 60px;"></img>
+					<a href="#">배송</a>
+				</li>
+			<hr>
+				<li>
+					<img src="../image/ming/member/icons8-쇼핑몰-50.png" style="width: 60px;"></img>
+					<a href="#">쇼핑몰 이동</a>
+				</li>
+				<li>
+					<img src="../image/ming/member/리뷰.png" style="width: 60px;"></img>
+					<a href="#">커뮤니티 이동</a>
+				</li>
+				<li>
+					<img src="../image/ming/member/logout.png" style="width: 60px;"></img>
+					<a href="#">로그아웃</a>
+				</li>
+				<li style=" position:relative; top:150px;">
+					<img src="../image/ming/member/icons8-취소-100 (1).png" style="width: 60px;"></img>
+					<a href="#">회원탈퇴</a>
+				</li>
+		</ul>
+	</aside>
+	<form action="" method="post">
+		<div id="border" class="changeList" style="width: 1000px;height: 1700px;">
+			<span class="editTitle">내 정보 수정</span><br>
+				<div class="profile">
+					<img src="../image/ming/member/icons8-프로필-사진-96.png" class="profile-poto">
+						<label class="input-file-button" for="input-file">
+							파일선택
+							<input type="file" class="btnFile" name="file" id="input-file" accept=".jpg,.png.jpge" style="text-align: center;">
+						</label>
+			     	<div class="input-group">
+					    <input type="text" value="UserName"  placeholder="이름">
+					    <label>Name</label>
+					    <span></span>
+					</div>
+					<div class="input-group">
+					    <input type="text" value="nickName"  placeholder="이름">
+					    <label>nickName</label>
+					    <span></span>
+					</div>
+					<div class="input-group">
+					    <input type="text" value="ID" placeholder="ID" required>
+					    <label>ID</label>
+					    <span></span>
+					</div>
+					<div class="input-group">
+					    <input type="tel" name="phone" value="phone" placeholder="전화번호(-제외)" required>
+					    <label>PHONE</label>
+					    <span></span>
+					</div>
+					<div class="input-group">
+					    <input type="email" name="phone" value="email@naver.com" placeholder="전화번호(-제외)" required>
+					    <label>email</label>
+					    <span></span>
+					</div>
+					 <button class="mailBtn">메일인증</button>
+					 <div class="input-group">
+					    <input type="text" name="emailCode" value="emailCode" placeholder="emailCode" required>
+					    <label>인증코드</label>
+					    <span></span>
+					</div>
+					<div class="input-group">
+					    <input type="text" value="post" placeholder="post" required>
+					    <label>주소</label>
+					    <span></span>
+					</div>
+					 <button class="postBtn">주소 찾기</button>
+					<div class="input-group">
+					    <input type="text" value="datailPost" placeholder="datailPost" required>
+					    <label>상세주소</label>
+					    <span></span>
+					</div>
+					<div class="input-group">
+			             <i class='bx bxs-lock-alt'></i>
+			             <input type="date" id="birth" placeholder="생년월일" name="birth" style="height: 45px;">
+		            </div>
+				</div>
+			</div>
+		<button class="btn-hover color-2">수정</button>
+      	<button class="btn-hover color-1">취소</button>
+	</form>
+</body>
+</html>

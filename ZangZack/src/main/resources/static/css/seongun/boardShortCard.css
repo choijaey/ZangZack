@@ -1,0 +1,373 @@
+/* 폰트 설정 */
+@font-face {
+  font-family: 'GmarketSansMedium';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* 전체 요소에 폰트 적용 */
+* {
+  font-family: 'GmarketSansMedium';
+}
+/* 상단 이동 버튼 */
+#upBtnArea{
+  top: 88%;
+  left: 92%;
+  position: fixed;
+}
+/* 상단 이동 버튼 */
+#back-to-top {
+  display: inline-block;
+  background-color: transparent !important;
+  width: 38px;
+  height: 38px;
+  text-align: center;
+  border-radius: 4px;
+  position: fixed;
+  bottom: 25px !important;
+  right: 35px !important;
+  transition: background-color .3s, 
+    opacity .5s, visibility .5s;
+  opacity: 0;
+  visibility: visible;
+  z-index: 99999999;
+}
+.show {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+#content {
+  padding: 0 20%;
+}
+
+/* 일반적인 div 요소 스타일 */
+#snb_zone{
+  width: 92%;
+  padding: 0;
+  margin-left: 1.5%;
+}
+
+#snb_zone ul li {
+  list-style: none;
+  display: inline-block;
+  vertical-align: middle;
+  color: gray;
+  font-size: 20px;
+  padding: 1% 2.5% 0 0;
+  height: 100%;
+}
+
+
+#snb_zone ul {
+  width: 100%;
+  position: relative;
+  padding: 0;
+  border-bottom: 1px solid black;
+}
+
+#snb_zone ul li a {
+  display: flex;
+}
+
+
+#check_snb {
+  border-bottom: 3px solid black;
+}
+
+/* 카테고리 */
+#point_zone{
+  width: 92%;
+  padding-left: 0;
+  margin-left: 1.5%;
+  border-bottom: 1px solid black;
+}
+
+#category {
+  margin: 1%;
+  margin-left: 0;
+}
+
+#category a {
+  text-decoration: none;
+  text-align: center;
+  color: black;
+  padding: 0.5% 1% 0.5% 1%;
+  margin: auto;
+}
+
+#allCategory {
+  border-radius: 8px;
+  color: #e6e6e6;
+  background-color: #464D0F;
+}
+
+
+/* 내용물 */
+.board_list_card .txt {
+  max-height: 44px; 
+  margin-top: 6px; 
+  font-size: 14px; 
+  line-height: 22px;
+  display: -webkit-box; /* 웹킷 브라우저에서의 표시 방식 설정 */
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  -webkit-line-clamp: 2; /* 표시할 최대 줄 수를 2로 설정 */
+  -webkit-box-orient: vertical; 
+  word-wrap: break-word; /* 넘치는 단어를 줄 바꿈하여 표시 */
+  word-break: break-word; /* 단어 내 줄 바꿈을 가능하게 함 */
+  color: #666; 
+}
+
+
+/* card bottom */
+.board_list_card .con_bottom{
+  position: absolute;
+  bottom: 0;
+  left:0;
+  width: 100%;
+  padding-top: 35px;
+}
+
+/* 닉네임 설정 */
+.board_list_card .user_info{
+  overflow: hidden;
+}
+
+.board_list_card .user_info .user_nick_area{
+  float: left;
+}
+
+.board_list_card .user_info .user_nick_area > table{
+  width: auto;
+  border-collapse: collapse;
+  table-layout: fixed;
+  
+
+  tbody{
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+  }
+
+  tr{
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+  }
+}
+
+.board-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; 
+  align-items: flex-start; 
+  padding-top: 20px; 
+  margin-left: 1%;
+  width: 92%; 
+  margin-bottom: 20px;
+}
+
+.card {
+  margin: 1%;
+  width: calc(23% - 20px);  /* 너비를 조절합니다 */
+  background-color: #fff;
+  display: inline-block;
+  position: relative;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.border-bottom-div {
+  width: 94%; /* 전체 너비를 사용 */
+  border-top: 1px solid #e6e6e6; /* 하단 테두리 설정 */
+  padding-bottom: 20px; /* 하단 테두리 아래에 여백을 줌 */
+}
+.card-image img {
+  width: 100%;
+  height: auto;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.card-body {
+  padding: 10px;
+  text-align: left;
+}
+
+.card-title {
+  display: flex; 
+  align-items: center; /* 세로 정렬 */
+  justify-content: space-between; /* 요소들 사이에 공간을 균등하게 분배 */
+  padding: 0; 
+}
+
+.title-text {
+  font-size: 1rem;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-grow: 1; /* 제목이 남는 공간을 채우도록 설정 */
+}
+
+.card-category {
+  padding: 2.5px 8px;
+  background-color: #464D0F;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  display: inline-flex; 
+  align-items: center; 
+  white-space: nowrap;
+  margin-left: 10px; 
+  flex-shrink: 0; /* 카테고리 크기가 줄어들지 않도록 설정 */
+}
+
+.card-author{
+  font-size: 0.9rem;
+  padding-top: 4px;
+  font-weight: bold;
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  width: 100%; 
+  display: block; 
+}
+
+.card-info {
+  padding-top: 3px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.card-info table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.info-label, .info-value {
+  padding: 4px;
+  text-align: center;
+}
+
+.info-label {
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.date-year, .date-day {
+  padding: 2px 6px;
+}
+
+.date-year {
+  font-weight: bold;
+}
+
+.write_btn{
+  display: inline-block;
+  min-width: 50px;
+  height: 30px;
+  box-sizing: border-box;
+  border: 1px solid #d3d3d3;
+  text-align: center;
+  position: relative;
+  background-color: #fff;
+  right: -88%;
+  font-weight: bolder;
+}
+
+.write_btn a{
+  color: black;
+  text-decoration: none;
+}
+
+/* 페이징 css */
+.board_bottom_area {
+  display: inline-block;
+  position: relative;
+  width: 80%;
+  margin: 2%;
+  margin-left: 8%;
+  align-items: center;
+}
+
+.board_bottom_area hr {
+  margin-top: 30px;
+  background-color: #eeeee6;
+  border: none;
+  height: 1px;
+}
+
+#pagenation {
+  text-align: center;
+}
+
+#pagenation ul {
+  list-style: none;
+  padding: 0;
+  display: inline-block; /* 중앙 정렬을 위해 inline-block으로 변경 */
+  margin: 0; /* 기본 마진 제거 */
+}
+
+#pagenation ul li {
+  display: inline;
+  margin: 0 5px; 
+}
+
+#pagenation ul li a {
+  text-decoration: none;
+  color: #464D0F;
+  font-size: 14px;
+  padding: 5px 10px; 
+  border-radius: 5px; /* 모서리를 둥글게 */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+#pagenation ul li a:hover {
+  background-color: #464D0F;
+  color: #e6e6e6;
+}
+
+#pagenation ul li a#check_page {
+  background-color: #464D0F; 
+  color: #e6e6e6; 
+}
+
+.search_area {
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  padding: 20px 0; 
+}
+
+.search_select {
+  padding: 5px 10px;
+  margin-right: 10px; 
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.search_input {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 300px; 
+  margin-right: 10px; 
+}
+
+.search_button {
+  padding: 5px 15px;
+  border: none;
+  background-color: #464D0F;
+  color: white; 
+  border-radius: 5px; 
+  cursor: pointer;
+}
+
+.search_button:hover {
+  background-color: #363D0F; 
+}

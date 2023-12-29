@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link href="css/sohwa/productList.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+<title>Insert title here</title>
+</head>
+<body>
+	<div th:replace="~{common/navbar :: navbar}"></div>
+	
+	<div id="wrapper">
+		<div class="slider-container">
+		<div class="slider">
+	      <div class="inner-container">
+	        <div class="slider__wrraper flex-column">
+	          <div class="flex-column slider__content"></div>
+	          <div class="slider__footer">
+	            <div class="slider__btns justify-between">
+	              <button class="slider__btn-buy">buy</button>
+	              <div class="flex-center">
+	                <button
+	                  data-type="prev"
+	                  class="slider__btn-switch slider__btn-switch--dark flex-center"
+	                ></button>
+	                <button
+	                  data-type="next"
+	                  class="slider__btn-switch slider__btn-switch--light flex-center"
+	                ></button>
+	              </div>
+	            </div>
+	            <div class="slider__index"></div>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	  
+	    
+	    <div class="additional-section">
+			<div class="category">
+		<div><img src="image/sohwa/tent.png">텐트</div>
+		<div><img src="image/sohwa/bed.png">취침용품</div>
+		<div><img src="image/sohwa/cook.png">조리도구</div>
+		<div><img src="image/sohwa/fire.png">발화용품</div>
+		<div><img src="image/sohwa/bag.png">백팩</div>
+		<div><img src="image/sohwa/other.png">기타용품</div>
+	</div>
+	
+	
+	<div class="search">
+  		<input type="text" placeholder="검색어 입력">
+  		<img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+	</div>
+	
+	<div class="dropdown" style="background-color: white !important; color:black;">
+  		<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    		등록일자 순
+  		</button>
+  		<ul class="dropdown-menu">
+    		<li><a class="dropdown-item" href="#">낮은 가격 순</a></li>
+    		<li><a class="dropdown-item" href="#">높은 가격 순</a></li>
+    		<li><a class="dropdown-item" href="#">평점 높은 순</a></li>
+  		</ul>
+	</div>
+	
+  <main>
+	  <h1>MD's PICK ></h1>
+  	  <section class="products pone">
+			<div class="product-wrapper">
+				<article class="product">
+				    <a href="#"><img src="image/sohwa/cook2core1.jpg"></a>
+			        <p>상품 설명이 들어가는 곳입니다. 상품에 대한 간략한 설명을 여기에 작성합니다.</p>
+			        <p class="price">￦ 10,000</p>
+			        <span class="starImage">
+						<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 20개</span></img>
+					</span><br>
+			        <span class="badge rounded-pill text-bg-dark">일시품절</span>
+			        <span class="badge text-bg-secondary">무료배송</span>
+			        <span class="badge text-bg-success">특가</span>
+			      </article>
+			      
+			      <article class="product">
+				    <a href="#"><img src="image/sohwa/fire2core1.png"></a>
+			        <p>상품 설명이 들어가는 곳입니다. 상품에 대한 간략한 설명을 여기에 작성합니다.</p>
+			        <p class="price">￦ 10,000</p>
+			        <span class="starImage">
+						<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 20개</span></img>
+					</span><br>
+			        <span class="badge rounded-pill text-bg-dark">일시품절</span>
+			        <span class="badge text-bg-secondary">무료배송</span>
+			        <span class="badge text-bg-success">특가</span>
+			      </article>
+			      
+			      <article class="product">
+				    <a href="#"><img src="image/sohwa/fire1core1.png"></a>
+			        <p>상품 설명이 들어가는 곳입니다. 상품에 대한 간략한 설명을 여기에 작성합니다.</p>
+			        <p class="price">￦ 10,000</p>
+			        <span class="starImage">
+						<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 20개</span></img>
+					</span><br>
+			        <span class="badge rounded-pill text-bg-dark">일시품절</span>
+			        <span class="badge text-bg-secondary">무료배송</span>
+			        <span class="badge text-bg-success">특가</span>
+			      </article>
+			      
+			      <article class="product">
+				    <a href="#"><img src="image/sohwa/cook2core1.jpg"></a>
+			        <p>상품 설명이 들어가는 곳입니다. 상품에 대한 간략한 설명을 여기에 작성합니다.</p>
+			        <p class="price">￦ 10,000</p>
+			        <span class="starImage">
+						<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 20개</span></img>
+					</span><br>
+			        <span class="badge rounded-pill text-bg-dark">일시품절</span>
+			        <span class="badge text-bg-secondary">무료배송</span>
+			        <span class="badge text-bg-success">특가</span>
+			      </article>
+			      
+			      <article class="product">
+				    <a href="#"><img src="image/sohwa/cook2core1.jpg"></a>
+			        <p>상품 설명이 들어가는 곳입니다. 상품에 대한 간략한 설명을 여기에 작성합니다.</p>
+			        <p class="price">￦ 10,000</p>
+			        <span class="starImage">
+						<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 20개</span></img>
+					</span><br>
+			        <span class="badge rounded-pill text-bg-dark">일시품절</span>
+			        <span class="badge text-bg-secondary">무료배송</span>
+			        <span class="badge text-bg-success">특가</span>
+			      </article>
+			      
+			      <article class="product">
+				    <a href="#"><img src="image/sohwa/cook2core1.jpg"></a>
+			        <p>상품 설명이 들어가는 곳입니다. 상품에 대한 간략한 설명을 여기에 작성합니다.</p>
+			        <p class="price">￦ 10,000</p>
+			        <span class="starImage">
+						<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 20개</span></img>
+					</span><br>
+			        <span class="badge rounded-pill text-bg-dark">일시품절</span>
+			        <span class="badge text-bg-secondary">무료배송</span>
+			        <span class="badge text-bg-success">특가</span>
+			      </article>
+			      
+			      <article class="product">
+				    <a href="#"><img src="image/sohwa/cook2core1.jpg"></a>
+			        <p>상품 설명이 들어가는 곳입니다. 상품에 대한 간략한 설명을 여기에 작성합니다.</p>
+			        <p class="price">￦ 10,000</p>
+			        <span class="starImage">
+						<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 20개</span></img>
+					</span><br>
+			        <span class="badge rounded-pill text-bg-dark">일시품절</span>
+			        <span class="badge text-bg-secondary">무료배송</span>
+			        <span class="badge text-bg-success">특가</span>
+			      </article>
+			      
+			      <article class="product">
+				    <a href="#"><img src="image/sohwa/cook2core1.jpg"></a>
+			        <p>상품 설명이 들어가는 곳입니다. 상품에 대한 간략한 설명을 여기에 작성합니다.</p>
+			        <p class="price">￦ 10,000</p>
+			        <span class="starImage">
+						<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 20개</span></img>
+					</span><br>
+			        <span class="badge rounded-pill text-bg-dark">일시품절</span>
+			        <span class="badge text-bg-secondary">무료배송</span>
+			        <span class="badge text-bg-success">특가</span>
+			      </article>
+				
+			</div>
+        </section>
+       
+	    <div id="radio-box">
+			<input type="radio" name="slide" id="prevBtn" checked>
+	        <input type="radio" name="slide" id="nextBtn">
+		</div>
+       
+       
+   </main>
+  
+   <main>
+	  <h1>PRODUCT ></h1>
+  	  <section class="products">
+      	<article class="product">
+		    <a href="#"><img src="image/sohwa/cook2core1.jpg"></a>
+	        <p>상품 설명이 들어가는 곳입니다. 상품에 대한 간략한 설명을 여기에 작성합니다.</p>
+	        <p class="price">￦ 10,000</p>
+	        <span class="starImage">
+				<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 20개</span></img>
+			</span><br>
+	        <span class="badge rounded-pill text-bg-dark">일시품절</span>
+	        <span class="badge text-bg-secondary">무료배송</span>
+	        <span class="badge text-bg-success">특가</span>
+	      </article>
+	      
+	      <article class="product">
+		    <a href="#"><img src="image/sohwa/cook2core1.jpg"></a>
+	        <p>상품 설명이 들어가는 곳입니다. 상품에 대한 간략한 설명을 여기에 작성합니다.</p>
+	        <p class="price">￦ 10,000</p>
+	        <span class="starImage">
+				<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 20개</span></img>
+			</span><br>
+	        <span class="badge rounded-pill text-bg-dark">일시품절</span>
+	        <span class="badge text-bg-secondary">무료배송</span>
+	        <span class="badge text-bg-success">특가</span>
+	      </article>
+	      
+	      <article class="product">
+		    <a href="#"><img src="image/sohwa/cook2core1.jpg"></a>
+	        <p>상품 설명이 들어가는 곳입니다. 상품에 대한 간략한 설명을 여기에 작성합니다.</p>
+	        <p class="price">￦ 10,000</p>
+	        <span class="starImage">
+				<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 20개</span></img>
+			</span><br>
+	        <span class="badge rounded-pill text-bg-dark">일시품절</span>
+	        <span class="badge text-bg-secondary">무료배송</span>
+	        <span class="badge text-bg-success">특가</span>
+	      </article>
+	      
+	      <article class="product">
+		    <a href="#"><img src="image/sohwa/cook2core1.jpg"></a>
+	        <p>상품 설명이 들어가는 곳입니다. 상품에 대한 간략한 설명을 여기에 작성합니다.</p>
+	        <p class="price">￦ 10,000</p>
+	        <span class="starImage">
+				<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 20개</span></img>
+			</span><br>
+	        <span class="badge rounded-pill text-bg-dark">일시품절</span>
+	        <span class="badge text-bg-secondary">무료배송</span>
+	        <span class="badge text-bg-success">특가</span>
+	      </article>
+	      
+	      <article class="product">
+		    <a href="#"><img src="image/sohwa/cook2core1.jpg"></a>
+	        <p>상품 설명이 들어가는 곳입니다. 상품에 대한 간략한 설명을 여기에 작성합니다.</p>
+	        <p class="price">￦ 10,000</p>
+	        <span class="starImage">
+				<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 20개</span></img>
+			</span><br>
+	        <span class="badge rounded-pill text-bg-dark">일시품절</span>
+	        <span class="badge text-bg-secondary">무료배송</span>
+	        <span class="badge text-bg-success">특가</span>
+	      </article>
+	      
+	      <article class="product">
+		    <a href="#"><img src="image/sohwa/cook2core1.jpg"></a>
+	        <p>상품 설명이 들어가는 곳입니다. 상품에 대한 간략한 설명을 여기에 작성합니다.</p>
+	        <p class="price">￦ 10,000</p>
+	        <span class="starImage">
+				<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 20개</span></img>
+			</span><br>
+	        <span class="badge rounded-pill text-bg-dark">일시품절</span>
+	        <span class="badge text-bg-secondary">무료배송</span>
+	        <span class="badge text-bg-success">특가</span>
+	      </article>
+	      
+	      <article class="product">
+		    <a href="#"><img src="image/sohwa/cook2core1.jpg"></a>
+	        <p>상품 설명이 들어가는 곳입니다. 상품에 대한 간략한 설명을 여기에 작성합니다.</p>
+	        <p class="price">￦ 10,000</p>
+	        <span class="starImage">
+				<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 20개</span></img>
+			</span><br>
+	        <span class="badge rounded-pill text-bg-dark">일시품절</span>
+	        <span class="badge text-bg-secondary">무료배송</span>
+	        <span class="badge text-bg-success">특가</span>
+	      </article>
+	      
+	      <article class="product">
+		    <a href="#"><img src="image/sohwa/cook2core1.jpg"></a>
+	        <p>상품 설명이 들어가는 곳입니다. 상품에 대한 간략한 설명을 여기에 작성합니다.</p>
+	        <p class="price">￦ 10,000</p>
+	        <span class="starImage">
+				<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 20개</span></img>
+			</span><br>
+	        <span class="badge rounded-pill text-bg-dark">일시품절</span>
+	        <span class="badge text-bg-secondary">무료배송</span>
+	        <span class="badge text-bg-success">특가</span>
+	      </article>
+	      
+	      <article class="product">
+		    <a href="#"><img src="image/sohwa/cook2core1.jpg"></a>
+	        <p>상품 설명이 들어가는 곳입니다. 상품에 대한 간략한 설명을 여기에 작성합니다.</p>
+	        <p class="price">￦ 10,000</p>
+	        <span class="starImage">
+				<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 20개</span></img>
+			</span><br>
+	        <span class="badge rounded-pill text-bg-dark">일시품절</span>
+	        <span class="badge text-bg-secondary">무료배송</span>
+	        <span class="badge text-bg-success">특가</span>
+	      </article>
+    </section>
+  </main>
+		</div>
+	</div>
+	</div>
+	
+	
+    
+    
+    <script>
+		
+		let intervalId; // 전역 변수로 setInterval을 담기 위한 변수
+
+		function startSlideShow(intervalTime) {
+		  intervalId = setInterval(() => {
+		    // 'next' 버튼을 눌렀을 때와 동일한 효과를 내는 코드
+		    slider.handleClick('next'); // slider는 현재 슬라이드를 관리하는 객체일 것입니다.
+		  }, intervalTime);
+		}
+		
+		function stopSlideShow() {
+		  clearInterval(intervalId); // setInterval을 멈추는 함수
+		}
+		
+		
+		startSlideShow(5000);
+			  
+	  
+	  
+	  
+	  
+	  
+
+		
+		const items = [
+		{
+		    img: "image/sohwa/cook3core1-removebg-preview.png",
+		    category: "cooking utensils",
+		    title: "cold pack",
+		    price: "\\16,910",
+		    bgColor: "#dedede",
+		  },
+		  {
+		    img: "image/sohwa/대표1-removebg-preview (2).png",
+		    category: "Other products",
+		    title: "dear shaped lights",
+		    price: "\\ 17,000",
+		    bgColor: "#ffe474",
+		  },
+		  {
+		    img: "image/sohwa/대표2-removebg-preview.png",
+		    category: "Other products",
+		    title: "camping chair",
+		    price: "\\20,100",
+		    bgColor: "#d2e2d7",
+		  },
+		  {
+		    img: "image/sohwa/cook2Detail2-removebg-preview.png",
+		    category: "cooking utensils",
+		    title: "mini brazier",
+		    price: "\\19,800",
+		    bgColor: "#f3c3be",
+		  },
+		  
+		];
+		
+		const timeLine = gsap.timeline();
+		
+		class Slider {
+		  constructor(items) {
+		    this.active = 0;
+		    this.items = items;
+		    document
+		      .querySelectorAll(".slider__btn-switch[data-type]")
+		      .forEach((btn) => {
+		        btn.onclick = () => this.handleClick(btn.dataset.type);
+		      });
+		  }
+		
+		  renderItem() {
+		    const { img, category, title, price } = this.items[this.active];
+		
+		    const sliderContent = `
+		      <img class="slider__img" src="${img}" alt="${title}" />
+		      <div class="slider__context flex-column">
+		        <h3 class="slider__category">${category}</h3>
+		        <strong class="slider__title">${title}</strong>
+		        <small class="slider__price">${price}</small>
+		      </div>
+		    `;
+		    const sliderIndex = `
+		      <span>${
+		        this.active < 10 ? "0" + (this.active + 1) : this.active + 1
+		      }</span>
+		      <span>${
+		        this.items.length < 10 ? "0" + this.items.length : this.items.length
+		      }</span>
+		    `;
+		
+		    document.querySelector(".slider__content").innerHTML = sliderContent;
+		    document.querySelector(".slider__index").innerHTML = sliderIndex;
+		  }
+		
+		  basicAimation(dir, delay) {
+		    timeLine.to(".slider", {
+		      delay,
+		      duration: 0.2,
+		      backgroundColor: `${items[this.active].bgColor}`,
+		    });
+		    timeLine.fromTo(
+		      ".slider__img",
+		      {
+		        x: 150 * dir,
+		        opacity: 0,
+		        duration: 1,
+		        ease: "power2.out",
+		      },
+		      {
+		        x: 0,
+		        opacity: 1,
+		        duration: 1,
+		        ease: "power2.out",
+		      }
+		    );
+		    timeLine.fromTo(
+		      ".slider__context *",
+		      {
+		        x: 50 * dir,
+		        opacity: 0,
+		        duration: 0.7,
+		        stagger: 0.15,
+		        ease: "power2.out",
+		      },
+		      {
+		        x: 0,
+		        opacity: 1,
+		        duration: 0.7,
+		        stagger: 0.15,
+		        ease: "power2.out",
+		      },
+		      "<"
+		    );
+		  }
+		
+		  handleClick(type) {
+		    const dir = type === "next" ? 1 : -1;
+		    timeLine.to(".slider__img", {
+		      x: -250 * dir,
+		      opacity: 0,
+		      duration: 1,
+		      ease: "power2.inOut",
+		
+		      onComplete: () => {
+		        if (type === "next") {
+		          this.active = this.active === items.length - 1 ? 0 : this.active + 1;
+		        } else {
+		          this.active = this.active <= 0 ? items.length - 1 : this.active - 1;
+		        }
+		
+		        this.renderItem();
+		        this.basicAimation(dir);
+		      },
+		    });
+		    timeLine.to(
+		      " .slider__context *",
+		      {
+		        x: -100 * dir,
+		        opacity: 0,
+		        duration: 0.7,
+		        stagger: 0.15,
+		        ease: "power2.inOut",
+		      },
+		      "<"
+		    );
+		  }
+		}
+		
+		const slider = new Slider(items);
+		slider.renderItem();
+		slider.basicAimation(1, 1);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		    
+	    const productWrapper = document.querySelector('.product-wrapper');
+		const prevBtn = document.getElementById('prevBtn');
+		const nextBtn = document.getElementById('nextBtn');
+		const productCount = 4; // 보여질 상품 개수
+		
+		let currentPosition = 0;
+		
+		nextBtn.addEventListener('click', () => {
+		  if (currentPosition < productWrapper.children.length / productCount - 1) {
+		    currentPosition++;
+		    productWrapper.style.transform = `translateX(-${currentPosition * 100}%)`;
+		  }
+		});
+		
+		prevBtn.addEventListener('click', () => {
+		  if (currentPosition > 0) {
+		    currentPosition--;
+		    productWrapper.style.transform = `translateX(-${currentPosition * 100}%)`;
+		  }
+		});
+	</script>
+
+</body>
+</html>
