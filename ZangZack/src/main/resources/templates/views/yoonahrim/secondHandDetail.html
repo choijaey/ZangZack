@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<link href="css/yoonahrim/SecondHandDetail.css?after" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+	<div th:replace="~{common/navbar :: navbar}"></div>
+	<br><br>
+	<h1 style="text-align:center; font-size: 30px; margin: 50px">중고 거래 매물 상세페이지</h1>
+	
+	<div class="d-grid gap-2 d-md-block">
+			<div class="container text-end mt-n2">
+				<button type="button" class="btn btn-outline-success" th:onclick="location.href='edit.do'">수정하기</button>&nbsp;&nbsp;
+				<button type="button" id="bookButton" class="btn btn-outline-success" th:onclick="booked()">예약 중</button>&nbsp;&nbsp;
+				<button type="button" id="soldoutButton" class="btn btn-outline-success" th:onclick="markSold()">판매완료</button>
+			</div>
+			<h2 class="reservation" style="text-align:center; margin: 50px; display: none">현재 이 페이지는 예약 중입니다.</h2>
+	</div>
+		<!-- 사진 뒤에 배경을 옆에 container 만틈 배경색을 줘서 비어보이지 않게 해보자! -->
+		<div class="detail">
+			<div class="slide">
+				<!-- 아래 버튼 -->
+				<div id="carouselExampleCaptions" class="carousel slide" style="width:800px; height:680px; border-radius: 20%">
+				  <div class="carousel-indicators">
+				    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+				    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+				    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+				    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Slide 4"></button>
+				  </div>
+				  
+				  <!-- 이미지 -->
+				  <div class="carousel-inner mb-2" >
+				    <div class="carousel-item active">
+				      <img src="image/yoonahrim/예시_등불.PNG" class="d-block w-100" alt="img" style="border-radius: 3%">
+				      	<div class="carousel-caption d-none d-md-block"></div>
+				    </div>
+				    <div class="carousel-item">
+				      <img src="image/yoonahrim/예시_등불2.PNG" class="d-block w-100" alt="img" style="border-radius: 3%">
+				      	<div class="carousel-caption d-none d-md-block"></div>
+				    </div>
+				    <div class="carousel-item">
+				      <img src="image/yoonahrim/예시_등불3.PNG" class="d-block w-100" alt="img" style="border-radius: 3%">
+				      	<div class="carousel-caption d-none d-md-block"></div>
+				   </div>
+				   <div class="carousel-item">
+				      <img src="image/yoonahrim/예시_등불4.PNG" class="d-block w-100" alt="img" style="border-radius: 3%">
+				      	<div class="carousel-caption d-none d-md-block"></div>
+				   </div>
+				  </div>
+				  
+				  <!-- < > 버튼 -->
+				  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+				    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				    <span class="visually-hidden">Previous</span>
+				  </button>
+				  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+				    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+				    <span class="visually-hidden">Next</span>
+				  </button>
+				</div>
+			</div>
+			
+			
+			<!-- 내용 창 -->
+			<div class="container_content" style="position:absolute; top: 1050px; left: 660px;">
+			    		
+			    		<!-- 프로필 창 -->
+						<span class="container_profile">
+							<span id="profile">
+								<img alt="img" src="image/yoonahrim/user.png">
+									<p><b>윤아림</b></p>
+									<p>서울특별시 중구</p>
+									
+								<div class="container2 text-end">
+									<button type="button" class="btn_booked" th:onclick="location.href='chating.do'">1 : 1 채팅방</button>
+								</div>	
+							</span>
+						</span>	
+			    		
+			    		
+						
+			    		
+						<div id="content">
+							<div style="margin:50px">
+								<p style="margin:10px"><b>충전식 캠핑랜턴 c타입 감성 캠핑조명 빈티지 고리식 (하자)</b></p><br>
+								<p style="margin:10px"><b>5,000원</b></p><hr><br>
+								<div class="content-line">
+									<pre style="margin:10px; overflow: hidden;">
+충전식 캠핑랜턴 c타입 감성 캠핑조명 빈티지 고리식 (하자)
+
+*사진과 같이 윗부분에 깨진 부분이 있습니다
+그 와 사용감 있고 기능적으로는 아무 문제 없습니다
+
+깨진부분이 뒷쪽이라 안보이게 걸어서 사용하시면 괜찮습니다
+
+c타입 충전식이고
+밝기 조절 가능 합니다
+캠핑 늦오후부터 다음날까지 쭉 켜놔도 될정도로 배터리 오래 갑니다
+
+하자부분 예민하지 않으시다면 저렴히 구매하셔요
+
+구성품: 랜턴 본품
+
+직거래, 일반택배, CU알뜰택배 모두 가능합니다 :)
+상점 내 다른 다양한 캠핑 물품과 함께 구매하시면 좋습니다. 둘러보세요~
+테
+스
+트
+를
+해
+보
+겠
+습
+니
+다.
+									</pre>
+								</div>
+							</div>
+						</div>
+				</div>
+				
+				<hr id="hr_line">
+				
+			<!-- 댓글 창 -->
+			<div class="container_reply" style="position:absolute; top: 2050px; left: 520px; width: 770px; height: 400px;">
+				<div class="reply" style="margin:30px">
+					
+					<!-- 댓글 카운트가 보이는 부분 -->
+					<div class="reply_count">
+						<p style="margin:20px">댓글 n</p>
+					</div>
+					<hr id="hr_count">
+					<!-- 작성한 댓글이 보이는 부분 -->
+					<div class="reply_content" style="width:820px; height:245px; overflow: auto; overflow-x: hidden">
+						<div class="media fs-7">
+							<img class="d-flex rounded-circle" alt="reply_profile" src="image/yoonahrim/user.png" style="position:absolute; width:50px; height:50px">
+							<div class="media-body" style="position:relative; left:60px">
+								<h8 class="mt-0">Commenter Name</h8>
+								<div></div>
+								<p>첫번째 댓글.</p>
+							</div>
+						</div>
+						<div class="media fs-7">
+							<img class="d-flex rounded-circle" alt="reply_profile" src="image/yoonahrim/user.png" style="position:absolute; width:50px; height:50px">
+							<div class="media-body" style="position:relative; left:60px">
+								<h8 class="mt-0">Commenter Name</h8>
+								<p>첫번째 댓글.</p>
+							</div>
+						</div>
+						<div class="media fs-7">
+							<img class="d-flex rounded-circle" alt="reply_profile" src="image/yoonahrim/user.png" style="position:absolute; width:50px; height:50px">
+							<div class="media-body" style="position:relative; left:60px">
+								<h8 class="mt-2">Commenter Name</h8>
+								<p>첫번째 댓글.</p>
+							</div>
+						</div>
+						<div class="media fs-7">
+							<img class="d-flex rounded-circle" alt="reply_profile" src="image/yoonahrim/user.png" style="position:absolute; width:50px; height:50px">
+							<div class="media-body fs-7" style="position:relative; left:60px">
+								<h8 class="mt-0">Commenter Name</h8>
+								<p>첫번째 댓글.</p>
+							</div>
+						</div>
+						<div class="media fs-7">
+							<img class="d-flex rounded-circle" alt="reply_profile" src="image/yoonahrim/user.png" style="position:absolute; width:50px; height:50px">
+							<div class="media-body fs-7" style="position:relative; left:60px">
+								<h8 class="mt-0">Commenter Name</h8>
+								<p>첫번째 댓글.</p>
+							</div>
+						</div>
+					</div>
+					<hr id="hr_content" style="width:820px">
+					<!-- 댓글 입력창 -->
+					<div id="reply_write">
+						<div class="input-group mb-3">
+							 <div class="col-xs-4">
+								<label for="ex2">
+	        						<input class="form-control" id="ex2" type="text" placeholder="댓글을 입력하세요">
+							  		<button class="btn_reply btn-outline-secondary" type="button" id="button-addon2">
+								  		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cursor-fill" viewBox="0 0 16 16">
+			 								 <path d="M14.082 2.182a.5.5 0 0 1 .103.557L8.528 15.467a.5.5 0 0 1-.917-.007L5.57 10.694.803 8.652a.5.5 0 0 1-.006-.916l12.728-5.657a.5.5 0 0 1 .556.103z"/>
+										</svg>
+							  		</button>
+							  	</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script th:line="javascript">
+			function booked() {
+	            var button = document.getElementById('bookButton');
+	            var confirmBooking = confirm("예약 상태를 변경하시겠습니까?");
+	            
+	            if (confirmBooking) {
+	                var reservationElement = document.getElementsByClassName('reservation')[0];
+	
+	                if (button.innerText === '예약 중') {
+	                    alert("예약 중으로 상태가 변경되었습니다.");
+	                    button.innerText = '예약 취소';
+	                    window.location.href = "booking.do"; //예약중일때
+	                    
+	                    if (reservationElement) {
+	                        reservationElement.style.display = 'block';
+	                    }
+	                    
+	                } else {
+	                    alert("예약 취소로 상태가 변경되었습니다.");
+	                    button.innerText = '예약 중';
+	                    window.location.href = "bookingUndo.do"; //예약취소일때
+	                    
+	                    if (reservationElement) {
+	                        reservationElement.style.display = 'none';
+	                    }
+	                }
+	            } else {
+	                alert("취소되었습니다.");
+	            }
+	        }
+
+			
+			function markSold() {
+			    var outButton = document.getElementById('soldoutButton');
+			    
+			    if (outButton.innerText == '판매완료') {
+			        var confirmSold = confirm("판매완료로 상태를 변경하시면 상태를 되돌릴 수 없습니다. \n그래도 변경하시겠습니까?");
+			        
+			        if (confirmSold) {
+			            alert("판매완료로 상태가 변경되었습니다.");
+			            outButton.innerText = '삭제';
+			            window.location.href = "soldout.do"; //판매완료일때
+			        } else {
+			            alert("취소되었습니다.");
+			        }
+			        
+			    } else if (outButton.innerText == '삭제') {
+			        var confirmDelete = confirm("정말 삭제하시겠습니까?");
+			        
+			        if (confirmDelete) {
+			            window.location.href = "delete.do"; //삭제일때
+			        } else {
+			            alert("삭제가 취소되었습니다.");
+			        }
+			    }
+			}
+		</script>
+</body>
+</html>
