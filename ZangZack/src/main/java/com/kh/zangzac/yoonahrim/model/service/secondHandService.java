@@ -4,7 +4,9 @@ import com.kh.zangzac.yoonahrim.model.vo.secondHandProduct;
 
 public interface secondHandService {
 
-	int writeSeconHand(secondHandProduct sp);
+	int insertSeconHand(secondHandProduct sp);
+
+	int updateSeconHand(secondHandProduct sp);
 
 	
 	

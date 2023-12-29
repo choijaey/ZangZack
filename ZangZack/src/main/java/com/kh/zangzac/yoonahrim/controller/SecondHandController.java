@@ -23,10 +23,31 @@ public class SecondHandController {
 		return "views/yoonahrim/secondHandList";
 	}
 	
+	//중고 게시글 수정
 	@GetMapping("edit.ah")
     public String editPage() {
         return "views/yoonahrim/editSecondHand";
     }
+	
+	@PostMapping("update.ah")
+	public String updatePage(@ModelAttribute secondHandProduct sp, @RequestParam("spAddressStreet") String spAddressStreet, 
+			 @RequestParam("spAddressDetail") String spAddressDetail, Model model) {
+		
+		String spAddress = null;
+		if(!spAddressStreet.equals("")) {
+			spAddress = spAddressStreet + " " + spAddressDetail;
+		}
+		sp.setSpAddress(spAddress);
+		System.out.println(sp);
+		
+		int result = spService.updateSeconHand(sp);
+			if(result > 0) {
+				return "views/yoonahrim/secondHandList";
+			} else {
+				model.addAttribute("error", "게시판 등록에 실패했습니다.");
+		        return "views/yoonahrim/writeSecondHand";
+			}
+	}
 	
 	//상세페이지
 	@GetMapping("detail.ah")
@@ -35,7 +56,7 @@ public class SecondHandController {
 	}
 	
 	
-	//게시글 작성
+	//중고 게시글 작성
 	@GetMapping("write.ah")
 	public String writePage() {
 		return "views/yoonahrim/writeSecondHand";
@@ -51,7 +72,7 @@ public class SecondHandController {
 		sp.setSpAddress(spAddress);
 		System.out.println(sp);
 		
-		int result = spService.writeSeconHand(sp);
+		int result = spService.insertSeconHand(sp);
 			if(result > 0) {
 				return "views/yoonahrim/secondHandList";
 			} else {
