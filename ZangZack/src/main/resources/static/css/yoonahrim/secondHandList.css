@@ -1,0 +1,96 @@
+@charset "UTF-8";
+
+.col{
+	width: 360px;
+	height: 360px;
+}
+
+.container{
+	position:relative;
+	top: 20px;
+}
+
+.card-desc{
+	position: absolute;
+	text-align: left;
+	font-size:15px; 
+	color:black;
+}
+.card-price, .card-region-name, .card-counts{
+	position: relative;
+	top: -5px;
+	left: 60px;
+}
+.card-title{
+	position: relative;
+	margin: 5px;
+	top: 15px;
+	left: 50px;
+}
+
+.card-counts{
+	font-size:10px; 
+}
+
+.card-photo>img{
+	width:223px; 
+	height:223px;
+	border-radius:20px;
+}
+
+.selectCategory{
+	background-color: #5cb85c;
+	text-align:center;
+	border-radius: 10px;
+	width: 65px;
+	position: relative;
+	bottom: 25px;
+	left: 128px;
+	color: white;
+}
+
+select{
+	position: relative;
+	top: 130px;
+	left: 360px;
+}
+
+.btn-hover {
+    width: 100px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff; 
+    cursor: pointer;
+    margin: 20px;
+    height: 45px;
+    text-align:center;
+    border: none;
+    background-size: 300% 100%;
+    position: relative;
+    left: 1420px;
+    top: 65px;
+
+    border-radius: 50px;
+    -moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out; 
+}
+
+.btn-hover:hover {
+    background-position: 100% 0;
+    -moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+}
+
+.btn-hover:focus {
+    outline: none;
+}
+
+.color-1{
+   background-image: linear-gradient(to right, #fc6076, #ff9a44, #ef9d43, #e75516);
+   box-shadow: 0 4px 15px 0 rgba(252, 104, 110, 0.75) !important;
+}
+
