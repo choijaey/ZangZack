@@ -301,6 +301,7 @@ function categoryChange(e) {
 		  }
 		  
 		  function clearMarkers() {
+			  
 			    // 배열에 추가된 마커와 인포윈도우를 모두 지도에서 제거합니다
 			    for (let i = 0; i < markers.length; i++) {
 			        markers[i].marker.setMap(null);
@@ -331,6 +332,8 @@ function categoryChange(e) {
 			        
 		        }
 		        function createMarker(location, campName) {
+		        	
+		        	console.log('test');
 		            // divId에 대응되는 새로운 마커를 생성하고 지도에 표시
 		            const position = getPositionForDivId(location,campName);
 
@@ -351,13 +354,17 @@ function categoryChange(e) {
 
 		                    // LatLngBounds 객체에 좌표를 추가합니다
 		                    bounds.extend(coords);
+		                    
 
 		                    // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-		                    const iwContent = '<div style="width:150px;text-align:center;padding:6px 0;">' + campName + '<br><a href="campDetail.fo" style="color:blue" target="blank">상세보기</a></div>'; 
+		                    const iwContent = '<div style="width:200px; height:100px;text-align:center;padding:6px 0;">' + campName + '<br><a href="campDetail.fo" style="color:blue" target="blank">상세보기</a></div>'; 
 		                    const infowindow = new kakao.maps.InfoWindow({
 		                        content: iwContent
 		                    });
-
+							
+		                 // 마커와 인포윈도우를 배열에 추가
+		    	            markers.push({ marker, infowindow });
+		                 
 		                    // 마커에 클릭 이벤트를 등록합니다
 		                    kakao.maps.event.addListener(marker, 'click', function () {
 		                        // 마커에 클릭 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
@@ -365,6 +372,7 @@ function categoryChange(e) {
 		                    });
 		                }
 		            });
+		            
 		        }
 		        
 		        function getPositionForDivId(location,campName) {
