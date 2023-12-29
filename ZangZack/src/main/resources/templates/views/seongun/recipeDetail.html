@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>레시피 상세보기</title>
+    <link rel="stylesheet" href="css/seongun/recipeDetail.css">
+</head>
+<body>
+    <div class="recipe-detail">
+        <!-- 이미지 슬라이더 -->
+        <h1>아 ㅋㅋ 이게 제목임</h1>
+        <div class="image-slider">
+            <button class="slide-btn prev-btn"></button>
+            <div class="image-container">
+                <img src="image/cat.jpg" alt="레시피 이미지 1">
+                <img src="image/sample.png" alt="레시피 이미지 2">
+                <!-- 추가 이미지 -->
+            </div>
+            <button class="slide-btn next-btn"></button>
+            <div class="slider-pagination"></div>
+        </div>
+
+        <!-- 레시피 정보 테이블 -->
+        <table class="recipe-info">
+            <tr>
+                <th>메인재료</th>
+                <th>조리도구</th>
+                <th>맛</th>
+            </tr>
+            <tr>
+                <td>닭</td>
+                <td>팬</td>
+                <td>매움!</td>
+            </tr>
+            <!-- 추가 정보 -->
+        </table>
+
+        <!-- 레시피 설명 -->
+        <div class="recipe-description">
+            <p>치킨이니깐 닭은 필수에요~</p>
+        </div>
+        <div class="recipe-description">
+            <p>간단한 재료로 만들 수 있는 초간단 치킨 요리! 요리 초보도 만들 수 있다! 캠핑 추천 레시피!</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    let sliderImages = document.querySelectorAll('.image-container img');
+    let currentImageIdx = 0;
+    let imageContainer = document.querySelector('.image-container');
+    let paginationContainer = document.querySelector('.slider-pagination');
+
+    // 페이징 버튼 생성
+    sliderImages.forEach((_, idx) => {
+        let btn = document.createElement('span');
+        btn.classList.add('pagination-btn');
+        btn.addEventListener('click', () => {
+            currentImageIdx = idx;
+            updateSliderPosition();
+            updatePaginationButtons();
+        });
+        paginationContainer.appendChild(btn);
+    });
+
+    function updateSliderPosition() {
+        let sliderWidth = document.querySelector('.image-slider').clientWidth;
+        imageContainer.style.transform = `translateX(${-currentImageIdx * sliderWidth}px)`;
+    }
+
+    function updatePaginationButtons() {
+        let buttons = document.querySelectorAll('.pagination-btn');
+        buttons.forEach((btn, idx) => {
+            btn.classList.toggle('active', idx === currentImageIdx);
+        });
+    }
+
+    document.querySelector('.prev-btn').addEventListener('click', () => {
+        currentImageIdx = currentImageIdx > 0 ? currentImageIdx - 1 : sliderImages.length - 1;
+        updateSliderPosition();
+        updatePaginationButtons();
+    });
+
+    document.querySelector('.next-btn').addEventListener('click', () => {
+        currentImageIdx = (currentImageIdx + 1) % sliderImages.length;
+        updateSliderPosition();
+        updatePaginationButtons();
+    });
+
+    updateSliderPosition();
+    updatePaginationButtons(); // 초기 페이징 버튼 설정
+});
+
+    </script> <!-- JavaScript 파일 링크 -->
+</body>
+</html>

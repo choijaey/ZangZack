@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<style>
+  .foreground{
+     background: url(https://aldo814.github.io/jobcloud/html/images/user/star_bg02.png) no-repeat;
+     width: 121px;
+     height: 20px;
+     position: relative;
+   }
+  .foreground span{
+     position: absolute;
+     background: url(https://aldo814.github.io/jobcloud/html/images/user/star02.png);
+     filter: invert(90%) sepia(10%) saturate(7000%) hue-rotate(570deg) brightness(115%) contrast(120%);
+     height: 20px;
+
+  }
+ 
+</style>
+</head>
+<body>
+	  <div th:replace="~{common/navbar :: navbar}"></div>
+	  <div class="container">
+	        <div style="background-color:#F3F4F6; border-radius: 10px; height:60px;margin-top: 50px; position: relative; margin-bottom: 40px;">
+	           <img src="image/yoonseo/img/icons8-adventure-64.png" style=" position: absolute; text-align: center; margin-left: 20px; bottom: 10%; height:50px;">
+	           <h3 style=" position: absolute; top:30%; text-align: center; margin-left: 100px;">[강원도] 청라해변캠핑장</h3>
+	        </div>
+		    <div style="margin-top: 10px;">
+			    <div id="carouselExampleFade" class="carousel slide carousel-fade" style=" float: left; width:650px;  margin-bottom: 60px;">
+				     <div class="carousel-inner">
+				       <div class="carousel-item active">
+				         <img src="image/yoonseo/img/camp.jpg" class="d-block w-100">
+				       </div>
+				      <div class="carousel-item">
+				        <img src="image/yoonseo/img/camp2.jpg" class="d-block w-100">
+				      </div>
+				      <div class="carousel-item">
+				        <img src="image/yoonseo/img/camp3.jpg" class="d-block w-100">
+				      </div>
+				      </div>
+				      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+				        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				        <span class="visually-hidden">Previous</span>
+				    </button>
+				    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+				      <span class="carousel-control-next-icon" aria-hidden="true" ></span>
+				      <span class="visually-hidden" style="margin-left: -1200px;">Next</span>
+				   </button>
+			   </div>
+			   <div style="width:550px; height:433px; float: left;  margin-left: 10px;">
+		         <table class="table">
+				   <tr>
+				     <td>주소</td>
+				     <td>강원 정선군 신동읍 동강로 916-212</td>
+				   </tr>
+				   <tr>
+				     <td>문의처</td>
+				     <td>033-560-3464</td>
+				   </tr>
+				   <tr>
+				     <td>캠핑장 환경</td>
+				     <td>산 / 지자체</td>
+				   </tr>
+				   <tr>
+				     <td>캠핑장 유형</td>
+				     <td>자동차야영장</td>
+				   </tr>
+				   <tr>
+				     <td>운영기간</td>
+				     <td>봄, 여름, 가을, 겨울</td>
+				   </tr>
+				   <tr>
+				     <td>운영일</td>
+				     <td>평일+주말</td>
+				   </tr>
+				   <tr>
+				     <td>홈페이지</td>
+				     <td><a href="http://donggang.jsimc.or.kr/">홈페이지 바로가기</a></td>
+				   </tr>
+				   <tr>
+				     <td>예약방법</td>
+				     <td>온라인실시간예약</td>
+				   </tr>
+				   <tr>
+				     <td>주변이용가능시설</td>
+				     <td>산책로</td>
+				   </tr>
+				   <tr>
+				     <td>네이버 별점</td>
+				     <td>
+				       <div class="score">  
+			             <div class="foreground" style="float: left;">
+			               <span class="background" style="width:96%;"></span><!-- 4.8 x 100 / 5 = 96 퍼센트 계산 식.-->
+			             </div>
+			             <p>4.8</p>  
+			           </div>
+			         </td>
+				  </tr>
+			  </table>
+		    </div>
+	    </div>
+	    <div style="clear: both; background-color:#F3F4F6; border-radius: 10px; height:50px; position: relative;">
+	      <h3 style=" margin-top: 5px; position: absolute; top: 20%; left:20px;">캠핑장 소개</h3>
+	    </div>
+	    <p align="justify" style="margin-top: 40px; margin-bottom: 60px; line-height:30px;">
+	        우리나라에서 가장 아름답고 보존이 잘 된 강으로 통하는 동강. 
+	        정선 가수리를 들머리로 운치리와 제장마을,연포마을 차례로 거쳐 영월에서 서강을 만나기까지 장장 65km를 구절양장으로 흐른다. 
+	        동강이 특별한 것은 물 흐름의 모양새에 있다. 백두대간의 산세를 따라 구절양장으로 흐르다 못해 물이 고인 듯 깊은 소를 수없이 만들고 지나간다. 
+	        경치좋은 동강중에서도 최고로 일컬어지는 곳이 고성산성과 연포마을 주변. 
+	        백운산 자락을 앞에 두고 하늘을 가리는 뼝대와 모래 강변이 번갈아 나타나는 풍경이 가히 절경이다. 
+	        동강 전망자연휴양림은 바로 이곳에 자리잡고 있다. 고성산성 앞에서 산으로 난 길을 올라가야 하는데 마치 한계령처럼 구비길이 이어진다. 
+	        힘들게 오르고 나면 발아래로 동강의 물길이 아스라이 지나가고 고봉준령들이 주변을 빙둘러 싸고 있는 모습이 말로만 듣던 명당이 이런 것이었구나 싶어진다. 
+	        해발 600m에 위치한 동강전망자연휴양림오토캠핑장은 풍경 하나만큼은 최고다. 눈앞에는 산이 너울너울 능선을 이루고, 발아래 강이 굽이굽이 산을 휘감아 흐른다.
+	         강과 산이 만들어내는 풍경도 명품이지만 이곳의 또 다른 자랑거리는 운해다. 백운산과 그 뒤로 겹겹이 서 있는 능선 사이로 넘실대는 운해가 말 그대로 장관을 이룬다.
+	         발아래 구름바다가 펼쳐지면 마치 구름 위에 텐트를 친 듯 황홀하다. 가장 인기 있는 사이트는 전망대 옆으로 이어져 있는 데크 사이트. 
+	         1년내내 예약이 밀린다 할 정도로 캠퍼들에게는 꿈의 장소다.
+	      
+	    </p>  
+	      <div style="background-color:#F3F4F6; border-radius: 10px; height:50px; position: relative; margin-bottom: 10px; ">
+	        <h3 style="position: absolute; top:20%; left:20px;">캠핑장 시설 정보</h3>
+	      </div>
+	      <div style="background-color:#F3F4F6; border-radius: 10px; height:100px;">
+	         <div style="text-align: center;">
+		         <div style="margin-top: 10px; width:100xp; display: inline-block; margin-left: 30px;">
+			         <div style="text-align: center;" >
+					    <img src="image/yoonseo/img/icons8-wood-48.png">
+					 </div>
+				     <div style="text-align: center;">장작판매</div>
+			     </div>
+			     <div style="width:100px; margin-left: 10px; display: inline-block;">  
+					 <div style="text-align: center;">
+					    <img src="image/yoonseo/img/icons8-hot-springs-48.png">
+					  </div>
+					  <div style="text-align: center;">온수</div>
+			     </div> 
+			     <div style="width:100px; margin-left: 10px; display: inline-block;">  
+					<div style="text-align: center;">
+					   <img src="image/yoonseo/img/icons8-wifi-48.png">
+					</div>
+					<div style="text-align: center;">와이파이</div>
+				 </div> 
+			     <div style="width:100px;  margin-left: 10px; display: inline-block;">  
+					<div style="text-align: center;">
+					   <img src="image/yoonseo/img/icons8-market-50.png">
+					</div>
+					<div style="text-align: center;">마트,편의점</div>
+			     </div> 
+			     <div style="width:100px; margin-left: 10px; display: inline-block;">  
+					 <div  style="text-align: center;">
+					    <img src="image/yoonseo/img/icons8-tesla-supercharger-pin-48.png" >
+					 </div>
+					 <div style="text-align: center;">전기사용</div>
+			     </div> 
+		     </div>
+	      </div>
+    </div>
+    
+	     
+	
+	
+</body>
+</html>
