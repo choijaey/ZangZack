@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="../css/ming/member/find.css" rel="stylesheet">
+</head>
+<body>
+	<div id="container" class="container">
+	    <!-- FORM SECTION -->
+	    <div class="row">
+	      <!-- 비밀번호 찾기 시작 -->
+	      <div class="col align-items-center flex-col sign-up">
+	        <div class="form-wrapper align-items-center">
+	          <form class="form sign-up" action="" method="post">
+	            <div class="input-group">
+	              <i class='bx bxs-user'></i>
+	              <input type="text" placeholder="Name" >
+	            </div>
+	            <div class="input-group">
+	              <i class='bx bx-mail-send'></i>
+	              <input type="email" placeholder="Email" style="width: 300px; display: inline-block; ">
+	              <button type="button" id="mail-Check-Btn"  style="width: 100px; display: inline-block;background-color: rgb(251, 125, 83); color: white;">인증하기</button></td>
+	            </div>
+	            <div class="input-group">
+	              <i class='bx bxs-lock-alt'></i>
+	              <input type="text" placeholder="EmailCode" >
+	            </div>
+	            <button style="background-color: rgb(251, 125, 83); color: white;">
+	              비밀번호 찾기
+	            </button>
+	            <p style="font-size: 0.8em;">
+	              <span>
+	                Already have an account?
+	              </span>
+	              <b onclick="toggle()" class="pointer" >
+	                로그인
+	              </b>
+	            </p>
+	          </form>
+	        </div>
+	      
+	      </div>
+	      <!-- 비밀번호 찾기 끝 -->
+	      <!-- 아이디 찾기 -->
+	      <div class="col align-items-center flex-col sign-in">
+	        <div class="form-wrapper align-items-center">
+	          <form class="form sign-in" action="" method="post">
+	            <div class="input-group">
+	              <i class='bx bxs-user'></i>
+	              <input type="text" placeholder="Name" required autofocus>
+	            </div>
+	           <div class="input-group">
+	              <i class='bx bx-mail-send'></i>
+	              <input type="email" placeholder="Email" style="width: 300px; display: inline-block; ">
+	              <button type="button" id="mail-Check-Btn"  style="width: 100px; display: inline-block;background-color: rgb(251, 125, 83); color: white;">인증하기</button></td>
+	            </div>
+	            <div class="input-group">
+	              <i class='bx bxs-lock-alt'></i>
+	              <input type="text" placeholder="EmailCode" >
+	            </div>
+	            <button style="background-color: rgb(251, 125, 83); color: white;">
+	              아이디 찾기
+	            </button>
+	            <p style="text-align: center;">
+	              <a href="#" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold;">
+					로그인
+				  </a>
+	            </p>
+	            <p>
+	              <span>
+	                Already have an account?
+	              </span>
+	              <b onclick="toggle()" class="pointer">
+	                비밀번호 찾기
+	              </b>
+	            </p>
+	          </form>
+	        </div>
+	      </div>
+	      <!-- 아이디 찾기 끝 -->
+	    </div>
+	    <!-- END FORM SECTION -->
+	    <!-- CONTENT SECTION -->
+	    <div class="row content-row">
+	      <!-- SIGN IN CONTENT -->
+	      <div class="col align-items-center flex-col">
+	        <div class="text sign-in">
+	          <h2>
+	            <img src="image/ming/member/logo.png" style="width: 300px;">
+	            <p style="font-size: 0.5em; margin-top: -50px; color: black;">아이디 찾기</p>
+	          </h2>
+	        </div>
+	        <div class="img sign-in">
+	    
+	        </div>
+	      </div>
+	      <!-- END SIGN IN CONTENT -->
+	      <!-- SIGN UP CONTENT -->
+	      <div class="col align-items-center flex-col">
+	        <div class="img sign-up">
+	        
+	        </div>
+	        <div class="text sign-up">
+	          <h2>
+	            <img src="image/ming/member/logo.png" style="width: 300px;">
+	            <p style="font-size: 0.5em; margin-top: -50px; color: black;">비밀번호찾기</p>
+	          </h2>
+	        </div>
+	      </div>
+	      <!-- END SIGN UP CONTENT -->
+	    </div>
+	    <!-- END CONTENT SECTION -->
+	  </div>
+
+<script src="../js/sign.js"></script>
+</body>
+</html>
