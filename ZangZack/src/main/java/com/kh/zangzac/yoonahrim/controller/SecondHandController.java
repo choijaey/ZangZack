@@ -1,40 +1,74 @@
 package com.kh.zangzac.yoonahrim.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.kh.zangzac.yoonahrim.model.service.secondHandService;
+import com.kh.zangzac.yoonahrim.model.vo.secondHandProduct;
 
 @Controller
 public class SecondHandController {
 	
-	@GetMapping("secondHand.do")
+	@Autowired
+	private secondHandService spService;
+	
+	
+	@GetMapping("secondHand.ah")
 	public String secondHand() {
-		return "yoonahrim/secondHandList";
+		return "views/yoonahrim/secondHandList";
 	}
 	
-	@GetMapping("edit.do")
+	@GetMapping("edit.ah")
     public String editPage() {
-        return "yoonahrim/editSecondHand";
+        return "views/yoonahrim/editSecondHand";
     }
 	
-	@GetMapping("detail.do")
+	//상세페이지
+	@GetMapping("detail.ah")
 	public String detailPage() {
-		return "yoonahrim/secondHandDetail";
+		return "views/yoonahrim/secondHandDetail";
 	}
 	
-	@GetMapping("write.do")
+	
+	//게시글 작성
+	@GetMapping("write.ah")
 	public String writePage() {
-		return "yoonahrim/writeSecondHand";
+		return "views/yoonahrim/writeSecondHand";
+	}
+	
+	@PostMapping("/insert.ah")
+	public String insertPage(@ModelAttribute secondHandProduct sp, @RequestParam("spAddressStreet") String spAddressStreet, 
+							 @RequestParam("spAddressDetail") String spAddressDetail, Model model) {
+		String spAddress = null;
+		if(!spAddressStreet.equals("")) {
+			spAddress = spAddressStreet + " " + spAddressDetail;
+		}
+		sp.setSpAddress(spAddress);
+		System.out.println(sp);
+		
+		int result = spService.writeSeconHand(sp);
+			if(result > 0) {
+				return "views/yoonahrim/secondHandList";
+			} else {
+				model.addAttribute("error", "게시판 등록에 실패했습니다.");
+		        return "views/yoonahrim/writeSecondHand";
+			}
 	}
 	
 	
-	@GetMapping("selectCategory.do")
+	@GetMapping("selectCategory.ah")
 	public String selectCategory() {
-		return "yoonahrim/selectCategory";
+		return "views/yoonahrim/selectCategory";
 	}
 	
 	
-	@GetMapping("chating.do")
+	@GetMapping("chating.ah")
 	public String chating() {
-		return "yoonahrim/chatingRoom";
+		return "views/yoonahrim/chatingRoom";
 	}
 }
