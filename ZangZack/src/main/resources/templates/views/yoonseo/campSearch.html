@@ -79,42 +79,42 @@
 					     <th class="table-th">
 						         <h5>[강원도]충주 카누 캠핑장캠핑장ㅁㅁㅁㅁㅁㅇㅇㅇ</h5>
 						         <h6>강원 정선군 신동읍 동강로 916-212</h6>
-						         02)123-123
+						         <h6>02)123-123</h6>
 					     </th>
 					  </tr>
 					  <tr>
 					     <th class="table-th">
 					         <h5>[강원도]zzz</h5>
 					         <h6>인천 서구 정서진로 500 (오류동)</h6>
-					         02)123-123
+					         <h6>02)123-123</h6>
 					     </th>
 					  </tr>
 					  <tr>
 					     <th class="table-th">
 					         <h5>[강원도]fdhdf</h5>
 					         <h6>강원 정선군 신동읍 동강로 916-212</h6>
-					         02)123-123
+					         <h6>02)123-123</h6>
 					     </th>
 					  </tr>
 					   <tr>
 					     <th class="table-th">
 					         <h5>[강원도]tttttttt</h5>
 					         <h6>경기 용인시 처인구 원삼면 원양로591번길 93-34</h6>
-					         02)123-123
+					          <h6>02)123-123</h6>
 					     </th>
 					  </tr>
 					   <tr>
 					     <th class="table-th">
 					         <h5>[강원도]yyyyyyyyyyyyy</h5>
 					         <h6>강원 정선군 신동읍 동강로 916-212</h6>
-					         02)123-123
+					         <h6>02)123-123</h6>
 					     </th>
 					  </tr>
 					  <tr>
 					     <th class="table-th">
 					         <h5>[강원도]hhhhhhhh</h5>
 					         <h6>강원 정선군 신동읍 동강로 916-212</h6>
-					         02)123-123
+					         <h6>02)123-123</h6>
 					     </th>
 					  </tr>
 					   
@@ -224,7 +224,8 @@ function categoryChange(e) {
 		
 		const positions = [
 			{	title: '카카오',
-				address: '제주특별자치도 제주시 첨단로 242'
+				address: '제주특별자치도 제주시 첨단로 242',
+				
 			},
 			{
 				title: '생태연못',
@@ -264,7 +265,7 @@ function categoryChange(e) {
 		        bounds.extend(coords); //추가한 코드, 현재 코드에서 좌표정보는 point[i]가 아닌 coords이다.
 		        
 		     // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-		        const iwContent = '<div style="width:150px;text-align:center;padding:6px 0;">' + position.title + '<br><a href="campDetail.fo" style="color:blue" target="blank">상세보기</a></div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+		        const iwContent = '<div style="width:150px; text-align:center; padding:2px 0;">' + position.title + '<br><a href="campDetail.fo" style="color:blue" target="blank">상세보기</a></div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
 
 		        // 인포윈도우로 장소에 대한 설명을 표시합니다
 		        const infowindow = new kakao.maps.InfoWindow({
@@ -321,17 +322,18 @@ function categoryChange(e) {
 			        th.addEventListener('click',function(){
 		        	    const campName = this.children[0].textContent;
 		        		const location = this.children[1].textContent;
+		        		const phone = this.children[2].textContent;
 		        		clearMarkers();
 		        		
 		        		// 클릭한 div에 대응되는 새로운 마커 생성
-		        	    createMarker(location, campName);
+		        	    createMarker(location, campName, phone);
 		        		
 		        		
 	
 			        })
 			        
 		        }
-		        function createMarker(location, campName) {
+		        function createMarker(location, campName ,phone) {
 		        	
 		        	console.log('test');
 		            // divId에 대응되는 새로운 마커를 생성하고 지도에 표시
@@ -357,7 +359,7 @@ function categoryChange(e) {
 		                    
 
 		                    // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-		                    const iwContent = '<div style="width:200px; height:100px;text-align:center;padding:6px 0;">' + campName + '<br><a href="campDetail.fo" style="color:blue" target="blank">상세보기</a></div>'; 
+		                    const iwContent = '<div style="width:200px; height:100px; text-align:center; padding:2px 0;">' + campName + '<br>'+ phone +'<br><a href="campDetail.fo" style="color:blue" target="blank">상세보기</a></div>'; 
 		                    const infowindow = new kakao.maps.InfoWindow({
 		                        content: iwContent
 		                    });
