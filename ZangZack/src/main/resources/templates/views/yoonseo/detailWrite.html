@@ -1,89 +1,22 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta>
 <title>캠핑장 정보 등록</title>
-<link rel="stylesheet" href="styles.css">
+
+
 </head>
-<style>
- body {
-    font-family: 'Noto Sans KR', sans-serif;
-    background-color: #f7f7f7;
-    margin: 0;
-    padding: 0;
-}
-
-.container {
-    width: 50%;
-    margin-top:100px;
-    margin:0 auto;
-    margin-top:100px;
-    background-color: #fff;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    color: #333;
-    text-align: center;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.form-group input[type="text"],
-.form-group textarea {
-    width: 90%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.form-group input[type="number"] {
-     width: 90%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    width:100px;
-}
-
-.form-group input[type="file"] {
-    border: none;
-}
-
-button {
-    width: 100px;
-    padding: 10px;
-    background-color: #5cb85c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #4cae4c;
-}
-
-
-</style>
 <body>
-
-<div class="container">
-    <h1>캠핑장 정보 등록</h1>
-
-    <form action="/submit-camping-info" method="post">
-        
+   <div th:replace="~{common/admin :: admin}"></div>
+   
+   <div style="margin-left: 15%; margin-top: 6%; ">
+     <div style="border:1px solid black; width:1000px; height:100%; margin-bottom: 20%; ">
+       <h1 style="text-align: center;">캠핑장 등록</h1>
+       <br>
        <div class="form-group">
          <label for="campsiteName">캠핑장 지역:</label>
-            <select name="city" id="" style=" margin-right: 10px; height:30px;">
+         <select name="city" id="" style=" margin-right: 10px; height:30px; ">
               <option value=>시/도 선택</option>
               <option value="general01">강원도</option>
               <option value="general02">경기도</option>
@@ -101,19 +34,16 @@ button:hover {
               <option value="general14">제주도</option>
               <option value="general15">충청남도</option>
               <option value="general16">충청북도</option>
-            </select>
-       </div>
-        
-        <div class="form-group">
+           </select>
+       </div><br>
+       <div class="form-group">
             <label for="campsiteName">캠핑장 이름:</label>
             <input type="text" id="campsiteName" name="campsiteName" required>
-        </div>
-
+        </div><br>
         <div class="form-group">
             <label for="rating">별점 :</label>
             <input type="number" step="0.1" min="0" max="5" required>
-        </div>
-        
+        </div><br>
         <div class="form-group" id="fileInputs">
 		    <label for="facilities">캠핑장 이미지:</label>
 		    <button type="button" onclick="addFileInput()">추가버튼</button>
@@ -122,141 +52,170 @@ button:hover {
 		        <input type="text" style="width:200px;">
 		        <button type="button" onclick="removeFileInput(this)">삭제</button>
 		    </div>
-		     
-		</div>
-		
-         
-         <div style="width:550px; height:300px; margin-left: 10px;">
-		         <table class="table">
+		</div><br>
+		<div style="width:750px; margin-left: 10px;">
+		         <table class="table" >
 				   <tr>
 				     <td>주소</td>
-				     <td><input text="text"></td>
+				     <td><input text="text" style="width:500px;"></td>
 				   </tr>
 				   <tr>
 				     <td>문의처</td>
-				     <td><input text="text"></td>
+				     <td><input text="text" style="width:500px;"></td>
 				   </tr>
 				   <tr>
 				     <td>캠핑장 환경</td>
-				     <td><input text="text"></td>
+				     <td><input text="text" style="width:500px;"></td>
 				   </tr>
 				   <tr>
 				     <td>캠핑장 유형</td>
-				     <td><input text="text"></td>
+				     <td><input text="text" style="width:500px;"></td>
 				   </tr>
 				   <tr>
 				     <td>운영기간</td>
-				     <td><input text="text"></td>
+				     <td><input text="text" style="width:500px;"></td>
 				   </tr>
 				   <tr>
 				     <td>운영일</td>
-				     <td><input text="text"></td>
+				     <td><input text="text" style="width:500px;"></td>
 				   </tr>
 				   <tr>
 				     <td>홈페이지</td>
-				     <td><input text="text"></td>
+				     <td><input text="text" style="width:500px;"></td>
 				   </tr>
 				   <tr>
 				     <td>예약방법</td>
-				     <td><input text="text"></td>
+				     <td><input text="text" style="width:500px;"></td>
 				   </tr>
 				   <tr>
 				     <td>주변이용가능시설</td>
-				     <td><input text="text"></td>
+				     <td><input text="text" style="width:500px;"></td>
 				   </tr>
 				   <tr>
 				     <td>네이버 별점</td>
-				     <td><input text="number"></td>
+				     <td><input text="number" style="width:500px;"></td>
 				  </tr>
+				  <tr>
+				     <td>캠핑장 소개</td>
+				     <td><textarea style="width:500px;height:200px;"></textarea></td>
+				  </tr>     
 			  </table>
+			  
           </div>
-         
-         
-        <div class="form-group">
-            <label for="description">캠핑장 소개:</label>
-            <textarea id="description" name="description" rows="4" required></textarea>
-        </div>
-        
-        <div class="form-group" id="fileInputs">
-		    <label for="facilities">시설 정보 및 이미지:</label>
-		    <div>
-		        <input type="file" name="imageUpload[]" accept="image/*" style="float: left; width:200px;">
-		        <input type="text" style="width:200px;">
-		        <button type="button" onclick="removeFileInput(this)">삭제</button>
-		    </div>
-		</div>
-		
-		<button type="button" onclick="addFileInput()">추가버튼</button>        
-        <button type="submit">등록</button>
-        <button style="background-color: red; margin-left: 10px;">취소</button>
-
-    </form>
-</div>
-
-<script>
-function addFileInput() {
-    // 새로운 파일 입력 필드 생성
-    var fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.name = 'imageUpload[]'; // 배열 형태로 파일 이름 지정
-    fileInput.accept = 'image/*';
-    fileInput.style.float = 'left';
-    fileInput.style.width = '200px';
-
-    // 새로운 텍스트 입력 필드 생성
-    var textInput = document.createElement('input');
-    textInput.type = 'text';
-    textInput.style.width = '200px';
-
-    // "삭제" 버튼 생성
-    var removeButton = document.createElement('button');
-    removeButton.type = 'button';
-    removeButton.textContent = '삭제';
-    removeButton.onclick = function() {
-        removeFileInput(this);
-    };
-
-    // 새로운 파일 입력 필드와 텍스트 입력 필드, "삭제" 버튼을 감싸는 div 생성
-    var wrapperDiv = document.createElement('div');
-    wrapperDiv.appendChild(fileInput);
-    wrapperDiv.appendChild(textInput);
-    wrapperDiv.appendChild(removeButton);
-
-    // 파일과 텍스트 입력 필드, "삭제" 버튼을 감싸는 div 추가
-    document.getElementById('fileInputs').appendChild(wrapperDiv);
-}
-
-function removeFileInput(button) {
-    // 해당 "삭제" 버튼이 속한 div를 찾아 삭제
-    var divToRemove = button.parentNode;
-    divToRemove.parentNode.removeChild(divToRemove);
-}
-
-function previewImage() {
-    var input = document.getElementById('imageUpload');
-    var preview = document.getElementById('imagePreview');
-
-    while (preview.firstChild) {
-        preview.removeChild(preview.firstChild);
-    }
-
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var image = document.createElement('img');
-            image.src = e.target.result;
-            image.style.width = '200px'; // 이미지 크기 조절
-            image.style.height= '200px';
-            preview.appendChild(image);
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
+          <div class="form-group" id="appendFile">
+			    <label for="facilities">캠핑장 이미지:</label>
+			    <button type="button" onclick="addInfoInput()">추가버튼</button>
+			    <div>
+			        <input type="file" name="imageUpload[]" accept="image/*" style=" width:200px;">
+			        <input type="text" style="width:200px;">
+			        <button type="button" onclick="removeFileInput(this)">삭제</button>
+			    </div>
+		  </div><br>
+	      <button type="submit">등록</button>
+	      <button style="background-color: red; margin-left: 10px;">취소</button>
+          
+		  
+     </div>
+   </div>
+   <script>
+	function addFileInput() {
+	    // 새로운 파일 입력 필드 생성
+	    const fileInput = document.createElement('input');
+	    fileInput.type = 'file';
+	    fileInput.name = 'imageUpload[]'; // 배열 형태로 파일 이름 지정
+	    fileInput.accept = 'image/*';
+	    fileInput.style.float = 'left';
+	    fileInput.style.width = '200px';
+	
+	    // 새로운 텍스트 입력 필드 생성
+	    const textInput = document.createElement('input');
+	    textInput.type = 'text';
+	    textInput.style.width = '200px';
+	
+	    // "삭제" 버튼 생성
+	    const removeButton = document.createElement('button');
+	    removeButton.type = 'button';
+	    removeButton.textContent = '삭제';
+	    removeButton.onclick = function() {
+	        removeFileInput(this);
+	    };
+	
+	    // 새로운 파일 입력 필드와 텍스트 입력 필드, "삭제" 버튼을 감싸는 div 생성
+	    const wrapperDiv = document.createElement('div');
+	    wrapperDiv.appendChild(fileInput);
+	    wrapperDiv.appendChild(textInput);
+	    wrapperDiv.appendChild(removeButton);
+	
+	    // 파일과 텍스트 입력 필드, "삭제" 버튼을 감싸는 div 추가
+	    document.getElementById('fileInputs').appendChild(wrapperDiv);
+	}
+	
+	function addInfoInput() {
+	    // 새로운 파일 입력 필드 생성
+	    const fileInput = document.createElement('input');
+	    fileInput.type = 'file';
+	    fileInput.name = 'imageUpload[]'; // 배열 형태로 파일 이름 지정
+	    fileInput.accept = 'image/*';
+	    fileInput.style.float = 'left';
+	    fileInput.style.width = '200px';
+	
+	    // 새로운 텍스트 입력 필드 생성
+	    const textInput = document.createElement('input');
+	    textInput.type = 'text';
+	    textInput.style.width = '200px';
+	
+	    // "삭제" 버튼 생성
+	    const removeButton = document.createElement('button');
+	    removeButton.type = 'button';
+	    removeButton.textContent = '삭제';
+	    removeButton.onclick = function() {
+	        removeFileInput(this);
+	    };
+	
+	    // 새로운 파일 입력 필드와 텍스트 입력 필드, "삭제" 버튼을 감싸는 div 생성
+	    const wrapperDiv = document.createElement('td');
+	    wrapperDiv.appendChild(fileInput);
+	    wrapperDiv.appendChild(textInput);
+	    wrapperDiv.appendChild(removeButton);
+	
+	    // 파일과 텍스트 입력 필드, "삭제" 버튼을 감싸는 div 추가
+	    document.getElementById('appendFile').appendChild(wrapperDiv);
+	}
+	
+	
+	
+	function removeFileInput(button) {
+	    // 해당 버튼이 속한 행을 찾아 삭제
+	    var row = button.parentNode.parentNode;
+	    row.parentNode.removeChild(row);
+	}
+	
+	
+	
+	function previewImage() {
+	    const input = document.getElementById('imageUpload');
+	    const preview = document.getElementById('imagePreview');
+	
+	    while (preview.firstChild) {
+	        preview.removeChild(preview.firstChild);
+	    }
+	
+	    if (input.files && input.files[0]) {
+	        const reader = new FileReader();
+	        reader.onload = function(e) {
+	            const image = document.createElement('img');
+	            image.src = e.target.result;
+	            image.style.width = '200px'; // 이미지 크기 조절
+	            image.style.height= '200px';
+	            preview.appendChild(image);
+	        };
+	        reader.readAsDataURL(input.files[0]);
+	    }
+	}
 
  
   
 </script>
-
 
 </body>
 </html>

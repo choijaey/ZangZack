@@ -7,19 +7,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class CampController {
 	
 	
-	@GetMapping("campSearch.fo")
+	@GetMapping("campSearch.ys")
 	public String campSearch() {
 		return "views/yoonseo/campSearch";
 	}
 	
-	@GetMapping("campList.fo")
+	@GetMapping("campList.ys")
 	public String campList() {
 		return "views/yoonseo/campList";
 	}
 	
-	@GetMapping("campDetail.fo")
+	@GetMapping("campDetail.ys")
 	public String campDetail() {
 		return"views/yoonseo/campDetail";
+	}
+	
+	@GetMapping("detailWrite.ys")
+	public String detailWriter() {
+		return "views/yoonseo/detailWrite";
 	}
 
 }
