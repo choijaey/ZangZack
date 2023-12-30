@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/seongun/boardList.css">
 </head>
 <body>
+	<div th:replace="~{common/navbar :: navbar}"></div>
     <a id="back-to-top"><img src='image/topBtn.png' style='width:38px; height:38px;'></a>
     <div id="content">
         <div id="space_zone">
@@ -40,9 +41,9 @@
                         <a href="#none" onclick="setCategory('글램핑')" class="on">글램핑</a>
                     </form>
                     <form>
-						<a href="#none"><img src="image/file.png"></a>
-						<a href="#none"></a>
-						<a href="#none"></a>
+						<a href="#none"><img src="image/seongun/boardType1.png"></a>
+						<a href="#none"><img src="image/seongun/boardType2.png"></a>
+						<a href="#none"><img src="image/seongun/boardType3.png"></a>
                     </form>
                 </div>
             </div>
