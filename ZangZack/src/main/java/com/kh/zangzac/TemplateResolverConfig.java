@@ -21,6 +21,5 @@ public class TemplateResolverConfig {
 		
 		return dotDo;
 	}
-	
 
 }
