@@ -3,7 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link href="../css/sign.css" rel="stylesheet">
+<link href="../css/ming/member/sign.css" rel="stylesheet">
+<style>
+	.input-group .confirmBtn{
+		width: 200px; 
+		display: inline-block; 
+		height: 40px; 
+		background-color: rgb(251, 125, 83); 
+		color: white;
+		position: relative;
+		top: 5px;
+	}
+	#sample6{
+		width: 200px; 
+		display: inline-block; 
+		height: 40px; 
+		background-color: rgb(251, 125, 83); 
+		color: white;
+		position: relative;
+		top: 5px;
+	}
+	.input-group{
+		margin: 8px
+	}
+</style>
 </head>
 <body>
 	<div id="container" class="container">
@@ -12,38 +35,40 @@
 	      <!-- 회원가입 시작 -->
 	      <div class="col align-items-center flex-col sign-up">
 	        <div class="form-wrapper align-items-center">
-	          <form class="form sign-up" action="" method="post">
+	          <form class="form sign-up" action="insertMember.me" method="post">
 	            <div class="input-group">
 	              <i class='bx bxs-user'></i>
-	              <input type="text" placeholder="Id" style="height: 45px;">
+	              <input type="text" placeholder="Id" style="height: 45px;" name="id">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="password" placeholder="Password" style="height: 45px;">
+	              <input type="password" placeholder="Password" style="height: 45px;" name="pwd">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="password" placeholder="Confirm password" style="height: 45px;">
+	              <input type="password" placeholder="Confirm password" style="height: 45px;" name="pwdConfirm">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bx-mail-send'></i>
-	              <input type="email" placeholder="Email" style="height: 45px;">
+	              <input type="email" placeholder="Email" style="height: 45px;" name="email">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="text" placeholder="Name" style="height: 45px;">
+	              <input type="text" placeholder="Name" style="height: 45px;" name="name">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="text" placeholder="nickName" style="height: 45px;">
+	              <input type="text" placeholder="nickName" style="height: 45px;" name="nickName">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="tel" placeholder="전화번호(-제외)" style="height: 45px;">
+	              <input type="tel" placeholder="전화번호(-제외)" style="height: 45px;" name="phone">
+	              <input type="text" id="userNum" placeholder="인증번호" style="width: 200px; display: inline-block; height: 45px;">   <!-- 인증번호 입력창 -->
+				  <button type="button" id="enterBtn" class="confirmBtn">확인</button> <!-- 인증번호와 내가 입력창에 입력한 인증번호 비교하는 창 -->
 	            </div>
 	            <div class="input-group">
 					<input type="text" id="sample6_postcode" placeholder="우편번호" name="sample6_postcode" style="width: 200px; display: inline-block; height: 45px;" >
-					<input type="button" id="sample6" onclick="sample6_execDaumPostcode()" value="주소검색" style="width: 200px; display: inline-block; height: 45px; background-color: rgb(251, 125, 83); color: white;">
+					<input type="button" id="sample6" onclick="sample6_execDaumPostcode()" value="주소검색"  class="confirmBtn">
 				</div>
 				<div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
@@ -52,12 +77,15 @@
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
 	             <input type="text" id="sample6_detailAddress" placeholder="상세주소" name="sample6_detailAddress" style="height: 45px;">
+	           	 <input type="text" id="sample6_extraAddress" placeholder="참고항목" name="sample6_extraAddress" style="height: 45px;">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
 	             <input type="date" id="birth" placeholder="생년월일" name="birth" style="height: 45px;">
 	            </div>
-	            <button style="background-color: rgb(251, 125, 83); color: white;">
+	            <span>이용약관 동의 필수 <a href="agreement.me">[보기]</a></span>
+	            <input type="checkbox" name="chk" class="essential" required="required">
+	            <button type="submit" style="background-color: rgb(251, 125, 83); color: white;">
 	              Sign up
 	            </button>
 	            <p style="font-size: 0.8em;">
@@ -116,7 +144,7 @@
 	      <div class="col align-items-center flex-col">
 	        <div class="text sign-in">
 	          <h2>
-	            <img src="../image/logo.png" style="width: 300px;">
+	            <img src="../image/ming/member/logo.png" style="width: 300px;">
 	            <p style="font-size: 0.5em; margin-top: -50px;">로그인</p>
 	          </h2>
 	  
@@ -133,7 +161,7 @@
 	        </div>
 	        <div class="text sign-up">
 	          <h2>
-	            <img src="../image/logo.png" style="width: 300px;">
+	            <img src="../image/ming/member/logo.png" style="width: 300px;">
 	            <p style="font-size: 0.5em; margin-top: -50px;">회원가입</p>
 	          </h2>
 	  
@@ -205,14 +233,14 @@
 	<!-- 아이디 중복체크 / 정규식 -->
 	<script>
 		window.onload = () =>{
-			document.getElementById('userId').addEventListener('change', function(){
+			document.getElementById('id').addEventListener('change', function(){
 				const idResult = document.getElementById('idCheckResult');		// 아이디 확인
-				let idval = $('#userId').val();
+				let idval = $('#id').val();
 		        let idvalcheck = /^[a-z0-9]+$/;
 				if(this.value.trim() == ''){
 					alert('아이디는 영소문자,숫자로 구성된 6글자 이상으로 조합하시오.');
     				userId.style.borderColor = 'red';
-		            $('#userId').focus();
+		            $('#id').focus();
 				}else if(!idvalcheck.test(idval) || idval.length<6){
 					alert('아이디는 영소문자,숫자로 구성된 6글자 이상으로 조합하시오.');
     				userId.style.borderColor = 'red';
@@ -244,27 +272,62 @@
 		function focusOut(){
 			
 			let pwd = document.getElementById("pwd");
-	        let pwd2 = document.getElementById("pwd2");
+	        let pwdConfirm = document.getElementById("pwdConfirm");
 	        let pwdcheck = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#%^&*])[A-Za-z\d!@#%^&*]{8,}$/;
 	        
 			if(pwd2.value.trim() == ''){		// 비밀번호 입력안하고
 			
-			} else if(pwd2.value != pwd.value || !pwdcheck.test(pwd.value)) {	
+			} else if(pwdConfirm.value != pwd.value || !pwdcheck.test(pwd.value)) {	
 				pwd.style.borderColor = 'red';
-				pwd2.style.borderColor = 'red';
+				pwdConfirm.style.borderColor = 'red';
 				console.log(pwd.value);
-				console.log(pwd2.value);
+				console.log(pwdConfirm.value);
 				alert('비밀번호는 영대소문자,숫자로 구성된 8글자 이상으로 조합하시오.')
 				checkPwd = false;
-			} else if(pwd2.value == pwd.value && pwdcheck.test(pwd.value)){														// 비밀번호가 같지 않고, 정규식 안 맞을 때
+			} else if(pwdConfirm.value == pwd.value && pwdcheck.test(pwd.value)){// 비밀번호가 같지 않고, 정규식 안 맞을 때
 				pwd.style.borderColor = 'green';
-				pwd2.style.borderColor = 'green';
+				pwdConfirm.style.borderColor = 'green';
 				console.log(pwd.value);
 				console.log(pwd2.value);
 				checkPwd = true;
 			} 
 		}
 	</script> 
+	<script type="text/javascript">
+		
+		 let check_num;
+		 
+		$('#send').click(function() {
+			
+			const to = $('#to').val();
+			
+			$.ajax ({
+				url: '/send-one',
+				type: 'GET',
+				data: {
+					"to" : to
+				},
+				success: function(data) {
+					check_num = data;
+					alert('checkNum:'+ check_num);
+					
+				}
+			});
+			
+			$('#enterBtn').click(function() {	
+				const userNum = $('#userNum').val();
+				
+				if(check_num === userNum) {
+					alert('인증 성공하였습니다.');
+				}
+				else {
+					alert('인증 실패하였습니다. 다시 입력해주세요.');
+				}
+			});
+			
+		});
+	</script>
+	
 
 	
 </body>
