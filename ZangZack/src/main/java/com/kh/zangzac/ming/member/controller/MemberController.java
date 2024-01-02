@@ -18,9 +18,9 @@ public class MemberController {
 	
 	@Autowired
 	private MemberService mService;
+	
 	@Autowired
 	private BCryptPasswordEncoder bcrypt;
-	
 	
 	
 	@PostMapping("/insertMember.me")
