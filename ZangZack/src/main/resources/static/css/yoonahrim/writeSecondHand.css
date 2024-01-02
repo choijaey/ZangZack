@@ -17,7 +17,7 @@
 	position:absolute; 
 	left: 765px;
 	top: 400px;
-	background-color:#F9612B;
+	background-color: #5cb85c;
 	border:0px;
 }
 
@@ -76,7 +76,7 @@
 }
 
 .color-1{
-   background-image: linear-gradient(to right, #fc6076, #ff9a44, #ef9d43, #e75516);
-   box-shadow: 0 4px 15px 0 rgba(252, 104, 110, 0.75);
+   	background-color: #5cb85c;
+   	box-shadow: 0 4px 15px 0 rgb(128, 128, 128) !important;
 }
 

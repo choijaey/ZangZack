@@ -14,7 +14,7 @@
 	
 	<div class="d-grid gap-2 d-md-block">
 			<div class="container text-end mt-n2">
-				<button type="button" class="btn btn-outline-success" th:onclick="location.href='edit.do'">수정하기</button>&nbsp;&nbsp;
+				<button type="button" class="btn btn-outline-success" th:onclick="location.href='edit.ah'">수정하기</button>&nbsp;&nbsp;
 				<button type="button" id="bookButton" class="btn btn-outline-success" th:onclick="booked()">예약 중</button>&nbsp;&nbsp;
 				<button type="button" id="soldoutButton" class="btn btn-outline-success" th:onclick="markSold()">판매완료</button>
 			</div>
@@ -76,7 +76,7 @@
 									<p>서울특별시 중구</p>
 									
 								<div class="container2 text-end">
-									<button type="button" class="btn_booked" th:onclick="location.href='chating.do'">1 : 1 채팅방</button>
+									<button type="button" class="btn_booked" th:onclick="location.href='chating.ah'">1 : 1 채팅방</button>
 								</div>	
 							</span>
 						</span>	
@@ -86,10 +86,10 @@
 			    		
 						<div id="content">
 							<div style="margin:50px">
-								<p style="margin:10px"><b>충전식 캠핑랜턴 c타입 감성 캠핑조명 빈티지 고리식 (하자)</b></p><br>
-								<p style="margin:10px"><b>5,000원</b></p><hr><br>
+								<p style="margin:10px"><b>충전식 캠핑랜턴 c타입 감성 캠핑조명 빈티지 고리식 (하자)<!-- [[${spTitle}]] --></b></p><br>
+								<p style="margin:10px"><b>5,000원<!-- [[${spPrice}]] --></b></p><hr><br>
 								<div class="content-line">
-									<pre style="margin:10px; overflow: hidden;">
+									<pre style="margin:10px; overflow: hidden;"><!-- [[${spContent}]] -->
 충전식 캠핑랜턴 c타입 감성 캠핑조명 빈티지 고리식 (하자)
 
 *사진과 같이 윗부분에 깨진 부분이 있습니다

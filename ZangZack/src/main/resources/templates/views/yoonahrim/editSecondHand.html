@@ -13,63 +13,63 @@
 	<div th:replace="~{common/navbar :: navbar}"></div>
 	
 	<h1 style="text-align:center; font-size: 30px; margin: 50px">중고 매물 수정하기</h1>
-	
-   <!-- 업로드할 파일 사진 업로드 및 버튼(업로드버튼 및 추가버튼 구현)-->
-   <div>
-      <div class="photoNum">
-         <div class="photoUploads" style="">
-            <img src="#" id="photoUpload" style="width:200px; height:200px; border-radius:20%;"/>
-         </div>
-      	 <br>
-         <div class="input-group mb-3" style="left:55px">
-            <label class="input-group-text" for="inputGroupFile" Multiple>upload</label>
-			<input type="file" class="form-control" id="inputGroupFile" style="display:none;" onchange="previewImage(event, 'inputGroupFile','photoUpload')" />
-         </div>
-      </div>
-      <div class="addPhoto" style="cursor:pointer;">
-		  <button type="button" class="btn btn-success" id="plus"> + </button>
-	  </div>
-   </div>
-   <div id="upfileAddArea" class="upfileAddArea"></div>   
-   
-   <!-- 업로드할 내용 -->
-   <div class="edit">
-   		<label>제목
-   			<input class="form-control" type="text" placeholder="Default input" aria-label="default input example" style="width: 800px;">
-   		</label><br><br>
-   		<label>캠핑 카테고리
-   			<select class="form-select">
-			  <option value="1">텐트</option>
-			  <option value="2">취침용품</option>
-			  <option value="3">조리도구</option>
-			  <option value="4">발화용품</option>
-			  <option value="5">배낭</option>
-			  <option value="6">기타</option>
-			</select>
-		</label><br><br>
-   		<label>가격
-   			<input class="form-control" type="number" placeholder="Default input" aria-label="default input example" style="width: 800px;">
-   		</label><br><br>
-   		<label>자세한 설명
-   			<input class="form-control" type="text" placeholder="Default input" aria-label="default input example" style="width: 800px; height:500px;">
-   		</label><br><br>
-   		<label>주소
-	   		<p>
-		      <input type="text" id="zip-code" placeholder="우편번호">
-		      <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기">
-		    </p>
-		    <p>
-		      <input type="text" id="address-1" placeholder="도로명주소" style="width: 500px">
-		    </p>
-		    <p>
-		      <input type="text" id="address-2" placeholder="상세주소" style="width: 500px">
-		    </p>
-	    </label>
-   </div>
-	   <div class="pointerBtn">
-	  		<button type="submit" class="btn-hover color-1">작성 완료</button>
+	<form action="update.ah" method="post">
+	   <!-- 업로드할 파일 사진 업로드 및 버튼(업로드버튼 및 추가버튼 구현)-->
+	   <div>
+	      <div class="photoNum">
+	         <div class="photoUploads" style="">
+	            <img src="#" id="photoUpload" style="width:200px; height:200px; border-radius:20%;"/>
+	         </div>
+	      	 <br>
+	         <div class="input-group mb-3" style="left:55px">
+	            <label class="input-group-text" for="inputGroupFile" Multiple>upload</label>
+				<input type="file" class="form-control" id="inputGroupFile" style="display:none;" onchange="previewImage(event, 'inputGroupFile','photoUpload')" />
+	         </div>
+	      </div>
+	      <div class="addPhoto" style="cursor:pointer;">
+			  <button type="button" class="btn btn-success" id="plus"> + </button>
+		  </div>
 	   </div>
-   
+	   <div id="upfileAddArea" class="upfileAddArea"></div>   
+	   
+	   <!-- 업로드할 내용 -->
+	   <div class="edit">
+	   		<label>제목
+	   			<input class="form-control" type="text" name="spTitle" placeholder="Default input" aria-label="default input example" style="width: 800px;">
+	   		</label><br><br>
+	   		<label>캠핑 카테고리
+	   			<select class="form-select" name="categoryNo">
+				  <option value="1" name="categoryNo">텐트</option>
+				  <option value="2" name="categoryNo">취침용품</option>
+				  <option value="3" name="categoryNo">조리도구</option>
+				  <option value="4" name="categoryNo">발화용품</option>
+				  <option value="5" name="categoryNo">배낭</option>
+				  <option value="6" name="categoryNo">기타</option>
+				</select>
+			</label><br><br>
+	   		<label>가격
+	   			<input class="form-control" type="number" name="spPrice" placeholder="Default input" aria-label="default input example" style="width: 800px;">
+	   		</label><br><br>
+	   		<label>자세한 설명
+	   			<input class="form-control" type="text" name="spContent" placeholder="Default input" aria-label="default input example" style="width: 800px; height:500px;">
+	   		</label><br><br>
+	   		<label>주소
+		   		<p>
+			      <input type="text" id="zip-code" placeholder="우편번호">
+			      <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기">
+			    </p>
+			    <p>
+			      <input type="text" id="address-1" name="spAddressStreet" placeholder="도로명주소" style="width: 500px">
+			    </p>
+			    <p>
+			      <input type="text" id="address-2" name="spAddressDetail" placeholder="상세주소" style="width: 500px">
+			    </p>
+		    </label>
+	   </div>
+		   <div class="pointerBtn">
+		  		<button type="submit" class="btn-hover color-1">작성 완료</button>
+		   </div>
+	   </form>
    
    <script th:line="javascript">
        function previewImage(event, previewId,photoId){
@@ -83,9 +83,6 @@
     	   
        }
        document.getElementById('plus').addEventListener('click', addPhoto);
-       
-       
-      
        
        // '+'버튼을 눌렀을 때 .photoNum이 복제되는 코드 
        let numOfCopies = 1;  
