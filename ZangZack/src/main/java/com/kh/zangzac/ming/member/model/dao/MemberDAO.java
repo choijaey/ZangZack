@@ -10,4 +10,6 @@ public interface MemberDAO {
 
 	int insertMember(Member m);
 
+	Member login(Member m);
+
 }

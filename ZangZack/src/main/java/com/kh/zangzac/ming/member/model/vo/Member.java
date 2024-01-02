@@ -15,17 +15,17 @@ import lombok.ToString;
 @ToString
 public class Member {
 	
-	private String id;
-	private String pwd;
-	private String name;
-	private String email;
-	private String nickName;
-	private Date birth;
-	private String address;
-	private String phone;
-	private Date enrollDate;
-	private String isAdmin;
-	private String status;
-	private String profileRename;
-	private String profilePath;
+	private String memberId;
+	private String memberPwd;
+	private String memberName;
+	private String memberEmail;
+	private String memberNickName;
+	private Date memberBirth;
+	private String memberAddress;
+	private String memberPhone;
+	private Date memberEnrollDate;
+	private String memberIsAdmin;
+	private String memberStatus;
+	private String memberProfileRename;
+	private String memberProfilePath;
 }

@@ -50,11 +50,11 @@
 	          <form class="form sign-up" action="insertMember.me" method="post" onsubmit="return NoSign()">
 	            <div class="input-group">
 	              <i class='bx bxs-user'></i>
-	              <input type="text" placeholder="Id" style="height: 45px;" id="id" name="id" autofocus>
+	              <input type="text" placeholder="Id" style="height: 45px;" id="id" name="memberId" autofocus>
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="password" placeholder="Password" style="height: 45px;" name="pwd">
+	              <input type="password" placeholder="Password" style="height: 45px;" name="memberPwd">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
@@ -62,11 +62,11 @@
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bx-mail-send'></i>
-	              <input type="email" placeholder="Email" style="height: 45px;" name="email">
+	              <input type="email" placeholder="Email" style="height: 45px;" name="memberEmail">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="text" placeholder="Name" style="height: 45px;" name="name">
+	              <input type="text" placeholder="Name" style="height: 45px;" name="memberName">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
@@ -74,7 +74,7 @@
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="tel" placeholder="전화번호(-제외)" style="height: 45px; width: 300px; display: inline-block;" name="phone" id="phone">
+	              <input type="tel" placeholder="전화번호(-제외)" style="height: 45px; width: 300px; display: inline-block;" name="memberPhone" id="phone">
 	              <button type="button" id="send" class="confirmBtn2">전송</button>
 	              <input type="text" id="userNum" placeholder="인증번호" style="width: 200px; display: inline-block; height: 45px;">   <!-- 인증번호 입력창 -->
 				  <button type="button" id="enterBtn"  class="confirmBtn">확인</button> <!-- 인증번호와 내가 입력창에 입력한 인증번호 비교하는 창 -->
@@ -94,7 +94,7 @@
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	             <input type="date" id="birth" placeholder="생년월일" name="birth" style="height: 45px;">
+	             <input type="date" id="birth" placeholder="생년월일" name="memberBirth" style="height: 45px;">
 	            </div>
 	            <span>이용약관 동의 필수 <a href="agreement.me">[보기]</a></span>
 	            <input type="checkbox" name="chk" class="essential" required="required">
@@ -117,14 +117,14 @@
 	      <!-- 로그인 -->
 	      <div class="col align-items-center flex-col sign-in">
 	        <div class="form-wrapper align-items-center">
-	          <form class="form sign-in" action="" method="post">
+	          <form class="form sign-in" action="login.me" method="post">
 	            <div class="input-group">
 	              <i class='bx bxs-user'></i>
-	              <input type="text" placeholder="ID" required autofocus>
+	              <input type="text" placeholder="ID" name="memberId" required autofocus>
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="password" placeholder="Password" required autofocus>
+	              <input type="password" placeholder="Password" name="memberPwd" required autofocus>
 	            </div>
 	            <button style="background-color: rgb(251, 125, 83); color: white;">
 	              Sign in
