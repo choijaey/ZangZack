@@ -1,1 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kh.zangzac.seongun.model.dao">
+	<select id="getListCount">
+		select count(*)
+		from camp_board
+		<where>
+			<if test="i == 0">
+	            cb_status = 'Y'
+	        </if>
+	        <if test="i != 0">
+	            category_no = #{i} and cb_status = 'Y'
+	        </if>
+        </where>
+	</select>
+	
+	<select id="selectBoardList">
+		select * 	
+		from camp_board
+			join member using (member_id)
+		<where> 
+			board_status = 'Y'
+			<if test="i != 0">
+	            and category_no = #{i}
+	        </if> 
+        </where>
+		order by cb_no desc
+	</select>
+</mapper>
