@@ -79,14 +79,19 @@ public class MemberController {
 		System.out.println(m);
 		Member loginUser = mService.login(m);
 		
-		
-		if(bcrypt.matches(m.getMemberPwd(), loginUser.getMemberPwd())) {
-		
-			model.addAttribute("loginUser",loginUser);
-			return "views/ming/member/agreement";
+		if(loginUser != null) {
+			if(bcrypt.matches(m.getMemberPwd(), loginUser.getMemberPwd())) {
+				model.addAttribute("loginUser",loginUser);
+				return "views/ming/member/agreement";
+				
+			}else {
+				model.addAttribute("msg","실패");
+				return "sign";
+			}
+			
 		}else {
 			model.addAttribute("msg","실패");
-			return "redirect:insertMember.me";
+			return "sign";
 		}
 		
 		
