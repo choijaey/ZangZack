@@ -83,38 +83,38 @@ button:hover {
 	         <label for="campsiteName">캠핑장 지역:</label>
 	         <select name="city" id="" style=" margin-right: 10px; height:30px; ">
 	              <option value=>시/도 선택</option>
-	              <option value="general01">강원도</option>
-	              <option value="general02">경기도</option>
-	              <option value="general03">경상남도</option>
-	              <option value="general04">경상북도</option>
-	              <option value="general05">광주</option>
-	              <option value="general06">대구</option>
-	              <option value="general07">대전</option>
-	              <option value="general08">부산</option>
-	              <option value="general09">서울</option>
-	              <option value="general10">울산</option>
-	              <option value="general11">인천</option>
-	              <option value="general12">전라남도</option>
-	              <option value="general13">전라북도</option>
-	              <option value="general14">제주도</option>
-	              <option value="general15">충청남도</option>
-	              <option value="general16">충청북도</option>
+	              <option>강원도</option>
+	              <option>경기도</option>
+	              <option>경상남도</option>
+	              <option>경상북도</option>
+	              <option>광주</option>
+	              <option>대구</option>
+	              <option>대전</option>
+	              <option>부산</option>
+	              <option>서울</option>
+	              <option>울산</option>
+	              <option>인천</option>
+	              <option >전라남도</option>
+	              <option>전라북도</option>
+	              <option>제주도</option>
+	              <option>충청남도</option>
+	              <option>충청북도</option>
 	           </select>
 	       </div><br>
 	       <div class="form-group">
 	            <label for="campsiteName">캠핑장 이름:</label>
-	            <input type="text" id="campsiteName" name="campsiteName" required>
+	            <input type="text" id="campsiteName" name="campName" required>
 	        </div><br>
 	        <div class="form-group">
 	            <label for="rating">별점 :</label>
-	            <input type="number" step="0.1" min="0" max="5" required>
+	            <input type="number" step="0.1" min="0" max="5"  name="point" required >
 	        </div><br>
 	        <div class="form-group" id="fileInputs">
 			    <label for="facilities">캠핑장 이미지:</label>
 			    <button type="button" id="addfile">추가버튼</button>
 			    <div id="fileArea">
 			      <div class="mb-3">
-			        <input type="file" id="campImg" name="imageUpload[]" accept="image/*" style=" width:200px;" onchange="previewImage3(this)">
+			        <input type="file" id="campImg" name="campImg" accept="image/*" style=" width:200px;" onchange="previewImage3(this)">
 			        <div class="infoImgs" style="display:inline-block"></div>
 			        <input type="text" style="width:200px;"> 
 			      </div>
@@ -125,47 +125,47 @@ button:hover {
 			         <table class="table" >
 					   <tr>
 					     <td>주소</td>
-					     <td><input text="text" style="width:500px;"></td>
+					     <td><input text="text" style="width:500px;" name="address"></td>
 					   </tr>
 					   <tr>
 					     <td>문의처</td>
-					     <td><input text="text" style="width:500px;"></td>
-					   </tr>
-					   <tr>
-					     <td>캠핑장 환경</td>
-					     <td><input text="text" style="width:500px;"></td>
+					     <td><input text="text" style="width:500px;" name="phone"></td>
 					   </tr>
 					   <tr>
 					     <td>캠핑장 유형</td>
-					     <td><input text="text" style="width:500px;"></td>
+					     <td><input text="text" style="width:500px;" name="campType"></td>
+					   </tr>
+					   <tr>
+					     <td>캠핑장 환경</td>
+					     <td><input text="text" style="width:500px;" name="campArea"></td>
 					   </tr>
 					   <tr>
 					     <td>운영기간</td>
-					     <td><input text="text" style="width:500px;"></td>
+					     <td><input text="text" style="width:500px;" name="cgSeason"></td>
 					   </tr>
 					   <tr>
 					     <td>운영일</td>
-					     <td><input text="text" style="width:500px;"></td>
+					     <td><input text="text" style="width:500px;" name="cgDate"></td>
 					   </tr>
 					   <tr>
 					     <td>홈페이지</td>
-					     <td><input text="text" style="width:500px;"></td>
+					     <td><input text="text" style="width:500px;" name="cgPage"></td>
 					   </tr>
 					   <tr>
 					     <td>예약방법</td>
-					     <td><input text="text" style="width:500px;"></td>
+					     <td><input text="text" style="width:500px;" name="cgBooking"></td>
 					   </tr>
 					   <tr>
 					     <td>주변이용가능시설</td>
-					     <td><input text="text" style="width:500px;"></td>
+					     <td><input text="text" style="width:500px;" name="cgInfo"></td>
 					   </tr>
 					   <tr>
 					     <td>네이버 별점</td>
-					     <td><input text="number" style="width:500px;"></td>
+					     <td><input text="number" style="width:500px;" name="cgPoint"></td>
 					  </tr>
 					  <tr>
 					     <td>캠핑장 소개</td>
-					     <td><textarea style="width:500px;height:200px;"></textarea></td>
+					     <td><textarea style="width:500px;height:200px;" name="cgAmenity"></textarea></td>
 					  </tr>     
 				  </table>	  
 	          </div>
@@ -174,7 +174,7 @@ button:hover {
 		    <button type="button" id="addfile2">추가버튼</button>
 		    <div id="fileArea2">
 		      <div class="mb-3">
-		        <input type="file"  id ="info" name="imageUpload[]" accept="image/*" style=" width:200px; float: left;" onchange="previewImage4(this)">
+		        <input type="file"  id ="info" name="infoImg" accept="image/*" style=" width:200px; float: left;" onchange="previewImage4(this)">
 		        <div class="infoImgs2" style="display:inline-block;"></div>
 		        <input type="text" style="width:200px;">
 		      </div>
@@ -191,7 +191,7 @@ button:hover {
 		document.getElementById('addfile').addEventListener('click', ()=> {
 			const newDiv = document.createElement('div');
 			newDiv.classList.add('mb-3');
-			newDiv.innerHTML = '<input type="file" name="imageUpload[]" accept="image/*" style=" width:200px;" onchange="previewImage3(this)"><div class="infoImgs" style="display:inline-block"></div><input type="text" style="width:200px;"><button type="button" class="deleteInput">삭제</button>';
+			newDiv.innerHTML = '<input type="file" name="campImg" accept="image/*" style=" width:200px;" onchange="previewImage3(this)"><div class="infoImgs" style="display:inline-block"></div><input type="text" style="width:200px;"><button type="button" class="deleteInput">삭제</button>';
 			
 			fileArea.append(newDiv);
 			
@@ -206,7 +206,7 @@ button:hover {
 		document.getElementById('addfile2').addEventListener('click', ()=> {
 			const newDiv = document.createElement('div');
 			newDiv.classList.add('mb-3');
-			newDiv.innerHTML = '<input type="file" name="imageUpload[]" accept="image/*" style=" width:200px;" onchange="previewImage4(this)"><div class="infoImgs2" style="display:inline-block"></div><input type="text" style="width:200px;"><button type="button" class="deleteInput">삭제</button>';
+			newDiv.innerHTML = '<input type="file" name="infoImg" accept="image/*" style=" width:200px;" onchange="previewImage4(this)"><div class="infoImgs2" style="display:inline-block"></div><input type="text" style="width:200px;"><button type="button" class="deleteInput">삭제</button>';
 			
 			fileArea2.append(newDiv);
 			
