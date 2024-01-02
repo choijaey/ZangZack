@@ -18,9 +18,10 @@ public class MemberController {
 	
 	@Autowired
 	private MemberService mService;
-	
 	@Autowired
-	private BCryptPasswordEncoder bcrypt; 
+	private BCryptPasswordEncoder bcrypt;
+	
+	
 	
 	@PostMapping("/insertMember.me")
 	public String insertMember(@ModelAttribute Member m, @RequestParam("sample6_postcode") String sample6_postcode,
