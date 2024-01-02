@@ -46,13 +46,14 @@
         </div><br>
         <div class="form-group" id="fileInputs">
 		    <label for="facilities">캠핑장 이미지:</label>
-		    <button type="button" onclick="addFileInput()">추가버튼</button>
-		    <div>
-		        <input type="file" name="imageUpload[]" accept="image/*" style="float: left; width:200px;">
-		        <input type="text" style="width:200px;">
-		        <button type="button" onclick="removeFileInput(this)">삭제</button>
-		    </div>
-		</div><br>
+		    <button type="button" id="addfile">추가버튼</button>
+		    <div id="fileArea">
+			      <div class="mb-3">
+			        <input type="file" name="imageUpload[]" accept="image/*" style=" width:200px;">
+			        <input type="text" style="width:200px;">
+			      </div>
+			</div>		
+	    </div><br>
 		<div style="width:750px; margin-left: 10px;">
 		         <table class="table" >
 				   <tr>
@@ -102,13 +103,14 @@
 			  </table>
 			  
           </div>
-          <div class="form-group" id="appendFile">
-			    <label for="facilities">캠핑장 이미지:</label>
-			    <button type="button" onclick="addInfoInput()">추가버튼</button>
-			    <div>
+          <div class="form-group" id="appendFile2">
+			    <label>시설 아이콘:</label>
+			    <button type="button" id="addfile2">추가버튼</button>
+			    <div id="fileArea2">
+			      <div class="mb-3">
 			        <input type="file" name="imageUpload[]" accept="image/*" style=" width:200px;">
 			        <input type="text" style="width:200px;">
-			        <button type="button" onclick="removeFileInput(this)">삭제</button>
+			      </div>
 			    </div>
 		  </div><br>
 	      <button type="submit">등록</button>
@@ -118,102 +120,39 @@
      </div>
    </div>
    <script>
-	function addFileInput() {
-	    // 새로운 파일 입력 필드 생성
-	    const fileInput = document.createElement('input');
-	    fileInput.type = 'file';
-	    fileInput.name = 'imageUpload[]'; // 배열 형태로 파일 이름 지정
-	    fileInput.accept = 'image/*';
-	    fileInput.style.float = 'left';
-	    fileInput.style.width = '200px';
-	
-	    // 새로운 텍스트 입력 필드 생성
-	    const textInput = document.createElement('input');
-	    textInput.type = 'text';
-	    textInput.style.width = '200px';
-	
-	    // "삭제" 버튼 생성
-	    const removeButton = document.createElement('button');
-	    removeButton.type = 'button';
-	    removeButton.textContent = '삭제';
-	    removeButton.onclick = function() {
-	        removeFileInput(this);
-	    };
-	
-	    // 새로운 파일 입력 필드와 텍스트 입력 필드, "삭제" 버튼을 감싸는 div 생성
-	    const wrapperDiv = document.createElement('div');
-	    wrapperDiv.appendChild(fileInput);
-	    wrapperDiv.appendChild(textInput);
-	    wrapperDiv.appendChild(removeButton);
-	
-	    // 파일과 텍스트 입력 필드, "삭제" 버튼을 감싸는 div 추가
-	    document.getElementById('fileInputs').appendChild(wrapperDiv);
+	window.onload = () => {
+		const fileArea = document.querySelector('#fileArea');
+		document.getElementById('addfile').addEventListener('click', ()=> {
+			const newDiv = document.createElement('div');
+			newDiv.classList.add('mb-3');
+			newDiv.innerHTML = '<input type="file" name="imageUpload[]" accept="image/*" style=" width:200px;"><input type="text" style="width:200px;"><button type="button" class="deleteInput">삭제</button>';
+			
+			fileArea.append(newDiv);
+			
+			 // 삭제 버튼에 클릭 이벤트 추가
+	        const deleteButton = newDiv.querySelector('.deleteInput');
+	        deleteButton.addEventListener('click', () => {
+	            newDiv.remove(); // 해당 div를 삭제
+	        });
+		});
+		const fileArea2 = document.querySelector('#fileArea2');
+		document.getElementById('addfile2').addEventListener('click', ()=> {
+			const newDiv = document.createElement('div');
+			newDiv.classList.add('mb-3');
+			newDiv.innerHTML = '<input type="file" name="imageUpload[]" accept="image/*" style=" width:200px;"><input type="text" style="width:200px;"><button type="button" class="deleteInput" >삭제</button>';
+			
+			fileArea2.append(newDiv);
+			
+			 // 삭제 버튼에 클릭 이벤트 추가
+	        const deleteButton = newDiv.querySelector('.deleteInput');
+	        deleteButton.addEventListener('click', () => {
+	            newDiv.remove(); // 해당 div를 삭제
+	        });
+		});
+		
+		
 	}
 	
-	function addInfoInput() {
-	    // 새로운 파일 입력 필드 생성
-	    const fileInput = document.createElement('input');
-	    fileInput.type = 'file';
-	    fileInput.name = 'imageUpload[]'; // 배열 형태로 파일 이름 지정
-	    fileInput.accept = 'image/*';
-	    fileInput.style.float = 'left';
-	    fileInput.style.width = '200px';
-	
-	    // 새로운 텍스트 입력 필드 생성
-	    const textInput = document.createElement('input');
-	    textInput.type = 'text';
-	    textInput.style.width = '200px';
-	
-	    // "삭제" 버튼 생성
-	    const removeButton = document.createElement('button');
-	    removeButton.type = 'button';
-	    removeButton.textContent = '삭제';
-	    removeButton.onclick = function() {
-	        removeFileInput(this);
-	    };
-	
-	    // 새로운 파일 입력 필드와 텍스트 입력 필드, "삭제" 버튼을 감싸는 div 생성
-	    const wrapperDiv = document.createElement('td');
-	    wrapperDiv.appendChild(fileInput);
-	    wrapperDiv.appendChild(textInput);
-	    wrapperDiv.appendChild(removeButton);
-	
-	    // 파일과 텍스트 입력 필드, "삭제" 버튼을 감싸는 div 추가
-	    document.getElementById('appendFile').appendChild(wrapperDiv);
-	}
-	
-	
-	
-	function removeFileInput(button) {
-	    // 해당 버튼이 속한 행을 찾아 삭제
-	    var row = button.parentNode.parentNode;
-	    row.parentNode.removeChild(row);
-	}
-	
-	
-	
-	function previewImage() {
-	    const input = document.getElementById('imageUpload');
-	    const preview = document.getElementById('imagePreview');
-	
-	    while (preview.firstChild) {
-	        preview.removeChild(preview.firstChild);
-	    }
-	
-	    if (input.files && input.files[0]) {
-	        const reader = new FileReader();
-	        reader.onload = function(e) {
-	            const image = document.createElement('img');
-	            image.src = e.target.result;
-	            image.style.width = '200px'; // 이미지 크기 조절
-	            image.style.height= '200px';
-	            preview.appendChild(image);
-	        };
-	        reader.readAsDataURL(input.files[0]);
-	    }
-	}
-
- 
   
 </script>
 
