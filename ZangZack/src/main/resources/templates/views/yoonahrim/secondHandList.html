@@ -370,9 +370,25 @@
 					    </div>
 					</a>
 				</div>
-				
-				
 			</div>	
 		</div>
+		
+		<script>
+			function changeRegion(id, selectedValue) {
+		        // 선택한 값을 출력할 요소 가져오기
+		        var outputElement = document.getElementById("selectedRegionOutput");
+				
+		        // 선택한 값이 비어있지 않으면 출력
+		        if (selectedValue !== "") {
+		            outputElement.innerHTML = "선택한 지역: " + selectedValue;
+		        } else {
+		            // 선택한 값이 비어있을 경우 출력을 초기화
+		            outputElement.innerHTML = "";
+		        }
+		    }
+		
+		
+		</script>
+		
 </body>
 </html>
