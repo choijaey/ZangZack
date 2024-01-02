@@ -27,7 +27,7 @@ public class ProductController {
 	//상품등록페이지 view
 	@GetMapping("productListView.so")
 	public String productListView() {
-		return "views/sohwa/(admin)productEnroll";
+		return "views/sohwa/productDetail";
 	}
 	
 	
