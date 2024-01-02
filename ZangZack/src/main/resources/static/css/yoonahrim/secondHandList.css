@@ -46,7 +46,7 @@
 }
 
 #snb_zone ul {
-  width: 100%;
+  width: 105%;
   position: relative;
   padding: 0;
   border-bottom: 1px solid black;
@@ -93,13 +93,13 @@
 .card-price, .card-region-name, .card-counts{
 	position: relative;
 	top: -5px;
-	left: 60px;
+	left: 40px;
 }
 .card-title{
 	position: relative;
 	margin: 5px;
 	top: 15px;
-	left: 50px;
+	left: 35px;
 }
 
 .card-counts{
@@ -141,7 +141,7 @@ select{
     border: none;
     background-size: 300% 100%;
     position: relative;
-    left: 950px;
+    left: 960px;
     top: 0px;
 
     border-radius: 50px;
@@ -164,7 +164,7 @@ select{
 }
 
 .color-1{
-   background-image: linear-gradient(to right, #5cb85c, #ff9a44, #ef9d43, #CEF279);
-   box-shadow: 0 4px 15px 0 #CEF279 !important;
+   background-color: #5cb85c;
+   box-shadow: 0 4px 15px 0 rgb(128, 128, 128) !important;
 }
 

@@ -3,11 +3,11 @@
 <mapper namespace="com.kh.zangzac.yoonahrim.model.dao.secondHandDAO">
 	<insert id="insertSeconHand">
 		insert secondHandProduct
-		value (SPNO_nextnal, SPTITLE, SPPRICE, SPCONTENT, SPADDRESS, default, default, MEMBERID, CATEGORYNO, default) 
+		value (SP_SEQ.nextval, SPTITLE, SPPRICE, SPCONTENT, SPADDRESS, default, default, MEMBERID, CATEGORYNO, default) 
 	</insert>
 
 	<update id="updateSeconHand">
 		update secondHandProduct
-		set SPNO_nextnal, SPTITLE, SPPRICE, SPCONTENT, SPADDRESS, default, default, MEMBERID, CATEGORYNO, default
+		set SP_SEQ.nextval, SPTITLE, SPPRICE, SPCONTENT, SPADDRESS, default, default, MEMBERID, CATEGORYNO, default
 	</update>
 </mapper>
