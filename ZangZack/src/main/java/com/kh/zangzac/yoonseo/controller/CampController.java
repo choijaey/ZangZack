@@ -26,5 +26,10 @@ public class CampController {
 	public String detailWriter() {
 		return "views/yoonseo/detailWrite";
 	}
+	@GetMapping("recommendWrite.ys")
+	public String recommendWrite () {
+		return "views/yoonseo/recommendWrite";
+	}
+	
 
 }

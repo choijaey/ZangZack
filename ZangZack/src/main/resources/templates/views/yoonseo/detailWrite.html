@@ -4,128 +4,194 @@
 <meta charset="UTF-8">
 <meta>
 <title>캠핑장 정보 등록</title>
+<style>
+ body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+}
 
+.container {
+    width: 50%;
+    margin-top:100px;
+    margin:0 auto;
+    margin-top:100px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.form-group input[type="number"] {
+     width: 90%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width:100px;
+}
+
+.form-group input[type="file"] {
+    border: none;
+}
+
+button {
+    width: 100px;
+    padding: 10px;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #4cae4c;
+}
+</style>
 
 </head>
 <body>
    <div th:replace="~{common/admin :: admin}"></div>
-   
-   <div style="margin-left: 15%; margin-top: 6%; ">
-     <div style="border:1px solid black; width:1000px; height:100%; margin-bottom: 20%; ">
-       <h1 style="text-align: center;">캠핑장 등록</h1>
-       <br>
-       <div class="form-group">
-         <label for="campsiteName">캠핑장 지역:</label>
-         <select name="city" id="" style=" margin-right: 10px; height:30px; ">
-              <option value=>시/도 선택</option>
-              <option value="general01">강원도</option>
-              <option value="general02">경기도</option>
-              <option value="general03">경상남도</option>
-              <option value="general04">경상북도</option>
-              <option value="general05">광주</option>
-              <option value="general06">대구</option>
-              <option value="general07">대전</option>
-              <option value="general08">부산</option>
-              <option value="general09">서울</option>
-              <option value="general10">울산</option>
-              <option value="general11">인천</option>
-              <option value="general12">전라남도</option>
-              <option value="general13">전라북도</option>
-              <option value="general14">제주도</option>
-              <option value="general15">충청남도</option>
-              <option value="general16">충청북도</option>
-           </select>
-       </div><br>
-       <div class="form-group">
-            <label for="campsiteName">캠핑장 이름:</label>
-            <input type="text" id="campsiteName" name="campsiteName" required>
-        </div><br>
-        <div class="form-group">
-            <label for="rating">별점 :</label>
-            <input type="number" step="0.1" min="0" max="5" required>
-        </div><br>
-        <div class="form-group" id="fileInputs">
-		    <label for="facilities">캠핑장 이미지:</label>
-		    <button type="button" id="addfile">추가버튼</button>
-		    <div id="fileArea">
+	<form>  
+	   <div class="container">
+	     <div >
+	       <h1 style="text-align: center;">캠핑장 등록</h1>
+	       <br>
+	       <div class="form-group">
+	         <label for="campsiteName">캠핑장 지역:</label>
+	         <select name="city" id="" style=" margin-right: 10px; height:30px; ">
+	              <option value=>시/도 선택</option>
+	              <option value="general01">강원도</option>
+	              <option value="general02">경기도</option>
+	              <option value="general03">경상남도</option>
+	              <option value="general04">경상북도</option>
+	              <option value="general05">광주</option>
+	              <option value="general06">대구</option>
+	              <option value="general07">대전</option>
+	              <option value="general08">부산</option>
+	              <option value="general09">서울</option>
+	              <option value="general10">울산</option>
+	              <option value="general11">인천</option>
+	              <option value="general12">전라남도</option>
+	              <option value="general13">전라북도</option>
+	              <option value="general14">제주도</option>
+	              <option value="general15">충청남도</option>
+	              <option value="general16">충청북도</option>
+	           </select>
+	       </div><br>
+	       <div class="form-group">
+	            <label for="campsiteName">캠핑장 이름:</label>
+	            <input type="text" id="campsiteName" name="campsiteName" required>
+	        </div><br>
+	        <div class="form-group">
+	            <label for="rating">별점 :</label>
+	            <input type="number" step="0.1" min="0" max="5" required>
+	        </div><br>
+	        <div class="form-group" id="fileInputs">
+			    <label for="facilities">캠핑장 이미지:</label>
+			    <button type="button" id="addfile">추가버튼</button>
+			    <div id="fileArea">
 			      <div class="mb-3">
-			        <input type="file" name="imageUpload[]" accept="image/*" style=" width:200px;">
-			        <input type="text" style="width:200px;">
+			        <input type="file" id="campImg" name="imageUpload[]" accept="image/*" style=" width:200px;" onchange="previewImage3(this)">
+			        <div class="infoImgs" style="display:inline-block"></div>
+			        <input type="text" style="width:200px;"> 
 			      </div>
-			</div>		
-	    </div><br>
-		<div style="width:750px; margin-left: 10px;">
-		         <table class="table" >
-				   <tr>
-				     <td>주소</td>
-				     <td><input text="text" style="width:500px;"></td>
-				   </tr>
-				   <tr>
-				     <td>문의처</td>
-				     <td><input text="text" style="width:500px;"></td>
-				   </tr>
-				   <tr>
-				     <td>캠핑장 환경</td>
-				     <td><input text="text" style="width:500px;"></td>
-				   </tr>
-				   <tr>
-				     <td>캠핑장 유형</td>
-				     <td><input text="text" style="width:500px;"></td>
-				   </tr>
-				   <tr>
-				     <td>운영기간</td>
-				     <td><input text="text" style="width:500px;"></td>
-				   </tr>
-				   <tr>
-				     <td>운영일</td>
-				     <td><input text="text" style="width:500px;"></td>
-				   </tr>
-				   <tr>
-				     <td>홈페이지</td>
-				     <td><input text="text" style="width:500px;"></td>
-				   </tr>
-				   <tr>
-				     <td>예약방법</td>
-				     <td><input text="text" style="width:500px;"></td>
-				   </tr>
-				   <tr>
-				     <td>주변이용가능시설</td>
-				     <td><input text="text" style="width:500px;"></td>
-				   </tr>
-				   <tr>
-				     <td>네이버 별점</td>
-				     <td><input text="number" style="width:500px;"></td>
-				  </tr>
-				  <tr>
-				     <td>캠핑장 소개</td>
-				     <td><textarea style="width:500px;height:200px;"></textarea></td>
-				  </tr>     
-			  </table>
-			  
-          </div>
-          <div class="form-group" id="appendFile2">
-			    <label>시설 아이콘:</label>
-			    <button type="button" id="addfile2">추가버튼</button>
-			    <div id="fileArea2">
-			      <div class="mb-3">
-			        <input type="file" name="imageUpload[]" accept="image/*" style=" width:200px;">
-			        <input type="text" style="width:200px;">
-			      </div>
-			    </div>
-		  </div><br>
-	      <button type="submit">등록</button>
-	      <button style="background-color: red; margin-left: 10px;">취소</button>
-          
-		  
-     </div>
-   </div>
-   <script>
+				</div>
+						
+		    </div><br>
+			<div style="width:750px; margin-left: 10px;">
+			         <table class="table" >
+					   <tr>
+					     <td>주소</td>
+					     <td><input text="text" style="width:500px;"></td>
+					   </tr>
+					   <tr>
+					     <td>문의처</td>
+					     <td><input text="text" style="width:500px;"></td>
+					   </tr>
+					   <tr>
+					     <td>캠핑장 환경</td>
+					     <td><input text="text" style="width:500px;"></td>
+					   </tr>
+					   <tr>
+					     <td>캠핑장 유형</td>
+					     <td><input text="text" style="width:500px;"></td>
+					   </tr>
+					   <tr>
+					     <td>운영기간</td>
+					     <td><input text="text" style="width:500px;"></td>
+					   </tr>
+					   <tr>
+					     <td>운영일</td>
+					     <td><input text="text" style="width:500px;"></td>
+					   </tr>
+					   <tr>
+					     <td>홈페이지</td>
+					     <td><input text="text" style="width:500px;"></td>
+					   </tr>
+					   <tr>
+					     <td>예약방법</td>
+					     <td><input text="text" style="width:500px;"></td>
+					   </tr>
+					   <tr>
+					     <td>주변이용가능시설</td>
+					     <td><input text="text" style="width:500px;"></td>
+					   </tr>
+					   <tr>
+					     <td>네이버 별점</td>
+					     <td><input text="number" style="width:500px;"></td>
+					  </tr>
+					  <tr>
+					     <td>캠핑장 소개</td>
+					     <td><textarea style="width:500px;height:200px;"></textarea></td>
+					  </tr>     
+				  </table>	  
+	          </div>
+	          <div class="form-group" id="fileInputs">
+		    <label for="facilities">시설 정보 및 이미지:</label>
+		    <button type="button" id="addfile2">추가버튼</button>
+		    <div id="fileArea2">
+		      <div class="mb-3">
+		        <input type="file"  id ="info" name="imageUpload[]" accept="image/*" style=" width:200px; float: left;" onchange="previewImage4(this)">
+		        <div class="infoImgs2" style="display:inline-block;"></div>
+		        <input type="text" style="width:200px;">
+		      </div>
+			</div>
+		</div>   
+		      <button type="submit">등록</button>
+		      <button style="background-color: red; margin-left: 10px;">취소</button>  
+	     </div>
+	   </div>
+	</form> 
+   <script th:lnline="javascript">
 	window.onload = () => {
 		const fileArea = document.querySelector('#fileArea');
 		document.getElementById('addfile').addEventListener('click', ()=> {
 			const newDiv = document.createElement('div');
 			newDiv.classList.add('mb-3');
-			newDiv.innerHTML = '<input type="file" name="imageUpload[]" accept="image/*" style=" width:200px;"><input type="text" style="width:200px;"><button type="button" class="deleteInput">삭제</button>';
+			newDiv.innerHTML = '<input type="file" name="imageUpload[]" accept="image/*" style=" width:200px;" onchange="previewImage3(this)"><div class="infoImgs" style="display:inline-block"></div><input type="text" style="width:200px;"><button type="button" class="deleteInput">삭제</button>';
 			
 			fileArea.append(newDiv);
 			
@@ -134,12 +200,13 @@
 	        deleteButton.addEventListener('click', () => {
 	            newDiv.remove(); // 해당 div를 삭제
 	        });
-		});
+		});	
+		
 		const fileArea2 = document.querySelector('#fileArea2');
 		document.getElementById('addfile2').addEventListener('click', ()=> {
 			const newDiv = document.createElement('div');
 			newDiv.classList.add('mb-3');
-			newDiv.innerHTML = '<input type="file" name="imageUpload[]" accept="image/*" style=" width:200px;"><input type="text" style="width:200px;"><button type="button" class="deleteInput" >삭제</button>';
+			newDiv.innerHTML = '<input type="file" name="imageUpload[]" accept="image/*" style=" width:200px;" onchange="previewImage4(this)"><div class="infoImgs2" style="display:inline-block"></div><input type="text" style="width:200px;"><button type="button" class="deleteInput">삭제</button>';
 			
 			fileArea2.append(newDiv);
 			
@@ -148,12 +215,48 @@
 	        deleteButton.addEventListener('click', () => {
 	            newDiv.remove(); // 해당 div를 삭제
 	        });
-		});
-		
-		
+		});	
 	}
+	function previewImage3(input) {
+        const infoImgs = input.parentElement.querySelector('.infoImgs');
+
+        while (infoImgs.firstChild) {
+            infoImgs.removeChild(infoImgs.firstChild);
+        }
+
+        const files = input.files;
+        for (const file of files) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.width = '150px'; // 미리보기 이미지의 너비를 조절할 수 있습니다.
+                infoImgs.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+	function previewImage4(input) {
+        const infoImgs = input.parentElement.querySelector('.infoImgs2');
+
+        while (infoImgs.firstChild) {
+            infoImgs.removeChild(infoImgs.firstChild);
+        }
+
+        const files = input.files;
+        for (const file of files) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.width = '60px'; // 미리보기 이미지의 너비를 조절할 수 있습니다.
+                infoImgs.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
 	
-  
+	
 </script>
 
 </body>
