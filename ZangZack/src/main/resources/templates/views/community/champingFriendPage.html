@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Social Media Prototype</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+.profile-pic {
+	background-image: url('https://unsplash.com/photos/3PeSjpLVtLg');
+	background-size: cover;
+}
+
+	.modal {
+		display: none; /* 기본적으로 모달은 보이지 않습니다. */
+		position: fixed;
+		z-index: 1;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+		background-color: rgba(0, 0, 0, 0.4);
+	}
+	
+	.modal-content {
+		background-color: #fefefe;
+		margin: 15% auto;
+		padding: 20px;
+		border: 1px solid #888;
+		width: 80%;
+	}
+	
+	.modal-content ul {
+		list-style: none;
+		padding: 0;
+	}
+	
+	.modal-content ul li a {
+		text-decoration: none;
+		color: black;
+		display: block;
+		padding: 10px;
+		border-bottom: 1px solid #ccc;
+	}
+	
+	.modal-content ul li a:hover {
+		background-color: #f7f7f7;
+	}
+</style>
+</head>
+<body class="bg-gray-50">
+	<div class="max-w-2xl mx-auto my-8">
+		<!-- Post 1 -->
+		<div class="bg-white rounded-lg shadow-md p-4 mb-6">
+			<div class="flex items-center justify-between mb-4">
+				<div class="flex items-center">
+					<div class="rounded-full h-12 w-12 bg-gray-300 mr-3"></div>
+					<div>
+						<div class="font-semibold">캠핑짱</div>
+						<div class="text-gray-500 text-sm">@글램핑</div>
+					</div>
+				</div>
+				<div class="icon icon-more"></div>
+			</div>
+			<div class="mb-4">
+				<p>캠핑 같이 갈사람~~~????</p>
+			</div>
+			<div class="flex justify-between items-center text-gray-500 text-sm">
+				<div class="flex items-center">
+
+					<div name="reply">댓글 달기</div>
+				</div>
+				<div class="flex items-center">
+					<span>전체 댓글</span>
+				</div>
+
+			</div>
+		</div>
+
+		<!-- Post 2 -->
+		<div class="bg-white rounded-lg shadow-md p-4">
+			<div class="flex items-center justify-between mb-4">
+				<div class="flex items-center">
+					<div class="rounded-full h-12 w-12 bg-gray-300 mr-3"></div>
+					<div>
+						<div class="font-semibold">집에 가고싶다.</div>
+						<div class="text-gray-500 text-sm">@오토캠핑</div>
+					</div>
+					<button type="button" class="review-options-btn l-4">...</button>
+				</div>
+				<div class="icon icon-more"></div>
+			</div>
+			
+			
+			<div class="modal" id="modal">
+		      <div class="modal-content">
+		        <ul>
+		          <li><a href="#" class="edit-review">수정</a></li>
+		          <li><a href="#" class="delete-review">삭제</a></li>
+		        </ul>
+		      </div>
+		    </div>
+			
+		      
+			
+			<div class="mb-4">
+				<p>여긴어디 난 누구?</p>
+				<img src="https://source.unsplash.com/featured/?rocket,night"
+					alt="Rocket Launch" class="rounded-lg mt-3">
+			</div>
+			<div class="flex justify-between items-center text-gray-500 text-sm">
+				<div class="flex items-center">
+
+					<div name="reply">댓글 달기</div>
+				</div>
+				<div class="flex items-center">
+					<span>전체 댓글</span>
+				</div>
+			</div>
+		</div>
+
+		<!-- Reply Modal -->
+		<div id="replyModal" class="fixed inset-0 bg-black bg-opacity-25 flex justify-center items-center hidden">
+			<div class="bg-white p-4 rounded-lg shadow-lg w-full max-w-md">
+				<div class="flex justify-between items-center">
+					<div class="font-semibold">Replying to Elon Musk</div>
+					<button id="closeModal" class="text-gray-500">&times;</button>
+				</div>
+				<div class="mt-4">
+					<textarea
+						class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+						rows="4" placeholder="Post your reply"></textarea>
+				</div>
+				<div class="flex justify-end mt-4">
+					<button class="bg-blue-500 text-white px-4 py-2 rounded-lg">Reply</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+	<script>
+        // Get the modal and close button
+        const replyModal = document.getElementById('replyModal');
+        const closeModalBtn = document.getElementById('closeModal');
+
+        // Open the modal
+        function openModal() {
+            replyModal.classList.remove('hidden');
+        }
+
+        // Close the modal
+        function closeModal() {
+            replyModal.classList.add('hidden');
+        }
+
+        // Attach click event to open the modal
+        closeModalBtn.addEventListener('click', closeModal);
+        
+        window.onload = () => {
+            const replys = document.getElementsByName('reply');
+
+            for (const reply of replys) {
+                reply.addEventListener('click', openModal);
+            }
+        };
+        
+        
+        
+     // 모달을 가져옵니다.
+        var modal = document.getElementById("modal");
+
+        // 모달을 여는 버튼을 가져옵니다.
+        var btn = document.querySelector(".review-options-btn");
+
+        // 모달을 닫는 <span> 요소를 가져옵니다. (여기서는 사용하지 않았습니다. 필요하다면 추가하세요.)
+
+        // 사용자가 버튼을 클릭하면 모달을 엽니다.
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+
+        // 사용자가 모달 외부를 클릭하면 모달을 닫습니다.
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+        
+        
+        
+        
+        
+    </script>
+</body>
+
+</html>

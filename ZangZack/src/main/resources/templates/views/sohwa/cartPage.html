@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link href="css/sohwa/cartPage.css" rel="stylesheet">
+<title>Insert title here</title>
+</head>
+<body>
+	<div th:replace="~{common/navbar :: navbar}"></div>
+	
+	<br><br><br><br><br><br>
+	<div id="cartWrapped">
+		<div id="cartLogo">
+			01 장바구니 <span>-> 02 주문서 작성 -> 03 주문완료</span>
+		</div>
+		<hr style="border:2.5px solid black;">
+		
+		<table>
+			<tr>
+				<th class="th1" >
+					<input id="allSelect" type="checkbox"><span style="margin-left: 70px;">상품정보</span>
+				</th>
+				<th class="th2">
+					수량
+				</th>
+				<th class="th3">
+					주문금액
+				</th>
+				<th class="th4">
+					배송비
+				</th>
+				<th class="th5">
+					
+				</th>
+			</tr>
+			
+			
+			<!--장바구니에 상품이 있는 것만큼 반복-->
+			<tr class="cart-row">
+				<td class="td1">
+					<input type="checkbox">
+					<img src="image/sohwa/tent1core1.png">
+					<div>
+						<div>모비가든</div>
+						캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br>
+						410,000원
+					</div>
+					
+				</td>
+				<td class="td2">
+					<div class="quantity-input">&nbsp;&nbsp;&nbsp;
+					    <button class="quantity-btn" id="decrementBtn">-</button>
+			            <input type="text" class="quantity" value="1" min="1">
+			            <button class="quantity-btn" id="incrementBtn">+</button>
+			            <div id="resultPrice"></div>
+					</div>
+				</td>
+				<td class="td3">
+					410,000원
+					<button style="background-color: black; color:white">Buy now</button>
+				</td>
+				<td class="td4">
+					무료배송
+				</td>
+				<td class="td5">
+					<button class="close-btn">X</button>
+				</td>
+			</tr>
+			
+			<tr class="cart-row">
+				<td class="td1">
+					<input type="checkbox">
+					<img src="image/sohwa/tent1core1.png">
+					<div>
+						<div>모비가든</div>
+						캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br>
+						410,000원
+					</div>
+					
+				</td>
+				<td class="td2">
+					<div class="quantity-input">&nbsp;&nbsp;&nbsp;
+					    <button class="quantity-btn" id="decrementBtn">-</button>
+			            <input type="text" class="quantity" value="1" min="1">
+			            <button class="quantity-btn" id="incrementBtn">+</button>
+			            <div id="resultPrice"></div>
+					</div>
+				</td>
+				<td class="td3">
+					410,000원
+					<button style="background-color: black; color:white">Buy now</button>
+				</td>
+				<td class="td4">
+					무료배송
+				</td>
+				<td class="td5">
+					<button class="close-btn">X</button>
+				</td>
+			</tr>
+			
+			<tr class="cart-row">
+				<td class="td1">
+					<input type="checkbox">
+					<img src="image/sohwa/tent1core1.png">
+					<div>
+						<div>모비가든</div>
+						캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br>
+						410,000원
+					</div>
+					
+				</td>
+				<td class="td2">
+					<div class="quantity-input">&nbsp;&nbsp;&nbsp;
+					    <button class="quantity-btn" id="decrementBtn">-</button>
+			            <input type="text" class="quantity" value="1" min="1">
+			            <button class="quantity-btn" id="incrementBtn">+</button>
+			            <div id="resultPrice"></div>
+					</div>
+				</td>
+				<td class="td3">
+					410,000원
+					<button style="background-color: black; color:white">Buy now</button>
+				</td>
+				<td class="td4">
+					무료배송
+				</td>
+				<td class="td5">
+					<button class="close-btn">X</button>
+				</td>
+			</tr>
+			
+			<tr class="cart-row">
+				<td class="td1">
+					<input type="checkbox">
+					<img src="image/sohwa/tent1core1.png">
+					<div>
+						<div>모비가든</div>
+						캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br>
+						410,000원
+					</div>
+					
+				</td>
+				<td class="td2">
+					<div class="quantity-input">&nbsp;&nbsp;&nbsp;
+					    <button class="quantity-btn" id="decrementBtn">-</button>
+			            <input type="text" class="quantity" value="1" min="1">
+			            <button class="quantity-btn" id="incrementBtn">+</button>
+			            <div id="resultPrice"></div>
+					</div>
+				</td>
+				<td class="td3">
+					410,000원
+					<button style="background-color: black; color:white">Buy now</button>
+				</td>
+				<td class="td4">
+					무료배송
+				</td>
+				<td class="td5">
+					<button class="close-btn">X</button>
+				</td>
+			</tr>
+			
+			
+			
+			
+		</table>
+		
+		<br>
+		<button id="deleteBtn">선택 상품 삭제</button>
+		
+		
+		<hr style="border:2.5px solid black; margin-top:150px;">
+		
+		<table style="margin-bottom: 50px;">
+			<tr id="tr1">
+				<th id="th1">총 주문금액</th>
+				<th style="width:50px;"></th>
+				<th id="th2">총 배송비</th>
+				<th style="width:50px;"></th>
+				<th id="th3">총 결제금액</th>
+			</tr>
+			
+			<tr id="tr2">
+				<td id="td1">410,000원</td>
+				<td><img src="image/sohwa/icons8-plus-64.png"></td>
+				<td id="td2">0원</td>
+				<td><img src="image/sohwa/icons8-equal-24.png"></td>
+				<td id="td3">410,000원</td>
+			</tr>
+			
+		</table>
+		
+		<button class="btn-hover color-1" style="color:gray; margin-left:280px;">쇼핑하기</button>
+		<button class="btn-hover color-2">주문하기</button>
+		
+	</div>	
+	
+	<br><br><br><br><br><!--footer넣는 곳--><br><br><br><br><br>
+	
+	
+	
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+	    	const allSelect = document.getElementById('allSelect');
+		    const checkboxes = document.querySelectorAll('.cart-row input[type="checkbox"]');
+		    
+		    allSelect.addEventListener('change', function() {
+		        checkboxes.forEach(function(checkbox) {
+		            checkbox.checked = allSelect.checked;
+		        });
+		    });
+		});
+	</script>
+
+</body>
+</html>

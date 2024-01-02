@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+	.table td{cursor:pointer;}
+	.table td>div{border: 1px solid black; height: 80%; width: 45%; display: inline-block; padding-top: 3%; cursor: pointer;}
+	.selectState{background: lightgray; font-size: 15px}
+	.unselectState{background: none;}
+</style>
+<link href="css/yoonahrim/adminSecondHand.css?after" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+   <div th:replace="~{common/admin :: admin}"></div>
+   
+   <div id="orderListWrapped">
+      <h1>중고물품 관리</h1>
+      
+      <div style="float:right;">
+         <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    물품번호 검색
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="#" onclick="showSearch('search1', '물품번호 검색')">물품번호 검색</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSearch('search2', '물품명 검색')">물품명 검색</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSearch('search3', '작성자 검색')">작성자 검색</a></li>
+                </ul>
+            </div>
+         
+         <div class="search" id="search1">
+            <input type="text" placeholder="물품번호 입력">
+              <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+         </div>
+         <div class="search" id="search2" style="display: none;">
+            <input type="text" placeholder="물품명 입력">
+              <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+         </div>
+         <div class="search" id="search3" style="display: none;">
+            <input type="text" placeholder="작성자 입력">
+              <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+         </div>
+      </div>
+      
+      <table id="allOrder">
+         <tr>
+            <th class="td1"><input type="checkbox" id="allSelect" onclick="toggleAllCheckboxes('allOrder', 'allSelect')"></th>
+            <th class="td2">물품번호</th>
+            <th class="td3">아이디</th>
+            <th class="td4">물품명</th>
+            <th class="td5">물품가격</th>
+            <th class="td6">물품내용</th>
+            <th class="td7">주소</th>
+            <th class="td8">카테고리</th>
+            <th class="td9">예약여부</th>
+            <th class="td10">판매여부</th>
+            <th class="td11">삭제여부</th>
+         </tr>
+         
+         <tr>
+            <td class="td1"><input type="checkbox"></td>
+            <td class="td2">1012233</td>
+            <td class="td3">신소화</td>
+            <td class="td4">충전식 캠핑랜턴 c타입 감성 캠핑조명 빈티지 고리식</td>
+            <td class="td5">5,000</td>
+            <td class="td6">*사진과 같이 윗부분에 깨진 부분이 있습니다
+그 와 사용감 있고 기능적으로는 아무 문제 없습니다. dndkdkdkdkdkdkdkdkdkdkd</td>
+            <td class="td7">의정부시 의정부동 의정부</td>
+            <td class="td8">조리도구</td>
+            <td class="td9">
+				<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+			</td>
+            <td class="td10">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+            <td class="td11">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+         </tr>
+         
+         <tr>
+           <td class="td1"><input type="checkbox"></td>
+            <td class="td2">1012233</td>
+            <td class="td3">신소화</td>
+            <td class="td4">충전식 캠핑랜턴 c타입 감성 캠핑조명 빈티지 고리식</td>
+            <td class="td5">5,000</td>
+            <td class="td6">*사진과 같이 윗부분에 깨진 부분이 있습니다
+그 와 사용감 있고 기능적으로는 아무 문제 없습니다</td>
+            <td class="td7">의정부시 의정부동 의정부</td>
+            <td class="td8">조리도구</td>
+           <td class="td9">
+				<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+			</td>
+            <td class="td10">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+            <td class="td11">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+         </tr>
+         
+         <tr>
+           <td class="td1"><input type="checkbox"></td>
+            <td class="td2">1012233</td>
+            <td class="td3">신소화</td>
+            <td class="td4">충전식 캠핑랜턴 c타입 감성 캠핑조명 빈티지 고리식</td>
+            <td class="td5">5,000</td>
+            <td class="td6">*사진과 같이 윗부분에 깨진 부분이 있습니다
+그 와 사용감 있고 기능적으로는 아무 문제 없습니다</td>
+            <td class="td7">의정부시 의정부동 의정부</td>
+            <td class="td8">조리도구</td>
+            <td class="td9">
+				<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+			</td>
+            <td class="td10">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+            <td class="td11">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+         </tr>
+         
+         <tr>
+           <td class="td1"><input type="checkbox"></td>
+            <td class="td2">1012233</td>
+            <td class="td3">신소화</td>
+            <td class="td4">충전식 캠핑랜턴 c타입 감성 캠핑조명 빈티지 고리식</td>
+            <td class="td5">5,000</td>
+            <td class="td6">*사진과 같이 윗부분에 깨진 부분이 있습니다
+그 와 사용감 있고 기능적으로는 아무 문제 없습니다</td>
+            <td class="td7">의정부시 의정부동 의정부</td>
+            <td class="td8">조리도구</td>
+            <td class="td9">
+				<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+			</td>
+            <td class="td10">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+            <td class="td11">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+         </tr>
+         
+         <tr>
+           <td class="td1"><input type="checkbox"></td>
+            <td class="td2">1012233</td>
+            <td class="td3">신소화</td>
+            <td class="td4">충전식 캠핑랜턴 c타입 감성 캠핑조명 빈티지 고리식</td>
+            <td class="td5">5,000</td>
+            <td class="td6">*사진과 같이 윗부분에 깨진 부분이 있습니다
+그 와 사용감 있고 기능적으로는 아무 문제 없습니다</td>
+            <td class="td7">의정부시 의정부동 의정부</td>
+            <td class="td8">조리도구</td>
+            <td class="td9">
+				<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+			</td>
+            <td class="td10">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+            <td class="td11">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+         </tr>
+         
+         <tr>
+           <td class="td1"><input type="checkbox"></td>
+            <td class="td2">1012233</td>
+            <td class="td3">신소화</td>
+            <td class="td4">충전식 캠핑랜턴 c타입 감성 캠핑조명 빈티지 고리식</td>
+            <td class="td5">5,000</td>
+            <td class="td6">*사진과 같이 윗부분에 깨진 부분이 있습니다
+그 와 사용감 있고 기능적으로는 아무 문제 없습니다</td>
+            <td class="td7">의정부시 의정부동 의정부</td>
+            <td class="td8">조리도구</td>
+            <td class="td9">
+				<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+			</td>
+            <td class="td10">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+            <td class="td11">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+         </tr>
+         
+         <tr>
+           <td class="td1"><input type="checkbox"></td>
+            <td class="td2">1012233</td>
+            <td class="td3">신소화</td>
+            <td class="td4">충전식 캠핑랜턴 c타입 감성 캠핑조명 빈티지 고리식</td>
+            <td class="td5">5,000</td>
+            <td class="td6">*사진과 같이 윗부분에 깨진 부분이 있습니다
+그 와 사용감 있고 기능적으로는 아무 문제 없습니다</td>
+            <td class="td7">의정부시 의정부동 의정부</td>
+            <td class="td8">조리도구</td>
+            <td class="td9">
+				<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+			</td>
+            <td class="td10">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+            <td class="td11">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+         </tr>
+         
+         <tr>
+           <td class="td1"><input type="checkbox"></td>
+            <td class="td2">1012233</td>
+            <td class="td3">신소화</td>
+            <td class="td4">충전식 캠핑랜턴 c타입 감성 캠핑조명 빈티지 고리식</td>
+            <td class="td5">5,000</td>
+            <td class="td6">*사진과 같이 윗부분에 깨진 부분이 있습니다
+그 와 사용감 있고 기능적으로는 아무 문제 없습니다</td>
+            <td class="td7">의정부시 의정부동 의정부</td>
+            <td class="td8">조리도구</td>
+            <td class="td9">
+				<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+			</td>
+            <td class="td10">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+            <td class="td11">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+         </tr>
+         
+         <tr>
+           <td class="td1"><input type="checkbox"></td>
+            <td class="td2">1012233</td>
+            <td class="td3">신소화</td>
+            <td class="td4">충전식 캠핑랜턴 c타입 감성 캠핑조명 빈티지 고리식</td>
+            <td class="td5">5,000</td>
+            <td class="td6">*사진과 같이 윗부분에 깨진 부분이 있습니다
+그 와 사용감 있고 기능적으로는 아무 문제 없습니다</td>
+            <td class="td7">의정부시 의정부동 의정부</td>
+            <td class="td8">조리도구</td>
+            <td class="td9">
+				<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+			</td>
+            <td class="td10">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+            <td class="td11">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+         </tr>
+         
+         <tr>
+           <td class="td1"><input type="checkbox"></td>
+            <td class="td2">1012233</td>
+            <td class="td3">신소화</td>
+            <td class="td4">충전식 캠핑랜턴 c타입 감성 캠핑조명 빈티지 고리식</td>
+            <td class="td5">5,000</td>
+            <td class="td6">*사진과 같이 윗부분에 깨진 부분이 있습니다
+그 와 사용감 있고 기능적으로는 아무 문제 없습니다</td>
+            <td class="td7">의정부시 의정부동 의정부</td>
+            <td class="td8">조리도구</td>
+            <td class="td9">
+				<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+			</td>
+            <td class="td10">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+            <td class="td11">
+            	<div class="selectState">Y</div>
+				<div class="unselectState">N</div>
+            </td>
+         </tr>
+         
+         
+      </table>
+      
+      
+      
+      
+      
+      <nav class="Page" aria-label="Page navigation example">
+          <ul class="pagination">
+             <li class="page-item">
+               <a class="page-link" href="#" aria-label="Previous">
+                 <span aria-hidden="true">&laquo;</span>
+               </a>
+             </li>
+             <li class="page-item"><a class="page-link" href="#">1</a></li>
+             <li class="page-item"><a class="page-link" href="#">2</a></li>
+             <li class="page-item"><a class="page-link" href="#">3</a></li>
+             <li class="page-item"><a class="page-link" href="#">4</a></li>
+             <li class="page-item"><a class="page-link" href="#">5</a></li>
+             <li class="page-item">
+             <a class="page-link" href="#" aria-label="Next">
+                 <span aria-hidden="true">&raquo;</span>
+             </a>
+             </li>
+          </ul>
+      </nav>
+   </div>
+
+
+
+
+   <script>
+      //체크박스 전체 선택/해제
+        function toggleAllCheckboxes(tableId, selectId) {
+         const checkboxes = document.querySelectorAll(`#${tableId} input[type="checkbox"]:not(#${selectId})`);
+         const selectAll = document.getElementById(selectId);
+         const allChecked = selectAll.checked;
+   
+         checkboxes.forEach(checkbox => {
+             checkbox.checked = allChecked;
+         });
+     }
+      
+      
+      
+      //드롭다운 변경
+      function showSearch(searchId, dropdownText) {
+            document.querySelectorAll('.search').forEach(function(searchElement) {
+                searchElement.style.display = 'none';
+            });
+            document.getElementById(searchId).style.display = 'block';
+            document.getElementById('dropdownMenuButton').innerText = dropdownText;
+        }
+    </script>
+   
+</body>
+</html>

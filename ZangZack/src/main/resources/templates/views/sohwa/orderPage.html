@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="css/sohwa/orderPage.css" rel="stylesheet">
+</head>
+<body>
+	<div th:replace="~{common/navbar :: navbar}"></div>
+	
+	<div id="allWrapped">
+		<div id="cartLogo">
+			<span>01 장바구니 -></span> 02 주문서 작성 <span>-> 03 주문완료</span>
+		</div>
+		
+		<div id="originalDiv">
+			<br>
+			<hr style="border:2.5px solid black;">
+			<br>
+			<h3 style="margin-left:40px;">배송정보</h3>
+			
+			
+			<ul>
+		        <li><a href="#" id="newAddress">신규입력</a></li>
+		        <li><a href="#" id="existingAddress">기존배송지</a></li>
+		        <li id="line"></li>
+		    </ul>
+		   
+		
+		    <form id="newAddressForm" class="hidden" >
+		        <!-- 신규입력 폼 -->
+		        <label for="name">* 이름<br>
+	                <input type="text" id="name"><br><br>
+	            </label>
+					
+				<label for="phone1">* 연락처<br>
+	                <input type="text" id="phone1" style="width:100px;">&nbsp;-&nbsp;<input type="text" id="phone2" style="width:100px;">&nbsp;-&nbsp;<input type="text" id="phone3" style="width:100px;"><br><br>
+	            </label>
+				
+				<label for="post" style="display: inline-block;">* 우편번호<br>
+	                <input type="text" id="post" style="width:200px;">
+	            </label>
+	            
+	            <input type="button"  value="우편번호 찾기" style="width:100px;"><br><br>
+				
+				<label for="address">* 주소<br>
+	                <input type="text" id="address"><br><br>
+	            </label>
+	            
+	            <label for="detailAddress">* 상세주소<br>
+	                <input type="text" id="detailAddress"><br><br>
+	            </label>
+				
+		
+		    </form>
+		
+		
+		
+		    <form id="existingAddressForm" class="hidden">
+		        <!-- 기존배송지 폼 -->
+		        <label for="name">* 이름<br>
+	                <input type="text" id="name" value="기존 성함"><br><br>
+	            </label>
+					
+				<label for="phone1">* 연락처<br>
+	                <input type="text" id="phone1" style="width:100px;">&nbsp;-&nbsp;<input type="text" id="phone2" style="width:100px;">&nbsp;-&nbsp;<input type="text" id="phone3" style="width:100px;"><br><br>
+	            </label>
+				
+				<label for="post" style="display: inline-block;">* 우편번호<br>
+	                <input type="text" id="post" style="width:200px;">
+	            </label>
+	            
+	            <input type="button"  value="우편번호 찾기" style="width:100px;"><br><br>
+				
+				<label for="address">* 주소<br>
+	                <input type="text" id="address"><br><br>
+	            </label>
+	            
+	            <label for="detailAddress">* 상세주소<br>
+	                <input type="text" id="detailAddress"><br><br>
+	            </label>
+		    </form>
+			
+			
+			<hr style="border:2.5px solid black; margin-top:100px;">
+			
+			<h3>상품정보</h3>
+			<hr>
+			<table>
+				
+				<tr class="cart-row">
+                    <td class="td1">
+                        <input type="checkbox">
+						<img src="image/sohwa/tent1core1.png">
+						<div>
+							<div>모비가든</div>
+							캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br>
+							410,000원
+						</div>
+                    </td>
+                    <td class="td2">
+                        <div class="quantity-input">&nbsp;&nbsp;&nbsp;
+                            <button class="quantity-btn decrementBtn">-</button>
+                            <input type="text" class="quantity" value="1" min="1">
+                            <button class="quantity-btn incrementBtn">+</button>
+                        </div>
+                    </td>
+                    <td class="td3">
+                        410,000원
+                    </td>
+                </tr>
+                
+                <tr class="cart-row">
+                    <td class="td1">
+                        <input type="checkbox">
+						<img src="image/sohwa/tent1core1.png">
+						<div>
+							<div>모비가든</div>
+							캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br>
+							410,000원
+						</div>
+                    </td>
+                    <td class="td2">
+                        <div class="quantity-input">&nbsp;&nbsp;&nbsp;
+                            <button class="quantity-btn decrementBtn">-</button>
+                            <input type="text" class="quantity" value="1" min="1">
+                            <button class="quantity-btn incrementBtn">+</button>
+                        </div>
+                    </td>
+                    <td class="td3">
+                        410,000원
+                    </td>
+                </tr>
+                
+                <tr class="cart-row">
+                    <td class="td1">
+                        <input type="checkbox">
+						<img src="image/sohwa/tent1core1.png">
+						<div>
+							<div>모비가든</div>
+							캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br>
+							410,000원
+						</div>
+                    </td>
+                    <td class="td2">
+                        <div class="quantity-input">&nbsp;&nbsp;&nbsp;
+                            <button class="quantity-btn decrementBtn">-</button>
+                            <input type="text" class="quantity" value="1" min="1">
+                            <button class="quantity-btn incrementBtn">+</button>
+                        </div>
+                    </td>
+                    <td class="td3">
+                        410,000원
+                    </td>
+                </tr>
+                
+                <tr class="cart-row">
+                    <td class="td1">
+                        <input type="checkbox">
+						<img src="image/sohwa/tent1core1.png">
+						<div>
+							<div>모비가든</div>
+							캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br>
+							410,000원
+						</div>
+                    </td>
+                    <td class="td2">
+                        <div class="quantity-input">&nbsp;&nbsp;&nbsp;
+                            <button class="quantity-btn decrementBtn">-</button>
+                            <input type="text" class="quantity" value="1" min="1">
+                            <button class="quantity-btn incrementBtn">+</button>
+                        </div>
+                    </td>
+                    <td class="td3">
+                        410,000원
+                    </td>
+                </tr>
+                
+                <tr class="cart-row">
+                    <td class="td1">
+                        <input type="checkbox">
+						<img src="image/sohwa/tent1core1.png">
+						<div>
+							<div>모비가든</div>
+							캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br>
+							410,000원
+						</div>
+                    </td>
+                    <td class="td2">
+                        <div class="quantity-input">&nbsp;&nbsp;&nbsp;
+                            <button class="quantity-btn decrementBtn">-</button>
+                            <input type="text" class="quantity" value="1" min="1">
+                            <button class="quantity-btn incrementBtn">+</button>
+                        </div>
+                    </td>
+                    <td class="td3">
+                        410,000원
+                    </td>
+                </tr>
+			
+			</table>
+			
+			<button id="deleteBtn">선택 상품 삭제</button>
+			
+		</div>
+		
+		
+		
+		
+	
+	</div>
+	
+	
+	
+	
+	
+	
+	<div id="fixedDiv">
+		
+		<div id="fixedWrapped">
+			<img src="image/sohwa/icons8-camping-64.png">
+			
+			<h3>결제 금액</h3>
+			<hr>
+			<div>총 상품 금액      <span>820,000원</span></div>
+			<br>
+			<div>배송비      		<span>0원</span></div>
+			<hr>
+			<br>
+			<div style="font-weight:bold; font-size:20px;">최종 결제 금액    <span style="color:#F9612B;">820,000원</span></div>
+			<br>
+			<hr>
+			
+			
+			<!--약관동의-->
+			
+			<p>결제 및 계좌 안내 시 상호명은 <span style="color:#F9612B;">(주)장작</span>으로 표기되니 참고 부탁드립니다.</p>
+			
+			<button id="payButton">CHECK OUT</button>
+			
+		</div>
+		
+		
+		
+		
+	</div>
+	
+	
+	
+	
+	<br><br><br><br><!--footer--><br><br><br><br>
+	
+	
+	
+	
+	
+	
+    
+	<script>
+		
+		window.onload=()=>{
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			function findPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    document.getElementById('sample6_postcode').value = data.zonecode;
+                    document.getElementById('sample6_address').value = data.address;
+                    document.getElementById('sample6_detailAddress').focus();
+                }
+            }).open();
+        }
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			document.getElementById('newAddressForm').classList.remove('hidden');
+	            document.getElementById('existingAddressForm').classList.add('hidden');
+			
+			document.getElementById('newAddress').addEventListener('click', function(event) {
+	            event.preventDefault();
+	            document.getElementById('newAddressForm').classList.remove('hidden');
+	            document.getElementById('existingAddressForm').classList.add('hidden');
+	        });
+	
+	        document.getElementById('existingAddress').addEventListener('click', function(event) {
+	            event.preventDefault();
+	            document.getElementById('existingAddressForm').classList.remove('hidden');
+	            document.getElementById('newAddressForm').classList.add('hidden');
+	
+	            // 기존 정보를 폼에 채워넣는 부분
+	            // 예를 들어, 기존 정보가 있을 때 그 정보를 가져와서 채워넣는 로직이 들어갑니다.
+	            // 이는 실제 데이터베이스나 저장된 정보에 따라 달라질 수 있습니다.
+	            document.getElementById('recipientNameExisting').value = '이전에 입력된 수령인';
+	            document.getElementById('addressExisting').value = '이전에 입력된 주소';
+	            document.getElementById('phoneNumberExisting').value = '이전에 입력된 연락처';
+	        });
+	        
+	        
+	        
+	        
+	        
+	        
+	        const decrementButtons = document.querySelectorAll('.decrementBtn');
+            const incrementButtons = document.querySelectorAll('.incrementBtn');
+            const quantityInputs = document.querySelectorAll('.quantity');
+            const td3Elements = document.querySelectorAll('.td3');
+
+            // 초기에 각 행의 총 가격 계산
+            for (let i = 0; i < td3Elements.length; i++) {
+                const unitPrice = 410000; // 초기 가격 설정
+                const quantity = parseInt(quantityInputs[i].value);
+                td3Elements[i].innerText = (unitPrice * quantity).toLocaleString() + '원';
+            }
+
+            // 각 버튼에 이벤트 리스너 추가
+            for (let i = 0; i < decrementButtons.length; i++) {
+                decrementButtons[i].addEventListener('click', function() {
+                    const currentValue = parseInt(quantityInputs[i].value);
+                    if (currentValue > 1) {
+                        quantityInputs[i].value = currentValue - 1;
+                    }
+                    updateTotalPrice(i);
+                });
+
+                incrementButtons[i].addEventListener('click', function() {
+                    const currentValue = parseInt(quantityInputs[i].value);
+                    quantityInputs[i].value = currentValue + 1;
+                    updateTotalPrice(i);
+                });
+            }
+
+            // 총 가격 업데이트 함수
+            function updateTotalPrice(index) {
+                const unitPrice = 410000; // 초기 가격 설정
+                const quantity = parseInt(quantityInputs[index].value);
+                td3Elements[index].innerText = (unitPrice * quantity).toLocaleString() + '원';
+            }
+            
+		        
+		        
+		        
+	        
+	        
+	     
+			}
+		
+		
+		
+		
+	</script>
+
+</body>
+</html>
