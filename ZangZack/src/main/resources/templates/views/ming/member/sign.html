@@ -4,9 +4,21 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link href="../css/ming/member/sign.css" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+<meta http-equiv="X-UA-Compatible" content="ie=edge" /> 
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <style>
 	.input-group .confirmBtn{
 		width: 200px; 
+		display: inline-block; 
+		height: 40px; 
+		background-color: rgb(251, 125, 83); 
+		color: white;
+		position: relative;
+		top: 5px;
+	}
+	.input-group .confirmBtn2{
+		width: 90px; 
 		display: inline-block; 
 		height: 40px; 
 		background-color: rgb(251, 125, 83); 
@@ -62,9 +74,10 @@
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="tel" placeholder="전화번호(-제외)" style="height: 45px;" name="phone">
+	              <input type="tel" placeholder="전화번호(-제외)" style="height: 45px; width: 300px; display: inline-block;" name="phone">
+	              <button type="button" id="enterBtn"  class="confirmBtn2">전송</button>
 	              <input type="text" id="userNum" placeholder="인증번호" style="width: 200px; display: inline-block; height: 45px;">   <!-- 인증번호 입력창 -->
-				  <button type="button" id="enterBtn" class="confirmBtn">확인</button> <!-- 인증번호와 내가 입력창에 입력한 인증번호 비교하는 창 -->
+				  <button type="button" id="enterBtn"  class="confirmBtn">확인</button> <!-- 인증번호와 내가 입력창에 입력한 인증번호 비교하는 창 -->
 	            </div>
 	            <div class="input-group">
 					<input type="text" id="sample6_postcode" placeholder="우편번호" name="sample6_postcode" style="width: 200px; display: inline-block; height: 45px;" >
@@ -172,7 +185,7 @@
 	    <!-- END CONTENT SECTION -->
 	  </div>
 
-	<script src="../js/sign.js"></script>
+	<script src="../js/member/sign.js"></script>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script>
 	    function sample6_execDaumPostcode() {
@@ -299,13 +312,13 @@
 		 
 		$('#send').click(function() {
 			
-			const to = $('#to').val();
+			const to = $('#phone').val();
 			
 			$.ajax ({
 				url: '/send-one',
 				type: 'GET',
 				data: {
-					"to" : to
+					"phone" : phone
 				},
 				success: function(data) {
 					check_num = data;

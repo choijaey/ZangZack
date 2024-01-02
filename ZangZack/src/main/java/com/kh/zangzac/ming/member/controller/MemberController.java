@@ -22,6 +22,10 @@ public class MemberController {
 	@Autowired
 	private BCryptPasswordEncoder bcrypt;
 	
+	@GetMapping("signUp.me")
+	public String sign() {
+		return "views/ming/member/sign";
+	}
 	
 	@PostMapping("/insertMember.me")
 	public String insertMember(@ModelAttribute Member m, @RequestParam("sample6_postcode") String sample6_postcode,

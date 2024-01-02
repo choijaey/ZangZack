@@ -25,14 +25,14 @@ final DefaultMessageService messageService;
 	
 	@GetMapping("/send-one")
 	@ResponseBody
-    public String sendOne(@RequestParam("to")String to) {
+    public String sendOne(@RequestParam("phone")String phone) {
 		
 	    Random r = new Random();
 	    int checkNum = r.nextInt(888888) + 111111;
         Message message = new Message();
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
         message.setFrom("01057410416");
-        message.setTo(to);
+        message.setTo(phone);
         String msg="[ZangZac]본인확인을 위해 인증번호 ["+checkNum + "]를 입력해주세요.";
         
         message.setText(msg);
