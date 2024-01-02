@@ -64,7 +64,7 @@
 }
 
 #snb_zone ul {
-	width: 100%;
+	width: 105%;
 	position: relative;
 	padding: 0;
 	border-bottom: 1px solid black;
@@ -80,7 +80,7 @@
 
 /* 카테고리 */
 #point_zone {
-	width: 92%;
+	width: 96.8%;
 	padding-left: 0;
 	margin-left: 1.5%;
 	border-bottom: 1px solid black;
@@ -125,7 +125,7 @@
 #boardType-area {
 	display: inline-flex;
 	top: 10px;
-	left: 56%;
+	left: 55%;
 	position: relative;
 	width: 300px;
 	margin-top: 0px;
@@ -136,7 +136,7 @@
 }
 /* 게시판 목록 테이블 */
 table {
-	width: 92%;
+	width: 96.8%;
 	padding-left: 16px;
 	margin-left: 1.5%;
 	text-align: center;
@@ -190,12 +190,12 @@ td {
 	min-width: 50px;
 	height: 30px;
 	box-sizing: border-box;
-	border: 1px solid #d3d3d3;
+	border: 1px solid #5cb85c;
 	text-align: center;
 	position: relative;
-	background-color: #fff;
-	right: -88%;
-	font-weight: bolder;
+	background-color: #5cb85c;
+	color:#fff;
+	right: -93.6%;
 }
 
 .write_btn a {
