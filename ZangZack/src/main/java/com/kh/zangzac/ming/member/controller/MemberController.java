@@ -1,5 +1,7 @@
 package com.kh.zangzac.ming.member.controller;
 
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -30,7 +32,7 @@ public class MemberController {
 	@PostMapping("/insertMember.me")
 	public String insertMember(@ModelAttribute Member m, @RequestParam("sample6_postcode") String sample6_postcode,
 								@RequestParam("sample6_address") String sample6_address,@RequestParam("sample6_detailAddress") String sample6_detailAddress,
-								@RequestParam("sample6_extraAddress") String sample6_extraAddress) {
+								@RequestParam("sample6_extraAddress") String sample6_extraAddress, @RequestParam("existingNickname") String existingNickname) {
 		
 		String address = null;
 		if(!sample6_postcode.trim().equals("")) {
@@ -38,6 +40,7 @@ public class MemberController {
 		}
 		m.setAddress(address);
 		
+		 m.setNickName(existingNickname + "#" + generateRandomNumbers()); // 랜덤닉네임
 		m.setPwd(bcrypt.encode(m.getPwd()));
 		m.getId();
 		
@@ -49,7 +52,13 @@ public class MemberController {
 	    }
 	}
 	
-
+	private String generateRandomNumbers() {
+	    // 4자리 랜덤 숫자 생성
+	    Random random = new Random();
+	    int randomNum = random.nextInt(9000) + 1000; // 1000 이상 9999 이하의 숫자
+	    return String.valueOf(randomNum);
+	}
+	
 	@GetMapping("agreement.me")
 	public String agreement() {
 		return "views/ming/member/agreement";

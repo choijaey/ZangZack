@@ -26,7 +26,7 @@ final DefaultMessageService messageService;
 	@GetMapping("/send-one")
 	@ResponseBody
     public String sendOne(@RequestParam("phone")String phone) {
-		
+		System.out.println("들어옴");
 	    Random r = new Random();
 	    int checkNum = r.nextInt(888888) + 111111;
         Message message = new Message();

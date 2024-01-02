@@ -47,10 +47,10 @@
 	      <!-- 회원가입 시작 -->
 	      <div class="col align-items-center flex-col sign-up">
 	        <div class="form-wrapper align-items-center">
-	          <form class="form sign-up" action="insertMember.me" method="post">
+	          <form class="form sign-up" action="insertMember.me" method="post" onsubmit="return NoSign()">
 	            <div class="input-group">
 	              <i class='bx bxs-user'></i>
-	              <input type="text" placeholder="Id" style="height: 45px;" name="id">
+	              <input type="text" placeholder="Id" style="height: 45px;" id="id" name="id" autofocus>
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
@@ -70,12 +70,12 @@
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="text" placeholder="nickName" style="height: 45px;" name="nickName">
+	              <input type="text" placeholder="nickName" style="height: 45px;" name="existingNickname">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
 	              <input type="tel" placeholder="전화번호(-제외)" style="height: 45px; width: 300px; display: inline-block;" name="phone" id="phone">
-	              <button type="button" id="enterBtn" id="send" class="confirmBtn2">전송</button>
+	              <button type="button" id="send" class="confirmBtn2">전송</button>
 	              <input type="text" id="userNum" placeholder="인증번호" style="width: 200px; display: inline-block; height: 45px;">   <!-- 인증번호 입력창 -->
 				  <button type="button" id="enterBtn"  class="confirmBtn">확인</button> <!-- 인증번호와 내가 입력창에 입력한 인증번호 비교하는 창 -->
 	            </div>
@@ -244,7 +244,7 @@
 	</script>
 	
 	<!-- 아이디 중복체크 / 정규식 -->
-	<script>
+	 <script>
 		window.onload = () =>{
 			document.getElementById('id').addEventListener('change', function(){
 				const idResult = document.getElementById('idCheckResult');		// 아이디 확인
@@ -252,11 +252,11 @@
 		        let idvalcheck = /^[a-z0-9]+$/;
 				if(this.value.trim() == ''){
 					alert('아이디는 영소문자,숫자로 구성된 6글자 이상으로 조합하시오.');
-    				userId.style.borderColor = 'red';
+    				id.style.borderColor = 'red';
 		            $('#id').focus();
 				}else if(!idvalcheck.test(idval) || idval.length<6){
 					alert('아이디는 영소문자,숫자로 구성된 6글자 이상으로 조합하시오.');
-    				userId.style.borderColor = 'red';
+					id.style.borderColor = 'red';
    
 				} else {
 			    	$.ajax({
@@ -265,10 +265,10 @@
 			    		success: (data) =>{
 			    			console.log(data);
 			    			if(data == 'yes'){
-			    				userId.style.borderColor = 'green';
+			    				id.style.borderColor = 'green';
 			    				checkId = true;
 			    			} else {
-			    				userId.style.borderColor = 'red';
+			    				id.style.borderColor = 'red';
 			    				checkId = false;
 			    			}
 			    		},
@@ -280,10 +280,9 @@
 	</script>
 	<script>
 		<!-- 비밀번호 확인 + 정규식 -->
-	 	checkId = false;
-	 	checkPwd = false;
 		function focusOut(){
-			
+			let checkId = false;
+		    let checkPwd = false;
 			let pwd = document.getElementById("pwd");
 	        let pwdConfirm = document.getElementById("pwdConfirm");
 	        let pwdcheck = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#%^&*])[A-Za-z\d!@#%^&*]{8,}$/;
@@ -307,8 +306,8 @@
 		}
 	</script> 
 	<script type="text/javascript">
-		
-		 let check_num;
+		let check_code=false;
+		let check_num;
 		 
 		$('#send').click(function() {
 			
@@ -318,27 +317,44 @@
 				url: '/send-one',
 				type: 'GET',
 				data: {
-					"phone" : phone
+					"phone" : to
 				},
 				success: function(data) {
 					check_num = data;
-					alert('checkNum:'+ check_num);
+					alert("인증번호를 입력해주세요!");
 					
 				}
 			});
 			
-			$('#enterBtn').click(function() {	
-				const userNum = $('#userNum').val();
-				
-				if(check_num === userNum) {
-					alert('인증 성공하였습니다.');
-				}
-				else {
-					alert('인증 실패하였습니다. 다시 입력해주세요.');
-				}
-			});
-			
 		});
+		
+		$('#enterBtn').click(function() {	
+			const userNum = $('#userNum').val();
+			
+			if(check_num === userNum) {
+				alert('인증 성공하였습니다.');
+                this.innerText = '인증성공';
+                check_code = true;
+			}
+			else {
+				alert('인증 실패하였습니다. 다시 입력해주세요.');
+				this.innerText = '인증실패';
+				check_code =false;
+			}
+		});
+		
+		// 모든 폼이 일치해야 넘어오게 
+		function NoSign(){
+			
+			if(check_form){
+				return true;
+			}else{
+				alert("");
+				return false;
+			}
+				
+			
+		}
 	</script>
 	
 
