@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kh.zangzac.yoonahrim.model.dao.secondHandDAO">
+	<insert id="insertSecondHand">
+		<!-- order : insert/update를 하기 전에 selectKey를 수행할 것인지, 후에 수행할 것인지 (before : insert하기전에 수행) -->
+        <!-- keyProperty : 가져온 값을 필드에 대입하기 위해서 selectKey를 하는 것임. 어디에 집어넣을지를 적어놓어주는 곳 -->
+		<selectKey order="BEFORE" resultType="_int" keyProperty="spNo">
+         	select SP_SEQ.nextval 
+         	from dual
+     	 </selectKey>
+		<!-- 이미 시퀀스로 하나 올려진 글번호를 prodcutNo필드에 대입을 했으므로 시퀀스 돌려주는게(product_seq.nextval) 아니라 productNo 넣어주면 된다. -->
+		insert into SECONDHAND_PRODUCT
+		values (#{spNo}, #{spTitle}, #{spPrice}, #{spContent}, #{spAddress}, default, default, 1, #{categoryNo}, default) 
+	</insert>
+
+	<update id="updateSeconHand">
+		update secondHandProduct
+		set SP_NO = SP_SEQ.nextval, 
+			SP_TITLE = #{spTitle}, 
+			SP_PRICE = #{spPrice}, 
+			SP_CONTENT = #{spContent}, 
+			SP_ADDRESS = #{spAddress}, 
+			CATEGORY_NO = #{categoryNo}
+		where id = #{memberId}
+	</update>
+	
+	<insert id="insertAttmSecondHand">
+		insert all<!-- insert all 안에서는 nextval이라고 적어놓고 여러번 들어간다하더라도 딱 1번 nextval이 되고 나머지는 같은 값이 들어간다 -->
+		<foreach collection="list" item="item">
+			into photo
+			values (new_aid, #{item.photoRename}, #{item.photoPath}, #{item.photoLevel}, #{item.boardType}, #{item.boardNo}, default)
+		</foreach>
+		select * from dual
+	</insert>
+	
+	
+</mapper>

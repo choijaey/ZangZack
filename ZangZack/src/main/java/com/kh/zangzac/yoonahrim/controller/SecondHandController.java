@@ -89,28 +89,66 @@ public class SecondHandController {
 		return "views/yoonahrim/writeSecondHand";
 	}
 	
-	@PostMapping("/insert.ah")
+	@PostMapping("/insert.ah" )
 	public String insertPage(@ModelAttribute secondHandProduct sp, @RequestParam("spAddressStreet") String spAddressStreet, 
-							 @RequestParam("spAddressDetail") String spAddressDetail, Model model) {
+							 @RequestParam("spAddressDetail") String spAddressDetail,  @RequestParam("inputGroupFile") ArrayList<MultipartFile> inputGroupFile, Model model) {
 		//로그인한 User의 게시물을 insert 하기 위해
 		//로그인 유저의 id와 memebr_id가 일치할때 업도르 될 수 있도록 해야함
 		
 		String spAddress = null;
-		if(!spAddressStreet.equals("")) {
-			spAddress = spAddressStreet + " " + spAddressDetail;
-		}
-		sp.setSpAddress(spAddress);
-		System.out.println(sp);
-		
-		
-		int result = spService.insertSeconHand(sp);
-			if(result > 0) {
-				return "views/yoonahrim/secondHandList";
-			} else {
-				model.addAttribute("error", "게시판 등록에 실패했습니다.");
-		        return "views/yoonahrim/writeSecondHand";
-			}
+	    
+	    if (!spAddressStreet.equals("")) {
+	        spAddress = spAddressStreet + " " + spAddressDetail;
+	    }
+	    sp.setSpAddress(spAddress);
+	    
+	    String name = "ahrim";
+	    ArrayList<Attachment> detailList = new ArrayList<>();
+	    int result1 = 0;
+	    int result2 = 0;
+	    
+	    
+	    System.out.println(inputGroupFile);
+	    // rename 이랑 경로 뱉어냄.
+	    for (int i = 0; i < inputGroupFile.size(); i++) {
+	        MultipartFile upload = inputGroupFile.get(i); // 파일 하나씩 뽑아오기.
+	        String[] returnArr = imageStorage.saveImage(upload, name);
+	        
+	        if (returnArr != null) {
+	            Attachment a = new Attachment();
+	            a.setPhotoRename(returnArr[0]);
+	            a.setPhotoPath(returnArr[1]);
+	            a.setPhotoLevel(1);
+	            
+	            detailList.add(a);
+	        }
+	    }
+	    result1 = spService.insertSecondHand(sp);
+	    
+	    for (int i = 0; i < detailList.size(); i++) {
+	        Attachment a = detailList.get(i);
+	        if (i == 0) {
+	            a.setPhotoLevel(0);
+	        } else {
+	            a.setPhotoLevel(1);
+	        }
+	    }
+	    
+	    // 상세사진 저장
+	    for (Attachment a : detailList) {
+	        a.setBoardNo(sp.getSpNo());
+	    }
+	    
+	    result2 = spService.insertAttmSecondHand(detailList);
+	    
+	    if (result1 + result2 == detailList.size() + 1) {
+	        return "views/yoonahrim/secondHandList";
+	    } else {
+	        throw new secondHandException("게시판 등록 실패");
+	    }
 	}
+		
+	
 	//예약
 	//예약 중 -> 예약완료
 	//booking.ah
@@ -142,54 +180,4 @@ public class SecondHandController {
 	}
 	
 	
-	//첨부파일
-	//중고상품 등록
-	   @PostMapping("write.ah")
-	   public String insertProduct(@ModelAttribute secondHandProduct sp, @RequestParam("detailFile") ArrayList<MultipartFile> detailFiles, Model model) {
-	      
-	      ArrayList<Attachment> detailList = new ArrayList<>();
-	      String name="ahrim";
-	       
-	      	int result1 = 0;
-	        int result2 = 0;
-	      
-	     
-	      //rename 이랑 경로 뱉어냄.
-	      for(int i = 0; i<detailFiles.size(); i++) {
-	         MultipartFile upload = detailFiles.get(i); //파일 하나씩 뽑아오기.
-	         String[] returnArr = imageStorage.saveImage(upload, name);
-	         
-	         if(returnArr != null) {
-	            Attachment a = new Attachment();
-	            a.setPhotoRename(returnArr[0]);
-	            a.setPhotoPath(returnArr[1]);
-	            a.setPhotoLevel(1);
-	            
-	            detailList.add(a);
-	         }
-	      }
-	      
-	      for(int i = 0; i > detailList.size(); i++) {
-				Attachment a = detailList.get(i);
-				if(i == 0) {
-					a.setPhotoLevel(result2);
-				}else {
-					a.setPhotoLevel(result2);
-				}
-			}
-	      
-	      result1 = spService.insertSecondHand(sp);
-	      
-	      //상세사진 저장
-	      for(Attachment a : detailList) {
-	         a.setBoardNo(sp.getSpNo());
-	      }
-	      result2 = spService.insertAttmSecondHand(detailList);
-	      
-	      if(result1 + result2 == detailList.size()+1) {
-	         return "views/yoonahrim/secondHandList";
-	      }else {
-	         throw new secondHandException("상품 등록 실패");
-	      }
-	   }
 }

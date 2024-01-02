@@ -11,7 +11,7 @@ import com.kh.zangzac.yoonahrim.model.vo.secondHandProduct;
 @Mapper
 public interface secondHandDAO {
 
-	int insertSeconHand(secondHandProduct sp);
+	int insertSecondHand(secondHandProduct sp);
 
 	int updateSeconHand(secondHandProduct sp);
 
@@ -19,7 +19,7 @@ public interface secondHandDAO {
 
 	int insertAttmSecondHand(ArrayList<Attachment> detailList);
 
-	int insertSecondHand(secondHandProduct sp);
+
 	
 	
 
