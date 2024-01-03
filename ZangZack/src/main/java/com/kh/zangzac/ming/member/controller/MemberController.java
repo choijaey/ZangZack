@@ -2,22 +2,27 @@ package com.kh.zangzac.ming.member.controller;
 
 import java.util.Random;
 
-import org.mybatis.logging.LoggerFactory;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.kh.zangzac.ming.member.model.exception.MemberException;
 import com.kh.zangzac.ming.member.model.service.MemberService;
 import com.kh.zangzac.ming.member.model.vo.Member;
+
+import jakarta.mail.internet.MimeMessage;
 
 @SessionAttributes("loginUser")
 @Controller
@@ -26,10 +31,15 @@ public class MemberController {
 	@Autowired
 	private MemberService mService;
 	
+	//암호화
 	@Autowired
 	private BCryptPasswordEncoder bcrypt;
 	
 	//private Logger logger = LoggerFactory.getLogger(MemberController.class); 왜인지 오류가 남 나중에 해야지 
+	
+	//메일 인증
+	@Autowired
+	private JavaMailSender mailSender;
 	
 	@GetMapping("signUp.me")
 	public String sign() {
@@ -76,13 +86,12 @@ public class MemberController {
 	//로그인
 	@PostMapping("login.me")
 	public String loginUser(@ModelAttribute Member m , Model model) {
-		System.out.println(m);
 		Member loginUser = mService.login(m);
 		
 		if(loginUser != null) {
 			if(bcrypt.matches(m.getMemberPwd(), loginUser.getMemberPwd())) {
 				model.addAttribute("loginUser",loginUser);
-				return "views/ming/member/agreement";
+				return "index";
 				
 			}else {
 				model.addAttribute("msg","실패");
@@ -103,4 +112,52 @@ public class MemberController {
 		status.setComplete();
 		return "redirect:home.do";
 	}
+	
+	//find 화면
+	@GetMapping("signIn.me")
+	public String find() {
+		return "views/ming/member/find";
+	}
+	
+	@PostMapping("selectFindId.me")
+	public String selectId(@ModelAttribute Member m, Model model) {
+		
+		System.out.println(m);
+		//Member member = mService.selectId(m);
+		
+		return null;
+	}
+	
+	//이메일 인증
+	@RequestMapping(value ="mailCheck.me", method = RequestMethod.GET ,produces = "aplication/json; charset=UTF-8")
+	@ResponseBody
+	public String email(@RequestParam("memberEmail") String to)throws Exception {
+			System.out.println("123");
+		   Random r = new Random();
+	       int checkNum = r.nextInt(888888) + 111111;
+	         
+	       String subject = "[ZangZac]인증코드";                   // 제목
+	       String content = "인증코드 [ "+checkNum+" ] 입니다.";    // 내용
+	       String from = "gah_yn@naver.com";
+	       System.out.println(to);
+	       
+	       try {
+	    	   MimeMessage mail = mailSender.createMimeMessage();
+	           MimeMessageHelper mailHelper = new MimeMessageHelper(mail,true,"UTF-8");
+	           
+	           mailHelper.setFrom(from);                // 보낼사람    
+	           mailHelper.setTo(to);                   // 받을사람
+	           mailHelper.setSubject(subject);          // 제목
+	           mailHelper.setText(content, true);          // 내용
+	               
+	               
+	           mailSender.send(mail);
+	               
+	       } catch(Exception e) {
+	          e.printStackTrace();
+	       }
+	          return checkNum+"";
+	     }
+	
+	
 }
