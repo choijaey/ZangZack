@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kh.zangzac.product.model.dao.ProductDAO">
+
+
+	<insert id="insertProduct">
+		<!-- order : insert/update를 하기 전에 selectKey를 수행할 것인지, 후에 수행할 것인지 (before : insert하기전에 수행) -->
+	    <!-- keyProperty : 가져온 값을 필드에 대입하기 위해서 selectKey를 하는 것임. 어디에 집어넣을지를 적어놓어주는 곳 -->
+		<selectKey order="BEFORE" resultType="_int" keyProperty="productNo">
+			select product_seq.nextval from dual
+		</selectKey>
+		<!-- 이미 시퀀스로 하나 올려진 글번호를 prodcutNo필드에 대입을 했으므로 시퀀스 돌려주는게(product_seq.nextval) 아니라 productNo 넣어주면 된다. -->
+		insert into product
+		values (#{productNo}, #{productName}, #{productPrice}, sysdate, default, #{productScore}, #{categoryNo}, #{productCompany})
+	</insert>
+	
+	
+	
+	<insert id="insertProductPhoto">
+	<!-- 유의해야할 점 : insert all안에서 시퀀스 사용하게 되면 시퀀스 한 번만 작동돼서
+		     계속 같은 값을 내뱉음. 따라서, 그냥 photo_seq.nextval로 photo_no 지정하게 되면 무결성 제약조건 오류남. 
+		     oracle로 가서 아래와 같이 함수 만들어준다.
+		     
+		     create or replace function new_aid
+			 return number
+			 is
+			     new_aid number;
+			 begin
+			     select photo_seq.nextval
+			     into new_aid
+			     from dual;
+			    
+			     return new_aid;
+			 end;-->
+		insert all
+		
+		<foreach collection="list" item="item">
+			into photo
+			values (new_aid,  #{ item.photoRename }, #{item.photoPath}, #{item.photoLevel}, 5, #{item.boardNo}, default)
+		</foreach>
+		select * from dual
+	</insert>
+	
+	
+	
+	
+	
+	<insert id="insertOption">
+		<!-- 유의해야할 점 : insert all안에서 시퀀스 사용하게 되면 시퀀스 한 번만 작동돼서
+	     계속 같은 값을 내뱉음. 따라서, 그냥 photo_seq.nextval로 photo_no 지정하게 되면 무결성 제약조건 오류남. 
+	     oracle로 가서 아래와 같이 함수 만들어준다.
+	     
+	     create or replace function option_aid
+		 return number
+		 is
+		     option_aid number;
+		 begin
+		     select product_option_seq.nextval
+		     into option_aid
+		     from dual;
+		    
+		     return option_aid;
+		 end;-->
+		insert all
+		<foreach collection="list" item="item">
+			into product_option
+			values(option_aid, #{item.productOptionColor}, #{item.productOptionEno}, #{item.productNo})
+		</foreach>
+		select * from dual
+		
+	</insert>
+	
+	
+	
+	
+	
+	<select id="getListCount" resultType="_int">
+		select count(*)
+		from product
+		where product_status = 'N'
+		<if test="categoryNo != null">
+			and category_no=#{categoryNo}
+		</if>
+		order by product_no
+	</select>
+	
+	
+</mapper>

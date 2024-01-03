@@ -6,18 +6,18 @@
 <link href="css/sohwa/(admin)productEnroll.css" rel="stylesheet">
 </head>
 <body>
-	<div th:replace="~{common/navbar :: navbar}"></div>
+	<div th:replace="~{common/admin :: admin}"></div>
 	
-	<br><br>
+	<br><br><br><br>
 	<div id="enrollProduct">
-		<h1>상품 등록</h1>
+		<h1>상품 수정</h1>
 		<hr style="border:1px solid black;">
 		<br>
-		<form>
+		<form action="productEnroll.so" method="POST" id="enrollForm" enctype="multipart/form-data">
 			<h3>▸▸상품 대표 사진 (최대 4개): </h3>
 			<div id="resultDiv1" class="resultDiv">
 				<div style="display: inline-block;width:250px;height:200px;">
-					1.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview1')"><br>
+					1.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview1')" name="coreFile"><br>
 					<img id="preview1" src="image/sohwa/icons8-camera-80.png">
 					<button style="margin-left:65px;">취소</button>
 				</div>
@@ -25,7 +25,7 @@
 			
 			<div id="resultDiv2" class="resultDiv">
 				<div style="display: inline-block;width:250px;height:200px;">
-					2.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview2')"><br>
+					2.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview2')" name="coreFile"><br>
 					<img id="preview2" src="image/sohwa/icons8-camera-80.png">
 					<button style="margin-left:65px;">취소</button>
 				</div>
@@ -33,7 +33,7 @@
 			
 			<div id="resultDiv3" class="resultDiv">
 				<div style="display: inline-block;width:250px;height:200px;">
-					3.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview3')"><br>
+					3.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview3')" name="coreFile"><br>
 					<img id="preview3" src="image/sohwa/icons8-camera-80.png">
 					<button style="margin-left:65px;">취소</button>
 				</div>
@@ -41,7 +41,7 @@
 			
 			<div id="resultDiv4" class="resultDiv">
 				<div style="display: inline-block;width:250px;height:200px;">
-					4.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview4')"><br>
+					4.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview4')" name="coreFile"><br>
 					<img id="preview4" src="image/sohwa/icons8-camera-80.png">
 					<button style="margin-left:65px;">취소</button>
 				</div>
@@ -61,13 +61,13 @@
 			<br><br><br>
 			
 	         <label for="productCategory" style="font-size: 20px;">▸▸카테고리:</label>
-	         <select id="productCategory" name="productCategory" required>
-	             <option value="tent">텐트</option>
-	             <option value="bed">취침용품</option>
-	             <option value="cook">조리도구</option>
-	             <option value="fire">발화용품</option>
-	             <option value="bag">백팩</option>
-	             <option value="others">기타용품</option>
+	         <select id="categoryNo" name="categoryNo" required>
+	             <option value="11">텐트</option>
+	             <option value="12">취침용품</option>
+	             <option value="13">조리도구</option>
+	             <option value="14">발화용품</option>
+	             <option value="15">백팩</option>
+	             <option value="16">기타용품</option>
 	           <!-- 카테고리 옵션 추가 -->
 	         </select>
 		
@@ -78,9 +78,23 @@
 		  
 		    <br><br><br>
 		  
-		    <label for="productEno" style="font-size: 20px;">▸▸상품수량 : </label>
-		    <input type="number" name="productEno" id="productEno"> 개
-		  
+		    
+		    
+		    <label style="font-size: 20px;">▸▸컬러 옵션 : </label>
+		    <input type="radio" id="option1" name="colorOption" checked>&nbsp;<label for="option1">단일 옵션</label>&nbsp;&nbsp;&nbsp;
+		    <input type="radio" id="option2" name="colorOption">&nbsp;<label for="option2">추가 옵션</label>
+		    
+		  	<br><br>
+		  	
+		  	<div id="optionDiv" style="display:none;">
+		  		<div class="optionDiv-content">
+			  		옵션1: &nbsp;<input type="text" name="option"><button type="button" class="addOption">옵션 추가</button>
+			  		<label for="productEno" style="font-size: 20px;">▸▸상품수량 : </label>
+			    	<input type="number" name="productEno"> 개
+			  		<br>
+		  		</div>
+		  		
+		  	</div>
 		  
 		  <br><br><br>
 		  
@@ -88,7 +102,7 @@
 		    <h3>▸▸상품 상세 사진 (최대 4개): </h3>
 			<div id="detailDiv1" class="detailDiv">
 				<div style="display: inline-block;width:250px;height:200px;">
-					1.<input type="file" class="detailPhoto" onchange="previewImage(event, 'detail1')"><br>
+					1.<input type="file" class="detailPhoto" onchange="previewImage(event, 'detail1')" name="detailFile"><br>
 					<img id="detail1" src="image/sohwa/icons8-camera-80.png">
 					<button style="margin-left:65px;">취소</button>
 				</div>
@@ -96,7 +110,7 @@
 			
 			<div id="detailDiv2" class="detailDiv">
 				<div style="display: inline-block;width:250px;height:200px;">
-					2.<input type="file" class="detailPhoto" onchange="previewImage(event, 'detail2')"><br>
+					2.<input type="file" class="detailPhoto" onchange="previewImage(event, 'detail2')" name="detailFile"><br>
 					<img id="detail2" src="image/sohwa/icons8-camera-80.png">
 					<button style="margin-left:65px;">취소</button>
 				</div>
@@ -104,7 +118,7 @@
 			
 			<div id="detailDiv3" class="detailDiv">
 				<div style="display: inline-block;width:250px;height:200px;">
-					3.<input type="file" class="detailPhoto" onchange="previewImage(event, 'detail3')"><br>
+					3.<input type="file" class="detailPhoto" onchange="previewImage(event, 'detail3')" name="detailFile"><br>
 					<img id="detail3" src="image/sohwa/icons8-camera-80.png">
 					<button style="margin-left:65px;">취소</button>
 				</div>
@@ -112,7 +126,7 @@
 			
 			<div id="detailDiv4" class="detailDiv">
 				<div style="display: inline-block;width:250px;height:200px;">
-					4.<input type="file" class="detailPhoto" onchange="previewImage(event, 'detail4')"><br>
+					4.<input type="file" class="detailPhoto" onchange="previewImage(event, 'detail4')" name="detailFile"><br>
 					<img id="detail4" src="image/sohwa/icons8-camera-80.png">
 					<button style="margin-left:65px;">취소</button>
 				</div>
@@ -123,8 +137,8 @@
 		  	<br><br><br><br><hr style="border:1px solid black;"><br><br>
 		  	
 		  	
-		  	<button id="preBtn">이전으로</button>
-			<button id="enrollBtn">수정하기</button>
+		  	<button id="preBtn" type="button" onclick="javascript:history.back();">이전으로</button>
+			<button id="enrollBtn">등록하기</button>
 			
 		</form>
 	</div>
@@ -142,7 +156,7 @@
 	
 	
 	
-	<script>
+	<script th:inline="javascript">
 		//미리보기
 		function previewImage(event, previewId) {
 	      const input = event.target;
@@ -194,9 +208,102 @@
 		      resetFileInput(this);
 		    });
 		  });
+		  
+		  
+		  
+		  
+		  //첨부파일 비워져있으면 alert
+		  const form = document.getElementById('enrollForm');
+			document.getElementById('enrollBtn').addEventListener('click', ()=>{
+				const files = document.getElementsByName('coreFile');
+				let isEmpty = true;
+				
+				//첨부파일 비어져있는지 확인
+				for(const f of files){
+					if(f.value != ''){
+						isEmpty = false;
+					}
+				}
+				
+				//첨부파일 비어있으면 일반게시글로 옮겨진다는 모달 뜨게함.
+				if(isEmpty){
+					alert('대표사진이 등록되지 않았습니다.\n다시 확인해주세요');
+				}else{
+					//첨부파일 안 비워져있으면 form태그로 제출
+					form.submit();
+				}
+				
+			});
+		  
+			
+// 			//단일 옵션/ 추가 옵션
+// 			document.addEventListener('DOMContentLoaded', function() {
+// 		        var option1 = document.getElementById('option1');
+// 		        var option2 = document.getElementById('option2');
+// 		        var optionDiv = document.getElementById('optionDiv');
 
+// 		        // 라디오 버튼 변경 이벤트 처리
+// 		        option1.addEventListener('change', function() {
+// 		            optionDiv.style.display = 'none'; // 단일 옵션 선택 시 해당 div를 숨김
+// 		        });
 
+// 		        option2.addEventListener('change', function() {
+// 		            optionDiv.style.display = 'block'; // 추가 옵션을 선택하면 해당 div를 보이게 함
+// 		        });
+// 		    });
+			
+			
+			
+    document.addEventListener('DOMContentLoaded', function() {
+        var option1 = document.getElementById('option1');
+        var option2 = document.getElementById('option2');
+        var optionDiv = document.getElementById('optionDiv');
+        var addOptionButtons = document.querySelectorAll('.addOption');
+        var optionDivContent = document.querySelector('.optionDiv-content');
+        var maxOptions = 5;
+
+        option1.addEventListener('change', function() {
+            optionDiv.style.display = 'none';
+        });
+
+        option2.addEventListener('change', function() {
+            optionDiv.style.display = 'block';
+        });
+
+        function addOption(event) {
+            var optionCount = document.querySelectorAll('.optionDiv-content').length;
+
+            if (optionCount < maxOptions) {
+                var cloneDiv = optionDivContent.cloneNode(true);
+                var newProductEno = cloneDiv.querySelector('input[name="productEno"]');
+                var newOption = cloneDiv.querySelector('input[name="option"]');
+
+                if (newProductEno) {
+                    newProductEno.setAttribute('name', 'productEno');
+                }
+                if (newOption) {
+                    newOption.setAttribute('name', 'option');
+                }
+
+                var addButton = cloneDiv.querySelector('.addOption');
+                addButton.addEventListener('click', addOption);
+
+                optionDiv.appendChild(cloneDiv);
+            } else {
+                alert('옵션은 최대 5개까지 추가 가능합니다.');
+            }
+        }
+
+        addOptionButtons.forEach(function(button) {
+            button.addEventListener('click', addOption);
+        });
+    });
+			
+			
+			
+		  
   
 	</script>
+
 </body>
 </html>
