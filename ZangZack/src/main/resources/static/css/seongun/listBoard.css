@@ -67,6 +67,7 @@
 	width: 105%;
 	position: relative;
 	padding: 0;
+	margin-bottom: 0px;
 	border-bottom: 1px solid black;
 }
 
@@ -106,11 +107,13 @@
 	margin: auto;
 }
 
-#allCategory {
+#category #select-category {
 	border-radius: 8px;
-	color: #e6e6e6;
-	background-color: #464D0F;
+	padding : 5px 10px;
+	color: white;
+	background-color: #5cb85c;
 }
+
 
 .board_zone_cont {
 	display: block;
@@ -125,7 +128,7 @@
 #boardType-area {
 	display: inline-flex;
 	top: 10px;
-	left: 55%;
+	left: 56%;
 	position: relative;
 	width: 300px;
 	margin-top: 0px;
