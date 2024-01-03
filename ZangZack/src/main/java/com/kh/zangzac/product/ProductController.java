@@ -13,10 +13,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.zangzac.common.ImageStorage;
-import com.kh.zangzac.product.model.exception.productException;
+import com.kh.zangzac.common.Pagination;
+import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.product.model.exception.ProductException;
 import com.kh.zangzac.product.model.service.ProductService;
 import com.kh.zangzac.product.model.vo.Attachment;
+import com.kh.zangzac.product.model.vo.Option;
 import com.kh.zangzac.product.model.vo.Product;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 
 @Controller
@@ -34,8 +39,39 @@ public class ProductController {
 	
 	//상품등록페이지 view
 	@GetMapping("productListView.so")
-	public String productListView() {
-		return "views/sohwa/(admin)productEnroll";
+	public String productListView(@RequestParam("categoryNo") Integer categoryNo, @RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
+		
+//		int listCount = 0;
+//		if(categoryNo != null) {
+//			listCount = pService.getListCount(categoryNo);
+//		}else {
+//			listCount = pService.getListCount(null);
+//		}
+//		
+//		
+//		
+//		System.out.println(listCount);
+//		int currentPage = page;
+//		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 16);
+		
+		
+		
+//		ArrayList<Product> pList = pService.selectProductList(pi, categoryNo);
+//		
+//		ArrayList<Attachment> aList = pService.selectPhotoList(categoryNo);
+		
+//		if(aList != null) {
+//			model.addAttribute("aList", aList);
+//			model.addAttribute("pList", pList);
+//			model.addAttribute("pi", pi);
+//			model.addAttribute("loc", request.getRequestURI());
+//			return "views/sohwa/productList";
+//		}else {
+//			throw new ProductException("상품 목록 조회 실패");
+//		}
+		
+		return "views/sohwa/productList";
+		
 	}
 	
 	
@@ -43,16 +79,7 @@ public class ProductController {
 	@PostMapping("productEnroll.so")
 	public String insertProduct(@ModelAttribute Product p, @RequestParam("option") String[] options, @RequestParam("productEno") Integer[] productEnos, @RequestParam("detailFile") ArrayList<MultipartFile> detailFiles, @RequestParam("coreFile") ArrayList<MultipartFile> coreFiles, Model model) {
 		
-		System.out.println(options); //그린, 주황, 보라
-		System.out.println(productEnos); //15, 20, 30
-		
-		HashMap<String, Integer> map = new HashMap<>();
-		
-		for(int i=0; i<options.length; i++) {
-			map.put(options[i], productEnos[i]);
-		}
-		
-		System.out.println(map);
+	
 		
 		
 		
@@ -118,12 +145,43 @@ public class ProductController {
 		result3 = pService.insertProductPhoto(detailList);
 		
 		
-		if(result1 + result2 + result3 == coreList.size()+detailList.size()+1) {
+		
+		
+		
+		
+		
+		ArrayList<Option> list = new ArrayList<>();
+		
+		for(int i=0; i<options.length; i++) {
+			String option = options[i];
+			Integer productEno = productEnos[i];
+			
+			Option o = new Option();
+		    o.setProductOptionColor(option);
+		    o.setProductOptionEno(productEno);
+		    o.setProductNo(p.getProductNo());
+		    list.add(o);
+		}
+		
+		
+		
+		int result0 = pService.insertOption(list);
+		
+		
+		System.out.println(list);
+		//[Option(productOptionNo=0, productOptionColor=그린, productOptionEno=15, productNo=32), Option(productOptionNo=0, productOptionColor=주황, productOptionEno=20, productNo=32), Option(productOptionNo=0, productOptionColor=보라, productOptionEno=15, productNo=32)]
+		
+		
+		
+		
+		if(result0 + result1 + result2 + result3 == options.length + coreList.size()+detailList.size()+1) {
 			return "views/sohwa/productList";
 		}else {
-			throw new productException("상품 등록 실패");
+			throw new ProductException("상품 등록 실패");
 		}
 	}
+	
+	
 
 
 	

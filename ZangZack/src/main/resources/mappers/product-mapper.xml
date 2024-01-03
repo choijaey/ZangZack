@@ -12,7 +12,7 @@
 		</selectKey>
 		<!-- 이미 시퀀스로 하나 올려진 글번호를 prodcutNo필드에 대입을 했으므로 시퀀스 돌려주는게(product_seq.nextval) 아니라 productNo 넣어주면 된다. -->
 		insert into product
-		values (#{productNo}, #{productName}, #{productPrice}, sysdate, default, #{productScore}, default, #{productCompany})
+		values (#{productNo}, #{productName}, #{productPrice}, sysdate, default, #{productScore}, #{categoryNo}, #{productCompany})
 	</insert>
 	
 	
@@ -47,7 +47,43 @@
 	
 	
 	<insert id="insertOption">
+		<!-- 유의해야할 점 : insert all안에서 시퀀스 사용하게 되면 시퀀스 한 번만 작동돼서
+	     계속 같은 값을 내뱉음. 따라서, 그냥 photo_seq.nextval로 photo_no 지정하게 되면 무결성 제약조건 오류남. 
+	     oracle로 가서 아래와 같이 함수 만들어준다.
+	     
+	     create or replace function option_aid
+		 return number
+		 is
+		     option_aid number;
+		 begin
+		     select product_option_seq.nextval
+		     into option_aid
+		     from dual;
+		    
+		     return option_aid;
+		 end;-->
+		insert all
+		<foreach collection="list" item="item">
+			into product_option
+			values(option_aid, #{item.productOptionColor}, #{item.productOptionEno}, #{item.productNo})
+		</foreach>
+		select * from dual
+		
 	</insert>
+	
+	
+	
+	
+	
+	<select id="getListCount" resultType="_int">
+		select count(*)
+		from product
+		where product_status = 'N'
+		<if test="categoryNo != null">
+			and category_no=#{categoryNo}
+		</if>
+		order by product_no
+	</select>
 	
 	
 </mapper>
