@@ -29,8 +29,63 @@ public class CampBoardController {
 		int currentPage = page;
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
 		ArrayList<CampBoard> list = cService.selectBoardList(pi,1);
+		if(!list.isEmpty()) {
+			model.addAttribute("pi",pi);
+			model.addAttribute("list", list);
+			model.addAttribute("msg", null);
+			model.addAttribute("loc", request.getRequestURI());
+			return "views/seongun/listBoard";
+		}else {
+			model.addAttribute("pi",pi);
+			model.addAttribute("list", list);
+			model.addAttribute("msg", "작성된 게시판이 없습니다!");
+			model.addAttribute("loc", request.getRequestURI());
+			return "views/seongun/listBoard";
+		}
+	}
+	
+	@GetMapping("cardBoard.su")
+	public String campBoardCardView(@RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
+		int listCount = cService.getListCount(0);
 		
-		return "views/seongun/boardList";
+		int currentPage = page;
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
+		ArrayList<CampBoard> list = cService.selectBoardList(pi,1);
+		if(!list.isEmpty()) {
+			model.addAttribute("pi",pi);
+			model.addAttribute("list", list);
+			model.addAttribute("msg", null);
+			model.addAttribute("loc", request.getRequestURI());
+			return "views/seongun/cardBoard";
+		}else {
+			model.addAttribute("pi",pi);
+			model.addAttribute("list", list);
+			model.addAttribute("msg", "작성된 게시판이 없습니다!");
+			model.addAttribute("loc", request.getRequestURI());
+			return "views/seongun/cardBoard";
+		}
+	}
+	
+	@GetMapping("albumBoard.su")
+	public String campBoardAlbumView(@RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
+		int listCount = cService.getListCount(0);
+		
+		int currentPage = page;
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
+		ArrayList<CampBoard> list = cService.selectBoardList(pi,1);
+		if(!list.isEmpty()) {
+			model.addAttribute("pi",pi);
+			model.addAttribute("list", list);
+			model.addAttribute("msg", null);
+			model.addAttribute("loc", request.getRequestURI());
+			return "views/seongun/albumBoard";
+		}else {
+			model.addAttribute("pi",pi);
+			model.addAttribute("list", list);
+			model.addAttribute("msg", "작성된 게시판이 없습니다!");
+			model.addAttribute("loc", request.getRequestURI());
+			return "views/seongun/albumBoard";
+		}
 	}
 	
 	@GetMapping("recipe.su")
