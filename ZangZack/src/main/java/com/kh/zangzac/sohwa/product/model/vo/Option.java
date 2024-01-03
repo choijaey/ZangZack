@@ -1,4 +1,4 @@
-package com.kh.zangzac.product.model.vo;
+package com.kh.zangzac.sohwa.product.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

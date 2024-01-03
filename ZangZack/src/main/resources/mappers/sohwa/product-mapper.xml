@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.kh.zangzac.product.model.dao.ProductDAO">
+<mapper namespace="com.kh.zangzac.sohwa.product.model.dao.ProductDAO">
 
 
 	<insert id="insertProduct">
@@ -12,9 +12,8 @@
 		</selectKey>
 		<!-- 이미 시퀀스로 하나 올려진 글번호를 prodcutNo필드에 대입을 했으므로 시퀀스 돌려주는게(product_seq.nextval) 아니라 productNo 넣어주면 된다. -->
 		insert into product
-		values (#{productNo}, #{productName}, #{productPrice}, sysdate, default, #{productScore}, #{categoryNo}, #{productCompany})
+		values (#{productNo}, #{productName}, #{productPrice}, sysdate, default, #{productScore}, #{categoryNo}, #{productCompany}, #{deliveryPrice}, #{eno})
 	</insert>
-	
 	
 	
 	<insert id="insertProductPhoto">
@@ -79,11 +78,49 @@
 		select count(*)
 		from product
 		where product_status = 'N'
-		<if test="categoryNo != null">
+		<if test="categoryNo != 0">
 			and category_no=#{categoryNo}
 		</if>
-		order by product_no
 	</select>
 	
+	
+	
+	
+	<select id="selectProductList" resultType="Product">
+		select *
+		from product
+			 JOIN camping_category using (category_no)
+		where product_status = 'N'
+		<if test="categoryNo != 0">
+			and category_no = #{categoryNo}
+		</if>
+		<if test="standard==1">
+			order by product_no desc
+		</if>
+		<if test="standard==2">
+			order by product_price
+		</if>
+		<if test="standard==3">
+			order by product_price desc
+		</if>
+		<if test="standard==4">
+			order by product_score desc
+		</if>
+		
+	</select>	
+	
+	
+	
+	
+	<select id="selectPhotoList" resultType="Attachment">
+		select *
+		from photo
+			 join product on (product_no = board_no)
+		where photo_status = 'N' and photo_level = 0
+		<if test="categoryNo != 0">
+			and category_no = #{categoryNo}
+		</if>
+		order by board_no
+	</select>
 	
 </mapper>

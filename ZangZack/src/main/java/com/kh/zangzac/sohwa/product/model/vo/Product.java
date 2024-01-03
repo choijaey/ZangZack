@@ -1,4 +1,4 @@
-package com.kh.zangzac.product.model.vo;
+package com.kh.zangzac.sohwa.product.model.vo;
 
 import java.sql.Date;
 
@@ -24,5 +24,7 @@ public class Product {
 	private int categoryNo;
 	private String productCompany;
 	private int productEno;
+	private int deliveryPrice;
+	private int eno;
 
 }
