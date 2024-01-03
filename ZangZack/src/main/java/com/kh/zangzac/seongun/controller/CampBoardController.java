@@ -58,6 +58,7 @@ public class CampBoardController {
 			model.addAttribute("loc", request.getRequestURI());
 			return "views/seongun/cardBoard";
 		}else {
+			System.out.println("test");
 			model.addAttribute("pi",pi);
 			model.addAttribute("list", list);
 			model.addAttribute("msg", "작성된 게시판이 없습니다!");
