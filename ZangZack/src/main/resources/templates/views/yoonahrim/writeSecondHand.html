@@ -14,7 +14,7 @@
 	
 	<h1 style="text-align:center; font-size: 30px; margin: 50px">중고 매물 글쓰기</h1>
 	
-	<form action="/insert.ah" method="post">
+	<form action="/insert.ah" method="post" enctype="multipart/form-data">
 	   <!-- 업로드할 파일 사진 업로드 및 버튼(업로드버튼 및 추가버튼 구현)-->
 	   <div>
 	      <div class="photoNum">
@@ -24,7 +24,7 @@
 	      	 <br>
 	         <div class="input-group mb-3" style="left:55px">
 	            <label class="input-group-text" for="inputGroupFile" Multiple>upload</label>
-				<input type="file" class="form-control" id="inputGroupFile" style="display:none;" onchange="previewImage(event, 'inputGroupFile','photoUpload')" />
+				<input type="file" class="form-control" name="inputGroupFile" id="inputGroupFile" style="display:none;" onchange="previewImage(event, 'inputGroupFile','photoUpload')" />
 	         </div>
 	      </div>
 	      <div class="addPhoto" style="cursor:pointer;">
@@ -102,7 +102,7 @@
     	       <br>
     	       <div class="input-group mb-3" style="left:55px">
     	         <label class="input-group-text" for="inputGroupFile${numOfCopies}" Multiple>upload</label>
-    	         <input type="file" class="form-control" id="inputGroupFile${numOfCopies}" style="display:none;" onchange="previewImage(event, 'inputGroupFile${numOfCopies}','photoUpload${numOfCopies}')" />
+    	         <input type="file" class="form-control" id="inputGroupFile${numOfCopies}" name ="inputGroupFile" style="display:none;" onchange="previewImage(event, 'inputGroupFile${numOfCopies}','photoUpload${numOfCopies}')" />
     	       </div>
     	     `;
 
@@ -126,12 +126,6 @@
            } ).open();
          }
        
-      function error() {
-           var errorMessage = "${error}";
-           if (errorMessage) {
-               alert(errorMessage);
-           }
-       };
    </script>
 </body>
 </html>

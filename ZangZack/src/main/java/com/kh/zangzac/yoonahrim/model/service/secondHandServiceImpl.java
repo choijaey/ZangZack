@@ -17,8 +17,8 @@ public class secondHandServiceImpl implements secondHandService{
 	private secondHandDAO spDAO;
 	
 	@Override
-	public int insertSeconHand(secondHandProduct sp) {
-		return spDAO.insertSeconHand(sp);
+	public int insertSecondHand(secondHandProduct sp) {
+		return spDAO.insertSecondHand(sp);
 	}
 
 	@Override
@@ -36,10 +36,9 @@ public class secondHandServiceImpl implements secondHandService{
 		return spDAO.insertAttmSecondHand(detailList);
 	}
 
-	@Override
-	public int insertSecondHand(secondHandProduct sp) {
-		return spDAO.insertSecondHand(sp);
-	}
+
+
+	
 
 
 }
