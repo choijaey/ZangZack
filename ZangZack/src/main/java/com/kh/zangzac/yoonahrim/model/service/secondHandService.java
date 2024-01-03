@@ -8,7 +8,7 @@ import com.kh.zangzac.yoonahrim.model.vo.secondHandProduct;
 
 public interface secondHandService {
 
-	int insertSeconHand(secondHandProduct sp);
+	int insertSecondHand(secondHandProduct sp);
 
 	int updateSeconHand(secondHandProduct sp);
 
@@ -16,7 +16,7 @@ public interface secondHandService {
 
 	int insertAttmSecondHand(ArrayList<Attachment> detailList);
 
-	int insertSecondHand(secondHandProduct sp);
+
 
 	
 	
