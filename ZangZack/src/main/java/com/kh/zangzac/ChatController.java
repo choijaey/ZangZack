@@ -21,12 +21,13 @@ public class ChatController {
     
     
     @PostMapping("/upload")
-    public String uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("name") String name) {
+    public String uploadImage(@RequestParam("file") MultipartFile file) {
     	
-    	name="choi";
+    	String name="choi";
     	
-        imageStorage.saveImage(file, name);
-        
+    	//하나씩 넣어야하고
+        String[] result= imageStorage.saveImage(file, name);
+       
         
         return "index";
     }

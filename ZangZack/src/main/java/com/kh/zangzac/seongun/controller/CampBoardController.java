@@ -24,7 +24,7 @@ public class CampBoardController {
 	@GetMapping("campBoard.su")
 	public String campBoardListView(@RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
 		
-		int listCount = cService.getListCount(0);
+		int listCount = cService.getListCount(1);
 		
 		int currentPage = page;
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
@@ -58,7 +58,6 @@ public class CampBoardController {
 			model.addAttribute("loc", request.getRequestURI());
 			return "views/seongun/cardBoard";
 		}else {
-			System.out.println("test");
 			model.addAttribute("pi",pi);
 			model.addAttribute("list", list);
 			model.addAttribute("msg", "작성된 게시판이 없습니다!");
@@ -88,7 +87,6 @@ public class CampBoardController {
 			return "views/seongun/albumBoard";
 		}
 	}
-	
 	
 	@GetMapping("recipe.su")
 	public String recipe() {
