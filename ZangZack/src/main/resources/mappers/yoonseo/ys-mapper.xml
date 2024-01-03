@@ -35,6 +35,12 @@
      </foreach>
       select * from dual
    </insert>
+   
+   <select id="getListCount" resultType="_int">
+     select count(*)
+     from camping_ground
+     where cg_status = 'Y' 
+   </select>
 
 
 </mapper>
