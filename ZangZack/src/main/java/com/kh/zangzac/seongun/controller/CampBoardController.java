@@ -129,10 +129,12 @@ public class CampBoardController {
 				if(i==0) {
 					a.setPhotoRename(returnArr[0]);
 					a.setPhotoPath(returnArr[1]);
+					a.setBoardType(1);
 					a.setPhotoLevel(0);
 				}else {
 					a.setPhotoRename(returnArr[0]);
 					a.setPhotoPath(returnArr[1]);
+					a.setBoardType(1);
 					a.setPhotoLevel(1);
 				}
 				fileList.add(a);
