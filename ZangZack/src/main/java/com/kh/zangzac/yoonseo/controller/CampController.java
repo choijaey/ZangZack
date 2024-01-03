@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.yoonseo.model.vo.CampingGround;
+import com.kh.zangzac.yoonseo.model.exception.CampException;
 import com.kh.zangzac.yoonseo.model.servcie.CampService;
 
 
@@ -65,6 +66,8 @@ public class CampController {
 		String name = "yoonseo";
 		
 		int result1 = 0;
+		int result2 = 0;
+		int result3 =0;
 		
 		
 		for(int i = 0; i < campFiles.size(); i++) {
@@ -75,7 +78,7 @@ public class CampController {
 				Attachment a = new Attachment();
 				a.setPhotoRename(returnArr[0]);
 				a.setPhotoPath(returnArr[1]);
-				a.setPhotoLevel(0);
+				a.setPhotoLevel(1);
 				campList.add(a);
 			}
 		}
@@ -88,7 +91,7 @@ public class CampController {
 				Attachment a = new Attachment();
 				a.setPhotoRename(returnArr[0]);
 				a.setPhotoPath(returnArr[1]);
-				a.setPhotoLevel(0);
+				a.setPhotoLevel(1);
 				
 				infoList.add(a);
 			}
@@ -96,7 +99,23 @@ public class CampController {
 		
 		result1 = cService.insertCamp(camp);
 		
-		return null;
+		//캠프상세사진 저장
+		for(Attachment a : campList ) {
+			a.setBoardNo(camp.getCgNo());
+		}
+		result2 = cService.insertCampImg(campList);
+		
+		//시설사진 저장
+		for(Attachment a : infoList) {
+			a.setBoardNo(camp.getCgNo());
+		}
+		result3 = cService.insertInfoImg(infoList);
+		
+		if(result1 + result2 + result3 == campList.size() + infoList.size() + 1) {
+			return "views/yoonseo/campDetail";
+		}else {
+			throw new CampException("캠핑장 등록 실패");
+		}
 	}
 
 }

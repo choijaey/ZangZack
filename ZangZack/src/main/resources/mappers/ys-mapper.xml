@@ -2,15 +2,38 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kh.zangzac.yoonseo.model.dao.CampGround">
    <insert id="insertCamp">
+      <selectKey order="BEFORE" resultType="_int" keyProperty="cgNo">
+        select cg_seq.nextval from dual
+      </selectKey>
       insert into camping_ground
-      values(cg_seq.nextVal,#{cgName}, #{cgRegion},#{cgAddress},#{cgPhone},#{cgType},
+      values(#{cgNo},#{cgName}, #{cgRegion},#{cgAddress},#{cgPhone},#{cgType},
             #{cgCount}, #{cgDate}, #{cgArea}, #{cgSeason},#{cgManageDate},
             #{cgBooking}, #{cgPage},#{cgStarPoint},#{cgAmenity},#{cgInfo},
             #{cgRecomendation},#{cgStatus},#{categoryNo})
    
    </insert>
 
-
+   <insert id="insertCampImg">
+     insert all
+     <foreach collection="campList" item="item">
+       into photo
+       values (new_aid, #{item.photoNo}, #{item.photoRename},
+               #{item.photoPath}, #{item.photoLevel}, 3, #{item.boardNo},
+               default)
+     
+     </foreach>
+      select * from dual
+   </insert>
+   
+   <insert id="insertInfoImg">
+     insert all
+     <foreach collection="infoList" item="item">
+       into photo 
+       values (new_aid,#{item.photoNo}, #{item.photoRename},
+               #{item.photoPath}, #{item.photoLevel}, 3, #{item.boardNo},
+               default)
+     </foreach>
+   </insert>
 
 
 </mapper>
