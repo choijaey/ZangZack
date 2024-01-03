@@ -16,6 +16,9 @@ public interface secondHandService {
 
 	int insertAttmSecondHand(ArrayList<Attachment> detailList);
 
+	ArrayList<secondHandProduct> selectMyList(String id);
+
+
 
 
 	

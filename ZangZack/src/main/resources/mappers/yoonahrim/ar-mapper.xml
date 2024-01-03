@@ -12,17 +12,14 @@
 		insert into SECONDHAND_PRODUCT
 		values (#{spNo}, #{spTitle}, #{spPrice}, #{spContent}, #{spAddress}, default, default, 1, #{categoryNo}, default) 
 	</insert>
-
+	
 	<update id="updateSeconHand">
-		update secondHandProduct
-		set SP_NO = SP_SEQ.nextval, 
-			SP_TITLE = #{spTitle}, 
-			SP_PRICE = #{spPrice}, 
-			SP_CONTENT = #{spContent}, 
-			SP_ADDRESS = #{spAddress}, 
-			CATEGORY_NO = #{categoryNo}
-		<!-- member 테이블의 id와 join할 것. -->
-		where id = #{memberId}
+		UPDATE secondHandProduct
+		SET SP_TITLE = #{spTitle}, 
+		    SP_PRICE = #{spPrice},
+		    SP_CONTENT = #{spContent},
+		    SP_ADDRESS = #{spAddress}, 
+		    CATEGORY_NO = #{categoryNo}
 	</update>
 	
 	<insert id="insertAttmSecondHand">
@@ -33,6 +30,13 @@
 		</foreach>
 		select * from dual
 	</insert>
+	
+	<select id="selectMyList">
+		select *
+		from SECONDHAND_PRODUCT
+		where MEMBER_ID = #{id}
+	</select>
+	
 	
 	
 </mapper>

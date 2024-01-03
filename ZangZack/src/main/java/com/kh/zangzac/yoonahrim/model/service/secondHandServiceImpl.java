@@ -36,6 +36,12 @@ public class secondHandServiceImpl implements secondHandService{
 		return spDAO.insertAttmSecondHand(detailList);
 	}
 
+	@Override
+	public ArrayList<secondHandProduct> selectMyList(String id) {
+		return (ArrayList)spDAO.selectMyList(id);
+	}
+
+
 
 
 	

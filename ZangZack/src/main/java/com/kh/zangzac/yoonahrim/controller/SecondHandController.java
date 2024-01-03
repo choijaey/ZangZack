@@ -17,7 +17,7 @@ import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.yoonahrim.model.service.secondHandService;
 import com.kh.zangzac.yoonahrim.model.vo.secondHandException;
 import com.kh.zangzac.yoonahrim.model.vo.secondHandProduct;
-
+import com.kh.zangzac.ming.member.model.vo.Member;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -46,26 +46,37 @@ public class SecondHandController {
 		return "views/yoonahrim/secondHandList";
 	}
 	
-	//중고 게시글 수정
+	//중고 게시글 불러오기
 	@GetMapping("edit.ah")
-    public String editPage() {
+    public String editPage(@ModelAttribute secondHandProduct sp, HttpSession session, Model model) {
+		
+		String id = "2";
+		
+		//String id = ((Member)session.getAttribute("loginUser")).getMemberId();
+		ArrayList<secondHandProduct> sList=  spService.selectMyList(id);
+		model.addAttribute("list", sList);
+		
         return "views/yoonahrim/editSecondHand";
     }
 	
-	@GetMapping("update.ah")
-	public String updatePage(@ModelAttribute secondHandProduct sp, @RequestParam("spAddressStreet") String spAddressStreet, 
-			 @RequestParam("spAddressDetail") String spAddressDetail, @RequestParam("inputGroupFile") ArrayList<MultipartFile> inputGroupFile, Model model) {
+	//중고 게시글 수정
+	@PostMapping("update.ah")
+	public String updatePage(@ModelAttribute secondHandProduct sp, Model model) {
 		
 		//로그인한 User의 게시물을 update 하기 위해
 		//로그인 유저의 id와 memebr_id가 일치할때 업도르 될 수 있도록 해야함
 		
-		//String id = ((Member)session.getAttribute("loginUser")).getId();
-		//ArrayList<HashMap<String, Object>> list =  spService.selectMyList(id);
-		//System.out.println(list);
-		//model.addAttribute("list", list);
-		return "views/yoonahrim/editSecondHand";
+		int result = spService.updateSeconHand(sp);
+		System.out.println(result);
+		
+		if(result > 0) {
+			return "views/yoonahrim/editSecondHand";
+		}else {
+			throw new secondHandException("게시물 업데이트를 실패하였습니다.");
+		}
 		
 	}
+	
 	
 	//중고 게시글 상세페이지
 	@GetMapping("detail.ah")
@@ -91,7 +102,7 @@ public class SecondHandController {
 		String spAddress = null;
 	    
 	    if (!spAddressStreet.equals("")) {
-	        spAddress = spAddressStreet + " " + spAddressDetail;
+	        spAddress = spAddressStreet + "," + spAddressDetail;
 	    }
 	    sp.setSpAddress(spAddress);
 	    
@@ -101,24 +112,29 @@ public class SecondHandController {
 	    int result2 = 0;
 	    
 	    
-	    System.out.println(inputGroupFile);
 	    // rename 이랑 경로 뱉어냄.
 	    for (int i = 0; i < inputGroupFile.size(); i++) {
 	        MultipartFile upload = inputGroupFile.get(i); // 파일 하나씩 뽑아오기.
 	        String[] returnArr = imageStorage.saveImage(upload, name);
+	        Attachment a = new Attachment();
 	        
 	        if (returnArr != null) {
-	            Attachment a = new Attachment();
-	            a.setPhotoRename(returnArr[0]);
-	            a.setPhotoPath(returnArr[1]);
-	            a.setPhotoLevel(1);
-	            
+	            if(i == 0) {
+	            	a.setPhotoRename(returnArr[0]);
+	 	            a.setPhotoPath(returnArr[1]);
+	 	            a.setPhotoLevel(0);
+	            }else {
+	            	a.setPhotoRename(returnArr[0]);
+	 	            a.setPhotoPath(returnArr[1]);
+	 	            a.setPhotoLevel(1);
+	            }
 	            detailList.add(a);
-	        }
+	        } 
+	       
 	    }
 	    result1 = spService.insertSecondHand(sp);
-	    
-	    for (int i = 0; i < detailList.size(); i++) {
+	    /*
+	    for (int i = 0; i < inputGroupFile.size(); i++) {
 	        Attachment a = detailList.get(i);
 	        if (i == 0) {
 	            a.setPhotoLevel(0);
@@ -126,7 +142,7 @@ public class SecondHandController {
 	            a.setPhotoLevel(1);
 	        }
 	    }
-	    
+	    */
 	    // 상세사진 저장
 	    for (Attachment a : detailList) {
 	        a.setBoardNo(sp.getSpNo());
