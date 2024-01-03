@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.Pagination;
+import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.ming.member.model.vo.Member;
 import com.kh.zangzac.seongun.model.service.CampBoardService;
@@ -24,9 +26,16 @@ import jakarta.servlet.http.HttpServletRequest;
 @Controller
 public class CampBoardController {
 	
+	private final ImageStorage imageStorage;
+	
+	@Autowired
+	public CampBoardController(ImageStorage imageStorage) {
+		this.imageStorage = imageStorage;
+	}
+	
 	@Autowired
 	private CampBoardService cService;
-	
+    
 	@GetMapping("campBoard.su")
 	public String campBoardListView(@RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
 		
@@ -107,10 +116,30 @@ public class CampBoardController {
 	@PostMapping("insertCampBoard.su")
 	public String insertCampBoard(@ModelAttribute CampBoard board, @RequestParam("file") ArrayList<MultipartFile> files,HttpServletRequest request) {
 		board.setMemberId(((Member)request.getSession().getAttribute("loginUser")).getMemberId());
-		System.out.println(board);
 		
-		for(MultipartFile f : files) {
-			System.out.println(f);
+		ArrayList<Attachment> fileList = new ArrayList<>();
+		
+		for(int i=0; i<files.size(); i++) {
+			MultipartFile upload = files.get(i); //파일 하나씩 뽑아오기.
+			String[] returnArr = imageStorage.saveImage(upload, "seongun");
+			
+			if(returnArr != null) {
+				
+				Attachment a = new Attachment();
+				if(i==0) {
+					a.setPhotoRename(returnArr[0]);
+					a.setPhotoPath(returnArr[1]);
+					a.setPhotoLevel(0);
+				}else {
+					a.setPhotoRename(returnArr[0]);
+					a.setPhotoPath(returnArr[1]);
+					a.setPhotoLevel(1);
+				}
+				fileList.add(a);
+				System.out.println(returnArr);
+			}
+			
+			
 		}
 		return "redirect:/campBoard.su";
 	}
