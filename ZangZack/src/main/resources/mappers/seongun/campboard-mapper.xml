@@ -5,7 +5,7 @@
 		select count(*)
 		from camp_board
 		<where>
-			cb_status = 'Y'
+			cb_status = 'N'
 	        <if test="i != 0">
 	            and category_no = #{i}
 	        </if>
@@ -17,7 +17,7 @@
 		from camp_board
 			join member using (member_id)
 		<where> 
-			cb_status = 'Y'
+			cb_status = 'N'
 			<if test="i != 0">
 	            and category_no = #{i}
 	        </if> 

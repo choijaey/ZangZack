@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/seongun/commonBoard.css">
+    <link rel="stylesheet" href="css/seongun/albumBoard.css">
+</head>
+<body>
+	<div th:replace="~{common/navbar :: navbar}"></div>
+    <a id="back-to-top"><img src='image/topBtn.png' style='width:38px; height:38px;'></a>
+    <div id="content">
+        <div id="space_zone">
+            <p>
+                <img></img>
+            </p>
+        </div>
+        <div id="board_zone">
+            <div id="snb_zone">
+                <ul>
+                    <li>
+                        <a id="check_snb">캠핑게시시판</a>
+                    </li>
+                    <li>
+                        <a href="recipe.su">캠핑레시피</a>
+                    </li>
+                    <li>
+                        <a>중고거래</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="point_zone">
+                <div id="category">
+                    <form method="post">
+                        <input type="hidden" name="boardId" value="free">
+                        <input type="hidden" name="category_no" value="">
+                        <a href="#none" onclick="setCategory('')" class="on" id="select-category">전체보기</a>
+                        <a href="#none" onclick="setCategory('백패킹')" class="on">백패킹</a>
+                        <a href="#none" onclick="setCategory('오토캠핑')" class="on">오토캠핑</a>
+                        <a href="#none" onclick="setCategory('장박')" class="on">장박</a>
+                        <a href="#none" onclick="setCategory('글램핑')" class="on">글램핑</a>
+                    </form>
+                </div>
+				<div id="boardType-area">
+					<a href="campBoard.su"><img src="image/seongun/boardType1.png"></a>
+					<a href="cardBoard.su"><img src="image/seongun/boardType2.png"></a>
+					<a href="albumBoard.su"><img src="image/seongun/boardType3.png"></a>
+				</div>
+            </div>
+            <div class="board-container">
+                <!-- 카드 반복 -->
+                <div class="card">
+                    <div class="card-image">
+                        <img src="image/sample.png" alt="Thumbnail" />
+                    </div>
+                    <div class="card-body">
+                        <div class="card-title">
+                            <span class="title-text">제목임 드럽게 길면 어떤식으로 나올지 궁금하지?</span>
+                            <span class="card-category">오토캠핑</span>
+                        </div>
+                        <div class="card-author">글쓴이</div>
+                        <div class="card-info">
+                            <table>
+                                <tr>
+                                    <td class="info-label">조회수</td>
+                                    <td class="info-label">댓글</td>
+                                    <td class="info-label">좋아요</td>
+                                    <td class="info-value date-year">2023</td>
+                                </tr>
+                                <tr>
+                                    <td class="info-value">74531</td>
+                                    <td class="info-value">48</td>
+                                    <td class="info-value">40</td>
+                                    <td class="info-value date-day">12.20</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- 카드 반복 끝 -->
+            </div>
+            <div class="border-bottom-div"></div>
+            <div class="write_btn_area">
+                <button type="button" id="write_btn" onclick="writeBtn()">글쓰기</button>
+            </div>
+            <div class="board_bottom_area">
+                <div id="pagenation">
+                  <ul>
+                    <!-- 이전 버튼 -->
+                    <li><a href="#">&lt; 이전</a></li>
+                    <!-- 페이지 번호 -->
+                    <li><a href="#" id="check_page">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li><a href="#">6</a></li>
+                    <li><a href="#">7</a></li>
+                    <li><a href="#">8</a></li>
+                    <li><a href="#">9</a></li>
+                    <li><a href="#">10</a></li>
+                    <!-- 다음 버튼 -->
+                    <li><a href="#">다음 &gt;</a></li>
+                  </ul>
+                </div>
+                <hr/>
+                  <!-- 검색 필터 영역 -->
+                <div class="search_area">
+                    <select name="search_type" class="search_select">
+                        <option value="all">전체</option>
+                        <option value="title">제목</option>
+                        <option value="content">내용</option>
+                        <option value="author">글쓴이</option>
+                    </select>
+                    <input type="text" class="search_input" placeholder="검색어를 입력하세요." />
+                    <button type="submit" class="search_button">검색</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 스크롤이 끝으로 이동 시 이벤트 발생
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset <= 0) {
+                    document.getElementById('back-to-top').classList.remove('show');
+                } else {
+                    document.getElementById('back-to-top').classList.add('show');
+                }
+            });
+
+            window.addEventListener('touchmove', function() {
+                if (window.pageYOffset <= 0) {
+                    document.getElementById('back-to-top').classList.remove('show');
+                } else {
+                    document.getElementById('back-to-top').classList.add('show');
+                }
+            });
+
+            document.getElementById('back-to-top').addEventListener('click', function() {
+                // 페이지 맨 위로 스크롤하는 애니메이션
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                document.getElementById('back-to-top').classList.remove('show');
+            });
+        });
+        
+        function writeBtn(){
+        	window.location.href="writeCampBoardView.su";
+        }
+    </script>
+</body>
+</html>

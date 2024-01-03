@@ -84,7 +84,7 @@
             </div>
         </div>
         <div class="write_btn_area">
-            <button type="button" id="write_btn">글쓰기</button>
+            <button type="button" id="write_btn" onclick="writeBtn()">글쓰기</button>
         </div>
         <div class="board_bottom_area">
             <div id="pagenation">
@@ -116,7 +116,7 @@
                     <option value="author">글쓴이</option>
                 </select>
                 <input type="text" class="search_input" placeholder="검색어를 입력하세요." />
-                <button type="submit" class="search_button" onclick="writeBtn()">검색</button>
+                <button type="submit" class="search_button">검색</button>
             </div>
         </div>
     </div>
@@ -161,7 +161,6 @@
         }
         
         function writeBtn(){
-        	console.log("버튼누릶?");
         	window.location.href="writeCampBoardView.su";
         }
     </script>

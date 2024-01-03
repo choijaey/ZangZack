@@ -11,18 +11,18 @@
         <h1>캠핑게시판 등록</h1>
     </div>
     <div class="write-container">
-        <form>
+        <form method="post" action="insertCampBoard.su" enctype="multipart/form-data">
             <!-- 제목 입력 -->
             <div class="write-row">
-                <input type="text" id="title" name="title" placeholder="제목을 입력하세요." />
+                <input type="text" id="title" name="cbTitle" placeholder="제목을 입력하세요." />
             </div>
             <!-- 카테고리 선택 -->
             <div class="write-row">
-                <select name="category" id="category">
-                    <option value="백패킹">백패킹</option>
-                    <option value="오토캠핑">오토캠핑</option>
-                    <option value="장박">장박</option>
-                    <option value="글램핑">글램핑</option>
+                <select name="categoryNo" id="category">
+                    <option value="1">백패킹</option>
+                    <option value="2">오토캠핑</option>
+                    <option value="3">장박</option>
+                    <option value="4">글램핑</option>
                 </select>
             </div>
             <!-- 내용 입력 -->
@@ -36,10 +36,10 @@
                     <button type="button" id="add-upload-container">파일 추가</button>
                 </div>
                 <label class="upload-box">
-                    <input type="file" class="file-input" accept="image/*" onchange="sumviewImage(event)" />
+                    <input type="file" name="file" class="file-input" accept="image/*" onchange="sumviewImage(event)" />
                     <div class="upload-area">
                         <div class="upload-content" id="uploadContent">
-                            <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                             </svg>
                             <p class="upload-text">대표사진</p>
@@ -68,7 +68,7 @@
                             <button type="button" class="delete-upload-container">파일 삭제</button>
                         </div>
                         <label class="upload-box">
-                            <input type="file" class="file-input" accept="image/*" onchange="sumviewImage(event)" />
+                            <input type="file" name="file" class="file-input" accept="image/*" onchange="sumviewImage(event)" />
                             <div class="upload-area">
                                 <div class="upload-content">
                                     <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

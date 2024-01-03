@@ -117,7 +117,7 @@
             </ul>
         </div>
         <div class="write_btn_area">
-            <button id="write_btn">글쓰기</button>
+            <button type="button" id="write_btn" onclick="writeBtn()">글쓰기</button>
         </div>
         <div class="board_bottom_area">
             <div id="pagenation">
@@ -181,6 +181,10 @@
                 document.getElementById('back-to-top').classList.remove('show');
             });
         });
+        
+        function writeBtn(){
+        	window.location.href="writeCampBoardView.su";
+        }
     </script>
 </body>
 </html>

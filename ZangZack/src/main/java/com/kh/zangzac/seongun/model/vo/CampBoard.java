@@ -16,7 +16,7 @@ import lombok.ToString;
 public class CampBoard {
 	private int cbNo;
 	private String cbTitle;
-	private String ccbContent;
+	private String cbContent;
 	private int cbCount;
 	private Date cbCreateDate;
 	private Date cbModifyDate;
