@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="css/seongun/commonBoard.css">
     <link rel="stylesheet" href="css/seongun/listBoard.css">
 </head>
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
-    <a id="back-to-top"><img src='image/topBtn.png' style='width:38px; height:38px;'></a>
+    <a id="back-to-top"><img src='image/seongun/topBtn.png' style='width:38px; height:38px;'></a>
     <div id="content">
         <div id="space_zone">
             <p>
@@ -22,10 +24,10 @@
                         <a id="check_snb">캠핑게시시판</a>
                     </li>
                     <li>
-                        <a>캠핑레시피</a>
+                        <a href="recipe.su">캠핑레시피</a>
                     </li>
                     <li>
-                        <a>중고거래</a>
+                        <a href="secondHand.ah">중고거래</a>
                     </li>
                 </ul>
             </div>
@@ -82,7 +84,7 @@
             </div>
         </div>
         <div class="write_btn_area">
-            <button type="button" class="write_btn">글쓰기</button>
+            <button type="button" id="write_btn">글쓰기</button>
         </div>
         <div class="board_bottom_area">
             <div id="pagenation">
@@ -114,7 +116,7 @@
                     <option value="author">글쓴이</option>
                 </select>
                 <input type="text" class="search_input" placeholder="검색어를 입력하세요." />
-                <button type="submit" class="search_button">검색</button>
+                <button type="submit" class="search_button" onclick="writeBtn()">검색</button>
             </div>
         </div>
     </div>
@@ -156,6 +158,11 @@
               location.href='selectBoard.bo?bId=' + boardId + "&page=" +/*[[${pi.currentPage}]]*/1;
               /*]]>*/
            });
+        }
+        
+        function writeBtn(){
+        	console.log("버튼누릶?");
+        	window.location.href="writeCampBoardView.su";
         }
     </script>
 </body>

@@ -92,4 +92,9 @@ public class CampBoardController {
 	public String recipe() {
 		return "views/seongun/recipe";
 	}
+	
+	@GetMapping("writeCampBoardView.su")
+	public String writeCampBoard() {
+		return "views/seongun/writeBoard";
+	}
 }

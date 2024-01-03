@@ -1,15 +1,6 @@
-/* 폰트 설정 */
-/* 폰트 설정 */
-@font-face {
-	font-family: 'GmarketSansMedium';
-	src:
-		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff')
-		format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
+@charset "UTF-8";
 
-/* 전체 요소에 폰트 적용 */
+
 * {
 	font-family: 'GmarketSansMedium';
 }
@@ -64,13 +55,16 @@
 }
 
 #snb_zone ul {
-	width: 100%;
+	width: 105%;
 	position: relative;
 	padding: 0;
+	margin-bottom: 0px;
 	border-bottom: 1px solid black;
 }
 
 #snb_zone ul li a {
+	text-decoration: none;
+	color: gray;
 	display: flex;
 }
 
@@ -80,36 +74,38 @@
 
 /* 카테고리 */
 #point_zone {
-	width: 92%;
+	width: 96.8%;
 	padding-left: 0;
 	margin-left: 1.5%;
 	border-bottom: 1px solid black;
+	font-size: 0;
 }
 
 #category {
-	display: inline-flex;
-	position: relative;
-	margin: 1%;
-	margin-left: 0;
-	width: 400px;
+    display: inline-block;
+    vertical-align: top; /* 수직 정렬 */
+    width: calc(94.46% - 20px); /* 전체 너비의 절반에서 여백을 뺀 값 */
+    margin: 1% 0;
+    font-size: initial; /* 폰트 크기 초기화 */
 }
 
 #category form {
-	width: 100%
+	display: inline-block;
+	width: 100%;
 }
 
 #category a {
 	text-decoration: none;
 	text-align: center;
 	color: black;
-	padding: 0.5% 1% 0.5% 1%;
-	margin: auto;
+	padding: 0.5% 1%;
 }
 
-#allCategory {
+#category #select-category {
 	border-radius: 8px;
-	color: #e6e6e6;
-	background-color: #464D0F;
+	padding : 5px 10px;
+	color: white;
+	background-color: #5cb85c;
 }
 
 .board_zone_cont {
@@ -123,79 +119,37 @@
 }
 
 #boardType-area {
-	display: inline-flex;
-	top: 10px;
-	left: 56%;
-	position: relative;
-	width: 300px;
-	margin-top: 0px;
+    display: inline-block;
+    padding: 0.5vw 0;
+    align-items:center;
+    vertical-align: top; /* 수직 정렬 */
+    width: 81.75px; /* 전체 너비의 절반에서 여백을 뺀 값 */
 }
 
-#boardType-area form {
-	width: 100%;
-}
-/* 게시판 목록 테이블 */
-table {
-	width: 92%;
-	padding-left: 16px;
-	margin-left: 1.5%;
+#boardType-area a {
+	text-decoration: none;
 	text-align: center;
-	border-collapse: collapse;
-	position: relative;
-	margin-bottom: 30px;
+	color: black;
+	padding: 0.5% 1%;
+	margin: 0.5% 1%;
 }
 
-th, td {
-	width: 5%;
-	padding: 8px;
-	text-align: center;
-}
 
-th {
-	border: 0.5px solid lightgray;
-	border-top: 1px solid black;
-	background-color: #e4e0e0;
-	font-weight: 100px;
-}
-
-td {
-	padding: 13px 10px 15px 10px;
-	border-bottom: solid 1px #dbdbdb;
-	justify-content: space-between;
-	text-align: center;
-	align-items: center;
-	position: relative;
-}
-
-.board_writer {
-	width: 12%;
-}
-
-.board_title {
-	width: 40%;
-	text-align: left;
-}
-
-.attachment_icon {
-	position: absolute;
-	width: 20px;
-	height: auto;
-	top: 50%;
-	transform: translateY(-50%);
-	right: 10px;
-}
-
-.write_btn {
+#write_btn {
 	display: inline-block;
 	min-width: 50px;
 	height: 30px;
 	box-sizing: border-box;
-	border: 1px solid #d3d3d3;
+	border: 1px solid #5cb85c;
 	text-align: center;
 	position: relative;
-	background-color: #fff;
-	right: -88%;
-	font-weight: bolder;
+	background-color: #5cb85c;
+	color: #fff;
+	right: -93.6%;
+}
+
+#write_btn:hover {
+	cursor: pointer;
 }
 
 .write_btn a {
