@@ -6,9 +6,11 @@
 <link href="css/sohwa/(admin)productUpdate.css" rel="stylesheet">
 </head>
 <body>
-<br><br><br><br><!--네비--><br><br><br><br>
+	<div th:replace="~{common/admin :: admin}"></div>
+	
+	<br><br><br><br>
 	<div id="enrollProduct">
-		<h1>상품 수정</h1>
+		<h1>상품 등록</h1>
 		<hr style="border:1px solid black;">
 		<br>
 		<form>
@@ -122,7 +124,7 @@
 		  	
 		  	
 		  	<button id="preBtn">이전으로</button>
-			<button id="enrollBtn">등록하기</button>
+			<button id="enrollBtn">수정하기</button>
 			
 		</form>
 	</div>
@@ -196,6 +198,5 @@
 
   
 	</script>
-
 </body>
 </html>
