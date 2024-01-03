@@ -1,18 +1,18 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="css/seongun/boardShortCard.css">
+    <link rel="stylesheet" href="css/seongun/albumBoard.css">
 </head>
 <body>
+	<div th:replace="~{common/navbar :: navbar}"></div>
     <a id="back-to-top"><img src='image/topBtn.png' style='width:38px; height:38px;'></a>
     <div id="content">
         <div id="space_zone">
             <p>
-                <imp></imp>
+                <img></img>
             </p>
         </div>
         <div id="board_zone">
@@ -31,16 +31,21 @@
             </div>
             <div id="point_zone">
                 <div id="category">
-                    <form>
+                    <form method="post">
                         <input type="hidden" name="boardId" value="free">
-                        <input type="hidden" name="category" value>
-                        <a href="#none" onclick="setCategory('')" class="on" id="allCategory">전체보기</a>
+                        <input type="hidden" name="category_no" value="">
+                        <a href="#none" onclick="setCategory('')" class="on" id="select-category">전체보기</a>
                         <a href="#none" onclick="setCategory('백패킹')" class="on">백패킹</a>
                         <a href="#none" onclick="setCategory('오토캠핑')" class="on">오토캠핑</a>
                         <a href="#none" onclick="setCategory('장박')" class="on">장박</a>
                         <a href="#none" onclick="setCategory('글램핑')" class="on">글램핑</a>
                     </form>
                 </div>
+				<div id="boardType-area">
+					<a href="campBoard.su"><img src="image/seongun/boardType1.png"></a>
+					<a href="cardBoard.su"><img src="image/seongun/boardType2.png"></a>
+					<a href="albumBoard.su"><img src="image/seongun/boardType3.png"></a>
+				</div>
             </div>
             <div class="board-container">
                 <!-- 카드 반복 -->
