@@ -29,37 +29,40 @@ public class ImageStorage {
     @SuppressWarnings("deprecation")
 	public String[] saveImage(MultipartFile file, String name) {
     	
-    	 // 랜덤 이름 생성 
-    	 String uuid = UUID.randomUUID().toString();
-    	 // 확장자 명 찾기
-         String ext = file.getContentType();
-
-         // 파일 경로를 설정합니다.
-         String filePath = "image/"+name+"/"+uuid;
-
-         BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, filePath)
-                 .setContentType(ext)
-                 .build();
-         
-         //삭제 테스트
-        // boolean deleted = storage.delete(blobInfo.getBlobId());
-         //System.out.println(deleted);
-         
-         //실제 클라우드에 이미지 업로드
-         try {
-			storage.create(blobInfo, file.getInputStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-       
-         
-         String fileName =uuid+"."+ext.split("/")[1];
-         String path = "https://storage.googleapis.com/zangzac/image/"+name+"/"+uuid;
-         
-         //이름과 경로를 반환
-         String[] result =new String[] {fileName,path};
-         return result;
+    	if(file.getOriginalFilename() != "") {
+	    	 // 랜덤 이름 생성 
+	    	 String uuid = UUID.randomUUID().toString();
+	    	 // 확장자 명 찾기
+	         String ext = file.getContentType();
+	
+	         // 파일 경로를 설정합니다.
+	         String filePath = "image/"+name+"/"+uuid;
+	
+	         BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, filePath)
+	                 .setContentType(ext)
+	                 .build();
+	         
+	         //삭제 테스트
+	        // boolean deleted = storage.delete(blobInfo.getBlobId());
+	         //System.out.println(deleted);
+	         
+	         //실제 클라우드에 이미지 업로드
+	         try {
+				storage.create(blobInfo, file.getInputStream());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	       
+	         
+	         String fileName =uuid+"."+ext.split("/")[1];
+	         String path = "https://storage.googleapis.com/zangzac/image/"+name+"/"+uuid;
+	         
+	         //이름과 경로를 반환
+	         String[] result =new String[] {fileName,path};
+	         return result;
+    	}
+    	return null;
          
     }
 
