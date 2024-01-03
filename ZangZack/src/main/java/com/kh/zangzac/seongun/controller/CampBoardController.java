@@ -24,26 +24,14 @@ public class CampBoardController {
 	@GetMapping("campBoard.su")
 	public String campBoardListView(@RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
 		
-		int listCount = cService.getListCount(0);
+		int listCount = cService.getListCount(1);
 		
 		int currentPage = page;
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
 		ArrayList<CampBoard> list = cService.selectBoardList(pi,1);
-		if(!list.isEmpty()) {
-			model.addAttribute("pi",pi);
-			model.addAttribute("list", list);
-			model.addAttribute("msg", null);
-			model.addAttribute("loc", request.getRequestURI());
-			return "views/seongun/boardList";
-		}else {
-			model.addAttribute("pi",pi);
-			model.addAttribute("list", list);
-			model.addAttribute("msg", "작성된 게시판이 없습니다!");
-			model.addAttribute("loc", request.getRequestURI());
-			return "views/seongun/boardList";
-		}
+		
+		return "views/seongun/boardList";
 	}
-	
 	
 	@GetMapping("recipe.su")
 	public String recipe() {

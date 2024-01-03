@@ -61,7 +61,7 @@
 
 
 #snb_zone ul {
-  width: 105%;
+  width: 100%;
   position: relative;
   padding: 0;
   border-bottom: 1px solid black;
@@ -276,7 +276,7 @@
   text-align: center;
   position: relative;
   background-color: #fff;
-  right: -93.6%;
+  right: -88%;
   font-weight: bolder;
 }
 
