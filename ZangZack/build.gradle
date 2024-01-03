@@ -40,16 +40,12 @@ dependencies {
    	implementation 'net.nurigo:sdk:4.3.0'
     implementation 'org.springframework.boot:spring-boot-starter-mail:3.2.0'
     implementation 'org.springframework.boot:spring-boot-devtools:3.2.0'
-    implementation 'net.nurigo:sdk:4.3.0'
     
 	//구글 클라우드 관련
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
-<<<<<<< HEAD
 	
-=======
 
->>>>>>> branch 'main' of https://github.com/choijaey/ZangZack.git
 }
 
 tasks.named('test') {

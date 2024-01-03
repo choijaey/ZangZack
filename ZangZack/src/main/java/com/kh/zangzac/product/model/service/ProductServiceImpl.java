@@ -32,7 +32,7 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public int getListCount(Integer categoryNo) {
+	public int getListCount(int categoryNo) {
 		return pDAO.getListCount(categoryNo);
 	}
 

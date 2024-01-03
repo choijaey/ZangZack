@@ -39,20 +39,20 @@ public class ProductController {
 	
 	//상품등록페이지 view
 	@GetMapping("productListView.so")
-	public String productListView(@RequestParam("categoryNo") Integer categoryNo, @RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
+	public String productListView(@RequestParam(value="categoryNo", defaultValue="0") int categoryNo, @RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
 		
-//		int listCount = 0;
-//		if(categoryNo != null) {
-//			listCount = pService.getListCount(categoryNo);
-//		}else {
-//			listCount = pService.getListCount(null);
-//		}
-//		
-//		
-//		
-//		System.out.println(listCount);
-//		int currentPage = page;
-//		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 16);
+		int listCount = 0;
+		if(categoryNo != 0) {
+			listCount = pService.getListCount(categoryNo);
+		}else {
+			listCount = pService.getListCount(null);
+		}
+		
+		
+		
+		System.out.println(listCount);
+		int currentPage = page;
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 16);
 		
 		
 		

@@ -14,7 +14,7 @@ public interface ProductService {
 
 	int insertOption(ArrayList<Option> list);
 
-	int getListCount(Integer categoryNo);
+	int getListCount(int categoryNo);
 
 
 	
