@@ -27,7 +27,7 @@ public class CampingGround {
 	private String cgManageDate;
 	private String cgBooking;
 	private String cgPage;
-	private int cgStarPoint;
+	private double cgStarPoint;
 	private String cgAmenity;
 	private String cgInfo;
 	private char cgRecomendation;
