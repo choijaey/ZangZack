@@ -21,6 +21,7 @@
 			SP_CONTENT = #{spContent}, 
 			SP_ADDRESS = #{spAddress}, 
 			CATEGORY_NO = #{categoryNo}
+		<!-- member 테이블의 id와 join할 것. -->
 		where id = #{memberId}
 	</update>
 	

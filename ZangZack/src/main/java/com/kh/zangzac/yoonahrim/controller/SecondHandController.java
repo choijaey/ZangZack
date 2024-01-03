@@ -52,26 +52,19 @@ public class SecondHandController {
         return "views/yoonahrim/editSecondHand";
     }
 	
-	@PostMapping("update.ah")
+	@GetMapping("update.ah")
 	public String updatePage(@ModelAttribute secondHandProduct sp, @RequestParam("spAddressStreet") String spAddressStreet, 
-			 @RequestParam("spAddressDetail") String spAddressDetail, Model model) {
+			 @RequestParam("spAddressDetail") String spAddressDetail, @RequestParam("inputGroupFile") ArrayList<MultipartFile> inputGroupFile, Model model) {
 		
 		//로그인한 User의 게시물을 update 하기 위해
 		//로그인 유저의 id와 memebr_id가 일치할때 업도르 될 수 있도록 해야함
 		
-		String spAddress = null;
-		if(!spAddressStreet.equals("")) {
-			spAddress = spAddressStreet + " " + spAddressDetail;
-		}
-		sp.setSpAddress(spAddress);
-		System.out.println(sp);
+		//String id = ((Member)session.getAttribute("loginUser")).getId();
+		//ArrayList<HashMap<String, Object>> list =  spService.selectMyList(id);
+		//System.out.println(list);
+		//model.addAttribute("list", list);
+		return "views/yoonahrim/editSecondHand";
 		
-		int result = spService.updateSeconHand(sp);
-			if(result > 0) {
-				return "views/yoonahrim/secondHandList";
-			} else {
-				throw new secondHandException("게시판 등록 실패");
-			}
 	}
 	
 	//중고 게시글 상세페이지
