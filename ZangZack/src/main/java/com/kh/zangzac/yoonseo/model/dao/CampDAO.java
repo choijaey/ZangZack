@@ -16,4 +16,6 @@ public interface CampDAO {
 
 	int insertInfoImg(ArrayList<Attachment> infoList);
 
+	int getListCount(int i);
+
 }

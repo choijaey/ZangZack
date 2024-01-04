@@ -282,7 +282,7 @@ function categoryChange(e) {
 			        bounds.extend(coords); //추가한 코드, 현재 코드에서 좌표정보는 point[i]가 아닌 coords이다.
 			        
 			     // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-			        const iwContent = '<div style="width:150px; text-align:center; padding:2px 0;">' + position.title + '<br>010-0000-0000 <a href="campDetail.ys" style="color:blue" target="blank">상세보기</a></div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+			        const iwContent = '<div style="width:150px; text-align:center; padding:2px 0;">' + position.title + '<br>010-0000-0000 <a href="selectCamp.ys" style="color:blue" target="blank">상세보기</a></div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
 	
 			        // 인포윈도우로 장소에 대한 설명을 표시합니다
 			        const infowindow = new kakao.maps.InfoWindow({
@@ -386,7 +386,7 @@ function categoryChange(e) {
 		                    
 
 		                    // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-		                    const iwContent = '<div style="width:200px; height:100px; text-align:center; padding:2px 0;">' + campName + '<br>'+ phone +'<br><a href="campDetail.ys" style="color:blue" target="blank">상세보기</a></div>'; 
+		                    const iwContent = '<div style="width:200px; height:100px; text-align:center; padding:2px 0;">' + campName + '<br>'+ phone +'<br><a href="selectCamp.ys" style="color:blue" target="blank">상세보기</a></div>'; 
 		                    const infowindow = new kakao.maps.InfoWindow({
 		                        content: iwContent
 		                    });

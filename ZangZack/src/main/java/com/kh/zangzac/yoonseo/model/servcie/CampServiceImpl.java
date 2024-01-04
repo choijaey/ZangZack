@@ -30,6 +30,11 @@ public class CampServiceImpl implements CampService {
 		return cDAO.insertInfoImg(infoList);
 	}
 
+	@Override
+	public int getListCount(int i) {
+		return cDAO.getListCount(i);
+	}
+
 	
 	
 }
