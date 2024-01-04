@@ -22,13 +22,8 @@ public class secondHandServiceImpl implements secondHandService{
 	}
 
 	@Override
-	public int updateSeconHand(secondHandProduct sp) {
-		return spDAO.updateSeconHand(sp);
-	}
-
-	@Override
-	public ArrayList<HashMap<String, Object>> selectSeconHand(String id) {
-		return spDAO.updateSeconHand(id);
+	public int updateSecondHand(secondHandProduct sp) {
+		return spDAO.updateSecondHand(sp);
 	}
 
 	@Override
@@ -37,8 +32,18 @@ public class secondHandServiceImpl implements secondHandService{
 	}
 
 	@Override
-	public ArrayList<secondHandProduct> selectMyList(String id) {
-		return (ArrayList)spDAO.selectMyList(id);
+	public ArrayList<secondHandProduct> selectMyList(String memberId) {
+		return (ArrayList)spDAO.selectMyList(memberId);
+	}
+
+	@Override
+	public int updateAttmSecondHand(ArrayList<Attachment> detailList) {
+		return spDAO.updateAttmSecondHand(detailList);
+	}
+
+	@Override
+	public ArrayList<Attachment> selectAttachmentList(secondHandProduct sp) {
+		return (ArrayList)spDAO.selectAttachmentList(sp);
 	}
 
 

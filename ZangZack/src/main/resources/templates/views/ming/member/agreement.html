@@ -11,7 +11,7 @@
         <img src="image/ming/member/logo.png">
     </div>
     <div id="form_box">
-        <form id="joinForm" action="userInfo.me" method="post" onsubmit="return test()" style="background-color: white; border-radius: 10px;">
+        <form id="joinForm" action="signUp.me" method="get" onsubmit="return test()" style="background-color: white; border-radius: 10px;">
             <ul class="join_box"  style="border: solid 1.5px #464D0F; border-radius: 10px;">
                 <li class="checkBox check01">
                     <ul class="clearfix">
@@ -21,7 +21,6 @@
                             메일 수신(선택)에 모두 동의합니다.
                         </li>
                         <li class="checkAllBtn">
-                            <input type="checkbox" name="chkAll" id="chk" class="chkAll">
                         </li>
                     </ul>
                 </li>
@@ -29,7 +28,6 @@
                     <ul class="clearfix">
                         <li>이용약관 동의(필수)</li>
                         <li class="checkBtn">
-                            <input type="checkbox" name="chk" class="essential">
                         </li>
                     </ul>
                     <textarea name="" id="" readonly>여러분을 환영합니다.
@@ -156,7 +154,6 @@
                     <ul class="clearfix">
                         <li>개인정보 수집 및 이용에 대한 안내(필수)</li>
                         <li class="checkBtn">
-                            <input type="checkbox" name="chk" class="essential">
                         </li>
                     </ul>
 
@@ -239,55 +236,12 @@ QR코드 등록 정보:삭제 시점으로부터6개월 보관
 이용자는 개인정보의 수집 및 이용 동의를 거부할 권리가 있습니다. 회원가입 시 수집하는 최소한의 개인정보, 즉, 필수 항목에 대한 수집 및 이용 동의를 거부하실 경우, 회원가입이 어려울 수 있습니다.
                     </textarea>
                 </li>
-                <li class="checkBox check03">
-                    <ul class="clearfix">
-                        <li>이벤트 등 프로모션 알림 메일 수신(선택)</li>
-                        <li class="checkBtn">
-                            <input type="checkbox" name="chk">
-                        </li>
-                    </ul>
-
-                    <textarea name="" id="" readonly>
-장작 및 제휴 서비스의 이벤트・혜택 등의 정보 발송을 위해 장작 아이디(아이디 식별값 포함), 휴대전화번호(장작 앱 알림 또는 문자), 이메일주소를 수집합니다. 
-
-장작 아이디(아이디 식별값 포함), 휴대전화번호 및 이메일주소는 장작 서비스 제공을 위한 필수 수집항목으로서 장작 회원 가입 기간 동안 보관하나, 이벤트 혜택 정보 수신 동의를 철회하시면 본 목적으로의 개인정보 처리는 중지됩니다. 
-정보주체는 개인정보 수집 및 이용 동의를 거부하실 수 있으며, 미동의 시에도 서비스 이용은 가능합니다.
-
-※ 일부 서비스(별개의 회원체계 운영, 장작 가입 후 추가 가입하는 서비스 등)의 경우, 수신에 대해 별도로 안내 드리며, 동의를 구합니다.
-                    </textarea>
-                </li>
-            </ul>
             <ul class="footBtwrap clearfix">
-                <li style="padding-right: 10px; "><button type="button" class="fpmgBt1" id="fpmgBt1"  >가입취소</button></li>
-                <li><button class="fpmgBt2" id="fpmgBt2">동의</button></li>
+                <li style="padding-right: 10px; "><button type="button" class="fpmgBt1" id="fpmgBt1" onclick="location.href='home.do'">가입취소</button></li>
+                <li><button class="fpmgBt2" id="fpmgBt2" onclick="location.href='signUp.me'">동의</button></li>
                 
             </ul>
         </form>
     </div>
-    <script>
-        document.getElementById("fpmgBt1").addEventListener('click',function(){
-            if(confirm('정말로 가입취소 하시겠습니까?')){
-                location.href = 'home.me';
-            }
-        });
-        
-        document.getElementById('chk').addEventListener('click',function(){
-            const checkAll = document.getElementById('chk');
-            const checkboxes = document.getElementsByName('chk');
-            checkboxes.forEach((checkbox) => {
-                checkbox.checked = checkAll.checked;
-            });
-        });
-        
-        function test(){
-            const checking = document.querySelectorAll('input[class="essential"]:checked');
-            if(checking.length === 2){
-				return true;
-            }else {
-                alert('필수 약관을 모두 선택해 주세요.');
-                return false;
-            }
-        }
-    </script>
 </body>
 </html>

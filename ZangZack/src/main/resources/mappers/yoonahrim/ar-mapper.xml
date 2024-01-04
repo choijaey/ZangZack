@@ -13,20 +13,18 @@
 		values (#{spNo}, #{spTitle}, #{spPrice}, #{spContent}, #{spAddress}, default, default, 1, #{categoryNo}, default) 
 	</insert>
 	
-	<update id="updateSeconHand">
-		UPDATE secondHandProduct
-		SET SP_TITLE = #{spTitle}, 
-		    SP_PRICE = #{spPrice},
-		    SP_CONTENT = #{spContent},
-		    SP_ADDRESS = #{spAddress}, 
-		    CATEGORY_NO = #{categoryNo}
+	<update id="updateSecondHand">
+		UPDATE SECONDHAND_PRODUCT
+		SET SP_TITLE = #{spTitle}, SP_PRICE = #{spPrice}, SP_CONTENT = #{spContent}, SP_ADDRESS = #{spAddress}, CATEGORY_NO = #{categoryNo}
+		where member_id = '3'
+		<!-- member_id = #{memberId}로 후에 바꿔주기 -->
 	</update>
 	
 	<insert id="insertAttmSecondHand">
 		insert all<!-- insert all 안에서는 nextval이라고 적어놓고 여러번 들어간다하더라도 딱 1번 nextval이 되고 나머지는 같은 값이 들어간다 -->
 		<foreach collection="list" item="item">
 			into photo
-			values (new_aid, #{item.photoRename}, #{item.photoPath}, #{item.photoLevel}, #{item.boardType}, #{item.boardNo}, default)
+			values (new_aid, #{item.photoRename}, #{item.photoPath}, #{item.photoLevel}, 4, #{item.boardNo}, default)
 		</foreach>
 		select * from dual
 	</insert>
@@ -34,9 +32,18 @@
 	<select id="selectMyList">
 		select *
 		from SECONDHAND_PRODUCT
-		where MEMBER_ID = #{id}
+		where MEMBER_ID = #{memberId}
 	</select>
 	
+	<update id="updateAttmSecondHand">
+		update photo
+		set PHOTO_RENAME = #{photoRename}, PHOTO_PATH = #{photoPath}
+	</update>
 	
+	<select id="selectAttachmentList">
+		select *
+		from photo
+		where BOARD_NO = #{spNo} and board_type = '4'
+	</select>
 	
 </mapper>
