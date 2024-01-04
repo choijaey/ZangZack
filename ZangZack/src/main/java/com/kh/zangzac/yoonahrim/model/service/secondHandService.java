@@ -10,11 +10,16 @@ public interface secondHandService {
 
 	int insertSecondHand(secondHandProduct sp);
 
-	int updateSeconHand(secondHandProduct sp);
-
-	ArrayList<HashMap<String, Object>> selectSeconHand(String id);
+	int updateSecondHand(secondHandProduct sp);
 
 	int insertAttmSecondHand(ArrayList<Attachment> detailList);
+
+	ArrayList<secondHandProduct> selectMyList(String memberId);
+
+	int updateAttmSecondHand(ArrayList<Attachment> detailList);
+
+	ArrayList<Attachment> selectAttachmentList(secondHandProduct sp);
+
 
 
 

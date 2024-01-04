@@ -68,17 +68,17 @@ public class ImageStorage {
 
     // 이미지 삭제
     public boolean deleteImage(String imageName,String name) {
-    	
-    	String uuid = imageName.split("\\.")[0];
-    	
-    	//.으로 나누기
-    	 String ext = imageName.split("\\.")[1];
-    	 
-    	 
-    	 String filePath = "image/"+name+"/"+uuid;
-    	 
-    	 
-    	 BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, filePath)
+       
+       String uuid = imageName.split("\\.")[0];
+       
+       //.으로 나누기
+        String ext = imageName.split("\\.")[1];
+        
+        
+        String filePath = "image/"+name+"/"+uuid;
+        
+        
+        BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, filePath)
                  .setContentType(ext)
                  .build();
          
