@@ -35,11 +35,10 @@
 		where MEMBER_ID = #{memberId}
 	</select>
 	
-	<!-- 삭제하는 방향으로 변경해야함. 아직 변경 전 -->
-	<update id="updateAttmSecondHand">
-		update photo
-		set PHOTO_RENAME = #{photoRename}, PHOTO_PATH = #{photoPath}
-	</update>
+	<delete id="deleteAttmSecondHand">
+		delete from photo
+		where PHOTO_NO = #{spNo} and BOARD_TYPE = '4'
+	</delete>
 	
 	<select id="selectAttachmentList">
 		select *

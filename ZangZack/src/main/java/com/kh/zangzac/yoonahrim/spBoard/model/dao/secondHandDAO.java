@@ -19,9 +19,9 @@ public interface secondHandDAO {
 
 	ArrayList<secondHandProduct> selectMyList(String memberId);
 
-	int updateAttmSecondHand(ArrayList<Attachment> detailList);
+	int deleteAttmSecondHand(int spNo);
 
-	ArrayList<Attachment> selectAttachmentList(int spNo);
+	ArrayList<Attachment> selectAttachmentList(Integer spNo);
 
 
 

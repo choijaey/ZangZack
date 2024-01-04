@@ -37,13 +37,13 @@ public class secondHandServiceImpl implements secondHandService{
 	}
 
 	@Override
-	public int updateAttmSecondHand(ArrayList<Attachment> detailList) {
-		return spDAO.updateAttmSecondHand(detailList);
+	public ArrayList<Attachment> selectAttachmentList(Integer spNo) {
+		return (ArrayList)spDAO.selectAttachmentList(spNo);
 	}
 
 	@Override
-	public ArrayList<Attachment> selectAttachmentList(int spNo) {
-		return (ArrayList)spDAO.selectAttachmentList(spNo);
+	public int deleteAttmSecondHand(int spNo) {
+		return spDAO.deleteAttmSecondHand(spNo);
 	}
 
 

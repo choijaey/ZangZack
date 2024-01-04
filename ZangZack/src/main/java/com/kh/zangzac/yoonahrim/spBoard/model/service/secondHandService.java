@@ -16,9 +16,9 @@ public interface secondHandService {
 
 	ArrayList<secondHandProduct> selectMyList(String memberId);
 
-	int updateAttmSecondHand(ArrayList<Attachment> detailList);
+	ArrayList<Attachment> selectAttachmentList(Integer spNo);
 
-	ArrayList<Attachment> selectAttachmentList(int spNo);
+	int deleteAttmSecondHand(int spNo);
 
 
 

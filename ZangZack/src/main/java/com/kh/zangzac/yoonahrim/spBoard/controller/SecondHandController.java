@@ -46,7 +46,7 @@ public class SecondHandController {
 	
 	//중고 게시글 불러오기
 	@GetMapping("edit.ah")
-    public String editPage(@ModelAttribute secondHandProduct sp, @RequestParam("spNo") int spNo, HttpSession session, Model model) {
+    public String editPage(@ModelAttribute secondHandProduct sp, @RequestParam("spNo") Integer spNo, HttpSession session, Model model) {
 		
 		String memberId = "3";
 		
@@ -67,21 +67,36 @@ public class SecondHandController {
 		
 		//로그인한 User의 게시물을 update 하기 위해
 		//로그인 유저의 id와 memebr_id가 일치할때 업도르 될 수 있도록 해야함
+		System.out.println(sp);
+		
 		String spAddress = null;
 		
 		if (!spAddressStreet.equals("")) {
 	        spAddress = spAddressStreet + "," + spAddressDetail;
 	    }
 	    sp.setSpAddress(spAddress);
-		
-		String name = "ahrim";
+	    
+	    ArrayList<Attachment> aList = spService.selectAttachmentList(sp.getSpNo());
+	    //기존 파일 삭제(for문)
+	    int result = spService.deleteAttmSecondHand(sp.getSpNo());
+	    
+	    //구글드라이드 삭제
+	    String name = "ahrim";
+	    for (int i = 0; i < aList.size(); i++) {
+	        boolean deleteResult  = imageStorage.deleteImage(aList.get(i).getPhotoRename(), name);
+	        
+	        if(deleteResult) {
+	        	return "views/yoonahrim/secondHandList";
+		    } else {
+		        throw new secondHandException("게시판 수정 실패");
+	        }
+	    }
+
+	    //새로운 파일 업로드
 	    ArrayList<Attachment> detailList = new ArrayList<>();
 	    int result1 = 0;
 	    int result2 = 0;
 	    
-	    int result = spService.updateSecondHand(sp);
-	    
-	    // rename 이랑 경로 뱉어냄.
 	    for (int i = 0; i < inputGroupFile.size(); i++) {
 	        MultipartFile upload = inputGroupFile.get(i); // 파일 하나씩 뽑아오기.
 	        String[] returnArr = imageStorage.saveImage(upload, name);
@@ -99,18 +114,8 @@ public class SecondHandController {
 	            }
 	            detailList.add(a);
 	        } 
-	       
 	    }
 	    result1 = spService.insertSecondHand(sp);
-	    
-	    for (int i = 0; i < inputGroupFile.size(); i++) {
-	        Attachment a = detailList.get(i);
-	        if (i == 0) {
-	            a.setPhotoLevel(0);
-	        } else {
-	            a.setPhotoLevel(1);
-	        }
-	    }
 	    
 	    // 상세사진 저장
 	    for (Attachment a : detailList) {
@@ -118,22 +123,14 @@ public class SecondHandController {
 	    }
 	    
 	    if(!detailList.isEmpty()) {
-	    	 result2 = spService.updateAttmSecondHand(detailList);
+	    	 result2 = spService.insertAttmSecondHand(detailList);
 	    }
 	    
 	    if (result1 + result2 == detailList.size() + 1) {
-	        return "views/yoonahrim/secondHandDetail";
+	        return "views/yoonahrim/secondHandList";
 	    } else {
 	        throw new secondHandException("게시판 등록 실패");
 	    }
-	    
-		/*
-		if(result > 0) {
-			return "views/yoonahrim/secondHandDetail";
-		}else {
-			throw new secondHandException("게시물 업데이트를 실패하였습니다.");
-		}
-		*/
 	}
 	
 	//중고 게시글 상세페이지
@@ -197,15 +194,6 @@ public class SecondHandController {
 	        } 
 	    }
 	    result1 = spService.insertSecondHand(sp);
-	    
-	    for (int i = 0; i < inputGroupFile.size(); i++) {
-	        Attachment a = detailList.get(i);
-	        if (i == 0) {
-	            a.setPhotoLevel(0);
-	        } else {
-	            a.setPhotoLevel(1);
-	        }
-	    }
 	    
 	    // 상세사진 저장
 	    for (Attachment a : detailList) {

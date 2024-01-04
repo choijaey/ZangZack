@@ -45,6 +45,14 @@
 	margin-bottom: 0px;
 }
 
+p {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
 #snb_zone ul li {
 	list-style: none;
 	display: inline-block;
@@ -59,10 +67,9 @@
 	width: 105%;
 	position: relative;
 	padding: 0;
-	margin-top: 2px;
 	margin-bottom: 0px;
 	border-bottom: 1px solid black;
-	
+	bottom: 7px;
 }
 
 #snb_zone ul li a {
