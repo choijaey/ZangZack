@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.zangzac.common.ImageStorage;
+import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.Attachment;
-import com.kh.zangzac.yoonseo.model.vo.CampingGround;
+import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.yoonseo.model.exception.CampException;
 import com.kh.zangzac.yoonseo.model.servcie.CampService;
+import com.kh.zangzac.yoonseo.model.vo.CampingGround;
 
 
 @Controller
@@ -32,7 +35,14 @@ public class CampController {
 	
 	
 	@GetMapping("campSearch.ys")
-	public String campSearch() {
+	public String campSearch(@RequestParam(value="page", defaultValue="1") int page,
+			                  Model model) {
+		
+		int listCount = cService.getListCount(3); //내 보드타입은 3 번이니까
+		int currentPage = page;
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 7); //7개씩 보이게 할거야
+		
+		
 		return "views/yoonseo/campSearch";
 	}
 	
@@ -117,5 +127,8 @@ public class CampController {
 			throw new CampException("캠핑장 등록 실패");
 		}
 	}
+	
+	
+	
 
 }
