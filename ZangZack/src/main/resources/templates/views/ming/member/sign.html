@@ -50,7 +50,7 @@
 	          <form class="form sign-up" action="insertMember.me" method="post" onsubmit="return NoSign()">
 	            <div class="input-group">
 	              <i class='bx bxs-user'></i>
-	              <input type="text" placeholder="Id" style="height: 45px;" id="id" name="memberId" autofocus>
+	              <input type="text" placeholder="Id" style="height: 45px;" id="memberId" name="memberId" autofocus>
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
@@ -243,22 +243,36 @@
 		}
 	</script>
 	
-	<!-- 아이디 중복체크 / 정규식 -->
-	 <script>
+	<script th:inline="javascript">
+	    // 서버에서 전달한 메시지를 가져오기
+	    let msg = /*[[${msg}]]*/ '';
+	
+	    // alert을 띄우기 (로그인 실패 시에만)
+	    if (msg !== "" && msg.includes("로그인에 실패")) {
+	        alert(msg);
+	    }
+	</script>
+	
+	 <script >
 		window.onload = () =>{
-			document.getElementById('id').addEventListener('change', function(){
+			
+			// 로그인 및 회원가입 실패
+			
+			//아이디 중복 체크 / 정규식
+			document.getElementById('memberId').addEventListener('change', function(){
 				const idResult = document.getElementById('idCheckResult');		// 아이디 확인
-				let idval = $('#id').val();
+				let idval = $('#memberId').val();
 		        let idvalcheck = /^[a-z0-9]+$/;
 				if(this.value.trim() == ''){
 					alert('아이디는 영소문자,숫자로 구성된 6글자 이상으로 조합하시오.');
     				id.style.borderColor = 'red';
-		            $('#id').focus();
+		            $('#memberId').focus();
 				}else if(!idvalcheck.test(idval) || idval.length<6){
 					alert('아이디는 영소문자,숫자로 구성된 6글자 이상으로 조합하시오.');
 					id.style.borderColor = 'red';
    
 				} else {
+					// 아이디 중복체크
 			    	$.ajax({
 			    		url: 'checkId.me',
 			    		data: {userId:this.value.trim()},

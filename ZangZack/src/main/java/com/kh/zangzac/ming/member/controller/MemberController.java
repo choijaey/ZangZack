@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.kh.zangzac.ming.member.model.exception.MemberException;
 import com.kh.zangzac.ming.member.model.service.MemberService;
 import com.kh.zangzac.ming.member.model.vo.Member;
 
@@ -53,7 +52,7 @@ public class MemberController {
 	@PostMapping("/insertMember.me")
 	public String insertMember(@ModelAttribute Member m, @RequestParam("sample6_postcode") String sample6_postcode,
 								@RequestParam("sample6_address") String sample6_address,@RequestParam("sample6_detailAddress") String sample6_detailAddress,
-								@RequestParam("sample6_extraAddress") String sample6_extraAddress, @RequestParam("existingNickname") String existingNickname) {
+								@RequestParam("sample6_extraAddress") String sample6_extraAddress, @RequestParam("existingNickname") String existingNickname, Model model) {
 		
 		String address = null;
 		if(!sample6_postcode.trim().equals("")) {
@@ -69,7 +68,8 @@ public class MemberController {
 		if(result > 0) {
 		   return "index";
 	    } else {
-	    	throw new MemberException("회원가입을 실패하였습니다.");
+	    	model.addAttribute("msg", "회원가입에 실패하였습니다.\n인증코드를 확인해주세요");
+			return "views/ming/member/sign";
 	    }
 	}
 	
@@ -97,13 +97,13 @@ public class MemberController {
 				return "index";
 				
 			}else {
-				model.addAttribute("msg","실패");
-				return "index";
+				model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
+				return "views/ming/member/sign";
 			}
 			
 		}else {
-			model.addAttribute("msg","실패");
-			return "sign";
+			model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
+			return "views/ming/member/sign";
 		}
 		
 		
@@ -122,6 +122,7 @@ public class MemberController {
 		return "views/ming/member/find";
 	}
 	
+	// 아이디 찾기
 	@PostMapping(value ="selectId.me",produces = "aplication/json; charset=UTF-8")
 	@ResponseBody
 	public String selectId(@ModelAttribute Member m, Model model) {
@@ -169,6 +170,61 @@ public class MemberController {
 	       }
 	          return checkNum+"";
 	     }
+	
+	
+	// 비밀번호 재설정
+	@RequestMapping(value ="pwdReset.me", method = RequestMethod.GET ,produces = "aplication/json; charset=UTF-8")
+	@ResponseBody
+	public String pwdReset(@RequestParam("memberPwdCode") String to, @ModelAttribute Member m)throws Exception {
+		
+		//임시 비밀번호 랜덤 코드
+		char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+                'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+
+        String str = "";
+        int idx = 0;
+        for (int i = 0; i < 10; i++) {
+            idx = (int) (charSet.length * Math.random());
+            str += charSet[idx];
+        }
+        
+        
+		 String subject = "[ZangZac]임시 비밀번호";		// 제목
+		 String content = "임시비밀번호는 [ "+str+" ] 입니다.";    // 내용
+		 String from = "gah_yn@naver.com";
+		 
+		 try {
+	    	   MimeMessage mail = mailSender.createMimeMessage();
+	           MimeMessageHelper mailHelper = new MimeMessageHelper(mail,true,"UTF-8");
+	           
+	           mailHelper.setFrom(from);                // 보낼사람    
+	           mailHelper.setTo(to);                   // 받을사람
+	           mailHelper.setSubject(subject);          // 제목
+	           mailHelper.setText(content, true);          // 내용
+	               
+	               
+	           mailSender.send(mail);
+	               
+	       } catch(Exception e) {
+	          e.printStackTrace();
+	       }
+	          return str+"";
+		 
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }

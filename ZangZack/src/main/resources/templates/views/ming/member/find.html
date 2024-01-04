@@ -56,18 +56,11 @@
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bx-mail-send'></i>
-	              <input type="email" placeholder="Email" id="memberEmail2" name="memberEmail" style="width: 300px; display: inline-block;">
-	              <button type="button" id="send-email2" style="width: 100px; display: inline-block; background-color: rgb(251, 125, 83); color: white;">코드전송</button></td>
+	              <input type="email" placeholder="Email" id="memberPwdCode" name="memberEmail" style="width: 300px; display: inline-block;">
+	              <button type="button" id="send-code" style="width: 100px; display: inline-block; background-color: rgb(251, 125, 83); color: white;">코드전송</button></td>
 	            </div>
-	            <div class="input-group">
-	              <i class='bx bxs-lock-alt'></i>
-	              <input type="text" placeholder="EmailCode" id="EmailCheckNo2">
-	            <button style="background-color: rgb(251, 125, 83); color: white;" id="check">
-	              인증하기
-	            </button><br><br>
-	            </div>
-	            <button type="submit" id="next_btn2" style="background-color: rgb(251, 125, 83); color: white;">
-	              비밀번호 찾기
+	            <button type="submit" id="pwd_btn" style="background-color: rgb(251, 125, 83); color: white;">
+	              비밀번호 재설정
 	            </button>
 	            <p style="font-size: 0.8em;">
 	              <span>
@@ -165,8 +158,6 @@
         let code="";
     	let checkE = false;
 	window.onload=()=>{
-    
-        
           
           /* 아이디 인증 체크하는 곳 */
           $('#mail-Check-Btn').click(function() {
@@ -183,7 +174,7 @@
                       code =data;
                       alert('인증번호를 발송했습니다. 인증번호가 오지 않으면 입력하신 정보가 회원정보와 일치하는지 확인해 주세요.')
                    }         
-           }); 
+           	}); 
           }); 
           
           /* 받아온 랜덤 코드를 비교하는 부분 인증코드 input에서 포커스를 잃었을시 확인*/
@@ -201,6 +192,26 @@
                   }
               }
           });
+          
+          
+          /* 비밀번호 재설정 코드 보내기 */
+         $('#send-code').click(function(){
+        	 console.log(document.getElementById('memberPwdCode').value);
+        	 $.ajax({
+        		type:'get',
+        		url:'pwdReset.me',
+        		data:{memberPwdCode:document.getElementById('memberPwdCode').value},
+        		success : function(data) {
+        			console.log("data : " +  data);
+                    code =data;
+                    alert('임시 비밀번호를 발송했습니다. 메일이 오지 않으면 입력하신 정보가 회원정보와 일치하는지 확인해 주세요.')
+                    
+        		},
+        		error: data=> console.log(data)
+        	 })
+        	 
+         });
+          
 		}; 
 	
 			/* 모달창 */
@@ -246,7 +257,7 @@
 	                        homepageButton.textContent = '홈페이지';
 	                        homepageButton.className = 'homepage-btn';
 	                        homepageButton.addEventListener('click', function() {
-	                            window.location.href = '${ contextPath }';
+                            window.location.href = 'index.html';
 	                        });
 	                        
 	                        
