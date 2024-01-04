@@ -139,6 +139,7 @@ public class CampBoardController {
 				}
 				fileList.add(a);
 				System.out.println(returnArr);
+				System.out.println("test");
 			}
 			
 			
