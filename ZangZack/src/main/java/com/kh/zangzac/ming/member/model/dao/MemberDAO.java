@@ -1,5 +1,7 @@
 package com.kh.zangzac.ming.member.model.dao;
 
+import java.util.ArrayList;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.kh.zangzac.ming.member.model.vo.Member;
@@ -11,5 +13,7 @@ public interface MemberDAO {
 	int insertMember(Member m);
 
 	Member login(Member m);
+
+	ArrayList<Member> selectId(Member m);
 
 }

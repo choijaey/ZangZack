@@ -1,7 +1,10 @@
 package com.kh.zangzac.ming.member.controller;
 
+import java.util.ArrayList;
 import java.util.Random;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -119,20 +122,28 @@ public class MemberController {
 		return "views/ming/member/find";
 	}
 	
-	@PostMapping("selectFindId.me")
+	@PostMapping(value ="selectId.me",produces = "aplication/json; charset=UTF-8")
+	@ResponseBody
 	public String selectId(@ModelAttribute Member m, Model model) {
 		
 		System.out.println(m);
-		//Member member = mService.selectId(m);
+		ArrayList<Member> list = mService.selectId(m);
+		JSONArray jArr = new JSONArray();
 		
-		return null;
-	}
+		 for(Member member : list) {
+	         JSONObject json = new JSONObject();
+	         json.put("memberId", member.getMemberId());
+	         
+	         jArr.put(json);
+	      }
+	      return jArr.toString();
+	  }
+	
 	
 	//이메일 인증
 	@RequestMapping(value ="mailCheck.me", method = RequestMethod.GET ,produces = "aplication/json; charset=UTF-8")
 	@ResponseBody
 	public String email(@RequestParam("memberEmail") String to)throws Exception {
-			System.out.println("123");
 		   Random r = new Random();
 	       int checkNum = r.nextInt(888888) + 111111;
 	         

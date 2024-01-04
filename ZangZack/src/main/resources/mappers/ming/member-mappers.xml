@@ -12,4 +12,10 @@
 		select * from member
 		where MEMBER_ID = #{memberId} and member_status = 'N'
 	</select>
+	
+	<select id="selectId" resultType="Member">
+		select *
+		from member
+		where member_name = #{memberName} and member_email =#{memberEmail} and member_status = 'N'
+	</select>
 </mapper>

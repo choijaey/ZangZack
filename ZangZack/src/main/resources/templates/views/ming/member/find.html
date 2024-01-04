@@ -5,6 +5,42 @@
 <title>Insert title here</title>
 <link href="../css/ming/member/find.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<style>
+	.modal {
+	    display: none;
+	    position: fixed;
+	    z-index: 1;
+	    left: 0;
+	    top: 0;
+	    width: 100%;
+	    height: 100%;
+	    overflow: auto;
+	    background-color: rgba(0, 0, 0, 0.4);
+	}
+
+	.modal-content {
+	    background-color: white;
+	    margin: 15% auto;
+	    margin-left:60%;
+	    padding: 20px;
+	    border: 1px solid #888;
+	    width: 80%;
+	    max-width: 600px;
+	    text-align: center;
+	    height: auto;
+	    max-height: 70%;
+	    overflow-y: auto;
+	    display: flex;
+	    flex-direction: column;
+	}
+	.modal-content Button{
+		background-color: rgb(251, 125, 83);
+		color: white;
+		border-radius: 5px;
+		border-color: rgb(251, 125, 83);
+		height: 40px;
+	}
+</style>
 </head>
 <body>
 	<div id="container" class="container">
@@ -13,10 +49,10 @@
 	      <!-- 비밀번호 찾기 시작 -->
 	      <div class="col align-items-center flex-col sign-up">
 	        <div class="form-wrapper align-items-center">
-	          <form class="form sign-up">
+	          <form class="form sign-up" onsubmit="return NoSign()">
 	            <div class="input-group">
 	              <i class='bx bxs-user'></i>
-	              <input type="text" placeholder="ID" id="memberId" name="memberName">
+	              <input type="text" placeholder="ID" id="memberId" name="memberId">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bx-mail-send'></i>
@@ -52,7 +88,7 @@
 	          <form class="form sign-in" action="selectFindId.me" method="post">
 	            <div class="input-group">
 	              <i class='bx bxs-user'></i>
-	              <input type="text" placeholder="Name" required autofocus>
+	              <input type="text" placeholder="Name" name="memberName" id="memberName" required autofocus>
 	            </div>
 	           <div class="input-group">
 	              <i class='bx bx-mail-send'></i>
@@ -62,9 +98,6 @@
 	            <div class="input-group">
 		        	<i class='bx bxs-lock-alt'></i>
 		            <input type="text" placeholder="EmailCode" id="EmailCheckNo"><br><br>
-		            <button type="button" style="background-color: rgb(251, 125, 83); color: white;" id="check">
-		              코드 인증
-		            </button>
 	            </div>
 	            <button type="submit" id="next_btn" style="background-color: rgb(251, 125, 83); color: white;">
 	              아이디 찾기
@@ -129,16 +162,15 @@
     </div>
 	<script src="../js/member/sign.js"></script>
 	<script>
+        let code="";
+    	let checkE = false;
 	window.onload=()=>{
     
-        let code="";
-    	let checkBtn = false;
         
-          /*누른경우에만  체크 해줘야 함*/
-          let check_button=false;
-          /*아이디 인증체크하는곳*/
+          
+          /* 아이디 인증 체크하는 곳 */
           $('#mail-Check-Btn').click(function() {
-              const checkInput = $('.authentication');    // 인증번호 입력하는곳 
+              const checkInput = $('.EmailCheckNo');    // 인증번호 입력하는곳 
               check_button=true;
               console.log(document.getElementById('memberEmail').value);
               $.ajax({
@@ -155,95 +187,39 @@
           }); 
           
           /* 받아온 랜덤 코드를 비교하는 부분 인증코드 input에서 포커스를 잃었을시 확인*/
-          $('#EmailCheckNo').click(function() {	
-			const userNum = $('#userNum').val();
-			let inputCode = this.value;
-			if(inputCode === code) {
-				alert('인증 성공하였습니다.');
-                this.innerText = '인증성공';
-                checkE = true;
-			}
-			else {
-				alert('인증 실패하였습니다. 다시 입력해주세요.');
-				this.innerText = '인증실패';
-				checkE =false;
-			}
-		});
-          
-          
-          /* 아이디 인증 체크하는 곳 */
-          $('#mail-Check-Btn2').click(function() {
-              const checkInput = $('.EmailCheckNo2');    // 인증번호 입력하는곳 
-              check_button=true;
-              console.log(document.getElementById('memberEmail2').value);
-              $.ajax({
-                  type : 'get',
-                  url : 'mailCheck.me',                // GET방식이라 Url 뒤에 email을 뭍힐수있다.
-                  data: {memberEmail:document.getElementById('memberEmail2').value},
-                  success : function (data) {
-                     console.log("data : " +  data);
-                      checkInput.attr('disabled',false);
-                      code =data;
-                      alert('인증번호를 발송했습니다. 인증번호가 오지 않으면 입력하신 정보가 회원정보와 일치하는지 확인해 주세요.')
-                   }         
-           }); 
-          }); 
-          
-          /* 받아온 랜덤 코드를 비교하는 부분 인증코드 input에서 포커스를 잃었을시 확인*/
-	         $('#EmailCheckNo').click(function() {	
-				const userNum = $('#code').val();
-				if(inputCode === code) {
-					alert('인증 성공하였습니다.');
-	                this.innerText = '인증성공';
-	                checkBtn = true;
-				}
-				else {
-					alert('인증 실패하였습니다. 다시 입력해주세요.');
-					this.innerText = '인증실패';
-					checkBtn =false;
-				}
-			});
+          $('#EmailCheckNo').blur(function () {
+              console.log(code);
+              let inputCode = this.value;
+              if(check_button){
+                 if(inputCode == code){
+                    checkE=true;
+                    console.log(checkE);
+                    $('#EmailCheckNo').css("borderColor", "green");
+                 } else {
+                    checkE=false;
+                    $('#EmailCheckNo').css("borderColor", "red");
+                  }
+              }
+          });
+		}; 
 	
 			/* 모달창 */
 	        
-	        $('#check').click(function(){
-	        	const emailInput = document.getElementById('authentication');
-	        	const inputCode = document.getElementById('authentication').value;
-	            if(checkBtn){
-					if(inputCode == code){
-		                emailInput.style.border = '1px solid green';
-						$('.send-email').attr('disabled',true);
-						$('#memberEmail').attr('readonly',true);
-						checkBtn =true;
-	               }else{
-		                emailInput.style.border = '1px solid red';
-						checkBtn=false;
-	               }
-	            }
-	         });
-	        
-	        function displayErrorMessage(msgElement, message, fontSize, color) {
-	            msgElement.style.display = 'block';
-	            msgElement.innerHTML = message;
-	            msgElement.style.color = color;
-	            msgElement.style.fontSize = fontSize;
-	        }
-	
 	        document.getElementById('next_btn').addEventListener('click', function(event) {
 	            event.preventDefault();
-	            const name = document.getElementById('memberName').value.trim();
-	            if (checkBtn && name !== '') {
+	            const memberName = document.getElementById('memberName').value.trim();
+	            if (checkE && memberName !== '') {
 	                const modal = document.getElementById('myModal');
 	                const modalContent = document.getElementById('modalContent');
 	
 	                modalContent.textContent = memberName + '님의 아이디입니다.';
 	                
 	                $.ajax({
-	                    url : 'searchId.me',
+	                    url : 'selectId.me',
 	                    method: 'post',
 	                    data: {
-	                    	email:document.getElementById('memberEmail').value,
-	                    	userName:document.getElementById('memberName').value
+	                    	memberEmail:document.getElementById('memberEmail').value,
+	                    	memberName:document.getElementById('memberName').value
 	                    },
 	                    success : function (data) {
 	                    	const modalContent = document.querySelector('.modal-content');
@@ -254,15 +230,13 @@
 		                    	    const ulItem = document.createElement('ul'); 
 		                    	    const liItem = document.createElement('li'); 
 		                    	    const spanItem = document.createElement('span'); 
-		
-		                    	    spanItem.textContent = count + ": " + item.userId; 
+		                    	    spanItem.textContent = item.memberId; 
 		                    	    liItem.appendChild(spanItem); 
 		                    	    ulItem.appendChild(liItem); 
 		                    	    ulItem.style.padding = '8px 0';
 		                    	    ulItem.style.listStyle = 'none'; 
 		
 		                    	    spanContainer.appendChild(ulItem); 
-		                    	    count++; // 카운트 증가
 		                    	}
 	                    	}else{
 	                    		modalContent.textContent = memberName + '님은 등록된 아이디가 없습니다!';
@@ -272,7 +246,7 @@
 	                        homepageButton.textContent = '홈페이지';
 	                        homepageButton.className = 'homepage-btn';
 	                        homepageButton.addEventListener('click', function() {
-	                            window.location.href = '${ contextPath }/';
+	                            window.location.href = '${ contextPath }';
 	                        });
 	                        
 	                        
@@ -286,13 +260,13 @@
 	                 }); 
 	                
 	                
-	            }else if (!checkBtn){
+	            }else if (EmailCheckNo === ''){
 	            	alert('이메일 인증을 완료해주세요')
-	            }else if(userName === ''){
+	            }else if(memberName === ''){
 	            	alert('이름을 입력해 주세요')
 	            }
 	        });
-	};
+		
 	</script>
 	
 </body>

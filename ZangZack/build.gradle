@@ -47,7 +47,9 @@ dependencies {
 	
 	//mail 인증
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
-
+	
+	//JSON
+	implementation group: 'org.json', name: 'json', version: '20231013'
 }
 
 tasks.named('test') {
