@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kh.zangzac.seongun.model.dao.CampBoardDAO">
+<mapper namespace="com.kh.zangzac.seongun.campboard.model.dao.CampBoardDAO">
 	<select id="getListCount" resultType="_int">
-		select count(*)
-		from camp_board
-		<where>
-			cb_status = 'N'
-	        <if test="i != 0">
-	            and category_no = #{i}
-	        </if>
-        </where>
+		SELECT camp_board.CB_NO, camp_board.CB_TITLE, camp_board.CB_CONTENT, camp_board.CB_COUNT, camp_board.CB_CREATE_DATE, camp_board.CB_MODIFY_DATE,camp_board.CB_STATUS, 
+       	camp_board.MEMBER_ID,member.member_name, camping_category.CATEGORY_NO, camping_category.CATEGORY_NAME,COALESCE(heart_counts.heart_count, 0) AS heart_count, photo.photo_path, photo.photo_rename
+		FROM 
+    		camp_board
+    		JOIN member ON camp_board.member_id = member.member_id
+    		LEFT JOIN camping_category ON camp_board.category_no = camping_category.category_no
+    		LEFT JOIN (
+        		SELECT board_no, COUNT(*) AS heart_count
+        		FROM heart
+        		WHERE board_type = 1
+        		GROUP BY board_no
+    		) heart_counts ON camp_board.cb_no = heart_counts.board_no
+    		LEFT JOIN photo ON camp_board.cb_no = photo.board_no AND photo.board_type = 1 AND photo.photo_level = 0
+		<where> 
+			camp_board.cb_status = 'N'
+			<if test="i != 0">
+				and camp_board.category_no = #{i}
+			</if>
+		</where>
 	</select>
 	
-	<select id="selectBoardList">
+	<select id="selectBoardList" resultType="CampBoard">
 		select * 	
 		from camp_board
 			join member using (member_id)
@@ -24,4 +35,21 @@
         </where>
 		order by cb_no desc
 	</select>
+	
+	<insert id="insertCampBoard">
+		<selectKey order="BEFORE" resultType="_int" keyProperty="cbNo">
+			select cb_seq.nextval from dual  
+		</selectKey>
+		insert into camp_board
+		values(#{cbNo}, #{cbTitle}, #{cbContent},default, default, default, default, #{memberId}, #{categoryNo})
+	</insert>
+	
+	<insert id="insertAttmCampBoard">
+		insert all<!-- insert all 안에서는 nextval이라고 적어놓고 여러번 들어간다하더라도 딱 1번 nextval이 되고 나머지는 같은 값이 들어간다 -->
+		<foreach collection="list" item="item">
+			into photo
+			values (new_aid, #{item.photoRename}, #{item.photoPath}, #{item.photoLevel}, #{boardType}, #{item.boardNo}, default)
+		</foreach>
+		select * from dual
+	</insert>
 </mapper>

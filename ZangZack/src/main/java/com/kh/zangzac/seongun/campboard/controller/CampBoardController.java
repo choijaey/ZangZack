@@ -1,4 +1,4 @@
-package com.kh.zangzac.seongun.controller;
+package com.kh.zangzac.seongun.campboard.controller;
 
 import java.util.ArrayList;
 
@@ -17,8 +17,8 @@ import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.ming.member.model.vo.Member;
-import com.kh.zangzac.seongun.model.service.CampBoardService;
-import com.kh.zangzac.seongun.model.vo.CampBoard;
+import com.kh.zangzac.seongun.campboard.model.service.CampBoardService;
+import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -36,6 +36,14 @@ public class CampBoardController {
 	@Autowired
 	private CampBoardService cService;
     
+	private void addModelAttributes(Model model, PageInfo pi, ArrayList<CampBoard> list, String msg, String loc) {
+		model.addAttribute("pi", pi);
+		model.addAttribute("list", list);
+		model.addAttribute("msg", msg);
+	    model.addAttribute("loc", loc);
+	}
+
+	
 	@GetMapping("campBoard.su")
 	public String campBoardListView(@RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
 		
@@ -44,19 +52,11 @@ public class CampBoardController {
 		int currentPage = page;
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
 		ArrayList<CampBoard> list = cService.selectBoardList(pi,1);
-		if(!list.isEmpty()) {
-			model.addAttribute("pi",pi);
-			model.addAttribute("list", list);
-			model.addAttribute("msg", null);
-			model.addAttribute("loc", request.getRequestURI());
-			return "views/seongun/campboard/listBoard";
-		}else {
-			model.addAttribute("pi",pi);
-			model.addAttribute("list", list);
-			model.addAttribute("msg", "작성된 게시판이 없습니다!");
-			model.addAttribute("loc", request.getRequestURI());
-			return "views/seongun/campboard/listBoard";
-		}
+		
+		String msg = list.isEmpty() ? "작성된 게시판이 없습니다!" : null;
+	    addModelAttributes(model, pi, list, msg, request.getRequestURI());
+	    
+		return "views/seongun/campboard/listBoard";
 	}
 	
 	@GetMapping("cardBoard.su")
@@ -66,19 +66,11 @@ public class CampBoardController {
 		int currentPage = page;
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
 		ArrayList<CampBoard> list = cService.selectBoardList(pi,1);
-		if(!list.isEmpty()) {
-			model.addAttribute("pi",pi);
-			model.addAttribute("list", list);
-			model.addAttribute("msg", null);
-			model.addAttribute("loc", request.getRequestURI());
-			return "views/seongun/campboard/cardBoard";
-		}else {
-			model.addAttribute("pi",pi);
-			model.addAttribute("list", list);
-			model.addAttribute("msg", "작성된 게시판이 없습니다!");
-			model.addAttribute("loc", request.getRequestURI());
-			return "views/seongun/campboard/cardBoard";
-		}
+		
+		String msg = list.isEmpty() ? "작성된 게시판이 없습니다!" : null;
+	    addModelAttributes(model, pi, list, msg, request.getRequestURI());
+	    
+		return "views/seongun/campboard/cardBoard";
 	}
 	
 	@GetMapping("albumBoard.su")
@@ -88,19 +80,12 @@ public class CampBoardController {
 		int currentPage = page;
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
 		ArrayList<CampBoard> list = cService.selectBoardList(pi,1);
-		if(!list.isEmpty()) {
-			model.addAttribute("pi",pi);
-			model.addAttribute("list", list);
-			model.addAttribute("msg", null);
-			model.addAttribute("loc", request.getRequestURI());
-			return "views/seongun/campboard/albumBoard";
-		}else {
-			model.addAttribute("pi",pi);
-			model.addAttribute("list", list);
-			model.addAttribute("msg", "작성된 게시판이 없습니다!");
-			model.addAttribute("loc", request.getRequestURI());
-			return "views/seongun/campboard/albumBoard";
-		}
+		
+		System.out.println(list);
+		String msg = list.isEmpty() ? "작성된 게시판이 없습니다!" : null;
+	    addModelAttributes(model, pi, list, msg, request.getRequestURI());
+		
+	    return "views/seongun/campboard/albumBoard";
 	}
 	
 	@GetMapping("recipe.su")
@@ -114,8 +99,10 @@ public class CampBoardController {
 	}
 	
 	@PostMapping("insertCampBoard.su")
-	public String insertCampBoard(@ModelAttribute CampBoard board, @RequestParam("file") ArrayList<MultipartFile> files,HttpServletRequest request) {
+	public String insertCampBoard(@ModelAttribute CampBoard board, @RequestParam("file") ArrayList<MultipartFile> files,HttpServletRequest request, Model model) {
 		board.setMemberId(((Member)request.getSession().getAttribute("loginUser")).getMemberId());
+		int resultB = 0;
+		int resultA = 0;
 		
 		ArrayList<Attachment> fileList = new ArrayList<>();
 		
@@ -139,8 +126,31 @@ public class CampBoardController {
 				fileList.add(a);
 			}
 			
-			
 		}
-		return "redirect:/campBoard.su";
+		if(fileList.isEmpty()) {
+			resultB = cService.insertCampBoard(board);
+		}else {
+			resultB = cService.insertCampBoard(board);
+			for(Attachment a : fileList) {
+				a.setBoardNo(board.getCbNo());
+			}
+			resultA = cService.insertAttmCampBoard(fileList);
+		}
+		
+		if(fileList.isEmpty()) {
+			if(resultA > 0) {
+				return "redirect:/campBoard.su";
+			}else {
+				model.addAttribute("msg", "글 작성을 실패했습니다.");
+				return "views/seongun/campboard/writeBoard";
+			}
+		}else {
+			if(resultA > 0 && resultB > 0) {
+				return "redirect:/campBoard.su";
+			}else {
+				model.addAttribute("msg", "글 작성을 실패했습니다.");
+				return "views/seongun/campboard/writeBoard";
+			}
+		}
 	}
 }

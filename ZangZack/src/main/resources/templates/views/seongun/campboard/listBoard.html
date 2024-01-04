@@ -64,12 +64,12 @@
                             </tr>
                         </thead>
                         <tbody th:if="${!list.isEmpty}">
-                            <tr th:Each="${b : list}">
+                            <tr th:each="b : ${list}">
                                 <td>[[${b.cbNo}]]</td>
                                 <td>[[${b.categoryNo}]]</td>
-                                <td class="board_writer">[[${b.memberId}]]</td>
+                                <td class="board_writer">[[${b.memberName}]]</td>
                                 <td class="board_title">[[${b.cbTitle}]]<img src="./image/file.png" alt="첨부파일" class="attachment_icon"></td>
-                                <td>[[${b.count}]]</td>
+                                <td>[[${b.cbCount}]]</td>
                                 <td>추천수</td>
                                 <td>[[${b.cbCreateDate}]]</td>
                             </tr>

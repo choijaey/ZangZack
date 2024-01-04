@@ -1,4 +1,4 @@
-package com.kh.zangzac.seongun.model.vo;
+package com.kh.zangzac.seongun.campboard.model.vo;
 
 import java.sql.Date;
 
@@ -23,4 +23,5 @@ public class CampBoard {
 	private String cbStatus;
 	private String memberId;
 	private int categoryNo;
+	private String memberName;
 }

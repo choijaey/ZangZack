@@ -1,4 +1,4 @@
-package com.kh.zangzac.seongun.model.service;
+package com.kh.zangzac.seongun.campboard.model.service;
 
 import java.util.ArrayList;
 
@@ -6,9 +6,10 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
-import com.kh.zangzac.seongun.model.dao.CampBoardDAO;
-import com.kh.zangzac.seongun.model.vo.CampBoard;
+import com.kh.zangzac.seongun.campboard.model.dao.CampBoardDAO;
+import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
 
 @Service
 public class CampBoardServiceImpl implements CampBoardService{
@@ -25,6 +26,16 @@ public class CampBoardServiceImpl implements CampBoardService{
 		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), 
 		pi.getBoardLimit());
 		return cDAO.selectBoardList(i, rowBounds);
+	}
+
+	@Override
+	public int insertCampBoard(CampBoard board) {
+		return cDAO.insertCampBoard(board);
+	}
+
+	@Override
+	public int insertAttmCampBoard(ArrayList<Attachment> fileList) {
+		return cDAO.insertAttmCampBoard(fileList);
 	}
 
 }

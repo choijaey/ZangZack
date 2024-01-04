@@ -27,7 +27,7 @@
             </div>
             <!-- 내용 입력 -->
             <div class="write-row">
-                <textarea id="content" name="content" placeholder="내용을 입력하세요."></textarea>
+                <textarea id="content" name="cbContent" placeholder="내용을 입력하세요."></textarea>
             </div>
             <!-- 파일 첨부 -->
             <div class="upload-container">
@@ -55,7 +55,7 @@
         </form>
     </div>
 
-    <script>
+    <script th:inline="javascript">
         document.addEventListener('DOMContentLoaded', function() {
             var addUploadButton = document.getElementById('add-upload-container');
             var originalUploadContainer = document.querySelector('.upload-container');
@@ -105,7 +105,20 @@
             }
             imagePreview.style.display = 'block'; // 이미지 미리보기 표시
             uploadContent.style.display = 'none'; // 기존 콘텐츠 숨김
-}
+		}
+        
+        window.onload = function() {
+            // 서버로부터 전달받은 오류 메시지 확인
+            /*<![CDATA[*/
+            var msg = /*[[${msg}]]*/'';
+            /*]]>*/
+            console.log(msg)
+            
+            // errorMessage가 비어있지 않은 경우에만 알림 표시
+            if(msg && msg.trim().length > 0) {
+                alert(msg);
+            }
+        };
     </script>
 </body>
 </html>
