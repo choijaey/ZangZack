@@ -67,7 +67,7 @@ public class MemberController {
 		
 		int result = mService.insertMember(m);
 		if(result > 0) {
-		   return "redirect:home.do";
+		   return "index";
 	    } else {
 	    	throw new MemberException("회원가입을 실패하였습니다.");
 	    }
@@ -98,7 +98,7 @@ public class MemberController {
 				
 			}else {
 				model.addAttribute("msg","실패");
-				return "sign";
+				return "index";
 			}
 			
 		}else {
@@ -113,7 +113,7 @@ public class MemberController {
 	@GetMapping("logout.me")
 	public String logout(SessionStatus status) {
 		status.setComplete();
-		return "redirect:home.do";
+		return "index";
 	}
 	
 	//find 화면
