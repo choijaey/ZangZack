@@ -124,7 +124,6 @@ public class CampBoardController {
 			String[] returnArr = imageStorage.saveImage(upload, "seongun");
 			
 			if(returnArr != null) {
-				
 				Attachment a = new Attachment();
 				if(i==0) {
 					a.setPhotoRename(returnArr[0]);
@@ -138,8 +137,6 @@ public class CampBoardController {
 					a.setPhotoLevel(1);
 				}
 				fileList.add(a);
-				System.out.println(returnArr);
-				System.out.println("test");
 			}
 			
 			
