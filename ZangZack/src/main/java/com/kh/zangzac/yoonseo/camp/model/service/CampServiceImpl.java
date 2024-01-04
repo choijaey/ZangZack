@@ -1,0 +1,66 @@
+package com.kh.zangzac.yoonseo.camp.model.service;
+
+import java.util.ArrayList;
+
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.kh.zangzac.common.model.vo.Attachment;
+import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.yoonseo.camp.model.dao.CampDAO;
+import com.kh.zangzac.yoonseo.camp.model.vo.CampingGround;
+
+@Service
+public class CampServiceImpl implements CampService {
+	
+	@Autowired
+	private CampDAO cDAO;
+
+	@Override
+	public int insertCamp(CampingGround camp) {
+		return cDAO.insertCamp(camp);
+	}
+
+	@Override
+	public int insertCampImg(ArrayList<Attachment> campList) {
+		return cDAO.insertCampImg(campList);
+	}
+
+	@Override
+	public int insertInfoImg(ArrayList<Attachment> infoList) {
+		return cDAO.insertInfoImg(infoList);
+	}
+
+	@Override
+	public int getListCount(int i) {
+		return cDAO.getListCount(i);
+	}
+
+	@Override
+	public ArrayList<CampingGround> selectCampList(PageInfo pi, int i) {
+		
+		int offSet = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+		RowBounds row = new RowBounds(offSet, pi.getBoardLimit());
+		
+		return cDAO.selectCampList(i,row);
+		
+		
+	}
+
+	@Override
+	public ArrayList<CampingGround> selectMapList(int i) {
+		return cDAO.selectMapList(i);
+	}
+
+	@Override
+	public CampingGround selectCampingDetail(int no) {
+		return cDAO.selectCampingDetail(no);
+	}
+
+	@Override
+	public ArrayList<Attachment> selectPhoto(Integer no) {
+		return cDAO.selectPhoto(no);
+	}
+
+}

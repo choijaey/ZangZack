@@ -1,4 +1,4 @@
-package com.kh.zangzac.yoonseo.controller;
+package com.kh.zangzac.yoonseo.camp.controller;
 
 import java.util.ArrayList;
 
@@ -15,10 +15,11 @@ import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
-import com.kh.zangzac.yoonseo.model.exception.CampException;
-import com.kh.zangzac.yoonseo.model.servcie.CampService;
-import com.kh.zangzac.yoonseo.model.vo.CampingGround;
+import com.kh.zangzac.yoonseo.camp.model.exception.CampException;
+import com.kh.zangzac.yoonseo.camp.model.service.CampService;
+import com.kh.zangzac.yoonseo.camp.model.vo.CampingGround;
 
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class CampController {
@@ -36,14 +37,24 @@ public class CampController {
 	
 	@GetMapping("campSearch.ys")
 	public String campSearch(@RequestParam(value="page", defaultValue="1") int page,
-			                  Model model) {
+			                  Model model, HttpServletRequest request) {
 		
 		int listCount = cService.getListCount(3); //내 보드타입은 3 번이니까
 		int currentPage = page;
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 7); //7개씩 보이게 할거야
+		ArrayList<CampingGround> cList = cService.selectCampList(pi,3);
+		ArrayList<CampingGround> mapList = cService.selectMapList(3);
 		
-		
-		return "views/yoonseo/campSearch";
+		if(cList != null) {
+			model.addAttribute("loc", request.getRequestURI());
+			model.addAttribute("cList", cList);
+			model.addAttribute("pi", pi);
+			model.addAttribute("mapList", mapList);
+			
+			return "views/yoonseo/campSearch";
+		}else {
+			throw new CampException("캠프 목록 조회 실패");
+		}
 	}
 	
 	@GetMapping("campList.ys")
@@ -52,8 +63,24 @@ public class CampController {
 	}
 	
 	@GetMapping("campDetail.ys")
-	public String campDetail() {
-		return"views/yoonseo/campDetail";
+	public String selectCampDetail(@RequestParam("no") int no,
+			                       @RequestParam("page") int page,
+			                       Model model) {
+		
+		CampingGround camp = cService.selectCampingDetail(no);
+		ArrayList<Attachment> list = cService.selectPhoto(no);
+		
+		if(camp != null) {
+		   model.addAttribute("camp", camp);
+		   model.addAttribute("list", list);
+		   model.addAttribute("page", page);
+		   
+		   return"views/yoonseo/campDetail";   
+		}else {
+			throw new CampException("상세보기를 실패했습니다");
+		}
+		
+		
 	}
 	
 	@GetMapping("detailWrite.ys")
