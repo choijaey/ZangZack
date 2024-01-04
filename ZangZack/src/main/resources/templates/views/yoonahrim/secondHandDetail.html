@@ -33,7 +33,7 @@
 				  </div>
 				  
 				  <!-- 이미지 -->
-				  <div class="carousel-inner mb-2" >
+				  <div class="carousel-inner mb-2">
 				    <div class="carousel-item active">
 				      <img src="image/yoonahrim/예시_등불.PNG" class="d-block w-100" alt="img" style="border-radius: 3%">
 				      	<div class="carousel-caption d-none d-md-block"></div>
@@ -66,14 +66,14 @@
 			
 			
 			<!-- 내용 창 -->
-			<div class="container_content" style="position:absolute; top: 1050px; left: 660px;">
+			<div class="container_content" style="position:absolute; top: 1050px; left: 660px;" th:each="s : ${list}">
 			    		
 			    		<!-- 프로필 창 -->
 						<span class="container_profile">
 							<span id="profile">
 								<img alt="img" src="image/yoonahrim/user.png">
 									<p><b>윤아림</b></p>
-									<p>서울특별시 중구</p>
+									<p>[[${#strings.arraySplit(s.spAddress, ',')[0]}]]</p>
 									
 								<div class="container2 text-end">
 									<button type="button" class="btn_booked" th:onclick="location.href='chating.ah'">1 : 1 채팅방</button>
@@ -86,38 +86,10 @@
 			    		
 						<div id="content">
 							<div style="margin:50px">
-								<p style="margin:10px"><b>충전식 캠핑랜턴 c타입 감성 캠핑조명 빈티지 고리식 (하자)<!-- [[${spTitle}]] --></b></p><br>
-								<p style="margin:10px"><b>5,000원<!-- [[${spPrice}]] --></b></p><hr><br>
+								<p style="margin:10px"><b>[[${s.spTitle}]]</b></p><br>
+								<p style="margin:10px"><b>[[${s.spPrice}]]</b></p><hr><br>
 								<div class="content-line">
-									<pre style="margin:10px; overflow: hidden;"><!-- [[${spContent}]] -->
-충전식 캠핑랜턴 c타입 감성 캠핑조명 빈티지 고리식 (하자)
-
-*사진과 같이 윗부분에 깨진 부분이 있습니다
-그 와 사용감 있고 기능적으로는 아무 문제 없습니다
-
-깨진부분이 뒷쪽이라 안보이게 걸어서 사용하시면 괜찮습니다
-
-c타입 충전식이고
-밝기 조절 가능 합니다
-캠핑 늦오후부터 다음날까지 쭉 켜놔도 될정도로 배터리 오래 갑니다
-
-하자부분 예민하지 않으시다면 저렴히 구매하셔요
-
-구성품: 랜턴 본품
-
-직거래, 일반택배, CU알뜰택배 모두 가능합니다 :)
-상점 내 다른 다양한 캠핑 물품과 함께 구매하시면 좋습니다. 둘러보세요~
-테
-스
-트
-를
-해
-보
-겠
-습
-니
-다.
-									</pre>
+									<pre style="margin:10px; overflow: hidden;">[[${s.spContent}]]</pre>
 								</div>
 							</div>
 						</div>
