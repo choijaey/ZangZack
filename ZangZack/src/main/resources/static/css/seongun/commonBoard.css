@@ -104,6 +104,7 @@ p {
 	text-decoration: none;
 	text-align: center;
 	color: black;
+	font-weight: 800;
 	padding: 0.5% 1%;
 }
 
@@ -126,10 +127,10 @@ p {
 
 #boardType-area {
     display: inline-block;
-    padding: 0.5vw 0;
+    padding: 0.6vw 0;
     align-items:center;
     vertical-align: top; /* 수직 정렬 */
-    width: 81.75px; /* 전체 너비의 절반에서 여백을 뺀 값 */
+    width: 82px;
 }
 
 #boardType-area a {

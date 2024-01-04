@@ -48,8 +48,8 @@
 					<a href="albumBoard.su"><img src="image/seongun/boardType3.png"></a>
 				</div>
             </div>
-            <ul class="board_list_card">
-                <li class="card_list">
+            <ul class="board_list_card" th:if="${!list.isEmpty}">
+                <li class="card_list" th:each="b : ${list}">
                     <div class="card_area">
                         <div class="con">
                             <div class="con_top">
@@ -57,39 +57,39 @@
                                     <a href="#" class="title">
                                         <span class="inner">
                                             <strong>
-                                                제목임
+                                                [[${b.cbTitle}]]
                                             </strong>
                                         </span>
                                         <span class="board_category">
-                                            오토캠핑
+                                            [[${b.categoryName}]]
                                         </span>
                                     </a>
                                 </div>
                                 <a href="#" class="txt">
-                                    "그밖에도 릴파님 하고 모든 이세돌을 만들었어요 A.I는 굉장해 나중에 팔아야지 헤헤헤 이세돌 잘나온거 몇게 평소 작품  이세돌과 우리형사랑해 그리고 산타릴파 팬아트 콜라보 하실분 ??"
+                                    [[${b.cbContent}]]
                                 </a>
                             </div>
                             <div class="con_bottom">
                                 <div class="user_info">
                                     <div class="user_nick_area">
-                                        <table role="presentation" cellspacing="0">
+                                        <table role="presentation">
                                             <tbody>
                                                 <tr>
                                                     <td class="p-nick">
-                                                        <a href="#" class="u-tcol-k">닉네임임</a>
+                                                        <a href="#" class="u-tcol-k">[[${b.memberName}]]</a>
                                                     </td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="date_num">
-                                        <span class="date">2023.12.20.</span>
-                                        <span class="num">조회 : 74112</span>
+                                        <span class="date">[[${b.cbCreateDate}]]</span>
+                                        <span class="num">조회 : [[${b.cbCount}]]</span>
                                         <div class="like_area">
                                             <div class="comment_area">
                                                 <span class="c_comment_list">
                                                     <span class="comment_ico">
-                                                        <img src="image/comments_icon.png" width="16" height="16" alt="댓글">
+                                                        <img src="image/seongun/comments_icon.png" width="16" height="16" alt="댓글">
                                                     </span>
                                                     <em class="c_cnt num">812</em>
                                                 </span>
@@ -97,9 +97,9 @@
                                             <div class="u_like_list_module">
                                                 <span class="u_like_list_btn off">
                                                     <span class="u_icon">
-                                                        <img src="image/offheart.png" width="16" height="16" alt="좋아요">
+                                                        <img src="image/seongun/offheart.png" width="16" height="16" alt="좋아요">
                                                     </span>
-                                                    <em class="u_cnt num-recomm">999</em>
+                                                    <em class="u_cnt num-recomm">[[${b.heartCount}]]</em>
                                                 </span>
                                             </div>
                                         </div>
@@ -109,7 +109,9 @@
                         </div>
                         <div class="movie_img">
                             <a href="#">
-                                <img src="image/sample.png" width="120" height="120" alt="썸네일 이미지">
+                            	<th:block th:if="${b.photoPath != null}">
+                                	<img th:src="${b.photoPath}" width="120" height="120" alt="썸네일 이미지">
+                                </th:block>
                             </a>
                         </div>
                     </div>

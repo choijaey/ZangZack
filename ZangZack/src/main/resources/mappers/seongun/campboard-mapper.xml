@@ -2,31 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kh.zangzac.seongun.campboard.model.dao.CampBoardDAO">
 	<select id="getListCount" resultType="_int">
-		SELECT camp_board.CB_NO, camp_board.CB_TITLE, camp_board.CB_CONTENT, camp_board.CB_COUNT, camp_board.CB_CREATE_DATE, camp_board.CB_MODIFY_DATE,camp_board.CB_STATUS, 
-       	camp_board.MEMBER_ID,member.member_name, camping_category.CATEGORY_NO, camping_category.CATEGORY_NAME,COALESCE(heart_counts.heart_count, 0) AS heart_count, photo.photo_path, photo.photo_rename
-		FROM 
-    		camp_board
-    		JOIN member ON camp_board.member_id = member.member_id
-    		LEFT JOIN camping_category ON camp_board.category_no = camping_category.category_no
-    		LEFT JOIN (
-        		SELECT board_no, COUNT(*) AS heart_count
-        		FROM heart
-        		WHERE board_type = 1
-        		GROUP BY board_no
-    		) heart_counts ON camp_board.cb_no = heart_counts.board_no
-    		LEFT JOIN photo ON camp_board.cb_no = photo.board_no AND photo.board_type = 1 AND photo.photo_level = 0
+		SELECT * 
+		FROM camp_board_view
 		<where> 
-			camp_board.cb_status = 'N'
 			<if test="i != 0">
-				and camp_board.category_no = #{i}
+				and category_no = #{i}
 			</if>
 		</where>
 	</select>
 	
 	<select id="selectBoardList" resultType="CampBoard">
 		select * 	
-		from camp_board
-			join member using (member_id)
+		from camp_board_view
 		<where> 
 			cb_status = 'N'
 			<if test="i != 0">

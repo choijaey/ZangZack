@@ -24,4 +24,8 @@ public class CampBoard {
 	private String memberId;
 	private int categoryNo;
 	private String memberName;
+	private String categoryName;
+	private int heartCount;
+	private String photoPath;
+	private String photoRename;
 }
