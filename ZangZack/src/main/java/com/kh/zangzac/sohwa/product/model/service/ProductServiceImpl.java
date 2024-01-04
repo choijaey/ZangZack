@@ -52,6 +52,39 @@ public class ProductServiceImpl implements ProductService{
 		return pDAO.selectPhotoList(categoryNo);
 	}
 
+	@Override
+	public Product selectProductDetail(int productNo) {
+		return pDAO.selectProductDetail(productNo);
+	}
+
+	@Override
+	public ArrayList<Attachment> selectPhotoDetail(int productNo) {
+		return pDAO.selectPhotoDetail(productNo);
+	}
+
+	@Override
+	public ArrayList<Option> optionDetail(int productNo) {
+		return pDAO.optionDetail(productNo);
+	}
+
+	@Override
+	public int getListCountKeyword(String keyword) {
+		return pDAO.getListCountKeyword(keyword);
+	}
+
+	@Override
+	public ArrayList<Product> searchProduct(PageInfo pi, String keyword) {
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return pDAO.searchProduct(keyword, rowBounds);
+	}
+
+	@Override
+	public ArrayList<Attachment> searchPhoto(String keyword) {
+		return pDAO.searchPhoto(keyword);
+	}
+
 	
 
 	

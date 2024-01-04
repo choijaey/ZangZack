@@ -40,7 +40,8 @@
 	    
 	     <div class="additional-section">
 			 <div class="category">
-			     <div onclick="sendCategoryNo(11)"><img src="image/sohwa/tent.png">텐트</div>
+			 	<div onclick="sendCategoryNo(0)"><img src="image/sohwa/tent.png">전체</div>
+			     <div onclick="sendCategoryNo(11)"><img src="image/sohwa/tent-removebg-preview.png">텐트</div>
 			     <div onclick="sendCategoryNo(12)"><img src="image/sohwa/bed.png">취침용품</div>
 			     <div onclick="sendCategoryNo(13)"><img src="image/sohwa/cook.png">조리도구</div>
 			     <div onclick="sendCategoryNo(14)"><img src="image/sohwa/fire.png">발화용품</div>
@@ -54,9 +55,9 @@
 			</form>
 	
 	
-			<div class="search">
-		  		<input type="text" placeholder="검색어 입력">
-		  		<img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+			<div class="search">			
+		  		<input id="searchInput" type="text" placeholder="상품명 검색" th:value="${keyword}">
+		  		<img id="searchImg" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
 			</div>
 			
 			<div class="dropdown" style="background-color: white !important; color:black;">
@@ -186,7 +187,8 @@
 			  <h1>PRODUCT ></h1>
 		  	  <section class="products">
 		  	  <th:block th:each="p:${pList}">
-		  	  	<article class="product" th:each="a:${aList}" th:if="${ p.productNo eq a.boardNo}">
+		  	  	<article class="product" th:each="a:${aList}" th:if="${ p.productNo eq a.boardNo }" onclick="redirectToProductDetail(this)">
+		  	  		<input type="hidden" th:value="${p.productNo}">
 				    <a href="#"><img th:src="${a.photoPath}"></a>
 			        <p>[[${p.productName}]]</p>
 			        <p class="price" th:text="|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|"></p>
@@ -487,16 +489,35 @@
 		}
 		
 		
-		
+		//검색
+		document.getElementById('searchImg').addEventListener('click', ()=>{
+			var searchInputValue = document.getElementById('searchInput').value;
+		    var url = 'searchProduct.so?keyword=' + searchInputValue;
+		    window.location.href = url;
+		})
 		
 		//정렬
 		function standardSelect(value) {
 	        // value에 따라 URL 파라미터를 설정하고 페이지를 리로드합니다.
-	         var selectedCategory = localStorage.getItem('selectedCategory');
-	        location.href = 'productListView.so?categoryNo='+ selectedCategory +'&standard=' +value + '&page='+ /*[[${pi.currentPage}]]*/1 ;
+	        var selectedCategory = localStorage.getItem('selectedCategory');
+	        var searchInputValue = document.getElementById('searchInput').value;
+	        location.href = 'searchProduct.so?keyword='+ searchInputValue +'&standard=' +value ;
+	    }
+	
+		
+		
+		//상세보기
+		function redirectToProductDetail(element) {
+	        var hiddenInput = element.querySelector('input[type="hidden"]');
+	        var productNo = hiddenInput.value;
+	
+	        // productNo를 query parameter로 사용하여 productDetail.so 엔드포인트로 이동
+	        window.location.href = 'productDetail.so?productNo=' + productNo;
 	    }
 
-
+		
+		
+		    
 		
 		
 	</script>

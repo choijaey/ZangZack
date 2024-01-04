@@ -22,6 +22,18 @@ public interface ProductService {
 
 	ArrayList<Attachment> selectPhotoList(int categoryNo);
 
+	Product selectProductDetail(int productNo);
+
+	ArrayList<Attachment> selectPhotoDetail(int productNo);
+
+	ArrayList<Option> optionDetail(int productNo);
+
+	int getListCountKeyword(String keyword);
+
+	ArrayList<Product> searchProduct(PageInfo pi, String keyword);
+
+	ArrayList<Attachment> searchPhoto(String keyword);
+
 
 	
 }

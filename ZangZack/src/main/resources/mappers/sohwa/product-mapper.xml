@@ -86,6 +86,30 @@
 	
 	
 	
+	<select id="getListCountKeyword" resultType="_int">
+		select count(*)
+		from product
+		where product_status = 'N' and product_name like '%${keyword}%'
+	</select>
+	
+	
+	
+	<select id="searchProduct" resultType="Product">
+		select *
+		from product
+			 JOIN camping_category using (category_no)
+		where product_status = 'N' and product_name like '%${keyword}%'
+	</select>
+	
+	<select id="searchPhoto" resultType="Attachment">
+		select *
+		from photo
+			 join product on (board_no = product_no)
+		where photo_status = 'N' and product_name like '%${keyword}%' and photo_level =0
+	</select>
+	
+	
+	
 	<select id="selectProductList" resultType="Product">
 		select *
 		from product
@@ -121,6 +145,28 @@
 			and category_no = #{categoryNo}
 		</if>
 		order by board_no
+	</select>
+	
+	
+	
+	<select id="selectProductDetail" resultType="Product">
+		select *
+		from product
+		where product_status='N' and product_no = #{productNo}
+	</select>
+	
+	
+	<select id="selectPhotoDetail" resultType="Attachment">
+		select *
+		from photo
+			 join product on (product_no = board_no)
+		where board_no = #{productNo}
+	</select>
+	
+	<select id="optionDetail" resultType="Option">
+		select *
+		from product_option
+		where product_no = #{productNo}
 	</select>
 	
 </mapper>

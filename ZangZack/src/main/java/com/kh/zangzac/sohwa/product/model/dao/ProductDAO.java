@@ -25,6 +25,18 @@ public interface ProductDAO {
 
 	ArrayList<Attachment> selectPhotoList(int categoryNo);
 
+	Product selectProductDetail(int productNo);
+
+	ArrayList<Attachment> selectPhotoDetail(int productNo);
+
+	ArrayList<Option> optionDetail(int productNo);
+
+	int getListCountKeyword(String keyword);
+
+	ArrayList<Product> searchProduct(String keyword, RowBounds rowBounds);
+
+	ArrayList<Attachment> searchPhoto(String keyword);
+
 	
 
 	

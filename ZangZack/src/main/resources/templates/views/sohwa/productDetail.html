@@ -11,24 +11,28 @@
 	<div th:replace="~{common/navbar :: navbar}"></div>
 	
 	<br><br>
-	<p id="category">캠핑물품판매 >> 텐트</p>
+	<p id="category">캠핑물품판매 >> [[${(p.getCategoryNo() == 11) ? "텐트" :
+                  (p.getCategoryNo() == 12) ? "취침용품" :
+                  (p.getCategoryNo() == 13) ? "조리도구" :
+                  (p.getCategoryNo() == 14) ? "발화용품" :
+                  (p.getCategoryNo() == 15) ? "백팩" :
+                  (p.getCategoryNo() == 16) ? "기타용품" :
+                  "기타"}]]</p>
+    <br>
 	<div class="gallery">
 		<div class="thumbnails">
-	        <img src="image/sohwa/tent1core1.png" alt="Thumbnail 1" class="thumbnail" onmouseover="changeImage(this)">
-	        <img src="image/sohwa/tent1core2.png" alt="Thumbnail 2" class="thumbnail" onmouseover="changeImage(this)">
-	        <img src="image/sohwa/tent1core3.png" alt="Thumbnail 3" class="thumbnail" onmouseover="changeImage(this)">
-	        <img src="image/sohwa/tent1core4.png" alt="Thumbnail 4" class="thumbnail" onmouseover="changeImage(this)">
+	        <img th:each="l:${list}" th:if="${l.photoLevel==0||l.photoLevel==1}" th:src="${l.photoPath}" alt="Thumbnail 1" class="thumbnail" onmouseover="changeImage(this)" >
 	    </div>
 	    
 	    <div class="main-image">
-	      <img src="image/sohwa/tent1core1.png" alt="Main Image">
+	      <img th:each="l:${list}" th:if="${l.photoLevel==0}" th:src="${l.photoPath}" alt="Main Image">
 	    </div>
 	    
 	    
 	    
 	    <div id="explain">
-			<span style="font-size: 15px; color:gray;">모비가든</span>
-			<h1>캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용</h1>
+			<span style="font-size: 15px; color:gray;">[[${p.productCompany}]]</span>
+			<h1>[[${p.productName}]]</h1>
 			<div class="star-rating">
 				  <span class="fa fa-star checked"></span>
 				  <span class="fa fa-star checked"></span>
@@ -38,16 +42,18 @@
 			</div>
 		    4.7
 		    <br>
-			<span id="price">410,000</span>원
-			<span class="badge text-bg-secondary">무료배송</span><br><br>
-			<p>배송</p>
-			<div style="display: inline-block;">무료배송<br>일반택배<br>☝지역별 차등배송비&nbsp;✌제주도/도서산간 지역 7,000원</br></div>
+			<span id="price">[[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]</span>
+			&nbsp;&nbsp;<div class="deliverySpan" th:if="${p.deliveryPrice==0}">무료배송</div><br><br>
+			<p>배송비</p>
+			<div style="display: inline-block;">
+				<span th:if="${p.deliveryPrice==0}">무료배송</span>
+    			<span th:unless="${p.deliveryPrice==0}" th:text="|${#numbers.formatDecimal(p.deliveryPrice, 0, 'COMMA', 0, 'POINT')}원|"></span>
+    			<br>일반택배<br>☝무료배송 상품&nbsp;✌무료배송 상품 제외 배송비 2,500원</br></div>
 			<br><br>
 			
 			<select style="border:1px solid gray; width:100%; height:40px; border-radius:3px;" id="colorSelect" onchange="showDiv()">
 				<option>컬러 선택</option>
-				<option>그린</option>
-				<option>주황</option>
+				<option th:each="o:${oList}">[[${o.productOptionColor}]]</option>
 			</select>
 			
 			
@@ -55,7 +61,7 @@
 			
 			
 			
-			<div id="enoDiv" style="display: none;">&nbsp;&nbsp;&nbsp;캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용
+			<div id="enoDiv" style="display: none;">&nbsp;&nbsp;&nbsp;[[${p.productName}]]
 				<br><br>
 				<div class="quantity-input">&nbsp;&nbsp;&nbsp;
 				    <button class="quantity-btn" id="decrementBtn">-</button>
@@ -102,8 +108,7 @@
 			
 	    <!-- 상품 상세 정보 섹션 -->
 	      <section id="detail">
-	        <img src="image/sohwa/tent1Detail1.jpg">
-	        <img src="image/sohwa/tent1Detail2.jpg">
+	        <img th:each="l:${list}" th:if="${l.photoLevel==2}" th:src="${l.photoPath}">
 	      </section>
 	
 	
@@ -426,24 +431,24 @@
 					<div class="max-w-4xl mx-auto py-10 px-6">
 					  
 					  <div class="bg-white shadow rounded-lg p-6 mb-6">
-					    <h2 class="text-xl font-bold mb-4">납부/결제 사유에 대한 요청 가이드</h2>
-					    <p class="mb-4">납부 및 이자 지급에 있어서의 사유를 적는 칸입니다. 배송비, 반품비, 반품지 주소 등을 입력하시면 됩니다. 납부방법을 선택하시기 바랍니다.</p>
+					    <h2 class="text-xl font-bold mb-4">반품/교환 사유에 따른 요청 가능 기간</h2>
+					    <p class="mb-4">반품 시 사유를 확실히 적어주시고, 반품신청을 해주시길 바랍니다.</p>
 					    <ol class="list-decimal pl-4 mb-4">
-					      <li>구매자는 반품 비용을 상품 수령 후 7일 이내에 (방법: 납부방법 선택)</li>
-					      <li>결제 취소시 납부, 자동납부해지 등 다양한 이유로 인해 상품 수령 후 3개월 이내, 그 사유를 입력해 주시면 됩니다. 상품 수령후 30일 이내. (방법: 납부방법 선택)</li>
+					      <li>구매자 단순 변심은 상품 수령 후 7일 이내 (구매자 반품배송비 부담)</li>
+					      <li>표시/광고와 상이, 계약내용과 다르게 이행된 경우 상품 수령 후 3개월 이내, 그 사실을 안 날 또는 알 수 있었던 날로부터 30일 이내. 둘 중 하나 경과 시 반품/교환 불가 (판매자 반품배송비 부담)</li>
 					    </ol>
 					  </div>
 					  <div class="bg-white shadow rounded-lg p-6">
 					    <h2 class="text-xl font-bold mb-4">납부/결제 취소 가능 사유</h2>
 					    <p class="mb-4">아래와 같은 경우 납부/결제가 취소될 수 있습니다.</p>
 					    <ol class="list-decimal pl-4">
-					      <li>반품완료일기준 2년 초과</li>
-					      <li>구매자의 계정 삭제 사유로 인해 5일 이내에 셀러로부터 환불 요청 (예, 판매자의 사업자 등록증 사본이 필요한 경우 등)</li>
-					      <li>구매자의 개인정보유출로 인해 셀러에게 환불이 필요한 경우 (예, 해킹, 바이러스)</li>
-					      <li>구매자의 신용 또는 신뢰 상실에 의하여 셀러가 환불이 필요하다고 요청한 경우 (예, 신용 불량, 불법)</li>
-					      <li>기타 셀러의 신용이나 신뢰에 관하여 셀러로부터 환불 요청이 있었던 경우 (예, 신용 불량, 불법)</li>
-					      <li>구매자로부터의 요청에 의하여 셀러가 환불을 요청하였음</li>
-					      <li>셀러가 사업을 영위할 목적으로 셀러에게 환불 요청 (CD/DVD/GAME/도서류 등 제외 제품)</li>
+					      <li>반품요청기간이 지난 경우</li>
+					      <li>구매자의 책임 있는 사유로 상품 등이 멸실 또는 훼손된 경우 (단, 상품의 내용을 확인하기 위하여 포장 등을 훼손한 경우는 제외)</li>
+					      <li>포장을 개봉하였으나 포장이 훼손되어 상품가치가 현저히 상실된 경우 (예: 식품, 화장품)</li>
+					      <li>구매자의 사용 또는 일부 소비에 의하여 상품의 가치가 현저히 감소한 경우 (라벨이 떨어진 의류 또는 태그가 떨어진 명품관 상품인 경우)</li>
+					      <li>시간의 경과에 의하여 재판매가 곤란할 정도로 상품 등의 가치가 현저히 감소한 경우 (예: 식품, 화장품)</li>
+					      <li>고객주문 확인 후 상품제작에 들어가는 주문제작상품</li>
+					      <li>복제가 가능한 상품 등의 포장을 훼손한 경우 (CD/DVD/GAME/도서의 경우 포장 개봉 시)</li>
 					    </ol>
 					  </div>
 					  <div class="bg-white shadow rounded-lg p-6 mt-6">

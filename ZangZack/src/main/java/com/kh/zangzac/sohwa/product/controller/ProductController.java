@@ -85,9 +85,53 @@ public class ProductController {
 	}
 	
 	
+	
+	@GetMapping("searchProduct.so")
+	public String searchProduct(@RequestParam("keyword") String keyword, @RequestParam(value="standard", defaultValue="1") int standard, @RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
+		
+		int listCount = pService.getListCountKeyword(keyword);
+		
+		int currentPage = page;
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 16);
+		
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("keyword", keyword);
+		map.put("standard", standard);
+		
+		ArrayList<Product> pList = pService.searchProduct(pi, map);
+		ArrayList<Attachment> aList = pService.searchPhoto(keyword);
+		
+		System.out.println(keyword);
+		
+		if(aList != null) {
+			model.addAttribute("keyword", keyword);
+			model.addAttribute("aList", aList);
+			model.addAttribute("pList", pList);
+			model.addAttribute("pi", pi);
+			model.addAttribute("loc", request.getRequestURI());
+			return "views/sohwa/productList";
+		}else {
+			throw new ProductException("상품 목록 조회 실패");
+		}
+	}
+	
+	
+	@GetMapping("productDetail.so")
+	public String productDetailView(@RequestParam("productNo") int productNo, Model model) {
+		Product p = pService.selectProductDetail(productNo);
+		ArrayList<Attachment> list = pService.selectPhotoDetail(productNo);
+		ArrayList<Option> oList = pService.optionDetail(productNo);
+		
+		model.addAttribute("oList", oList);
+		model.addAttribute("list", list);
+		model.addAttribute("p", p);
+		return "views/sohwa/productDetail";
+	}
+	
+	
 	//상품등록
 	@PostMapping("productEnroll.so")
-	public String insertProduct(@ModelAttribute Product p, @RequestParam("option") String[] options, @RequestParam("productEno") Integer[] productEnos, @RequestParam("detailFile") ArrayList<MultipartFile> detailFiles, @RequestParam("coreFile") ArrayList<MultipartFile> coreFiles, Model model) {
+	public String insertProduct(@ModelAttribute Product p, @RequestParam(value="option") String[] options, @RequestParam("productEno") Integer[] productEnos, @RequestParam("detailFile") ArrayList<MultipartFile> detailFiles, @RequestParam("coreFile") ArrayList<MultipartFile> coreFiles, Model model) {
 		
 		
 		
