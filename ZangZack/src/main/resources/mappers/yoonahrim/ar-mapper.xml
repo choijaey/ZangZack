@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kh.zangzac.yoonahrim.model.dao.secondHandDAO">
+<mapper namespace="com.kh.zangzac.yoonahrim.spBoard.model.dao.secondHandDAO">
 	<insert id="insertSecondHand">
 		<!-- order : insert/update를 하기 전에 selectKey를 수행할 것인지, 후에 수행할 것인지 (before : insert하기전에 수행) -->
         <!-- keyProperty : 가져온 값을 필드에 대입하기 위해서 selectKey를 하는 것임. 어디에 집어넣을지를 적어놓어주는 곳 -->
@@ -29,12 +29,13 @@
 		select * from dual
 	</insert>
 	
-	<select id="selectMyList">
+	<select id="selectMyList" resultType="secondHandProduct">
 		select *
 		from SECONDHAND_PRODUCT
 		where MEMBER_ID = #{memberId}
 	</select>
 	
+	<!-- 삭제하는 방향으로 변경해야함. 아직 변경 전 -->
 	<update id="updateAttmSecondHand">
 		update photo
 		set PHOTO_RENAME = #{photoRename}, PHOTO_PATH = #{photoPath}

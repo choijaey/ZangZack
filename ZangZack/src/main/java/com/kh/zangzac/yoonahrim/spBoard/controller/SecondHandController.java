@@ -1,4 +1,4 @@
-package com.kh.zangzac.yoonahrim.controller;
+package com.kh.zangzac.yoonahrim.spBoard.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,9 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.model.vo.Attachment;
-import com.kh.zangzac.yoonahrim.model.service.secondHandService;
-import com.kh.zangzac.yoonahrim.model.vo.secondHandException;
-import com.kh.zangzac.yoonahrim.model.vo.secondHandProduct;
+import com.kh.zangzac.yoonahrim.spBoard.model.service.secondHandService;
+import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandException;
+import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 import com.kh.zangzac.ming.member.model.vo.Member;
 import jakarta.servlet.http.HttpSession;
 
@@ -45,17 +45,17 @@ public class SecondHandController {
 	}
 	
 	//중고 게시글 불러오기
-	@PostMapping("edit.ah")
+	@GetMapping("edit.ah")
     public String editPage(@ModelAttribute secondHandProduct sp, @RequestParam("spNo") int spNo, HttpSession session, Model model) {
 		
 		String memberId = "3";
 		
 		//String id = ((Member)session.getAttribute("loginUser")).getMemberId();
 		ArrayList<secondHandProduct> sList=  spService.selectMyList(memberId);
-		ArrayList<Attachment> aList = spService.selectAttachmentList(sp);
+		ArrayList<Attachment> aList = spService.selectAttachmentList(spNo);
 		
-		model.addAttribute("list", sList);
 		model.addAttribute("aList", aList);
+		model.addAttribute("list", sList);
 		
         return "views/yoonahrim/editSecondHand";
     }
@@ -74,13 +74,12 @@ public class SecondHandController {
 	    }
 	    sp.setSpAddress(spAddress);
 		
-		int result = spService.updateSecondHand(sp);
-		
 		String name = "ahrim";
 	    ArrayList<Attachment> detailList = new ArrayList<>();
 	    int result1 = 0;
 	    int result2 = 0;
 	    
+	    int result = spService.updateSecondHand(sp);
 	    
 	    // rename 이랑 경로 뱉어냄.
 	    for (int i = 0; i < inputGroupFile.size(); i++) {
@@ -139,13 +138,16 @@ public class SecondHandController {
 	
 	//중고 게시글 상세페이지
 	@GetMapping("detail.ah")
-	public String detailPage(@ModelAttribute secondHandProduct sp, HttpSession session, Model model) {
+	public String detailPage(@ModelAttribute secondHandProduct sp, @RequestParam("spNo") int spNo, HttpSession session, Model model) {
 		//정보를 가져와서 list에 담은 다음 화면에 뿌리면 됨.
 		
 		String memberId = "3";
 		
 		//String id = ((Member)session.getAttribute("loginUser")).getMemberId();
 		ArrayList<secondHandProduct> sList=  spService.selectMyList(memberId);
+		ArrayList<Attachment> aList = spService.selectAttachmentList(spNo);
+		
+		model.addAttribute("aList", aList);
 		model.addAttribute("list", sList);
 		
 		return "views/yoonahrim/secondHandDetail";

@@ -1,10 +1,10 @@
-package com.kh.zangzac.yoonahrim.model.service;
+package com.kh.zangzac.yoonahrim.spBoard.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.kh.zangzac.common.model.vo.Attachment;
-import com.kh.zangzac.yoonahrim.model.vo.secondHandProduct;
+import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
 public interface secondHandService {
 
@@ -18,7 +18,7 @@ public interface secondHandService {
 
 	int updateAttmSecondHand(ArrayList<Attachment> detailList);
 
-	ArrayList<Attachment> selectAttachmentList(secondHandProduct sp);
+	ArrayList<Attachment> selectAttachmentList(int spNo);
 
 
 

@@ -1,4 +1,4 @@
-package com.kh.zangzac.yoonahrim.model.vo;
+package com.kh.zangzac.yoonahrim.spBoard.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

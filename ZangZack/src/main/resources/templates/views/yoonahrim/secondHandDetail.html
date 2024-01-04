@@ -14,7 +14,7 @@
 	
 	<div class="d-grid gap-2 d-md-block">
 			<div class="container text-end mt-n2">
-				<button type="button" class="btn btn-outline-success" th:onclick="location.href='edit.ah'">수정하기</button>&nbsp;&nbsp;
+				<button type="button" class="btn btn-outline-success" th:onclick="location.href='edit.ah?spNo=' + '41';">수정하기</button>&nbsp;&nbsp; <!-- th:onclick="location.href='edit.ah?spNo=' + ${spNo}"; -->
 				<button type="button" id="bookButton" class="btn btn-outline-success" th:onclick="booked()">예약 중</button>&nbsp;&nbsp;
 				<button type="button" id="soldoutButton" class="btn btn-outline-success" th:onclick="markSold()">판매완료</button>
 			</div>
@@ -34,24 +34,13 @@
 				  
 				  <!-- 이미지 -->
 				  <div class="carousel-inner mb-2">
-				    <div class="carousel-item active">
-				      <img src="image/yoonahrim/예시_등불.PNG" class="d-block w-100" alt="img" style="border-radius: 3%">
+				    <div class="carousel-item active" th:each="a:${aList}">
+				      <img th:src="${a.photoPath}" class="d-block w-100" alt="img" style="border-radius: 3%">
 				      	<div class="carousel-caption d-none d-md-block"></div>
 				    </div>
-				    <div class="carousel-item">
-				      <img src="image/yoonahrim/예시_등불2.PNG" class="d-block w-100" alt="img" style="border-radius: 3%">
-				      	<div class="carousel-caption d-none d-md-block"></div>
-				    </div>
-				    <div class="carousel-item">
-				      <img src="image/yoonahrim/예시_등불3.PNG" class="d-block w-100" alt="img" style="border-radius: 3%">
-				      	<div class="carousel-caption d-none d-md-block"></div>
-				   </div>
-				   <div class="carousel-item">
-				      <img src="image/yoonahrim/예시_등불4.PNG" class="d-block w-100" alt="img" style="border-radius: 3%">
-				      	<div class="carousel-caption d-none d-md-block"></div>
-				   </div>
 				  </div>
-				  
+				 
+				
 				  <!-- < > 버튼 -->
 				  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
 				    <span class="carousel-control-prev-icon" aria-hidden="true"></span>

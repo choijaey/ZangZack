@@ -1,4 +1,4 @@
-package com.kh.zangzac.yoonahrim.model.service;
+package com.kh.zangzac.yoonahrim.spBoard.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.zangzac.common.model.vo.Attachment;
-import com.kh.zangzac.yoonahrim.model.dao.secondHandDAO;
-import com.kh.zangzac.yoonahrim.model.vo.secondHandProduct;
+import com.kh.zangzac.yoonahrim.spBoard.model.dao.secondHandDAO;
+import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
 @Service
 public class secondHandServiceImpl implements secondHandService{
@@ -42,8 +42,8 @@ public class secondHandServiceImpl implements secondHandService{
 	}
 
 	@Override
-	public ArrayList<Attachment> selectAttachmentList(secondHandProduct sp) {
-		return (ArrayList)spDAO.selectAttachmentList(sp);
+	public ArrayList<Attachment> selectAttachmentList(int spNo) {
+		return (ArrayList)spDAO.selectAttachmentList(spNo);
 	}
 
 

@@ -1,4 +1,4 @@
-package com.kh.zangzac.yoonahrim.model.dao;
+package com.kh.zangzac.yoonahrim.spBoard.model.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.kh.zangzac.common.model.vo.Attachment;
-import com.kh.zangzac.yoonahrim.model.vo.secondHandProduct;
+import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
 @Mapper
 public interface secondHandDAO {
@@ -21,7 +21,7 @@ public interface secondHandDAO {
 
 	int updateAttmSecondHand(ArrayList<Attachment> detailList);
 
-	ArrayList<Attachment> selectAttachmentList(secondHandProduct sp);
+	ArrayList<Attachment> selectAttachmentList(int spNo);
 
 
 
