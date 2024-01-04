@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/seongun/recipe.css">
 </head>
 <body>
+	<div th:replace="~{common/navbar :: navbar}"></div>
     <a id="back-to-top"><img src='image/topBtn.png' style='width:38px; height:38px;'></a>
     <div id="content">
         <div id="space_zone">
