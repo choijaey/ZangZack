@@ -1,6 +1,7 @@
 package com.kh.zangzac.ming.member.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.kh.zangzac.ming.member.model.vo.Member;
 
@@ -11,6 +12,8 @@ public interface MemberService {
 	Member login(Member m);
 
 	ArrayList<Member> selectId(Member m);
+
+	int updateNewPwd(HashMap<String, String> map);
 
 
 	

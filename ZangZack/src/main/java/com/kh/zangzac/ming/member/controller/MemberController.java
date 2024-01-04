@@ -1,6 +1,7 @@
 package com.kh.zangzac.ming.member.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import org.json.JSONArray;
@@ -173,9 +174,9 @@ public class MemberController {
 	
 	
 	// 비밀번호 재설정
-	@RequestMapping(value ="pwdReset.me", method = RequestMethod.GET ,produces = "aplication/json; charset=UTF-8")
+	@RequestMapping(value ="pwdReset.me", method = RequestMethod.GET ,produces = "application/json; charset=UTF-8")
 	@ResponseBody
-	public String pwdReset(@RequestParam("memberPwdCode") String to, @ModelAttribute Member m)throws Exception {
+	public String pwdReset(@RequestParam("memberPwdCode") String to, @ModelAttribute Member m, Model model)throws Exception {
 		
 		//임시 비밀번호 랜덤 코드
 		char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
@@ -187,7 +188,20 @@ public class MemberController {
             idx = (int) (charSet.length * Math.random());
             str += charSet[idx];
         }
+        String encPwd = bcrypt.encode(str);
+         HashMap<String, String> map = new HashMap<String, String>();
+         map.put("memberId", m.getMemberId());
+         map.put("memberPwd", bcrypt.encode(m.getMemberPwd()));
         
+         int result = mService.updateNewPwd(map);
+         
+         if(result>0) {
+        	 model.addAttribute("loginUser", mService.login(m));
+        	 return "index";
+         }else {
+        	 model.addAttribute("msg", "비밀번호 변경에 실패하였습니다.\n아이디와 이메일을 다시 확인해주세요.");
+         }
+         
         
 		 String subject = "[ZangZac]임시 비밀번호";		// 제목
 		 String content = "임시비밀번호는 [ "+str+" ] 입니다.";    // 내용

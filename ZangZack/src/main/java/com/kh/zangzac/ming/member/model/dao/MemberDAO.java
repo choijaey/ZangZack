@@ -1,6 +1,7 @@
 package com.kh.zangzac.ming.member.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -15,5 +16,7 @@ public interface MemberDAO {
 	Member login(Member m);
 
 	ArrayList<Member> selectId(Member m);
+
+	int updateNewPwd(HashMap<String, String> map);
 
 }

@@ -18,4 +18,10 @@
 		from member
 		where member_name = #{memberName} and member_email =#{memberEmail} and member_status = 'N'
 	</select>
+	
+	<update id="updateNewPwd">
+	    update member
+	    set member_pwd = #{memberPwd}
+	    where MEMBER_ID = #{memberId}
+	</update>
 </mapper>

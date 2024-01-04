@@ -1,6 +1,7 @@
 package com.kh.zangzac.ming.member.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,12 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public ArrayList<Member> selectId(Member m) {
 		return mDAO.selectId(m);
+	}
+
+
+	@Override
+	public int updateNewPwd(HashMap<String, String> map) {
+		return mDAO.updateNewPwd(map);
 	}
 
 	
