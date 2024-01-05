@@ -10,20 +10,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.ming.member.model.vo.Member;
 import com.kh.zangzac.sohwa.product.model.exception.ProductException;
 import com.kh.zangzac.sohwa.product.model.service.ProductService;
 import com.kh.zangzac.sohwa.product.model.vo.Attachment;
+import com.kh.zangzac.sohwa.product.model.vo.Cart;
 import com.kh.zangzac.sohwa.product.model.vo.Option;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-
+@SessionAttributes("loginUser")
 @Controller
 public class ProductController {
 	
@@ -41,69 +44,98 @@ public class ProductController {
 	
 	//관리자 상품 등록페이지 view
 	@GetMapping("adminProductEnroll.so")
-	public String adminView() {
+	public String adminProductEnrollView() {
 		return "views/sohwa/(admin)productEnroll";
 	}
+	
+	//관리자 상품 수정페이지 view
+	@GetMapping("adminProductUpdate.so")
+	public String adminProductUpdateView(@RequestParam("productNo") int productNo, Model model) {
+		Product p = pService.selectProductDetail(productNo);
+		ArrayList<Attachment> list = pService.selectPhotoDetail(productNo);
+		ArrayList<Option> oList = pService.optionDetail(productNo);
+		
+		
+		model.addAttribute("oList", oList);
+		model.addAttribute("list", list);
+		model.addAttribute("p", p);
+		return "views/sohwa/(admin)productUpdate";
+	}
+	
+	//관리자 상품 목록페이지 view
+	@GetMapping("adminProductList.so")
+	public String adminProductListView(Model model) {
+		ArrayList<Product> pList = pService.selectAllProduct();
+		ArrayList<Attachment> aList = pService.selectAllPhoto();
+		
+		model.addAttribute("pageStatus", "Y");
+		model.addAttribute("aList", aList);
+		model.addAttribute("pList", pList);
+		return "views/sohwa/(admin)productList";
+	}
+	
+	
+	@GetMapping("productListN.so")
+	public String adminProductListN(Model model) {
+		ArrayList<Product> pList = pService.selectDeleteProduct();
+		ArrayList<Attachment> aList = pService.selectDeletePhoto();
+		
+		model.addAttribute("pageStatus", "N");
+		model.addAttribute("aList", aList);
+		model.addAttribute("pList", pList);
+		return "views/sohwa/(admin)productList";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
 	
 	//상품등록페이지 view
 	@GetMapping("productListView.so")
-	public String productListView(@RequestParam(value="standard", defaultValue="1") int standard, @RequestParam(value="categoryNo", defaultValue="0") int categoryNo, @RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
+	public String productListView(@RequestParam(value="keyword", defaultValue="") String keyword, @RequestParam(value="standard", defaultValue="1") String standard, @RequestParam(value="categoryNo", defaultValue="0") String categoryNo, @RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
 		
+		int listCount = 0;
+		HashMap<String, String> categoryMap = new HashMap<>();
+		HashMap<String, String> searchMap = new HashMap<>();
+		ArrayList<Product> pList = new ArrayList<>();
+		ArrayList<Attachment> aList = new ArrayList<>();
+		PageInfo pi = new PageInfo();
 		
-		int listCount = pService.getListCount(categoryNo);
-		
-		int currentPage = page;
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 16);
-		
-		HashMap<String, Integer> map = new HashMap<>();
-		map.put("categoryNo", categoryNo);
-		map.put("standard", standard);
-		System.out.println(map);
-		
-		
-		ArrayList<Product> pList = pService.selectProductList(pi, map);
-		
-		System.out.println(pList);
-		
-		
-		//카테고리 별 썸네일만 가져오기.
-		ArrayList<Attachment> aList = pService.selectPhotoList(categoryNo);
-		
-		if(aList != null) {
-			model.addAttribute("aList", aList);
-			model.addAttribute("pList", pList);
-			model.addAttribute("pi", pi);
-			model.addAttribute("loc", request.getRequestURI());
-			return "views/sohwa/productList";
+		//categoryNo가 0일때는 keyword가져가기
+		//keyword가 ""일때는 categoryNo가져가기
+		if(!categoryNo.equals("0")) {
+			listCount = pService.getListCount(categoryNo);
+			int currentPage = page;
+			pi = Pagination.getPageInfo(currentPage, listCount, 16);
+			categoryMap.put("categoryNo", categoryNo);
+			categoryMap.put("standard", standard);
+			pList = pService.selectProductList(pi, categoryMap);
+			aList = pService.selectPhotoList(categoryNo);
 		}else {
-			throw new ProductException("상품 목록 조회 실패");
+			listCount = pService.getListCountKeyword(keyword);
+			int currentPage = page;
+			pi = Pagination.getPageInfo(currentPage, listCount, 16);
+			
+			searchMap.put("keyword", keyword);
+			searchMap.put("standard", standard);
+			
+			pList = pService.searchProduct(pi, searchMap);
+			aList = pService.searchPhoto(searchMap);
 		}
 		
-	}
-	
-	
-	
-	@GetMapping("searchProduct.so")
-	public String searchProduct(@RequestParam("keyword") String keyword, @RequestParam(value="standard", defaultValue="1") int standard, @RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
-		
-		int listCount = pService.getListCountKeyword(keyword);
-		
-		int currentPage = page;
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 16);
-		
-		HashMap<String, Integer> map = new HashMap<>();
-		map.put("keyword", keyword);
-		map.put("standard", standard);
-		
-		ArrayList<Product> pList = pService.searchProduct(pi, map);
-		ArrayList<Attachment> aList = pService.searchPhoto(keyword);
-		
-		System.out.println(keyword);
+		//카테고리 별 썸네일만 가져오기.
 		
 		if(aList != null) {
+			model.addAttribute("categoryNo", categoryNo);
 			model.addAttribute("keyword", keyword);
 			model.addAttribute("aList", aList);
 			model.addAttribute("pList", pList);
@@ -113,8 +145,36 @@ public class ProductController {
 		}else {
 			throw new ProductException("상품 목록 조회 실패");
 		}
+		
 	}
 	
+	
+	
+//	@GetMapping("searchProduct.so")
+//	public String searchProduct(@RequestParam("keyword") String keyword, @RequestParam(value="standard", defaultValue="1") String standard, @RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
+//		
+//		int listCount = pService.getListCountKeyword(keyword);
+//		
+//		
+//		
+//		System.out.println(map);
+//		
+//		ArrayList<Product> pList = pService.searchProduct(pi, map);
+//		ArrayList<Attachment> aList = pService.searchPhoto(map);
+//		
+//		
+//		if(aList != null) {
+//			model.addAttribute("keyword", keyword);
+//			model.addAttribute("aList", aList);
+//			model.addAttribute("pList", pList);
+//			model.addAttribute("pi", pi);
+//			model.addAttribute("loc", request.getRequestURI());
+//			return "views/sohwa/productList";
+//		}else {
+//			throw new ProductException("상품 목록 조회 실패");
+//		}
+//	}
+//	
 	
 	@GetMapping("productDetail.so")
 	public String productDetailView(@RequestParam("productNo") int productNo, Model model) {
@@ -122,6 +182,9 @@ public class ProductController {
 		ArrayList<Attachment> list = pService.selectPhotoDetail(productNo);
 		ArrayList<Option> oList = pService.optionDetail(productNo);
 		
+		imageStorage.deleteImage("cb1d55f4-e2c4-42b1-96b9-948d8883b3c5.png","sohwa");
+		
+		model.addAttribute("productNo", productNo);
 		model.addAttribute("oList", oList);
 		model.addAttribute("list", list);
 		model.addAttribute("p", p);
@@ -250,7 +313,26 @@ public class ProductController {
 	}
 	
 	
-
+	
+	
+	@GetMapping("insertCart.so")
+	public String insertCart(@RequestParam("option") String option, @RequestParam("productNo") int productNo, @RequestParam("eno") int eno, Model model) {
+		
+		String id = ((Member)model.getAttribute("loginUser")).getMemberId();
+		Cart c = new Cart();
+		c.setProductNo(productNo);
+		c.setProductEno(eno);
+		c.setBuyOption(option);
+		c.setMemberId(id);
+		int result = pService.insertCart(c);
+		
+		if(result >0) {
+			return "cartPage";
+		}else {
+			throw new ProductException("장바구니 등록에 실패");
+		}
+		
+	}
 
 	
 	

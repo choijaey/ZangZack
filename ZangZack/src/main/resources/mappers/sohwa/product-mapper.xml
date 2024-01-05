@@ -99,13 +99,38 @@
 		from product
 			 JOIN camping_category using (category_no)
 		where product_status = 'N' and product_name like '%${keyword}%'
+		<if test="standard==1">
+			order by product_no desc
+		</if>
+		<if test="standard==2">
+			order by product_price
+		</if>
+		<if test="standard==3">
+			order by product_price desc
+		</if>
+		<if test="standard==4">
+			order by product_score desc
+		</if>
 	</select>
+	
 	
 	<select id="searchPhoto" resultType="Attachment">
 		select *
 		from photo
 			 join product on (board_no = product_no)
 		where photo_status = 'N' and product_name like '%${keyword}%' and photo_level =0
+		<if test="standard==1">
+			order by product_no desc
+		</if>
+		<if test="standard==2">
+			order by product_price
+		</if>
+		<if test="standard==3">
+			order by product_price desc
+		</if>
+		<if test="standard==4">
+			order by product_score desc
+		</if>
 	</select>
 	
 	
@@ -168,5 +193,55 @@
 		from product_option
 		where product_no = #{productNo}
 	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<select id="selectAllProduct" resultType="Product">
+		select *
+		from product
+		where product_status = 'N'
+	</select>
+	
+	
+	<select id="selectAllPhoto" resultType="Attachment">
+		select *
+		from photo
+			 join product on (board_no = product_no)
+		where product_status='N'
+	</select>
+	
+	<select id="selectProductOption" resultType="Option">
+		select *
+		from option
+		where product_no = #{productNo}
+	</select>
+	
+	<select id="selectDeleteProduct" resultType="Product">
+		select *
+		from product
+		where product_status = 'Y'
+	</select>
+	
+	<select id="selectDeletePhoto" resultType="Attachment">
+		select *
+		from photo
+			 join product on (board_no = product_no)
+		where product_status='Y'
+	</select>
+	
+	
+	
+	
+	<insert id="insertCart">
+		insert into cart
+		values(cart_key_seq.nextval, #{productNo}, #{memberId}, #{productEno}, #{butOption})
+	</insert>
 	
 </mapper>

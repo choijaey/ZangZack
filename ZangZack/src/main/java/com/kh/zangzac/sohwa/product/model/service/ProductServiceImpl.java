@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.sohwa.product.model.dao.ProductDAO;
 import com.kh.zangzac.sohwa.product.model.vo.Attachment;
+import com.kh.zangzac.sohwa.product.model.vo.Cart;
 import com.kh.zangzac.sohwa.product.model.vo.Option;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
 
@@ -35,12 +36,12 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public int getListCount(int categoryNo) {
+	public int getListCount(String categoryNo) {
 		return pDAO.getListCount(categoryNo);
 	}
 
 	@Override
-	public ArrayList<Product> selectProductList(PageInfo pi, HashMap<String, Integer> map) {
+	public ArrayList<Product> selectProductList(PageInfo pi, HashMap<String, String> map) {
 		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
 		int limit = pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, limit);
@@ -48,7 +49,7 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public ArrayList<Attachment> selectPhotoList(int categoryNo) {
+	public ArrayList<Attachment> selectPhotoList(String categoryNo) {
 		return pDAO.selectPhotoList(categoryNo);
 	}
 
@@ -73,16 +74,46 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public ArrayList<Product> searchProduct(PageInfo pi, String keyword) {
+	public ArrayList<Product> searchProduct(PageInfo pi, HashMap<String, String> map) {
 		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
 		int limit = pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		return pDAO.searchProduct(keyword, rowBounds);
+		return pDAO.searchProduct(map, rowBounds);
 	}
 
 	@Override
-	public ArrayList<Attachment> searchPhoto(String keyword) {
-		return pDAO.searchPhoto(keyword);
+	public ArrayList<Attachment> searchPhoto(HashMap<String, String> map) {
+		return pDAO.searchPhoto(map);
+	}
+
+	@Override
+	public ArrayList<Product> selectAllProduct() {
+		return pDAO.selectAllProduct();
+	}
+
+	@Override
+	public ArrayList<Attachment> selectAllPhoto() {
+		return pDAO.selectAllPhoto();
+	}
+
+	@Override
+	public ArrayList<Option> selectProductOption(int productNo) {
+		return pDAO.selectProductOption(productNo);
+	}
+
+	@Override
+	public ArrayList<Product> selectDeleteProduct() {
+		return pDAO.selectDeleteProduct();
+	}
+
+	@Override
+	public ArrayList<Attachment> selectDeletePhoto() {
+		return pDAO.selectDeletePhoto();
+	}
+
+	@Override
+	public int insertCart(Cart c) {
+		return pDAO.insertCart(c);
 	}
 
 	

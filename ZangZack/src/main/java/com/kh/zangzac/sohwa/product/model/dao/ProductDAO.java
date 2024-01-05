@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
 
 import com.kh.zangzac.sohwa.product.model.vo.Attachment;
+import com.kh.zangzac.sohwa.product.model.vo.Cart;
 import com.kh.zangzac.sohwa.product.model.vo.Option;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
 
@@ -19,11 +20,11 @@ public interface ProductDAO {
 
 	int insertOption(ArrayList<Option> list);
 
-	int getListCount(int categoryNo);
+	int getListCount(String categoryNo);
 
-	ArrayList<Product> selectProductList(HashMap<String, Integer> map, RowBounds rowBounds);
+	ArrayList<Product> selectProductList(HashMap<String, String> map, RowBounds rowBounds);
 
-	ArrayList<Attachment> selectPhotoList(int categoryNo);
+	ArrayList<Attachment> selectPhotoList(String categoryNo);
 
 	Product selectProductDetail(int productNo);
 
@@ -33,9 +34,21 @@ public interface ProductDAO {
 
 	int getListCountKeyword(String keyword);
 
-	ArrayList<Product> searchProduct(String keyword, RowBounds rowBounds);
+	ArrayList<Product> searchProduct(HashMap<String, String> map, RowBounds rowBounds);
 
-	ArrayList<Attachment> searchPhoto(String keyword);
+	ArrayList<Attachment> searchPhoto(HashMap<String, String> map);
+
+	ArrayList<Product> selectAllProduct();
+
+	ArrayList<Attachment> selectAllPhoto();
+
+	ArrayList<Option> selectProductOption(int productNo);
+
+	ArrayList<Product> selectDeleteProduct();
+
+	ArrayList<Attachment> selectDeletePhoto();
+
+	int insertCart(Cart c);
 
 	
 

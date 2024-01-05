@@ -23,8 +23,8 @@ public class Product {
 	private int productScore;
 	private int categoryNo;
 	private String productCompany;
-	private int productEno;
 	private int deliveryPrice;
 	private int eno;
+	
 
 }

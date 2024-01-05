@@ -21,14 +21,8 @@
 	            <div class="slider__btns justify-between">
 	              <button class="slider__btn-buy">buy</button>
 	              <div class="flex-center">
-	                <button
-	                  data-type="prev"
-	                  class="slider__btn-switch slider__btn-switch--dark flex-center"
-	                ></button>
-	                <button
-	                  data-type="next"
-	                  class="slider__btn-switch slider__btn-switch--light flex-center"
-	                ></button>
+	                <button data-type="prev" class="slider__btn-switch slider__btn-switch--dark flex-center"></button>
+	                <button data-type="next" class="slider__btn-switch slider__btn-switch--light flex-center"></button>
 	              </div>
 	            </div>
 	            <div class="slider__index"></div>
@@ -65,10 +59,10 @@
 		    		등록일자 순
 		  		</button>
 		  		<ul class="dropdown-menu">
-		  			<li><a class="dropdown-item" onclick="standardSelect(1);">등록 일자 순</a></li>
-		    		<li><a class="dropdown-item" onclick="standardSelect(2);">낮은 가격 순</a></li>
-		    		<li><a class="dropdown-item" onclick="standardSelect(3);">높은 가격 순</a></li>
-		    		<li><a class="dropdown-item" onclick="standardSelect(4);">평점 높은 순</a></li>
+		  			<li><a class="dropdown-item" th:href="'productListView.so?categoryNo=' +${categoryNo} + '&keyword=' + ${keyword} + '&standard=1'">등록 일자 순</a></li>
+		    		<li><a class="dropdown-item" th:href="'productListView.so?categoryNo=' +${categoryNo} + '&keyword=' + ${keyword} + '&standard=2'">낮은 가격 순</a></li>
+		    		<li><a class="dropdown-item" th:href="'productListView.so?categoryNo=' +${categoryNo} + '&keyword=' + ${keyword} + '&standard=3'">높은 가격 순</a></li>
+		    		<li><a class="dropdown-item" th:href="'productListView.so?categoryNo=' +${categoryNo} + '&keyword=' + ${keyword} + '&standard=4'">평점 높은 순</a></li>
 		  		</ul>
 			</div>
 			
@@ -480,30 +474,19 @@
 		
 		
 		
-		
-		//카테고리 value값 넘기기
-		function sendCategoryNo(categoryNo) {
-			localStorage.setItem('selectedCategory', categoryNo);
-		    document.getElementById('categoryNoInput').value = categoryNo;
-		    document.getElementById('categoryForm').submit();
+		function sendCategoryNo(categoryNo){
+			location.href='productListView.so?categoryNo='+ categoryNo +'&keyword=' + '&standard=1';
 		}
 		
 		
 		//검색
 		document.getElementById('searchImg').addEventListener('click', ()=>{
 			var searchInputValue = document.getElementById('searchInput').value;
-		    var url = 'searchProduct.so?keyword=' + searchInputValue;
+		    var url = 'productListView.so?categoryNo=0&keyword=' + searchInputValue + '&standard=1' ;
 		    window.location.href = url;
 		})
-		
-		//정렬
-		function standardSelect(value) {
-	        // value에 따라 URL 파라미터를 설정하고 페이지를 리로드합니다.
-	        var selectedCategory = localStorage.getItem('selectedCategory');
-	        var searchInputValue = document.getElementById('searchInput').value;
-	        location.href = 'searchProduct.so?keyword='+ searchInputValue +'&standard=' +value ;
-	    }
-	
+
+
 		
 		
 		//상세보기
