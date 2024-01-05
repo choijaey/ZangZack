@@ -46,14 +46,4 @@
 		where BOARD_NO = #{spNo} and board_type = '4'
 	</select>
 	
-	<insert id="insertReply">
-		insert reply
-		values (#{replyNo}, #{replyContent}, sysdate, sysdate, 4, #{boardNo}, default, 3)
-	</insert>
-	
-	<select id="selectReply" resultType="Reply">
-		select *
-		from reply
-		where BOARD_NO = #{spNo} and BOARD_TYPE = '4'
-	</select>
 </mapper>

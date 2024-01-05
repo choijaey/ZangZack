@@ -3,8 +3,6 @@ package com.kh.zangzac.yoonahrim.spBoard.controller;
 import java.sql.Date;
 import java.util.ArrayList;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,14 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
 
 import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.yoonahrim.spBoard.model.service.secondHandService;
-import com.kh.zangzac.yoonahrim.spBoard.model.vo.Reply;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandException;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
@@ -165,9 +160,7 @@ public class SecondHandController {
 		//String id = ((Member)session.getAttribute("loginUser")).getMemberId();
 		ArrayList<secondHandProduct> sList=  spService.selectMyList(memberId);
 		ArrayList<Attachment> aList = spService.selectAttachmentList(spNo);
-		ArrayList<Reply> rList = spService.selectReply(spNo);
 		
-		model.addAttribute("rList", rList);
 		model.addAttribute("aList", aList);
 		model.addAttribute("list", sList);
 		
@@ -233,28 +226,6 @@ public class SecondHandController {
 	    } else {
 	        throw new secondHandException("게시판 등록 실패");
 	    }
-	}
-	
-	
-	@GetMapping(value="insertReply.ah", produces="application/json; charset=UTF-8")
-	@ResponseBody
-	public String insertReply(@ModelAttribute Reply r, @RequestParam("spNo") int spNo) {
-		int result = spService.insertReply(r);
-        ArrayList<Reply> list = spService.selectReply(spNo);
-         
-        JSONArray jArr = new JSONArray();
-        for(Reply reply : list) {
-        	JSONObject  json = new JSONObject ();
-        	json.put("replyNo", reply.getReplyNo());
-            json.put("replyContent", reply.getReplyContent());
-            json.put("boardType", reply.getBoardType());
-            json.put("boardNo", reply.getBoardNo());
-            json.put("replyStatus", reply.getReplyStatus());
-            json.put("memberId", reply.getMemberId());
-            
-            jArr.put(json);
-         }
-         return jArr.toString();
 	}
 	
 	
