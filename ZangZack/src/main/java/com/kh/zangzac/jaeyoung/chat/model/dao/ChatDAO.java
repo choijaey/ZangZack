@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.kh.zangzac.jaeyoung.chat.model.vo.ChatRoom;
 import com.kh.zangzac.jaeyoung.chat.model.vo.Chatter;
 
 @Mapper
@@ -14,5 +15,9 @@ public interface ChatDAO {
 	int insertChatRoom(Chatter c);
 
 	ArrayList<Chatter> selectChatterList(int i);
+
+	int updateChatRoomCount(int clNo);
+
+	ArrayList<ChatRoom> chatRoomList();
 
 }
