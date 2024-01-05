@@ -44,10 +44,18 @@ public class MemberController {
 	@Autowired
 	private JavaMailSender mailSender;
 	
+	//로그인 화면으로 넘어가기
 	@GetMapping("signUp.me")
 	public String sign() {
 		return "views/ming/member/sign";
 	}
+	
+	@GetMapping("home.me")
+	public String home() {
+		return "index";
+	}
+	
+	
 	
 	//회원가입
 	@PostMapping("/insertMember.me")
@@ -91,19 +99,23 @@ public class MemberController {
 	@PostMapping("login.me")
 	public String loginUser(@ModelAttribute Member m , Model model) {
 		Member loginUser = mService.login(m);
+		System.out.println("로그인 되기 전 : " + m);
 		
 		if(loginUser != null) {
 			if(bcrypt.matches(m.getMemberPwd(), loginUser.getMemberPwd())) {
 				model.addAttribute("loginUser",loginUser);
+				System.out.println("로그인이 된다면? : " + m);
 				return "index";
 				
 			}else {
 				model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
+				System.out.println("로그인 왜 안되는지? : " + m);
 				return "views/ming/member/sign";
 			}
 			
 		}else {
 			model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
+			System.out.println("진짜 왜? : " + m);
 			return "views/ming/member/sign";
 		}
 		
@@ -174,9 +186,9 @@ public class MemberController {
 	
 	
 	// 비밀번호 재설정
-	@RequestMapping(value ="pwdReset.me", method = RequestMethod.GET ,produces = "application/json; charset=UTF-8")
+	@GetMapping(value ="pwdReset.me")
 	@ResponseBody
-	public String pwdReset(@RequestParam("memberPwdCode") String to, @ModelAttribute Member m, Model model)throws Exception {
+	public String pwdReset(@RequestParam("memberPwdCode") String to, @ModelAttribute Member m)throws Exception {
 		
 		//임시 비밀번호 랜덤 코드
 		char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
@@ -189,23 +201,16 @@ public class MemberController {
             str += charSet[idx];
         }
         String encPwd = bcrypt.encode(str);
-         HashMap<String, String> map = new HashMap<String, String>();
-         map.put("memberId", m.getMemberId());
-         map.put("memberPwd", bcrypt.encode(m.getMemberPwd()));
+        m.setMemberId(m.getMemberId());
+        m.setMemberPwd(encPwd);
+        System.out.println(encPwd);
+        System.out.println(m);
         
-         int result = mService.updateNewPwd(map);
-         
-         if(result>0) {
-        	 model.addAttribute("loginUser", mService.login(m));
-        	 return "index";
-         }else {
-        	 model.addAttribute("msg", "비밀번호 변경에 실패하였습니다.\n아이디와 이메일을 다시 확인해주세요.");
-         }
-         
+        int result = mService.updateNewPwd(m);
         
-		 String subject = "[ZangZac]임시 비밀번호";		// 제목
-		 String content = "임시비밀번호는 [ "+str+" ] 입니다.";    // 내용
-		 String from = "gah_yn@naver.com";
+        String subject = "[ZangZac]임시 비밀번호";		// 제목
+		String content = "임시비밀번호는 [ "+str+" ] 입니다.";    // 내용
+		String from = "gah_yn@naver.com";
 		 
 		 try {
 	    	   MimeMessage mail = mailSender.createMimeMessage();
@@ -222,21 +227,20 @@ public class MemberController {
 	       } catch(Exception e) {
 	          e.printStackTrace();
 	       }
-	          return str+"";
+
+        
+        
+        if (result > 0) {
+            return "index";
+        } else {
+        }
+         
+	  return str+"";
 		 
+	
+	
+	
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

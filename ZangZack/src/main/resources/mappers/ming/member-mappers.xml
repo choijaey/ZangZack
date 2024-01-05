@@ -20,8 +20,9 @@
 	</select>
 	
 	<update id="updateNewPwd">
-	    update member
-	    set member_pwd = #{memberPwd}
-	    where MEMBER_ID = #{memberId}
+	    update MEMBER
+	    set MEMBER_PWD = #{memberPwd}
+	    where MEMBER_ID = #{memberId} and member_status = 'N'
 	</update>
+	
 </mapper>

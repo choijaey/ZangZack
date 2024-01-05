@@ -33,8 +33,8 @@ public class MemberServiceImpl implements MemberService{
 
 
 	@Override
-	public int updateNewPwd(HashMap<String, String> map) {
-		return mDAO.updateNewPwd(map);
+	public int updateNewPwd(Member m) {
+		return mDAO.updateNewPwd(m);
 	}
 
 	

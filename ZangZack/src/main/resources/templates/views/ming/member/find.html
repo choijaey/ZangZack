@@ -59,15 +59,17 @@
 	              <input type="email" placeholder="Email" id="memberPwdCode" name="memberEmail" style="width: 300px; display: inline-block;">
 	              <button type="button" id="send-code" style="width: 100px; display: inline-block; background-color: rgb(251, 125, 83); color: white;">코드전송</button></td>
 	            </div>
-	            <button type="submit" id="pwd_btn" style="background-color: rgb(251, 125, 83); color: white;">
-	              비밀번호 재설정
-	            </button>
+	            <p style="text-align: center;">
+	              <a href="home.me" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.5em;">
+					HOME으로 돌아가기
+				  </a>
+	            </p>
 	            <p style="font-size: 0.8em;">
 	              <span>
 	                Already have an account?
 	              </span>
 	              <b onclick="toggle()" class="pointer" >
-	                로그인
+	                아이디 찾기
 	              </b>
 	            </p>
 	          </form>
@@ -96,8 +98,8 @@
 	              아이디 찾기
 	            </button>
 	            <p style="text-align: center;">
-	              <a href="#" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold;">
-					로그인
+	              <a href="home.me" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.5em;">
+					HOME으로 돌아가기
 				  </a>
 	            </p>
 	            <p>
@@ -120,7 +122,9 @@
 	      <div class="col align-items-center flex-col">
 	        <div class="text sign-in">
 	          <h2>
-	            <img src="image/ming/member/logo.png" style="width: 300px;">
+	           <a href="home.me">
+	            	<img src="image/ming/member/logo.png" style="width: 300px;">
+	            </a>
 	            <p style="font-size: 0.5em; margin-top: -50px; color: black;">아이디 찾기</p>
 	          </h2>
 	        </div>
@@ -136,7 +140,9 @@
 	        </div>
 	        <div class="text sign-up">
 	          <h2>
-	            <img src="image/ming/member/logo.png" style="width: 300px;">
+	          	<a href="home.me">
+	            	<img src="image/ming/member/logo.png" style="width: 300px;">
+	            </a>
 	            <p style="font-size: 0.5em; margin-top: -50px; color: black;">비밀번호찾기</p>
 	          </h2>
 	        </div>
@@ -197,14 +203,19 @@
           /* 비밀번호 재설정 코드 보내기 */
          $('#send-code').click(function(){
         	 console.log(document.getElementById('memberPwdCode').value);
+        	 console.log(document.getElementById('memberId').value);
         	 $.ajax({
         		type:'get',
         		url:'pwdReset.me',
-        		data:{memberPwdCode:document.getElementById('memberPwdCode').value},
+        		data:{memberPwdCode:document.getElementById('memberPwdCode').value, memberId:document.getElementById('memberId').value},
         		success : function(data) {
         			console.log("data : " +  data);
                     code =data;
                     alert('임시 비밀번호를 발송했습니다. 메일이 오지 않으면 입력하신 정보가 회원정보와 일치하는지 확인해 주세요.')
+                    if(data=="index") {
+    					location.href = "home.me";
+					}
+                    
                     
         		},
         		error: data=> console.log(data)
@@ -212,7 +223,7 @@
         	 
          });
           
-		}; 
+	}; 
 	
 			/* 모달창 */
 	        

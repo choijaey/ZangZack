@@ -13,7 +13,7 @@ public interface MemberService {
 
 	ArrayList<Member> selectId(Member m);
 
-	int updateNewPwd(HashMap<String, String> map);
+	int updateNewPwd(Member m);
 
 
 	
