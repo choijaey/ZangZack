@@ -781,7 +781,9 @@
 	        var option = document.getElementById('colorSelect').value;
 	        var eno = document.querySelector('.quantity').value;
 			var productNo = document.getElementById('productNo').value;
-	        location.href='insertCart.so?productNo='+productNo + '&option=' + option + '&eno=' + eno;
+			var priceString = document.getElementById('resultPrice2').innerText;
+			var price = parseInt(priceString.replace(/\D/g, ''), 10); // 숫자가 아닌 문자를 모두 제거
+	        location.href='insertCart.so?productNo='+productNo + '&option=' + option + '&eno=' + eno +"&price=" + price;
 	        
 	    }
 		

@@ -18,5 +18,6 @@ public class Cart {
 	private String memberId;
 	private int productEno;
 	private String buyOption;
+	private int buyPrice;
 
 }

@@ -25,6 +25,7 @@ import com.kh.zangzac.sohwa.product.model.vo.Option;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @SessionAttributes("loginUser")
 @Controller
@@ -316,7 +317,7 @@ public class ProductController {
 	
 	
 	@GetMapping("insertCart.so")
-	public String insertCart(@RequestParam("option") String option, @RequestParam("productNo") int productNo, @RequestParam("eno") int eno, Model model) {
+	public String insertCart(@RequestParam("price") int price, @RequestParam("option") String option, @RequestParam("productNo") int productNo, @RequestParam("eno") int eno, Model model) {
 		
 		String id = ((Member)model.getAttribute("loginUser")).getMemberId();
 		Cart c = new Cart();
@@ -324,10 +325,13 @@ public class ProductController {
 		c.setProductEno(eno);
 		c.setBuyOption(option);
 		c.setMemberId(id);
+		c.setBuyPrice(price);
 		int result = pService.insertCart(c);
 		
-		if(result >0) {
-			return "cartPage";
+		
+		if(result > 0) {
+			model.addAttribute("c", c);
+			return "views/sohwa/cartPage";
 		}else {
 			throw new ProductException("장바구니 등록에 실패");
 		}
