@@ -14,7 +14,6 @@ import lombok.ToString;
 @ToString
 
 public class Attachment {
-   
    private int photoNo;
    private String photoRename;
    private String photoPath;
