@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kh.zangzac.jaeyoung.chat.model.dao.ChatDAO">
+	
+	<select id="checkCount" resultType="_int">
+		select count(*)
+		from chatter
+		where member_id = #{memberId} and cl_no =${clNo}
+	</select>
+	
+	<insert id="insertChatRoom">
+		insert into chatter
+		values (ch_seq.nextval,#{clNo},#{memberId})
+	</insert>
+	
+	<select id="selectChatterList" resultType="Chatter">
+		select *
+		from chatter
+		where cl_no = ${i}
+	</select>
+
+	
+</mapper>
