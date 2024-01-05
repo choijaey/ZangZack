@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.common.reply.model.dao.ReplyDAO;
+import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.seongun.campboard.model.dao.CampBoardDAO;
 import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
 
@@ -15,6 +17,9 @@ import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
 public class CampBoardServiceImpl implements CampBoardService{
 	@Autowired
 	private CampBoardDAO cDAO;
+	
+	@Autowired
+	private ReplyDAO rDAO;
 	
 	@Override
 	public int getListCount(int i) {
@@ -36,6 +41,25 @@ public class CampBoardServiceImpl implements CampBoardService{
 	@Override
 	public int insertAttmCampBoard(ArrayList<Attachment> fileList) {
 		return cDAO.insertAttmCampBoard(fileList);
+	}
+
+	@Override
+	public CampBoard selectBoard(int cbNo, String id) {
+		CampBoard b = cDAO.selectBoard(cbNo);
+	      if(b != null) {
+	         if(id != null && !b.getMemberId().equals(id)) {
+	            int result = cDAO.updateCount(cbNo);
+	            if(result > 0) {
+	               b.setCbCount(b.getCbCount() + 1);
+	            }
+	         }
+	      } 
+		return b;
+	}
+
+	@Override
+	public ArrayList<Reply> selectReply(Reply sendReply) {
+		return rDAO.selectReply(sendReply);
 	}
 
 }

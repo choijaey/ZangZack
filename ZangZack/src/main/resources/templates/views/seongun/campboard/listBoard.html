@@ -51,7 +51,7 @@
             </div>
             <div id="board_zone_cont">
                 <div id="board_list_table">
-                    <table>
+                    <table  th:if="${!list.isEmpty}">
                         <thead>
                             <tr>
                                 <th>번호</th>
@@ -63,27 +63,30 @@
                                 <th>날짜</th>
                             </tr>
                         </thead>
-                        <tbody th:if="${!list.isEmpty}">
+                        <tbody>
                             <tr th:each="b : ${list}">
-                                <td>[[${b.cbNo}]]</td>
-                                <td>[[${b.categoryNo}]]</td>
+                                <td class="board_num">[[${b.cbNo}]]</td>
+                                <td class="board_category">[[${b.categoryName}]]</td>
                                 <td class="board_writer">[[${b.memberName}]]</td>
                                 <td class="board_title">[[${b.cbTitle}]]
                                 	<th:block th:if="${b.photoPath != null}">
-                                		<img th:src="${b.photoPath}" th:alt="${b.photoRename}" class="attachment_icon">
+                                		<img src="image/seongun/file.png" th:alt="${b.photoRename}" class="attachment_icon">
                                 	</th:block>
                                 </td>
                                 <td>[[${b.cbCount}]]</td>
                                 <td>추천수</td>
-                                <td>[[${b.cbCreateDate}]]</td>
-                            </tr>
-                        </tbody>
-                        <tbody th:if="${list.isEmpty}">
-                            <tr>
-                                <td colspan="7">[[${msg}]]</td>
+                                <td>[[${#dates.format(b.cbCreateDate, 'YYYY MM-dd')}]]</td>
                             </tr>
                         </tbody>
                     </table>
+                    <th:block th:if="${list.isEmpty}">
+			            <div class="board-container" >
+			            	<div class="board-none-text">
+			            		<h1>아직 작성된 글이 없어요...</h1>
+			            	</div>
+			            </div>
+			            <div class="border-bottom-div"></div>
+		            </th:block>
                 </div>
             </div>
         </div>
@@ -124,7 +127,9 @@
             </div>
         </div>
     </div>
-    <script>
+    
+    <script th:inline="javascript">
+		/*<![CDATA[*/
         document.addEventListener('DOMContentLoaded', function() {
             // 스크롤이 끝으로 이동 시 이벤트 발생
             window.addEventListener('scroll', function() {
@@ -152,21 +157,30 @@
                 document.getElementById('back-to-top').classList.remove('show');
             });
         });
+        
         const tbody = document.querySelector('tbody');
         const tds = tbody.querySelectorAll('td');
         for(const td of tds){
            td.addEventListener('click', function(){
               const trTds = this.parentElement.querySelectorAll('td');
               const boardId = trTds[0].innerText;
-              /*<![CDATA[*/
-              location.href='selectBoard.bo?bId=' + boardId + "&page=" +/*[[${pi.currentPage}]]*/1;
-              /*]]>*/
+              location.href='selectBoard.su?cbNo=' + boardId + "&page=" +/*[[${pi.currentPage}]]*/1;
            });
         }
         
         function writeBtn(){
         	window.location.href="writeCampBoardView.su";
         }
+        
+        window.onload = function() {
+            var msg = /*[[${msg}]]*/'';
+            
+            // errorMessage가 비어있지 않은 경우에만 알림 표시
+            if(msg && msg.trim().length > 0) {
+                alert(msg);
+            }
+        };
+		/*]]>*/
     </script>
 </body>
 </html>

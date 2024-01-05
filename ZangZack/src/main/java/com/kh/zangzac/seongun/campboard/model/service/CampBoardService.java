@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
 
 public interface CampBoardService {
@@ -15,5 +16,9 @@ public interface CampBoardService {
 	int insertCampBoard(CampBoard board);
 
 	int insertAttmCampBoard(ArrayList<Attachment> fileList);
+
+	CampBoard selectBoard(int cbNo, String id);
+
+	ArrayList<Reply> selectReply(Reply sendReply);
 
 }

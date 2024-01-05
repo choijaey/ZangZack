@@ -16,11 +16,14 @@ import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.ming.member.model.vo.Member;
 import com.kh.zangzac.seongun.campboard.model.service.CampBoardService;
 import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
+import com.kh.zangzac.seongun.common.WorkController;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @SessionAttributes("loginUser")
 @Controller
@@ -36,26 +39,20 @@ public class CampBoardController {
 	@Autowired
 	private CampBoardService cService;
     
-	private void addModelAttributes(Model model, PageInfo pi, ArrayList<CampBoard> list, String msg, String loc) {
-		model.addAttribute("pi", pi);
-		model.addAttribute("list", list);
-		model.addAttribute("msg", msg);
-	    model.addAttribute("loc", loc);
-	}
-
+	@Autowired
+	private WorkController sWork;
 	
 	@GetMapping("campBoard.su")
 	public String campBoardListView(@RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
 		
-		int listCount = cService.getListCount(1);
+		int listCount = cService.getListCount(0);
 		
 		int currentPage = page;
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
-		ArrayList<CampBoard> list = cService.selectBoardList(pi,1);
+		ArrayList<CampBoard> list = cService.selectBoardList(pi,0);
 		
 		String msg = list.isEmpty() ? "작성된 게시판이 없습니다!" : null;
-	    addModelAttributes(model, pi, list, msg, request.getRequestURI());
-	    
+		sWork.addModel(model, pi, list, msg, request.getRequestURI());
 		return "views/seongun/campboard/listBoard";
 	}
 	
@@ -65,10 +62,10 @@ public class CampBoardController {
 		
 		int currentPage = page;
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
-		ArrayList<CampBoard> list = cService.selectBoardList(pi,1);
+		ArrayList<CampBoard> list = cService.selectBoardList(pi,0);
 		
 		String msg = list.isEmpty() ? "작성된 게시판이 없습니다!" : null;
-	    addModelAttributes(model, pi, list, msg, request.getRequestURI());
+		sWork.addModel(model, pi, list, msg, request.getRequestURI());
 	    
 		return "views/seongun/campboard/cardBoard";
 	}
@@ -79,11 +76,11 @@ public class CampBoardController {
 		
 		int currentPage = page;
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
-		ArrayList<CampBoard> list = cService.selectBoardList(pi,1);
+		ArrayList<CampBoard> list = cService.selectBoardList(pi,0);
 		
-		System.out.println(list);
+		System.out.println(list.toString());
 		String msg = list.isEmpty() ? "작성된 게시판이 없습니다!" : null;
-	    addModelAttributes(model, pi, list, msg, request.getRequestURI());
+		sWork.addModel(model, pi, list, msg, request.getRequestURI());
 		
 	    return "views/seongun/campboard/albumBoard";
 	}
@@ -93,9 +90,30 @@ public class CampBoardController {
 		return "views/seongun/recipe";
 	}
 	
-	@GetMapping("writeCampBoardView.su")
-	public String writeCampBoard() {
-		return "views/seongun/campboard/writeBoard";
+	@GetMapping("selectBoard.su")
+	public String campBoardView(@RequestParam("cbNo") int cbNo, @RequestParam(value="page", defaultValue="1") int page, HttpSession session,Model model) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		Reply sendReply = new Reply();
+		sendReply.setBoardNo(cbNo);
+		sendReply.setBoardType(4);
+		
+		String id = null;
+		if(loginUser != null) {
+			id = loginUser.getMemberId(); 
+		}
+	    
+	    CampBoard bList = cService.selectBoard(cbNo, id);
+	    ArrayList<Reply> rList = cService.selectReply(sendReply);
+		
+	    if(bList != null) {
+			model.addAttribute("b", bList);
+			model.addAttribute("page", page);
+			model.addAttribute("list", rList);
+			return "views/seongun/campboard/boardDetail";
+		}else {
+			
+			return "redirect:/campBoard.su";
+		}
 	}
 	
 	@PostMapping("insertCampBoard.su")
@@ -111,18 +129,8 @@ public class CampBoardController {
 			String[] returnArr = imageStorage.saveImage(upload, "seongun");
 			
 			if(returnArr != null) {
-				Attachment a = new Attachment();
-				if(i==0) {
-					a.setPhotoRename(returnArr[0]);
-					a.setPhotoPath(returnArr[1]);
-					a.setBoardType(1);
-					a.setPhotoLevel(0);
-				}else {
-					a.setPhotoRename(returnArr[0]);
-					a.setPhotoPath(returnArr[1]);
-					a.setBoardType(1);
-					a.setPhotoLevel(1);
-				}
+				Attachment a = sWork.setAttachment(returnArr, i);
+				
 				fileList.add(a);
 			}
 			
@@ -138,19 +146,23 @@ public class CampBoardController {
 		}
 		
 		if(fileList.isEmpty()) {
-			if(resultA > 0) {
+			if(resultB > 0) {
 				return "redirect:/campBoard.su";
 			}else {
-				model.addAttribute("msg", "글 작성을 실패했습니다.");
+				model.addAttribute("msg", "게시글 작성에 실패했습니다.재작성 부탁드립니다.");
 				return "views/seongun/campboard/writeBoard";
 			}
 		}else {
 			if(resultA > 0 && resultB > 0) {
 				return "redirect:/campBoard.su";
+			}else if(resultA > 0 && resultB <= 0){
+				model.addAttribute("msg", "이미지 업로드를 실패했습니다. 이미지 없이 게시판이 작성되었습니다!");
+				return "redirect:/campBoard.su";
 			}else {
-				model.addAttribute("msg", "글 작성을 실패했습니다.");
+				model.addAttribute("msg", "게시글 작성에 실패했습니다.재작성 부탁드립니다..");
 				return "views/seongun/campboard/writeBoard";
 			}
 		}
 	}
+	
 }

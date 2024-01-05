@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
-    <a id="back-to-top"><img src='image/topBtn.png' style='width:38px; height:38px;'></a>
+    <a id="back-to-top"><img src='image/seongun/topBtn.png' style='width:38px; height:38px;'></a>
     <div id="content">
         <div id="space_zone">
             <p>
@@ -53,10 +53,10 @@
                 <div class="card" th:each="b : ${list}">
                     <div class="card-image">
                     	<th:block th:if="${b.photoPath != null}">
-                        	<img src="${b.photoPath}" alt="썸네일 이미지" />
+                        	<img th:src="${b.photoPath}" alt="썸네일 이미지" />
                         </th:block>
                     	<th:block th:if="${b.photoPath == null}">
-                        	<img src="image/seongun/cat.jpg" alt="썸네일 이미지" />
+                        	<img src="image/seongun/NONE.png" alt="썸네일 이미지" />
                         </th:block>
                     </div>
                     <div class="card-body">
@@ -71,19 +71,24 @@
                                     <td class="info-label">조회수</td>
                                     <td class="info-label">댓글</td>
                                     <td class="info-label">좋아요</td>
-                                    <td class="info-value date-year">날짜 카운트</td>
+                                    <td class="info-value date-year">[[${#dates.format(b.cbCreateDate, 'YYYY')}]]</td>
                                 </tr>
                                 <tr>
                                     <td class="info-value">[[${b.cbCount}]]</td>
-                                    <td class="info-value">추가예정</td>
+                                    <td class="info-value">[[${b.replyCount}]]</td>
                                     <td class="info-value">[[${b.heartCount}]]</td>
-                                    <td class="info-value date-day">12.20</td>
+                                    <td class="info-value date-day">[[${#dates.format(b.cbCreateDate, 'MM.dd')}]]</td>
                                 </tr>
                             </table>
                         </div>
                     </div>
                 </div>
                 <!-- 카드 반복 끝 -->
+            </div>
+            <div class="board-container" th:if="${list.isEmpty}">
+            	<div class="board-none-text">
+            		<h1>아직 작성된 글이 없어요...</h1>
+            	</div>
             </div>
             <div class="border-bottom-div"></div>
             <div class="write_btn_area">

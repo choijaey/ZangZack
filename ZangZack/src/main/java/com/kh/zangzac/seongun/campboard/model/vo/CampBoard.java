@@ -28,4 +28,5 @@ public class CampBoard {
 	private int heartCount;
 	private String photoPath;
 	private String photoRename;
+	private int replyCount;
 }

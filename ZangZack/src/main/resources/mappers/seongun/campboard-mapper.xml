@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kh.zangzac.seongun.campboard.model.dao.CampBoardDAO">
 	<select id="getListCount" resultType="_int">
-		SELECT * 
+		SELECT count(*) 
 		FROM camp_board_view
-		<where> 
+		<where>
 			<if test="i != 0">
 				and category_no = #{i}
 			</if>
@@ -35,8 +35,20 @@
 		insert all<!-- insert all 안에서는 nextval이라고 적어놓고 여러번 들어간다하더라도 딱 1번 nextval이 되고 나머지는 같은 값이 들어간다 -->
 		<foreach collection="list" item="item">
 			into photo
-			values (new_aid, #{item.photoRename}, #{item.photoPath}, #{item.photoLevel}, #{boardType}, #{item.boardNo}, default)
+			values (new_aid, #{item.photoRename}, #{item.photoPath}, #{item.photoLevel}, 1, #{item.boardNo}, default)
 		</foreach>
 		select * from dual
 	</insert>
+	
+	<select id="selectBoard" resultType="CampBoard">
+		select *
+		from camp_board
+		where cb_no = #{cbNo}
+	</select>
+	
+	<update id="updateCount">
+		update camp_board 
+		set cb_count = cb_count + 1
+		where cb_no = #{cbNo}
+	</update>
 </mapper>

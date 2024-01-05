@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
-    <a id="back-to-top"><img src='image/topBtn.png' style='width:38px; height:38px;'></a>
+    <a id="back-to-top"><img src='image/seongun/topBtn.png' style='width:38px; height:38px;'></a>
     <div id="content">
         <div id="space_zone">
             <p>
@@ -91,7 +91,7 @@
                                                     <span class="comment_ico">
                                                         <img src="image/seongun/comments_icon.png" width="16" height="16" alt="댓글">
                                                     </span>
-                                                    <em class="c_cnt num">812</em>
+                                                    <em class="c_cnt num">[[${b.replyCount}]]</em>
                                                 </span>
                                             </div>
                                             <div class="u_like_list_module">
@@ -117,6 +117,14 @@
                     </div>
                 </li>
             </ul>
+            <th:block th:if="${list.isEmpty}">
+	            <div class="board-container" >
+	            	<div class="board-none-text">
+	            		<h1>아직 작성된 글이 없어요...</h1>
+	            	</div>
+	            </div>
+	            <div class="border-bottom-div"></div>
+            </th:block>
         </div>
         <div class="write_btn_area">
             <button type="button" id="write_btn" onclick="writeBtn()">글쓰기</button>

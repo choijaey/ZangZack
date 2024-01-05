@@ -19,4 +19,8 @@ public interface CampBoardDAO {
 
 	int insertAttmCampBoard(ArrayList<Attachment> fileList);
 
+	CampBoard selectBoard(int cbNo);
+
+	int updateCount(int cbNo);
+
 }
