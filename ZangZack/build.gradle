@@ -50,6 +50,20 @@ dependencies {
 	
 	//JSON
 	implementation group: 'org.json', name: 'json', version: '20231013'
+	
+	// 웹소켓을 위한 디팬던시
+	// https://mvnrepository.com/artifact/org.java-websocket/Java-WebSocket
+	implementation group: 'org.java-websocket', name: 'Java-WebSocket', version: '1.5.3'
+
+	// https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-jasper
+	implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: '10.0.22'
+		
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-websocket
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-websocket', version: '2.7.3'
+	
+	// https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
 }
 
 tasks.named('test') {
