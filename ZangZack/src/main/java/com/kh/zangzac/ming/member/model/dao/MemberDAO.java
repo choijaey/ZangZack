@@ -29,4 +29,6 @@ public interface MemberDAO {
 	//이메일 중복체크
 	int checkEmail(String memberEmail);
 
+	int deleteMember(String memberId);
+
 }

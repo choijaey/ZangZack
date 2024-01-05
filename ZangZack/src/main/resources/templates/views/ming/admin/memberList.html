@@ -244,26 +244,6 @@
      }
       
       
-      //전체내역/ 환불요청내역
-      function toggleTable(showId, hideId, element) {
-        document.getElementById(showId).classList.remove('hidden');
-        document.getElementById(hideId).classList.add('hidden');
-        
-      }
-      
-      const buttons = document.querySelectorAll('.cateBtn');
-     buttons.forEach(btn => btn.addEventListener('click', () => {
-       buttons.forEach(otherBtn => {
-           if (otherBtn !== btn) {
-               otherBtn.classList.remove('active');
-           }
-       });
-   
-       btn.classList.add('active');
-   }));
-      
-      
-      
       //드롭다운 변경
       function showSearch(searchId, dropdownText) {
             document.querySelectorAll('.search').forEach(function(searchElement) {

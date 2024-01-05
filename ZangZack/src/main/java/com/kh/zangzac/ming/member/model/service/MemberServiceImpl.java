@@ -53,6 +53,11 @@ public class MemberServiceImpl implements MemberService{
 		return mDAO.checkEmail(memberEmail);
 	}
 
+	@Override
+	public int deleteMember(String memberId) {
+		return mDAO.deleteMember(memberId);
+	}
+
 	
 	}
 

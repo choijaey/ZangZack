@@ -19,6 +19,8 @@ public interface MemberService {
 
 	int checkEmail(String memberEmail);
 
+	int deleteMember(String memberId);
+
 
 	
 	

@@ -4,6 +4,62 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link href="../css/ming/member/MyPage.css" rel="stylesheet">
+<style>
+	.profilePoto{
+		border-radius: 50%;
+		width: 120px;
+		height:120px;
+		top: 170px;
+		position: relative;
+		left: 45%;
+	}
+	.modal {
+	    display: none;
+	    position: fixed;
+	    z-index: 1;
+	    left: 0;
+	    top: 0;
+	    width: 100%;
+	    height: 100%;
+	    overflow: auto;
+	    background-color: rgba(0, 0, 0, 0.4);
+	}
+	.modal-content {
+	    background-color: white;
+	    margin: 15% auto;
+	    margin-left:60%;
+	    padding: 20px;
+	    border: 1px solid #888;
+	    width: 80%;
+	    max-width: 600px;
+	    text-align: center;
+	    height: auto;
+	    max-height: 70%;
+	    overflow-y: auto;
+	    display: flex;
+	    flex-direction: column; /* 수정된 부분 */
+    	justify-content: center; /* 추가된 부분 */
+    	align-items: center;
+	}
+	.modal-content Button{
+		background-color: rgb(251, 125, 83);
+		color: white;
+		border-radius: 5px;
+		border-color: rgb(251, 125, 83);
+		height: 50px;
+		width: 100px;
+		margin: 5px;
+	}
+	.modal-content Button:hover{
+		background-color: #FB8D53;
+		color: white;
+		border-radius: 5px;
+		border-color: rgb(251, 125, 83);
+		height: 50px;
+		width: 100px;
+		cursor: pointer;
+	}
+</style>
 </head>
 <body>
 	<div class="logo">
@@ -11,7 +67,7 @@
 	</div>
 	<aside class="sidebar">
 		<div class="user">
-			<img src="../image/ming/icons8-프로필-사진-96.png" style="width: 80px;"></img><br><br>
+			<img th:src="${loginUser.memberProfilePath}" style="width: 80px;"></img><br><br>
 			<p style="font-weight: bold; font-size: 1.5em;" th:text="${loginUser.memberName}"></p><br><br>
 		</div>
 		<ul class="links">
@@ -39,25 +95,32 @@
 				</li>
 				<li>
 					<img src="../image/ming/member/logout.png" style="width: 60px;"></img>
-					<a href="#">로그아웃</a>
+					<a href="logout.me">로그아웃</a>
 				</li>
 				<li style=" position:relative; top:150px;">
 					<img src="../image/ming/member/icons8-취소-100 (1).png" style="width: 60px;"></img>
-					<a href="#">회원탈퇴</a>
+					<a id="deleteMember">회원탈퇴</a>
 				</li>
 		</ul>
 	</aside>
+		<div id="myModal" class="modal">
+	       <!-- 모달 내용 -->
+	       <div class="modal-content">
+	           	<h4 id="modalContent"></h4>
+	           	<span id="modalResult"></span>
+	       </div>
+    	</div>
 	<form action="" method="post">
 		<div id="border" class="changeList" style="width: 1000px;height: 1700px;">
 			<span class="editTitle">내 정보 수정</span><br>
 				<div class="profile">
-					<div class = "profilePoto">
-						<img src="../image/ming/member/icons8-프로필-사진-96.png" class="profile-poto">
-							<label class="input-file-button" for="input-file">
-								파일선택
-								<input type="file" class="btnFile" name="file" id="input-file" accept=".jpg,.png.jpge" style="text-align: center;">
-							</label>
+					<div class="profilePoto">
+						<img th:src="${loginUser.memberProfilePath}" class="profile-poto">
 					</div>
+					<label class="input-file-button" for="input-file" style="width: 500px;">
+						파일선택
+						<input type="file" class="btnFile" name="file" id="input-file" accept=".jpg,.png.jpge" style="text-align: center;">
+					</label>
 			     	<div class="input-group">
 					    <input type="text" th:value="${loginUser.memberName}"  placeholder="이름">
 					    <label>Name</label>
@@ -80,40 +143,77 @@
 					</div>
 					<button class="mailBtn">번호인증</button>
 					<div class="input-group">
-					    <input type="text" name="emailCode"  required>
+					    <input type="text" name="phoneCode">
 					    <label>인증코드</label>
 					    <span></span>
 					</div>
 					<div class="input-group">
-					    <input type="email" name="phone" value="email@naver.com" placeholder="전화번호(-제외)" required>
+					    <input type="email" name="phone" th:value="${loginUser.memberEmail}"  required>
 					    <label>email</label>
 					    <span></span>
 					</div>
 					 <button class="mailBtn">메일인증</button>
 					 <div class="input-group">
-					    <input type="text" name="emailCode" value="emailCode" placeholder="emailCode" required>
+					    <input type="text" name="emailCode">
 					    <label>인증코드</label>
 					    <span></span>
 					</div>
 					<div class="input-group">
-					    <input type="text" value="post" placeholder="post" required>
+					    <input type="text" value="post" th:value="${loginUser.memberAddress}" required>
 					    <label>주소</label>
 					    <span></span>
 					</div>
 					 <button class="postBtn">주소 찾기</button>
 					<div class="input-group">
-					    <input type="text" value="datailPost" placeholder="datailPost" required>
+					    <input type="text" value="datailPost" required>
 					    <label>상세주소</label>
 					    <span></span>
 					</div>
 					<div class="input-group">
 			             <i class='bx bxs-lock-alt'></i>
-			             <input type="date" id="birth" placeholder="생년월일" name="birth" style="height: 45px;">
+			             <input type="date" id="birth" th:value="${loginUser.memberBirth}" name="birth" style="height: 45px;">
 		            </div>
 				</div>
 			</div>
 		<button class="btn-hover color-2" type="submit">수정</button>
       	<button class="btn-hover color-1" type="reset">취소</button>
 	</form>
+
+	<script>
+	 	document.getElementById('deleteMember').addEventListener('click', function(event) {
+	 		event.preventDefault();
+	 		const modal = document.getElementById('myModal');
+            const modalContent = document.getElementById('modalContent');
+            modalContent.textContent = '정말 탈퇴하시겠습니까? \n 탈퇴 후 계정 복구는 불가능합니다.';
+            modalContent.appendChild(document.createElement('br'));
+            modalContent.appendChild(document.createElement('br'));
+
+            modal.style.display = 'block';
+            
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = '네';
+            deleteButton.className = 'homepage-btn';
+            deleteButton.addEventListener('click', function() {
+                window.location.href = 'deleteMember.me';
+            });
+            modalContent.appendChild(deleteButton);
+            
+            const homepageButton = document.createElement('button');
+            homepageButton.textContent = '아니오';
+            homepageButton.className = 'homepage-btn';
+            homepageButton.addEventListener('click', function() {
+                closeModal();
+            });
+            modalContent.appendChild(homepageButton);
+            
+	 	});
+	 	
+	 	function closeModal() {
+	 	    const modal = document.getElementById('myModal');
+	 	    modal.style.display = 'none';
+	 	};
+	 	
+	
+	</script>
 </body>
 </html>

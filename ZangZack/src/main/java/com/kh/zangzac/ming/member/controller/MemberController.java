@@ -1,7 +1,6 @@
 package com.kh.zangzac.ming.member.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 import org.json.JSONArray;
@@ -265,6 +264,21 @@ public class MemberController {
 		return "views/ming/member/myPage";
 	}
 	
-	
+	//회원탈퇴
+	@GetMapping("deleteMember.me")
+	public String deleteMember(Model model) {
+		Member m = (Member)model.getAttribute("loginUser");
+		
+		String memberId = m.getMemberId();
+		int result = mService.deleteMember(memberId);
+		
+		if(result > 0) {
+			return "index";
+		}else {
+			model.addAttribute("msg","회원탈퇴실패");
+			return "views/ming/member/myPage";
+		}
+		
+	}
 	
 }

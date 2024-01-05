@@ -37,4 +37,10 @@
 		where member_email = #{memberEmail} and member_status = 'N'
 	</select>
 	
+	<update id="deleteMember">
+		update member
+		set member_status = 'Y'
+		where member_id = #{memberId}
+	</update>
+	
 </mapper>
