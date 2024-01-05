@@ -63,4 +63,24 @@ public class CampServiceImpl implements CampService {
 		return cDAO.selectPhoto(no);
 	}
 
+	@Override
+	public ArrayList<Attachment> selectInfoPhoto(int no) {
+		return cDAO.selectInfoPhoto(no);
+	}
+
+	@Override
+	public int getRecomendationCount(String recomendation) {
+		return cDAO.getRecomendationCount(recomendation);
+	}
+
+	@Override
+	public ArrayList<CampingGround> selectRecomendationList(PageInfo pi, String recomendation) {
+		return cDAO.selectRecomendationList(recomendation);
+	}
+
+	@Override
+	public ArrayList<Attachment> selectOnePhoto(int i) {
+		return cDAO.selectOnePhoto(i);
+	}
+
 }

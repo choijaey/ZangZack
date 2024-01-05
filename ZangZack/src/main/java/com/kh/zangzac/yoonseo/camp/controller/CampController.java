@@ -45,6 +45,8 @@ public class CampController {
 		ArrayList<CampingGround> cList = cService.selectCampList(pi,3);
 		ArrayList<CampingGround> mapList = cService.selectMapList(3);
 		
+		
+		
 		if(cList != null) {
 			model.addAttribute("loc", request.getRequestURI());
 			model.addAttribute("cList", cList);
@@ -58,8 +60,34 @@ public class CampController {
 	}
 	
 	@GetMapping("campList.ys")
-	public String campList() {
-		return "views/yoonseo/campList";
+	public String campList(@RequestParam(value="page", defaultValue="1") int page,
+			               Model model, HttpServletRequest request) {
+		
+		String recomendation = "Y";
+		int listCount = cService.getRecomendationCount(recomendation);
+		
+		
+		int currentPage = page;
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 6);
+		ArrayList<CampingGround> list = cService.selectRecomendationList(pi,recomendation);
+		
+	    ArrayList<Attachment> photo = cService.selectOnePhoto(0);
+	    System.out.println(photo);
+		
+		 
+		if(list != null) {
+			model.addAttribute("list", list);
+			model.addAttribute("loc", request.getRequestURI());
+			model.addAttribute("pi", pi);
+			model.addAttribute("photo", photo);
+			
+			
+			return "views/yoonseo/campList";
+			
+		}else {
+			throw new CampException("추천 목록 조회 실패");
+		}
+				
 	}
 	
 	@GetMapping("campDetail.ys")
@@ -68,12 +96,21 @@ public class CampController {
 			                       Model model) {
 		
 		CampingGround camp = cService.selectCampingDetail(no);
-		ArrayList<Attachment> list = cService.selectPhoto(no);
 		
+		ArrayList<Attachment> campList = cService.selectPhoto(no); //캠핑장 사진
+		
+	    String info = camp.getCgImgInfo();
+	    String[] infoArray = info.split(",");
+	  
+	    double point = camp.getCgStarPoint()*100/5;//별점에 적용시킬 width % 계산식.
+	    
 		if(camp != null) {
 		   model.addAttribute("camp", camp);
-		   model.addAttribute("list", list);
+		   model.addAttribute("list", campList);
 		   model.addAttribute("page", page);
+		   model.addAttribute("infoArray", infoArray);
+		   model.addAttribute("point", point);
+		  
 		   
 		   return"views/yoonseo/campDetail";   
 		}else {
@@ -94,17 +131,16 @@ public class CampController {
 	
 	@PostMapping("campInsert.ys")
 	public String campInsert(@ModelAttribute CampingGround camp,
-			                 @RequestParam("campImg") ArrayList<MultipartFile> campFiles,
-			                 @RequestParam("infoImg") ArrayList<MultipartFile> infoFiles
+			                 @RequestParam("campImg") ArrayList<MultipartFile> campFiles
+			                
 			                 ) {
 		
 		ArrayList<Attachment> campList = new ArrayList<>();
-		ArrayList<Attachment> infoList = new ArrayList<>();
+		
 		String name = "yoonseo";
 		
 		int result1 = 0;
 		int result2 = 0;
-		int result3 =0;
 		
 		
 		for(int i = 0; i < campFiles.size(); i++) {
@@ -120,19 +156,7 @@ public class CampController {
 			}
 		}
 		
-		for(int i = 0; i < infoFiles.size(); i++) {
-			MultipartFile upload = infoFiles.get(i);
-			String[] returnArr = imageStorage.saveImage(upload, name);
-			
-			if(returnArr != null) {
-				Attachment a = new Attachment();
-				a.setPhotoRename(returnArr[0]);
-				a.setPhotoPath(returnArr[1]);
-				a.setPhotoLevel(1);
-				
-				infoList.add(a);
-			}
-		}
+		
 		
 		result1 = cService.insertCamp(camp);
 		
@@ -142,13 +166,9 @@ public class CampController {
 		}
 		result2 = cService.insertCampImg(campList);
 		
-		//시설사진 저장
-		for(Attachment a : infoList) {
-			a.setBoardNo(camp.getCgNo());
-		}
-		result3 = cService.insertInfoImg(infoList);
+	
 		
-		if(result1 + result2 + result3 == campList.size() + infoList.size() + 1) {
+		if(result1 + result2  == campList.size()+ 1) {
 			return "views/yoonseo/campDetail";
 		}else {
 			throw new CampException("캠핑장 등록 실패");

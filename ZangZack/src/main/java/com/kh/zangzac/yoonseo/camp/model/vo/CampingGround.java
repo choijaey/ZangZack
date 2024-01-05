@@ -33,6 +33,7 @@ import lombok.ToString;
 		private char cgRecomendation;
 		private char cgStatus;
 		private int categoryNo;
+		private String cgImgInfo;
 		
 
 }

@@ -9,7 +9,7 @@
       values(#{cgNo},#{cgName}, #{cgRegion},#{cgAddress},#{cgPhone},#{cgType},
             default, sysdate, #{cgArea}, #{cgSeason},#{cgManageDate},
             #{cgBooking}, #{cgPage},#{cgStarPoint},#{cgAmenity},#{cgInfo},
-            default,default,5)
+            #{cgRecomendation},default,5,#{cgImgInfo})
    
    </insert>
 
@@ -65,11 +65,36 @@
      select *
      from photo
      where photo_status = 'N' 
-     <if test="no != null">
-       and board_no = #{no}
-     </if>
+            and board_no = #{no} and board_type = 3 and photo_level = 1
      order by photo_no
    </select>
-
+   
+   <select id="selectInfoPhoto" resultType="Attachment">
+      select *
+     from photo
+     where photo_status = 'N' 
+            and board_no = #{no} and board_type = 3 and photo_level = 2
+     order by photo_no
+   </select>
+   
+   <select id="getRecomendationCount" resultType="_int">
+     select count(*)
+     from camping_ground
+     where cg_status = 'N'and cg_recomendation = #{recomendation}
+   </select>
+   
+   <select id="selectRecomendationList" resultType="CampingGround">
+     select *
+     from camping_ground
+     where cg_status = 'N' and cg_recomendation = #{recomendation}
+   </select>
+   
+   <select id="selectOnePhoto" resultType="Attachment">
+     select *
+     from photo
+     where photo_status = 'N' and photo_level = #{i} and board_type=3
+     order by photo_no
+   </select>
+   
 
 </mapper>

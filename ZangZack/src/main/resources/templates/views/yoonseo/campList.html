@@ -34,15 +34,18 @@
 		 </div>
 	  </div>
 	  <div>
-		  <div onclick = "location.href = 'campDetail.ys'" class="card mb-3" style="max-width:1200px; height:230px; margin: auto;">
+		  <div onclick = "location.href = 'campDetail.ys'" class="card mb-3" style="max-width:1200px; height:230px; margin: auto;" th:each="list : ${list}">
 			  <div class="row g-0" style="height:100%;">
-			    <div class="col-md-4" style="overflow:hidden;width:380px; height:228px;">
-			      <img src="image/yoonseo/img/img.png" class="img-fluid rounded-start" style=" object-fit: cover;">
+			    <div th:each="photo : ${photo}" th:if="${list.cgNo eq photo.boardNo}" class="col-md-4" style="overflow:hidden;width:380px; height:228px;">
+			      <img th:src="${photo.photoPath}" class="img-fluid rounded-start" style=" object-fit: cover;" 
+			           th:if="${#strings.containsIgnoreCase(photo.photoRename, 'jpg') 
+					           or #strings.containsIgnoreCase(photo.photoRename, 'png') 
+					           or #strings.containsIgnoreCase(photo.photoRename, 'jpeg')}">
 			    </div>
 			    <div class="col-md-8">
 			      <div class="card-body" style="width:100%;">
 			        <div>
-			          <h5 class="card-title" style="float: left;" >[인천]</h5>
+			          <h5 class="card-title" style="float: left;" th:text="|[${list.cgRegion}]|"></h5>
 			          <h5 class="card-title" style="float: left; margin-left: 10px;">청라해변캠핑장</h5>
 			          <div class="score" style="margin-left: 80%;">  
 			            <div class="foreground" style="float: left;">
@@ -111,66 +114,7 @@
 			    </div>
 			  </div>
 		   </div>
-		   <div class="card mb-3" style="max-width: 1200px; height:230px; margin: auto;">
-			  <div class="row g-0" style="height:100%;">
-			    <div class="col-md-4" style="overflow:hidden;width:380px; height:228px;">
-			      <img src="image/yoonseo/img/camp2.jpg" class="img-fluid rounded-start" style=" object-fit: cover;">
-			    </div>
-			    <div class="col-md-8">
-			      <div class="card-body">
-			        <div class="score" style="margin-left:80%;">
-			            <div class="foreground" style="float: left;">
-			               <span class="background" style="width:96%;"></span><!-- 4.8 x 100 / 5 = 96 퍼센트 계산 식.-->
-			            </div>
-			            <p style="display: inline-block;">4.8</p>
-			       </div>
-			        <h5 class="card-title">Card title</h5>
-			        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-			        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-			      </div>
-			    </div>
-			  </div>
-		   </div>
-		   <div class="card mb-3" style="max-width: 1200px; height:230px; margin: auto;">
-			  <div class="row g-0" style="height:100%;">
-			    <div class="col-md-4" style="overflow:hidden;width:380px; height:228px;">
-			      <img src="image/yoonseo/img/camp3.jpg" class="img-fluid rounded-start" style=" object-fit: cover;">
-			    </div>
-			    <div class="col-md-8">
-			      <div class="card-body">
-			        <div class="score" style="margin-left:80%;">
-			            <div class="foreground" style="float: left;">
-			               <span class="background" style="width:96%;"></span><!-- 4.8 x 100 / 5 = 96 퍼센트 계산 식.-->
-			            </div>
-			            <p style="display: inline-block;">4.8</p>
-			       </div>
-			        <h5 class="card-title">Card title</h5>
-			        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-			        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-			      </div>
-			    </div>
-			  </div>
-		   </div>
-		   <div class="card mb-3" style="max-width: 1200px; height:230px; margin: auto;">
-			  <div class="row g-0" style="height:100%;">
-			    <div class="col-md-4" style="overflow:hidden;width:380px; height:228px;">
-			      <img src="image/yoonseo/img/camp4.jpg" class="img-fluid rounded-start" style=" object-fit: cover;">
-			    </div>
-			    <div class="col-md-8">
-			      <div class="card-body">
-			       <div class="score" style="margin-left:80%;">
-			            <div class="foreground" style="float: left;">
-			               <span class="background" style="width:96%;"></span><!-- 4.8 x 100 / 5 = 96 퍼센트 계산 식.-->
-			            </div>
-			            <p style="display: inline-block;">4.8</p>
-			       </div>
-			        <h5 class="card-title">Card title</h5>
-			        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-			        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-			      </div>
-			    </div>
-			  </div>
-		   </div>
+		   
 	   </div>
 	   <nav aria-label="Page navigation example">
 		  <ul class="pagination pagination justify-content-center">
@@ -191,12 +135,7 @@
 	  </nav>					     
    </div> 
    
-   <script th:inline="javascript">
-      window.onload = () => {
-    	  const tbody = document.querySelector('tbody');
-    	  const tds = tbody.querySelectorAll('td');
-      }
-   </script>
+  
 	
 	
 		

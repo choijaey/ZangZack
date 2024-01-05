@@ -23,4 +23,12 @@ public interface CampService {
 
 	ArrayList<Attachment> selectPhoto(Integer no);
 
+	ArrayList<Attachment> selectInfoPhoto(int no);
+
+	int getRecomendationCount(String recomendation);
+
+	ArrayList<CampingGround> selectRecomendationList(PageInfo pi, String recomendation);
+
+	ArrayList<Attachment> selectOnePhoto(int i);
+
 }
