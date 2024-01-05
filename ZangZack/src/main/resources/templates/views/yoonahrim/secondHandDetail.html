@@ -173,7 +173,7 @@
 	                if (button.innerText === '예약 중') {
 	                    alert("예약 중으로 상태가 변경되었습니다.");
 	                    button.innerText = '예약 취소';
-	                    window.location.href = "booking.ah"; //예약중일때
+	                    window.location.href = "booking.ah?spNo=52"; //예약중일때
 	                    
 	                    if (reservationElement) {
 	                        reservationElement.style.display = 'block';
@@ -228,7 +228,7 @@
 			    if(repBtn !== '') {
 			        $.ajax({
 			            type: 'get',
-			            url: 'insertReply.rep',
+			            url: 'insertReply.ah',
 			            data: { spNo : spNo },
 			            success: (data) => {
 			                console.log(data);  //전송에 성공했을 때

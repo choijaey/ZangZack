@@ -20,6 +20,8 @@ public interface secondHandService {
 
 	int deleteAttmSecondHand(int spNo);
 
+	int updateBooking(int spNo);
+
 
 
 

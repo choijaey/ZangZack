@@ -46,4 +46,10 @@
 		where BOARD_NO = #{spNo} and board_type = '4'
 	</select>
 	
+	<update id="updateBooking">
+		update SECONDHAND_PRODUCT
+		SET SP_IS_BOOK='Y'
+		where boardType = '4' and boardNo = #{spNo}
+	</update>
+	
 </mapper>

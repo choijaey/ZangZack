@@ -46,6 +46,11 @@ public class secondHandServiceImpl implements secondHandService{
 		return spDAO.deleteAttmSecondHand(spNo);
 	}
 
+	@Override
+	public int updateBooking(int spNo) {
+		return spDAO.updateBooking(spNo);
+	}
+
 
 
 

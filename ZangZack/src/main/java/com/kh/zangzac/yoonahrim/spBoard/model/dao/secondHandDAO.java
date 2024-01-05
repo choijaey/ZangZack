@@ -23,6 +23,8 @@ public interface secondHandDAO {
 
 	ArrayList<Attachment> selectAttachmentList(Integer spNo);
 
+	int updateBooking(int spNo);
+
 
 
 

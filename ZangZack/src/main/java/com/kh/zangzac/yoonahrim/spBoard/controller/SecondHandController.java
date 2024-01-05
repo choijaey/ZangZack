@@ -21,6 +21,8 @@ import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 import jakarta.servlet.http.HttpSession;
 
 
+/* 전체적으로 loginUser랑 board_Type 다 넣어두기*/
+
 @Controller
 public class SecondHandController {
 	
@@ -234,8 +236,18 @@ public class SecondHandController {
 	//예약
 	//예약 중 -> 예약완료
 	//booking.ah
-	public String booking() {
-		return "views/yoonahrim/secondHandDetail";
+	@GetMapping("booking.ah")
+	public String booking(@RequestParam("spNo") int spNo) {
+		
+		int result = spService.updateBooking(spNo);
+		
+		if(result > 0) {
+			return "views/yoonahrim/secondHandDetail";
+		}else {
+			throw new secondHandException("예약 실패");
+		}
+		
+		
 	}
 	
 	//예약 중 -> 예약완료
