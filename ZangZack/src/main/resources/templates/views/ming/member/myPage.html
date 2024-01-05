@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -12,7 +12,7 @@
 	<aside class="sidebar">
 		<div class="user">
 			<img src="../image/ming/icons8-프로필-사진-96.png" style="width: 80px;"></img><br><br>
-			<p style="font-weight: bold; font-size: 1.5em;">홍길동</p><br><br>
+			<p style="font-weight: bold; font-size: 1.5em;" th:text="${loginUser.memberName}"></p><br><br>
 		</div>
 		<ul class="links">
 			<hr>
@@ -51,29 +51,37 @@
 		<div id="border" class="changeList" style="width: 1000px;height: 1700px;">
 			<span class="editTitle">내 정보 수정</span><br>
 				<div class="profile">
-					<img src="../image/ming/member/icons8-프로필-사진-96.png" class="profile-poto">
-						<label class="input-file-button" for="input-file">
-							파일선택
-							<input type="file" class="btnFile" name="file" id="input-file" accept=".jpg,.png.jpge" style="text-align: center;">
-						</label>
+					<div class = "profilePoto">
+						<img src="../image/ming/member/icons8-프로필-사진-96.png" class="profile-poto">
+							<label class="input-file-button" for="input-file">
+								파일선택
+								<input type="file" class="btnFile" name="file" id="input-file" accept=".jpg,.png.jpge" style="text-align: center;">
+							</label>
+					</div>
 			     	<div class="input-group">
-					    <input type="text" value="UserName"  placeholder="이름">
+					    <input type="text" th:value="${loginUser.memberName}"  placeholder="이름">
 					    <label>Name</label>
 					    <span></span>
 					</div>
 					<div class="input-group">
-					    <input type="text" value="nickName"  placeholder="이름">
+					    <input type="text" th:value="${loginUser.memberNickName}"  placeholder="이름">
 					    <label>nickName</label>
 					    <span></span>
 					</div>
 					<div class="input-group">
-					    <input type="text" value="ID" placeholder="ID" required>
+					    <input type="text" th:value="${loginUser.memberId}" required th:readonly>
 					    <label>ID</label>
 					    <span></span>
 					</div>
 					<div class="input-group">
-					    <input type="tel" name="phone" value="phone" placeholder="전화번호(-제외)" required>
+					    <input type="tel" name="phone" th:value="${loginUser.memberPhone}" placeholder="전화번호(-제외)" required>
 					    <label>PHONE</label>
+					    <span></span>
+					</div>
+					<button class="mailBtn">번호인증</button>
+					<div class="input-group">
+					    <input type="text" name="emailCode"  required>
+					    <label>인증코드</label>
 					    <span></span>
 					</div>
 					<div class="input-group">
@@ -104,8 +112,8 @@
 		            </div>
 				</div>
 			</div>
-		<button class="btn-hover color-2">수정</button>
-      	<button class="btn-hover color-1">취소</button>
+		<button class="btn-hover color-2" type="submit">수정</button>
+      	<button class="btn-hover color-1" type="reset">취소</button>
 	</form>
 </body>
 </html>
