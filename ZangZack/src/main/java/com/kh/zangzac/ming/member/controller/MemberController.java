@@ -162,7 +162,7 @@ public class MemberController {
 	       int checkNum = r.nextInt(888888) + 111111;
 	         
 	       String subject = "[ZangZac]인증코드";                   // 제목
-	       String content = "인증코드 [ "+checkNum+" ] 입니다.";    // 내용
+	       String content = "인증코드 ["+checkNum+"] 입니다.";    // 내용
 	       String from = "gah_yn@naver.com";
 	       System.out.println(to);
 	       
