@@ -17,6 +17,7 @@
        <th:block th:each="s : ${list}">
       <!--  <input type="hidden" th:value="${ session.loginUser.memberId }" name="memberId"> -->
       <input type="hidden" name="spNo" th:value="${param.spNo}">
+      
       <div class="d-flex flex-wrap" th:each="a : ${aList}">
          <div class="photoNum">
             <div class="photoUploads">
@@ -25,7 +26,7 @@
              <br>
             <div class="input-group mb-3" style="left:55px">
                 <label class="input-group-text" for="inputGroupFile" Multiple>upload</label>
-               <input type="file" class="form-control" id="inputGroupFile" name="inputGroupFile" style="display:none;" onchange="previewImage(event, 'inputGroupFile','photoUpload')"/>
+               <input type="file" class="form-control" value=" " id="inputGroupFile" name="inputGroupFile" style="display:none;" onchange="previewImage(event, 'inputGroupFile','photoUpload')"/>
             </div>
          </div>
         
@@ -79,15 +80,13 @@
    <script th:line="javascript">
        function previewImage(event, previewId,photoId){
           const fReader1 = new FileReader();
+          const output = document.getElementById(photoId);
           
-           const output = document.getElementById(photoId);
           fReader1.readAsDataURL(event.target.files[0]);
-           fReader1.onloadend = function(event){
-           output.src = event.target.result;
-           }
-          
+          fReader1.onloadend = function(event){
+          output.src = event.target.result;
        }
-       
+   }
        
        document.getElementById('plus').addEventListener('click', addPhoto);
        

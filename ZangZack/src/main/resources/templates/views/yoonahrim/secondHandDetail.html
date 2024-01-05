@@ -5,22 +5,26 @@
 <title>Insert title here</title>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <link href="css/yoonahrim/SecondHandDetail.css?after" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
 	<br><br>
 	<h1 style="text-align:center; font-size: 30px; margin: 50px">중고 거래 매물 상세페이지</h1>
-	
+	<form id="wow" name="wow">
+	<th:block th:each="s : ${list}">
+	<input type="hidden" value="${ s.spNo }" id="spNo" th:value="${s.spNo}"/>
+	<!--  <input type="hidden" value="${ loginUser.memberId }" id="memberId"/> -->
 	<div class="d-grid gap-2 d-md-block">
 			<div class="container text-end mt-n2">
-				<button type="button" class="btn btn-outline-success" th:onclick="location.href='edit.ah?spNo=' + '41';">수정하기</button>&nbsp;&nbsp; <!-- th:onclick="location.href='edit.ah?spNo=' + ${spNo}"; -->
+				<button type="button" class="btn btn-outline-success" th:onclick="location.href='edit.ah?spNo=' + '52';">수정하기</button>&nbsp;&nbsp; <!-- th:onclick="location.href='edit.ah?spNo=' + ${spNo}"; -->
 				<button type="button" id="bookButton" class="btn btn-outline-success" th:onclick="booked()">예약 중</button>&nbsp;&nbsp;
 				<button type="button" id="soldoutButton" class="btn btn-outline-success" th:onclick="markSold()">판매완료</button>
 			</div>
 			<h2 class="reservation" style="text-align:center; margin: 50px; display: none">현재 이 페이지는 예약 중입니다.</h2>
 	</div>
-		<!-- 사진 뒤에 배경을 옆에 container 만틈 배경색을 줘서 비어보이지 않게 해보자! -->
+		
 		<div class="detail">
 			<div class="slide">
 				<!-- 아래 버튼 -->
@@ -55,7 +59,7 @@
 			
 			
 			<!-- 내용 창 -->
-			<div class="container_content" style="position:absolute; top: 1050px; left: 660px;" th:each="s : ${list}">
+			<div class="container_content" style="position:absolute; top: 1050px; left: 660px;">
 			    		
 			    		<!-- 프로필 창 -->
 						<span class="container_profile">
@@ -63,7 +67,6 @@
 								<img alt="img" src="image/yoonahrim/user.png">
 									<p><b>윤아림</b></p>
 									<p>[[${#strings.arraySplit(s.spAddress, ',')[0]}]]</p>
-									
 								<div class="container2 text-end">
 									<button type="button" class="btn_booked" th:onclick="location.href='chating.ah'">1 : 1 채팅방</button>
 								</div>	
@@ -100,10 +103,13 @@
 						<div class="media fs-7">
 							<img class="d-flex rounded-circle" alt="reply_profile" src="image/yoonahrim/user.png" style="position:absolute; width:50px; height:50px">
 							<div class="media-body" style="position:relative; left:60px">
+								<input type="hidden"/>
 								<h8 class="mt-0">Commenter Name</h8>
-								<div></div>
 								<p>첫번째 댓글.</p>
+								<span id="insert_reply" style="cursor: pointer;">수정</span>
+								<span class="delete_reply" style="cursor: pointer;">삭제</span>
 							</div>
+							<br>
 						</div>
 						<div class="media fs-7">
 							<img class="d-flex rounded-circle" alt="reply_profile" src="image/yoonahrim/user.png" style="position:absolute; width:50px; height:50px">
@@ -141,7 +147,7 @@
 							 <div class="col-xs-4">
 								<label for="ex2">
 	        						<input class="form-control" id="ex2" type="text" placeholder="댓글을 입력하세요">
-							  		<button class="btn_reply btn-outline-secondary" type="button" id="button-addon2">
+							  		<button class="btn_reply btn-outline-secondary" type="button" id="button-addon2"> <!-- th:onclick="location.href='insertReply.ah?spNo?=' + '52'" -->
 								  		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cursor-fill" viewBox="0 0 16 16">
 			 								 <path d="M14.082 2.182a.5.5 0 0 1 .103.557L8.528 15.467a.5.5 0 0 1-.917-.007L5.57 10.694.803 8.652a.5.5 0 0 1-.006-.916l12.728-5.657a.5.5 0 0 1 .556.103z"/>
 										</svg>
@@ -153,6 +159,8 @@
 				</div>
 			</div>
 		</div>
+		</th:block>
+		</form>
 		<script th:line="javascript">
 			function booked() {
 	            var button = document.getElementById('bookButton');
@@ -209,6 +217,30 @@
 			        }
 			    }
 			}
+			
+			
+			document.getElementById('button-addon2').addEventListener('click', () => {
+			    console.log('Button Clicked!');
+			    const repBtn = document.getElementById("ex2").value;
+			    const spNo = document.getElementById("spNo").value;
+			    
+			    if (repBtn !== '') {
+			        $.ajax({
+			            type: 'get',
+			            url: 'insertReply.ah',
+			            data: { spNo: spNo },
+			            success: (data) => {
+			                console.log(data);  //전송에 성공했을 때
+			            },
+			            error: data => console.log(data)  //전송에 실패했을 때
+			        });
+			    } else {
+			        alert("댓글 내용을 입력해주세요");//content가 비어있다면 alert창 띄움
+			    }
+			});
+				 
+
+			
 		</script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 package com.kh.zangzac.yoonahrim.spBoard.controller;
 
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,15 +10,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.model.vo.Attachment;
+import com.kh.zangzac.common.model.vo.Reply;
 import com.kh.zangzac.yoonahrim.spBoard.model.service.secondHandService;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandException;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
-import com.kh.zangzac.ming.member.model.vo.Member;
+
 import jakarta.servlet.http.HttpSession;
+
 
 @Controller
 public class SecondHandController {
@@ -77,26 +82,42 @@ public class SecondHandController {
 	    sp.setSpAddress(spAddress);
 	    
 	    ArrayList<Attachment> aList = spService.selectAttachmentList(sp.getSpNo());
-	    //기존 파일 삭제(for문)
+	    String name = "ahrim";
+	    
+	    //기존 파일 삭제
 	    int result = spService.deleteAttmSecondHand(sp.getSpNo());
 	    
+	    System.out.println("Delete result: " + result); //0이 나옴....시벌
+	    
+	    if (result <= 0) {
+	        throw new secondHandException("게시판 수정 실패 - 기존 파일 삭제 실패");
+	    }
+	    
 	    //구글드라이드 삭제
-	    String name = "ahrim";
+	    boolean allDeleteSuccess = true;
+	    
 	    for (int i = 0; i < aList.size(); i++) {
 	        boolean deleteResult  = imageStorage.deleteImage(aList.get(i).getPhotoRename(), name);
 	        
-	        if(deleteResult) {
-	        	return "views/yoonahrim/secondHandList";
-		    } else {
-		        throw new secondHandException("게시판 수정 실패");
+	        if (!deleteResult) {
+	            // 삭제에 실패한 경우 플래그를 false로 설정하고 반복문을 계속 진행
+	            allDeleteSuccess = false;
+	            
+	            if (!allDeleteSuccess) {
+	    	        // 모든 파일이 성공적으로 삭제되지 않았을 경우 예외를 던지거나 다른 처리를 수행
+	    	        throw new secondHandException("게시판 수정 실패 - 구글드라이브 파일 삭제 실패");
+	    	    }else {
+	    	    	return "views/yoonahrim/secondHandList";
+	    	    }
 	        }
 	    }
-
+	    
 	    //새로운 파일 업로드
 	    ArrayList<Attachment> detailList = new ArrayList<>();
 	    int result1 = 0;
 	    int result2 = 0;
 	    
+	    // rename 이랑 경로 뱉어냄.
 	    for (int i = 0; i < inputGroupFile.size(); i++) {
 	        MultipartFile upload = inputGroupFile.get(i); // 파일 하나씩 뽑아오기.
 	        String[] returnArr = imageStorage.saveImage(upload, name);
@@ -143,7 +164,9 @@ public class SecondHandController {
 		//String id = ((Member)session.getAttribute("loginUser")).getMemberId();
 		ArrayList<secondHandProduct> sList=  spService.selectMyList(memberId);
 		ArrayList<Attachment> aList = spService.selectAttachmentList(spNo);
+		ArrayList<Reply> rList = spService.selectReply(spNo);
 		
+		model.addAttribute("rList", rList);
 		model.addAttribute("aList", aList);
 		model.addAttribute("list", sList);
 		
@@ -210,7 +233,31 @@ public class SecondHandController {
 	        throw new secondHandException("게시판 등록 실패");
 	    }
 	}
-		
+	
+	
+	@GetMapping(value="insertReply.ah", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String insertReply(@ModelAttribute Reply r, @RequestParam("spNo") int spNo) {
+		int result = spService.insertReply(r);
+        ArrayList<Reply> list = spService.selectReply(spNo);
+         
+        JsonArray jArr = new JsonArray();
+        for(Reply reply : list) {
+        	JsonObject  json = new JsonObject ();
+        	json.addProperty("replyNo", reply.getReplyNo());
+            json.addProperty("replyContent", reply.getReplyContent());
+            json.addProperty("boardType", reply.getBoardType());
+            json.addProperty("boardNo", reply.getBoardNo());
+            json.addProperty("replyStatus", reply.getReplyStatus());
+            json.addProperty("memberId", reply.getMemberId());
+            
+            jArr.add(json);
+         }
+         return jArr.toString();
+	}
+	
+	
+	
 	
 	//예약
 	//예약 중 -> 예약완료

@@ -6,7 +6,7 @@
 	border-radius: 20%; 
 	border: 1px solid black;
 	margin: 10px;
-	position: relative;
+	position: flex;
 	left: 520px;
 	top: 60px;
 	display: flex;

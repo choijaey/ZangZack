@@ -37,7 +37,7 @@
 	
 	<delete id="deleteAttmSecondHand">
 		delete from photo
-		where PHOTO_NO = #{spNo} and BOARD_TYPE = '4'
+		where BOARD_NO = #{spNo} and BOARD_TYPE = '4'
 	</delete>
 	
 	<select id="selectAttachmentList">
@@ -46,4 +46,14 @@
 		where BOARD_NO = #{spNo} and board_type = '4'
 	</select>
 	
+	<insert id="insertReply">
+		insert reply
+		values (#{replyNo}, #{replyContent}, sysdate, sysdate, 4, #{boardNo}, default, 3)
+	</insert>
+	
+	<select id="selectReply">
+		select *
+		from reply
+		where BOARD_NO = #{spNo} and BOARD_TYPE = '4'
+	</select>
 </mapper>

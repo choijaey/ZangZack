@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.kh.zangzac.common.model.vo.Attachment;
+import com.kh.zangzac.common.model.vo.Reply;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
 @Mapper
@@ -22,6 +23,10 @@ public interface secondHandDAO {
 	int deleteAttmSecondHand(int spNo);
 
 	ArrayList<Attachment> selectAttachmentList(Integer spNo);
+
+	int insertReply(Reply r);
+
+	ArrayList<Reply> selectReply(int spNo);
 
 
 

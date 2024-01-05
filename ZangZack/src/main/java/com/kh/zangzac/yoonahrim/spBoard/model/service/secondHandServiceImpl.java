@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.zangzac.common.model.vo.Attachment;
+import com.kh.zangzac.common.model.vo.Reply;
 import com.kh.zangzac.yoonahrim.spBoard.model.dao.secondHandDAO;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
@@ -44,6 +45,16 @@ public class secondHandServiceImpl implements secondHandService{
 	@Override
 	public int deleteAttmSecondHand(int spNo) {
 		return spDAO.deleteAttmSecondHand(spNo);
+	}
+
+	@Override
+	public int insertReply(Reply r) {
+		return spDAO.insertReply(r);
+	}
+
+	@Override
+	public ArrayList<Reply> selectReply(int spNo) {
+		return spDAO.selectReply(spNo);
 	}
 
 
