@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <style>
 * {
     padding: 0;
@@ -20,6 +20,7 @@ a {
     padding: 40px 0;
     display:inline-block;
     width:300px;
+    height:600px;
     background-color:rgba(173,178,169,0.5);
     position: absolute;
     left: 500px;
@@ -219,6 +220,41 @@ a {
     
 }
 
+.wrap .chat {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    padding: 8px;
+}
+
+.wrap .chat .nickname {
+			position:absolute;
+            font-size: 12px; /* 닉네임의 글자 크기 */
+            color: #555; /* 닉네임 텍스트 색상 */
+            margin-bottom: 5px; /* 닉네임과 텍스트박스 사이의 공간 */
+            text-align: left; /* 닉네임을 왼쪽 정렬 */
+            
+        }
+
+/* Additional styling for nickname in different chat types */
+	.wrap .ch1 .nickname {
+		position: absolute;
+		 text-align: right; /* 닉네임을 오른쪽 정렬 */
+		 top:0px;
+	    left: 85px; /* 왼쪽 정렬 */
+	    font-size: 12px;
+	    color: #555;
+	}
+
+	.wrap .ch2 .nickname {
+		 position: absolute;
+		 text-align: left; /* 닉네임을 왼쪽 정렬 */
+		 top:0px;
+	    right: 85px; /* 왼쪽 정렬 */
+	    font-size: 12px;
+	    color: #555;
+	}
+
 </style>
 
 </head>
@@ -266,34 +302,118 @@ a {
         </div>
 	
 	    <div class="wrap">
-	    
-	    
-	        <div class="chat ch1">
-	            <div class="icon"><i class="fa-solid fa-user"></i></div>
-	            <div class="textbox">안녕하세요. 반갑습니다.</div>
-	        </div>
-	        <div class="chat ch2">
-	            <div class="icon"><i class="fa-solid fa-user"></i></div>
-	            <div class="textbox">안녕하세요. 친절한효자손입니다. 그동안 잘 지내셨어요?</div>
-	        </div>
-	        <div class="chat ch1">
-	            <div class="icon"><i class="fa-solid fa-user"></i></div>
-	            <div class="textbox">아유~ 너무요너무요! 요즘 어떻게 지내세요?</div>
-	        </div>
-	        <div class="chat ch2">
-	            <div class="icon"><i class="fa-solid fa-user"></i></div>
-	            <div class="textbox">뭐~ 늘 똑같은 하루 하루를 보내는 중이에요. 코로나가 다시 극성이어서 모이지도 못하구 있군요 ㅠㅠ 얼른 좀 잠잠해졌으면 좋겠습니다요!</div>
-	        </div>
-	        <div class="chat ch1">
-	            <div class="icon"><i class="fa-solid fa-user"></i></div>
-	            <div class="textbox">안녕하세요!!</div>
-	        </div>
-	    </div>
+	          <div class="chat ch1">
+                <div class="nickname">${id}</div>
+                    <div class="icon"><i class="fa-solid fa-user"></i></div>
+                    <div class="textbox">${message}</div>
+                </div>
+                
+                 <div class="chat ch2">
+                <div class="nickname">${id}</div>
+                    <div class="icon"><img src="https://storage.googleapis.com/zangzac/image/ming/BasicProfile.png" class="fa-solid fa-user" style="width:100%; height:100%; background-size: cover;"></img></div>
+                    <div class="textbox">${message}</div>
+                </div>
+  	 	</div>
 	    
 	     <div class="chat-input">
-            <input type="text" placeholder="메시지를 입력하세요...">
-            <button>전송</button>
+	     	<input type="hidden" id="roomName">
+            <input type="hidden" id="sessionId">
+            <input type="hidden" id="nickName" value="nickName">
+            <input type="hidden" id="memberId" value="12345a">
+            <input type="hidden" id="profile" value="https://storage.googleapis.com/zangzac/image/ming/BasicProfile.png">
+            <input type="text" placeholder="메시지를 입력하세요..." id="chatting">
+            <button id="sendBtn" onclick="send()">전송</button>
         </div>
     </div>
+    <script type="text/javascript">
+		let ws;
+	
+		function wsOpen(){
+			//웹소켓 전송시 현재 방의 번호를 넘겨서 보낸다.
+			ws = new WebSocket("ws://" + location.host + "/chating/choi0000/1/1");
+			wsEvt();
+		}
+		
+		
+		function wsEvt() {
+			ws.onopen = function(data){
+				//소켓이 열리면 동작
+			}
+			
+			ws.onmessage = function(data) {
+				//메시지를 받으면 동작
+				var msg = data.data;
+				if(msg != null && msg.trim() != ''){
+					var d = JSON.parse(msg);
+					if(d.type == "getId"){
+						
+						let si = d.sessionId != null ? d.sessionId : "";
+						let rm = d.roomName != null ? d.roomName : "";
+						if(si != '' && rm !=''){
+							console.log(si);
+							console.log(rm);
+							
+							$("#sessionId").val(si);
+							$("#roomName").val(rm);
+							
+						}
+					}else if(d.type == "message"){
+						console.log(d.msg);
+						if(d.sessionId == $("#sessionId").val()){
+							addChat(d.msg,d.userName,2,d.profile,d.nickName);
+						}else{
+							addChat(d.msg,d.userName,1,d.profile,d.nickName);
+						}
+							
+					}else{
+						console.warn("unknown type!")
+					}
+				}
+			}
+
+			document.addEventListener("keypress", function(e){
+				if(e.keyCode == 13){ //enter press
+					send();
+				}
+			});
+		}
+		
+		function send() {
+			var option ={
+				type: "message",
+				chatType: "1",
+				roomName: $("#roomName").val(),
+				sessionId : $("#sessionId").val(),
+				nickName : $("#nickName").val(),
+				msg : $("#chatting").val(),
+				profile: $("#profile").val(),
+				memberId : $("#memberId").val(),
+				time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+			}
+			ws.send(JSON.stringify(option))                                                                                                                                  
+			$('#chatting').val("");
+		}
+		
+		window.onload = function() {
+			wsOpen();
+        };
+        
+        function addChat(message, id,type,profile,nickName) {
+            var wrap = document.querySelector(".wrap");
+
+            // innerHTML을 사용하여 문자열로 직접 HTML을 추가
+            wrap.innerHTML += `
+                <div class="chat ch${type}">	
+                <div class="nickname">${nickName}</div>
+                <div class="icon"><img src="${profile}" class="fa-solid fa-user" style="width:100%; height:100%; background-size: cover;"></img></div>
+                    <div class="textbox">${message}</div>
+                </div>
+            `;
+            
+            wrap.scrollTop = wrap.scrollHeight;
+        }
+	</script>
+    
+    
 </body>
 </html>

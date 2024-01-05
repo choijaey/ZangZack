@@ -21,10 +21,15 @@
       </p>
       <!-- height="111~120px" -->
       <div id="my_menu">
-         <ul>
-            <li><a href="signIn.me">로그인</a></li>
+         <ul th:if="${session.loginUser == null}">
+            <li><a href="signIn.me">아이디찾기</a></li>
             <li><span>/</span></li>
-            <li><a href="signUp.me">회원가입</a></li>
+            <li><a href="signUp.me">로그인</a></li>
+         </ul>
+         <ul th:if="${session.loginUser != null}">
+            <li><a href="logout.me">로그아웃</a></li>
+            <li><span>/</span></li>
+            <li><a href="myPage.me">마이페이지</a></li>
          </ul>
       </div>
    </div>
@@ -49,7 +54,7 @@
             <li class="main-menu"><a href="#" class="main-menu-name">커뮤니티</a>
                <ul>
                   <li class="sub-menu-1">
-                     <a href="#" class="sub-menu-name">채팅방<span class="gt"></span> 
+                     <a href="chatRoom.jy" class="sub-menu-name">채팅방<span class="gt"></span> 
                         <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
                      </a>
                   </li>
@@ -145,15 +150,5 @@
          </ul>
       </div>
    </header>
-    <script>
-      const logoImage = document.querySelector('.logo img');
-   
-      logoImage.addEventListener('click', function(event) {
-         window.location.href = 'home.do';
-      });
-      
-      logoImage.style.cursor = 'pointer';
-      
-   </script>
 </body>
 </html>
