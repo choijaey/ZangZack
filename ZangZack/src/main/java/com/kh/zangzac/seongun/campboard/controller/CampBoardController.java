@@ -78,10 +78,8 @@ public class CampBoardController {
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
 		ArrayList<CampBoard> list = cService.selectBoardList(pi,0);
 		
-		System.out.println(list.toString());
 		String msg = list.isEmpty() ? "작성된 게시판이 없습니다!" : null;
 		sWork.addModel(model, pi, list, msg, request.getRequestURI());
-		System.out.println("test");
 	    return "views/seongun/campboard/albumBoard";
 	}
 	
@@ -106,9 +104,9 @@ public class CampBoardController {
 	    ArrayList<Reply> rList = cService.selectReply(sendReply);
 		
 	    if(bList != null) {
-			model.addAttribute("b", bList);
+			model.addAttribute("bList", bList);
 			model.addAttribute("page", page);
-			model.addAttribute("list", rList);
+			model.addAttribute("rList", rList);
 			return "views/seongun/campboard/boardDetail";
 		}else {
 			
