@@ -81,7 +81,7 @@ public class CampBoardController {
 		System.out.println(list.toString());
 		String msg = list.isEmpty() ? "작성된 게시판이 없습니다!" : null;
 		sWork.addModel(model, pi, list, msg, request.getRequestURI());
-		
+		System.out.println("test");
 	    return "views/seongun/campboard/albumBoard";
 	}
 	
