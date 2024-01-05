@@ -15,4 +15,6 @@ public interface CampService {
 
 	int insertInfoImg(ArrayList<Attachment> infoList);
 
+	int getListCount(int i);
+
 }
