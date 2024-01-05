@@ -25,4 +25,16 @@
 	    where MEMBER_ID = #{memberId} and member_status = 'N'
 	</update>
 	
+	<select id="checkId" resultType="_int">
+		select count(*)
+		from member
+		where member_id = #{memberId} and member_status = 'N'
+	</select>
+	
+	<select id="checkEmail" resultType="_int">
+		select count(*)
+		from member
+		where member_email = #{memberEmail} and member_status = 'N'
+	</select>
+	
 </mapper>

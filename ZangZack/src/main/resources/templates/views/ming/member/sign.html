@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -47,7 +47,7 @@
 	      <!-- 회원가입 시작 -->
 	      <div class="col align-items-center flex-col sign-up">
 	        <div class="form-wrapper align-items-center">
-	          <form class="form sign-up" action="insertMember.me" method="post" onsubmit="return NoSign()">
+	          <form class="form sign-up"  action="insertMember.me" method="post" onsubmit="return NoSign()">
 	            <div class="input-group">
 	              <i class='bx bxs-user'></i>
 	              <input type="text" placeholder="Id" style="height: 45px;" id="memberId" name="memberId" autofocus>
@@ -62,7 +62,7 @@
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bx-mail-send'></i>
-	              <input type="email" placeholder="Email" style="height: 45px;" name="memberEmail">
+	              <input type="email" placeholder="Email" style="height: 45px;" name="memberEmail" id="memberEmail">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
@@ -94,13 +94,18 @@
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	             <input type="date" id="birth" placeholder="생년월일" name="memberBirth" style="height: 45px;">
+	             <input type="date" id="memberBirth" placeholder="생년월일" name="memberBirth" style="height: 45px;" min="1900-01-01">
 	            </div>
 	            <span>이용약관 동의 필수 <a href="agreement.me">[보기]</a></span>
-	            <input type="checkbox" name="chk" class="essential" required="required">
+	            <input type="checkbox" name="chk" class="essential" required="required"><br><br>
 	            <button type="submit" style="background-color: rgb(251, 125, 83); color: white;">
 	              Sign up
 	            </button>
+	            <p style="text-align: center;">
+	              <a href="home.me" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.1em;">
+					HOME으로 돌아가기
+				  </a>
+	            </p>
 	            <p style="font-size: 0.8em;">
 	              <span>
 	                Already have an account?
@@ -130,11 +135,11 @@
 	              Sign in
 	            </button>
 	            <p style="text-align: center;">
-	              <a href="#" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold;" >
-	                아이디 찾기 
+	              <a href="home.me" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.2em;" >
+	                HOME 
 	              </a>
-	              <a href="#" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold;">
-					비밀번호 찾기
+	              <a href="signIn.me" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.2em;">
+					아이디 / 비밀번호 찾기
 				  </a>
 	            </p>
 	            <p>
@@ -243,24 +248,11 @@
 		}
 	</script>
 	
-	<script th:inline="javascript">
-	    // 서버에서 전달한 메시지를 가져오기
-	    let msg = /*[[${msg}]]*/ '';
-	
-	    // alert을 띄우기 (로그인 실패 시에만)
-	    if (msg !== "" && msg.includes("로그인에 실패")) {
-	        alert(msg);
-	    }
-	</script>
-	
 	 <script >
 		window.onload = () =>{
 			
-			// 로그인 및 회원가입 실패
-			
 			//아이디 중복 체크 / 정규식
 			document.getElementById('memberId').addEventListener('change', function(){
-				const idResult = document.getElementById('idCheckResult');		// 아이디 확인
 				let idval = $('#memberId').val();
 		        let idvalcheck = /^[a-z0-9]+$/;
 				if(this.value.trim() == ''){
@@ -275,14 +267,14 @@
 					// 아이디 중복체크
 			    	$.ajax({
 			    		url: 'checkId.me',
-			    		data: {userId:this.value.trim()},
+			    		data: {memberId:this.value.trim()},
 			    		success: (data) =>{
 			    			console.log(data);
 			    			if(data == 'yes'){
-			    				id.style.borderColor = 'green';
+			    				memberId.style.borderColor = 'green';
 			    				checkId = true;
 			    			} else {
-			    				id.style.borderColor = 'red';
+			    				memberId.style.borderColor = 'red';
 			    				checkId = false;
 			    			}
 			    		},
@@ -290,13 +282,35 @@
 			    	})   
 				}
 			});
-		}
+		
+		
+		
+		//이메일 중복체크
+		document.getElementById('memberEmail').addEventListener('change', function(){
+			let emailVal = $('#memberEmail').val();
+				$.ajax({
+					url: 'checkEmail.me',
+					data : {memberEmail : this.value},
+					success: (data) =>{
+						if(data == 'yes'){
+							memberEmail.style.borderColor = 'green';
+							checkEmail = true;
+						}else{
+							memberEmail.style.borderColor = 'red';
+							checkEmail = false;
+						}
+					},
+					error : data => console.log(data)
+				});
+		});
+	}
 	</script>
 	<script>
 		<!-- 비밀번호 확인 + 정규식 -->
+		let checkId = false;
+	    let checkPwd = false;
+	    let checkEmail = false;
 		function focusOut(){
-			let checkId = false;
-		    let checkPwd = false;
 			let pwd = document.getElementById("pwd");
 	        let pwdConfirm = document.getElementById("pwdConfirm");
 	        let pwdcheck = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#%^&*])[A-Za-z\d!@#%^&*]{8,}$/;
@@ -319,6 +333,14 @@
 			} 
 		}
 	</script> 
+	
+	<script>
+		var now_date = Date.now();// 지금 날짜를 밀리초로
+		var timeOff = new Date().getTimezoneOffset()*60000; // getTimezoneOffset()은 현재 시간과의 차이를 분 단위로 반환
+		var today = new Date(now_date-timeOff).toISOString().split("T")[0]; //new Date(now_utc-timeOff).toISOString()은 '2024-01-01T18:09:38.134Z'를 반환
+		document.getElementById("memberBirth").setAttribute("max", today);
+    </script>
+    
 	<script type="text/javascript">
 		let check_code=false;
 		let check_num;
@@ -360,10 +382,13 @@
 		// 모든 폼이 일치해야 넘어오게 
 		function NoSign(){
 			
-			if(check_form){
+			if(check_code){
+				checkId = true;
+			   	checkPwd = true;
+			    checkEmail = true;
 				return true;
 			}else{
-				alert("");
+				alert("정보가 올바르게 작성되었는지 확인해주세요.");
 				return false;
 			}
 				

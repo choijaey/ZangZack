@@ -50,6 +50,7 @@ public class MemberController {
 		return "views/ming/member/sign";
 	}
 	
+	//홈으로 가기
 	@GetMapping("home.me")
 	public String home() {
 		return "index";
@@ -69,7 +70,7 @@ public class MemberController {
 		}
 		m.setMemberAddress(address);
 		
-		 m.setMemberNickName(existingNickname + "#" + generateRandomNumbers()); // 랜덤닉네임
+		m.setMemberNickName(existingNickname + "#" + generateRandomNumbers()); // 랜덤닉네임
 		m.setMemberPwd(bcrypt.encode(m.getMemberPwd()));
 		m.getMemberId();
 		
@@ -81,6 +82,29 @@ public class MemberController {
 			return "views/ming/member/sign";
 	    }
 	}
+	
+	
+	//아이디 중복체크
+	@RequestMapping(value = "checkId.me")
+	@ResponseBody
+	public String checkId(@RequestParam("memberId") String memberId) {
+		int count = mService.checkId(memberId);
+		String result = count ==  0 ? "yes" : "no";
+		
+		return result;
+	}
+	
+	//이메일 중복체크
+	@RequestMapping(value ="checkEmail.me")
+	@ResponseBody
+	public String checkEmail(@RequestParam("memberEmail") String memberEmail) {
+		
+		int count = mService.checkEmail(memberEmail);
+		String result = count == 0 ? "yes" : "no";
+		
+		return result;
+	}
+	
 	
 	private String generateRandomNumbers() {
 	    // 4자리 랜덤 숫자 생성
@@ -99,23 +123,19 @@ public class MemberController {
 	@PostMapping("login.me")
 	public String loginUser(@ModelAttribute Member m , Model model) {
 		Member loginUser = mService.login(m);
-		System.out.println("로그인 되기 전 : " + m);
 		
 		if(loginUser != null) {
 			if(bcrypt.matches(m.getMemberPwd(), loginUser.getMemberPwd())) {
 				model.addAttribute("loginUser",loginUser);
-				System.out.println("로그인이 된다면? : " + m);
 				return "index";
 				
 			}else {
 				model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
-				System.out.println("로그인 왜 안되는지? : " + m);
 				return "views/ming/member/sign";
 			}
 			
 		}else {
 			model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
-			System.out.println("진짜 왜? : " + m);
 			return "views/ming/member/sign";
 		}
 		
@@ -129,7 +149,7 @@ public class MemberController {
 		return "index";
 	}
 	
-	//find 화면
+	//아이디 / 비밀번호 화면
 	@GetMapping("signIn.me")
 	public String find() {
 		return "views/ming/member/find";
@@ -237,11 +257,13 @@ public class MemberController {
          
 	  return str+"";
 		 
-	
-	
-	
 	}
 	
+	// 마이페이지로 가기
+	@GetMapping("myPage.me")
+	public String myPage() {
+		return "views/ming/member/myPage";
+	}
 	
 	
 	
