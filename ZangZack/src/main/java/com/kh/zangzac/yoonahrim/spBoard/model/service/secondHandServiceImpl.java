@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.zangzac.common.model.vo.Attachment;
-import com.kh.zangzac.common.model.vo.Reply;
 import com.kh.zangzac.yoonahrim.spBoard.model.dao.secondHandDAO;
+import com.kh.zangzac.yoonahrim.spBoard.model.vo.Reply;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
 @Service

@@ -14,16 +14,17 @@
 	<h1 style="text-align:center; font-size: 30px; margin: 50px">중고 거래 매물 상세페이지</h1>
 	<form id="wow" name="wow">
 	<th:block th:each="s : ${list}">
-	<input type="hidden" value="${ s.spNo }" id="spNo" th:value="${s.spNo}"/>
+	<input type="hidden" th:value="${ s.spNo }" id="spNo"/>
+	
 	<!--  <input type="hidden" value="${ loginUser.memberId }" id="memberId"/> -->
-	<div class="d-grid gap-2 d-md-block">
-			<div class="container text-end mt-n2">
-				<button type="button" class="btn btn-outline-success" th:onclick="location.href='edit.ah?spNo=' + '52';">수정하기</button>&nbsp;&nbsp; <!-- th:onclick="location.href='edit.ah?spNo=' + ${spNo}"; -->
-				<button type="button" id="bookButton" class="btn btn-outline-success" th:onclick="booked()">예약 중</button>&nbsp;&nbsp;
-				<button type="button" id="soldoutButton" class="btn btn-outline-success" th:onclick="markSold()">판매완료</button>
-			</div>
-			<h2 class="reservation" style="text-align:center; margin: 50px; display: none">현재 이 페이지는 예약 중입니다.</h2>
-	</div>
+		<div class="d-grid gap-2 d-md-block">
+				<div class="container text-end mt-n2">
+					<button type="button" class="btn btn-outline-success" th:onclick="location.href='edit.ah?spNo=' + '52';">수정하기</button>&nbsp;&nbsp; <!-- th:onclick="location.href='edit.ah?spNo=' + ${spNo}"; -->
+					<button type="button" id="bookButton" class="btn btn-outline-success" th:onclick="booked()">예약 중</button>&nbsp;&nbsp;
+					<button type="button" id="soldoutButton" class="btn btn-outline-success" th:onclick="markSold()">판매완료</button>
+				</div>
+				<h2 class="reservation" style="text-align:center; margin: 50px; display: none">현재 이 페이지는 예약 중입니다.</h2>
+		</div>
 		
 		<div class="detail">
 			<div class="slide">
@@ -106,7 +107,7 @@
 								<input type="hidden"/>
 								<h8 class="mt-0">Commenter Name</h8>
 								<p>첫번째 댓글.</p>
-								<span id="insert_reply" style="cursor: pointer;">수정</span>
+								<span id="insert_reply" style="cursor: pointer;">수정</span>&nbsp;&nbsp;
 								<span class="delete_reply" style="cursor: pointer;">삭제</span>
 							</div>
 							<br>
@@ -224,11 +225,11 @@
 			    const repBtn = document.getElementById("ex2").value;
 			    const spNo = document.getElementById("spNo").value;
 			    
-			    if (repBtn !== '') {
+			    if(repBtn !== '') {
 			        $.ajax({
 			            type: 'get',
 			            url: 'insertReply.ah',
-			            data: { spNo: spNo },
+			            data: { spNo : spNo },
 			            success: (data) => {
 			                console.log(data);  //전송에 성공했을 때
 			            },

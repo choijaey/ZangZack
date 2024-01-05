@@ -3,6 +3,8 @@ package com.kh.zangzac.yoonahrim.spBoard.controller;
 import java.sql.Date;
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,12 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+
 import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.model.vo.Attachment;
-import com.kh.zangzac.common.model.vo.Reply;
 import com.kh.zangzac.yoonahrim.spBoard.model.service.secondHandService;
+import com.kh.zangzac.yoonahrim.spBoard.model.vo.Reply;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandException;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
@@ -241,17 +242,17 @@ public class SecondHandController {
 		int result = spService.insertReply(r);
         ArrayList<Reply> list = spService.selectReply(spNo);
          
-        JsonArray jArr = new JsonArray();
+        JSONArray jArr = new JSONArray();
         for(Reply reply : list) {
-        	JsonObject  json = new JsonObject ();
-        	json.addProperty("replyNo", reply.getReplyNo());
-            json.addProperty("replyContent", reply.getReplyContent());
-            json.addProperty("boardType", reply.getBoardType());
-            json.addProperty("boardNo", reply.getBoardNo());
-            json.addProperty("replyStatus", reply.getReplyStatus());
-            json.addProperty("memberId", reply.getMemberId());
+        	JSONObject  json = new JSONObject ();
+        	json.put("replyNo", reply.getReplyNo());
+            json.put("replyContent", reply.getReplyContent());
+            json.put("boardType", reply.getBoardType());
+            json.put("boardNo", reply.getBoardNo());
+            json.put("replyStatus", reply.getReplyStatus());
+            json.put("memberId", reply.getMemberId());
             
-            jArr.add(json);
+            jArr.put(json);
          }
          return jArr.toString();
 	}

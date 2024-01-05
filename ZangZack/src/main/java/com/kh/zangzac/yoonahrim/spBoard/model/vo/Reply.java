@@ -1,4 +1,4 @@
-package com.kh.zangzac.common.model.vo;
+package com.kh.zangzac.yoonahrim.spBoard.model.vo;
 
 import java.sql.Date;
 

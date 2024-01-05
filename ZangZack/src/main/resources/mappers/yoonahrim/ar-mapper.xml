@@ -51,7 +51,7 @@
 		values (#{replyNo}, #{replyContent}, sysdate, sysdate, 4, #{boardNo}, default, 3)
 	</insert>
 	
-	<select id="selectReply">
+	<select id="selectReply" resultType="Reply">
 		select *
 		from reply
 		where BOARD_NO = #{spNo} and BOARD_TYPE = '4'
