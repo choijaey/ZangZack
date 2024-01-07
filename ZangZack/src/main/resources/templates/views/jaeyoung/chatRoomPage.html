@@ -323,7 +323,7 @@ a {
 	    <div class="wrap">
 	    
 	    	<th:block th:each="chatLog : ${chatLogs}">
-			    <div th:class="|chat ${chatLog.memberId == session.loginUser.MemberId ? 'ch1' : 'ch2'}|">
+			    <div th:class="|chat ${chatLog.memberId != session.loginUser.MemberId ? 'ch1' : 'ch2'}|">
 			        <div class="nickname" th:text="${chatLog['nickName']}"></div>
 			        <div class="icon">
 			            <img th:src="${chatLog.profile}" class="fa-solid fa-user" style="width:100%; height:100%; background-size: cover;">

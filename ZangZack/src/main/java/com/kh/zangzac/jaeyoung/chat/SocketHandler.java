@@ -170,7 +170,12 @@ public class SocketHandler extends TextWebSocketHandler {
     	  int count = cService.checkCount(checkChatter);
     	  
     	  if(count>0) {
+    		  // 채팅방에 이미 있는 상태라면
     		  cFileManager.updateUnreadChatter(roomName,myId);
+    		  
+    		  //입장한 채팅방에 메시지를 보내 갱신시키게 만들거.
+    		  
+    		  
     	  }else {
     		 //DB에 정보 정보 추가하기
     		  int result = cService.insertChatRoom(checkChatter);

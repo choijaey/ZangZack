@@ -99,6 +99,12 @@ public class ChatFileManager {
     public static JSONArray readChatLog(String roomName) {
         // 파일 경로 설정 (C:/zangzacChat/chatlog/roomName.txt)
         String filePath = "C:/zangzacChat/chatlog/" + roomName + ".txt";
+        
+        // 파일이 없으면 만들기
+        File file = new File(filePath);
+        if (!file.exists() || file.length() == 0) {
+            return null;
+        }
 
         JSONParser parser = new JSONParser();
         JSONArray chatLogs = new JSONArray();
