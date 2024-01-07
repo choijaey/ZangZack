@@ -42,7 +42,7 @@
 	
 	<select id="selectBoard" resultType="CampBoard">
 		select *
-		from camp_board
+		from camp_board_view
 		where cb_no = #{cbNo}
 	</select>
 	

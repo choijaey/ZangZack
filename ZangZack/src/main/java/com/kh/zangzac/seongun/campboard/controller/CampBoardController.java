@@ -14,8 +14,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.Pagination;
+import com.kh.zangzac.common.controller.BoardCondition;
 import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.common.model.vo.SelectCondition;
+import com.kh.zangzac.common.photo.model.vo.Photo;
+import com.kh.zangzac.common.photo.service.PhotoService;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.ming.member.model.vo.Member;
 import com.kh.zangzac.seongun.campboard.model.service.CampBoardService;
@@ -38,9 +42,15 @@ public class CampBoardController {
 	
 	@Autowired
 	private CampBoardService cService;
+	
+	@Autowired 
+	private PhotoService pService;
     
 	@Autowired
 	private WorkController sWork;
+	
+	@Autowired
+	private BoardCondition boardSet;
 	
 	@GetMapping("campBoard.su")
 	public String campBoardListView(@RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
@@ -52,7 +62,7 @@ public class CampBoardController {
 		ArrayList<CampBoard> list = cService.selectBoardList(pi,0);
 		
 		String msg = list.isEmpty() ? "작성된 게시판이 없습니다!" : null;
-		sWork.addModel(model, pi, list, msg, request.getRequestURI());
+		sWork.addListModel(model, pi, list, msg, request.getRequestURI());
 		return "views/seongun/campboard/listBoard";
 	}
 	
@@ -65,7 +75,7 @@ public class CampBoardController {
 		ArrayList<CampBoard> list = cService.selectBoardList(pi,0);
 		
 		String msg = list.isEmpty() ? "작성된 게시판이 없습니다!" : null;
-		sWork.addModel(model, pi, list, msg, request.getRequestURI());
+		sWork.addListModel(model, pi, list, msg, request.getRequestURI());
 	    
 		return "views/seongun/campboard/cardBoard";
 	}
@@ -79,7 +89,7 @@ public class CampBoardController {
 		ArrayList<CampBoard> list = cService.selectBoardList(pi,0);
 		
 		String msg = list.isEmpty() ? "작성된 게시판이 없습니다!" : null;
-		sWork.addModel(model, pi, list, msg, request.getRequestURI());
+		sWork.addListModel(model, pi, list, msg, request.getRequestURI());
 	    return "views/seongun/campboard/albumBoard";
 	}
 	
@@ -91,9 +101,7 @@ public class CampBoardController {
 	@GetMapping("selectBoard.su")
 	public String campBoardView(@RequestParam("cbNo") int cbNo, @RequestParam(value="page", defaultValue="1") int page, HttpSession session,Model model) {
 		Member loginUser = (Member)session.getAttribute("loginUser");
-		Reply sendReply = new Reply();
-		sendReply.setBoardNo(cbNo);
-		sendReply.setBoardType(4);
+		SelectCondition b = boardSet.selectBoard(cbNo, 1);
 		
 		String id = null;
 		if(loginUser != null) {
@@ -101,15 +109,11 @@ public class CampBoardController {
 		}
 	    
 	    CampBoard bList = cService.selectBoard(cbNo, id);
-	    ArrayList<Reply> rList = cService.selectReply(sendReply);
-		
+	    ArrayList<Photo> pList = pService.selectBoardPhoto(b);
 	    if(bList != null) {
-			model.addAttribute("bList", bList);
-			model.addAttribute("page", page);
-			model.addAttribute("rList", rList);
+			sWork.BoardDetail(model,bList, pList, page);
 			return "views/seongun/campboard/boardDetail";
 		}else {
-			
 			return "redirect:/campBoard.su";
 		}
 	}

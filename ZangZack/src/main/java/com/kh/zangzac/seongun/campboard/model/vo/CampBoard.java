@@ -22,6 +22,7 @@ public class CampBoard {
 	private Date cbModifyDate;
 	private String cbStatus;
 	private String memberId;
+	private String memberProfilePath;
 	private int categoryNo;
 	private String memberName;
 	private String categoryName;
