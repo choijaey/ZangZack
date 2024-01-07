@@ -1,10 +1,13 @@
 package com.kh.zangzac.ming.member.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -37,7 +40,7 @@ public class MemberController {
 	@Autowired
 	private BCryptPasswordEncoder bcrypt;
 	
-	//private Logger logger = LoggerFactory.getLogger(MemberController.class); 왜인지 오류가 남 나중에 해야지 
+	private Logger logger = LoggerFactory.getLogger(MemberController.class);
 	
 	//메일 인증
 	@Autowired
@@ -120,22 +123,23 @@ public class MemberController {
 	
 	//로그인
 	@PostMapping("login.me")
-	public String loginUser(@ModelAttribute Member m , Model model) {
+	public String loginUser(@ModelAttribute Member m , Model model, @RequestParam("beforeURL") String beforeURL) {
 		Member loginUser = mService.login(m);
 		
 		if(loginUser != null) {
 			if(bcrypt.matches(m.getMemberPwd(), loginUser.getMemberPwd())) {
 				model.addAttribute("loginUser",loginUser);
-				return "index";
-				
+				return "redirect:" + beforeURL;
 			}else {
 				model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
-				return "views/ming/member/sign";
+				model.addAttribute("searchUrl","views/ming/member/sign");
+				return "redirect:signUp.me";
 			}
 			
 		}else {
 			model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
-			return "views/ming/member/sign";
+			model.addAttribute("searchUrl","views/ming/member/sign");
+			return "redirect:signUp.me";
 		}
 		
 		
@@ -281,4 +285,37 @@ public class MemberController {
 		
 	}
 	
+	
+	//비밀번호 변경
+	@GetMapping("updatePwd.me")
+	public String updatePwdView() {
+		return "views/ming/member/updatePwd";
+	}
+	
+	@PostMapping("changePwd.me")
+	public String changePwd(@RequestParam("memberPwd")String memeberPwd, @RequestParam("newMemberPwd")String newMemberPwd, Model model) {
+		 Member m = (Member)model.getAttribute("loginUser");
+		 if(bcrypt.matches(memeberPwd, m.getMemberPwd())) {
+			 HashMap<String, String> map = new HashMap<String, String>();
+			 
+			 map.put("memberId", m.getMemberId());
+			 map.put("memberPwd", bcrypt.encode(newMemberPwd));
+			 
+			 int result = mService.changePwd(map);
+			 
+			 if(result > 0) {
+				 model.addAttribute("loginUser", mService.login(m));
+				 return "redirect:myPage.me";
+			 } else {
+				 model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
+				 model.addAttribute("searchUrl","views/ming/member/updatePwd");
+				 return "redirect:updatePwd.me";
+			 }
+		 }else {
+			 model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
+			 model.addAttribute("searchUrl","views/ming/member/updatePwd");
+			 return "redirect:updatePwd.me";
+		 }
+		 
+	}
 }

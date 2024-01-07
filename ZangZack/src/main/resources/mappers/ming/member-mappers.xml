@@ -43,4 +43,9 @@
 		where member_id = #{memberId}
 	</update>
 	
+	<update id="changePwd">
+		update MEMBER
+	    set MEMBER_PWD = #{memberPwd}
+	    where MEMBER_ID = #{memberId} and member_status = 'N'
+	</update>
 </mapper>

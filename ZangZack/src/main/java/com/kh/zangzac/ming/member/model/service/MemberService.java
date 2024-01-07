@@ -21,6 +21,8 @@ public interface MemberService {
 
 	int deleteMember(String memberId);
 
+	int changePwd(HashMap<String, String> map);
+
 
 	
 	

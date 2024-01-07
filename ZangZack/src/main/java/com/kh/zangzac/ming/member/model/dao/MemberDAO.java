@@ -31,4 +31,6 @@ public interface MemberDAO {
 
 	int deleteMember(String memberId);
 
+	int changePwd(HashMap<String, String> map);
+
 }

@@ -58,6 +58,11 @@ public class MemberServiceImpl implements MemberService{
 		return mDAO.deleteMember(memberId);
 	}
 
+	@Override
+	public int changePwd(HashMap<String, String> map) {
+		return mDAO.changePwd(map);
+	}
+
 	
 	}
 

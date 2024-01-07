@@ -48,6 +48,7 @@
 	      <div class="col align-items-center flex-col sign-up">
 	        <div class="form-wrapper align-items-center">
 	          <form class="form sign-up"  action="insertMember.me" method="post" onsubmit="return NoSign()">
+	            <input type="hidden" name="beforeURL">
 	            <div class="input-group">
 	              <i class='bx bxs-user'></i>
 	              <input type="text" placeholder="Id" style="height: 45px;" id="memberId" name="memberId" autofocus>
@@ -123,6 +124,7 @@
 	      <div class="col align-items-center flex-col sign-in">
 	        <div class="form-wrapper align-items-center">
 	          <form class="form sign-in" action="login.me" method="post">
+	            <input type="hidden" name="beforeURL">
 	            <div class="input-group">
 	              <i class='bx bxs-user'></i>
 	              <input type="text" placeholder="ID" name="memberId" required autofocus>
@@ -241,15 +243,12 @@
 	        }).open();
 	    } 
 	</script>
-	<script type="text/javascript">
-		var openWin;
-		function openChild(){
-			openWin = window.open("child.me", "popup", "width=800, height=500");
-		}
-	</script>
 	
 	 <script >
 		window.onload = () =>{
+			//그전 url로 돌아가기
+			const beforeURL = document.referrer;
+			document.getElementsByName('beforeURL')[0].value = beforeURL;
 			
 			//아이디 중복 체크 / 정규식
 			document.getElementById('memberId').addEventListener('change', function(){

@@ -5,60 +5,7 @@
 <title>Insert title here</title>
 <link href="../css/ming/member/MyPage.css" rel="stylesheet">
 <style>
-	.profilePoto{
-		border-radius: 50%;
-		width: 120px;
-		height:120px;
-		top: 170px;
-		position: relative;
-		left: 45%;
-	}
-	.modal {
-	    display: none;
-	    position: fixed;
-	    z-index: 1;
-	    left: 0;
-	    top: 0;
-	    width: 100%;
-	    height: 100%;
-	    overflow: auto;
-	    background-color: rgba(0, 0, 0, 0.4);
-	}
-	.modal-content {
-	    background-color: white;
-	    margin: 15% auto;
-	    margin-left:60%;
-	    padding: 20px;
-	    border: 1px solid #888;
-	    width: 80%;
-	    max-width: 600px;
-	    text-align: center;
-	    height: auto;
-	    max-height: 70%;
-	    overflow-y: auto;
-	    display: flex;
-	    flex-direction: column; /* 수정된 부분 */
-    	justify-content: center; /* 추가된 부분 */
-    	align-items: center;
-	}
-	.modal-content Button{
-		background-color: rgb(251, 125, 83);
-		color: white;
-		border-radius: 5px;
-		border-color: rgb(251, 125, 83);
-		height: 50px;
-		width: 100px;
-		margin: 5px;
-	}
-	.modal-content Button:hover{
-		background-color: #FB8D53;
-		color: white;
-		border-radius: 5px;
-		border-color: rgb(251, 125, 83);
-		height: 50px;
-		width: 100px;
-		cursor: pointer;
-	}
+	
 </style>
 </head>
 <body>
@@ -115,46 +62,20 @@
 	       </div>
     	</div>
 	<!--------------------------------------------------------마이페이지 시작--------------------------------------------------------------------->
-	
-		<div id="border" class="changeList" style="width: 1000px;height: 1700px;">
-			<span class="editTitle">내 정보 수정</span><br>
-			<form action="" method="post">
-				<div class="profile">
-					<div class="profilePoto">
-						<img th:src="${loginUser.memberProfilePath}" class="profile-poto">
-					</div>
-					<label class="input-file-button" for="input-file" style="width: 500px;">
-						파일선택
-						<input type="file" class="btnFile" name="file" id="input-file" accept=".jpg,.png.jpge" style="text-align: center;">
-					</label>
-				</div>
-			</form>
-			<form action="updateMemberName.me" method="post">
-			    <input type="text" th:value="${loginUser.memberName}" class="updateInput" name="memberName" placeholder="이름">
-			    <input type="submit" value="수정" class="updateBtn">
-			</form>
-			<form action="updateMemberNickName.me" method="post">
-			    <input type="text" th:value="${loginUser.memberNickName}" class="updateInput" name="memberNickname" placeholder="닉네임">
-			    <input type="submit" value="수정" class="updateBtn">
-			</form>
-		    <input type="text" th:value="${loginUser.memberId}" class="updateInput" name="memberId" placeholder="Id" readonly>
-			<form action="updateMemberPhone.me" method="post">
-		    	<input type="tel" th:value="${loginUser.memberPhone}" class="updateInput" name="memberPhone" placeholder="전화번호(-제외)">
-				 <input type="button" value="코드전송" class="updateBtn" >
+		
+		<div id="border" class="changeList" style="width: 1000px; height: 1000px;">
+			<span class="editTitle">비밀번호 수정</span><br>
+			<form action="changePwd.me" method="post">
+			    <input type="password" class="updateInput" name="memberPwd" placeholder="현재 비밀번호">
+			    <input type="password" class="updateInput" name="newMemberPwd" placeholder="새 비밀번호">
+			    <input type="password" class="updateInput" name="configPwd" placeholder="새 비밀번호 확인">
+			    <input type="tel" th:value="${loginUser.memberPhone}" class="updateInput" name="memberPhone" placeholder="전화번호(-제외)">
+				<input type="button" value="코드전송" class="updateBtn" >
 				<input type="text" class="updateInput" name="phoneCode" placeholder="인증코드">
 				<input type="button" value="인증확인" class="updateBtn" >
+     			<button class="btn-hover color-2" type="submit" style=" left:250px;">수정</button>
+				<button class="btn-hover color-1" type="reset" style=" left:550px;">취소</button>
 			</form>
-			<form action="updateMemberEmail.me" method="post">
-			    <input type="email" name="memberEmail" class="updateInput" placeholder="이메일" th:value="${loginUser.memberEmail}"  required>
-			    <input type="button" value="코드전송" class="updateBtn" >
-			    <input type="text" id="updateInput" class="updateInput" name="emailCode" placeholder="인증코드">
-			    <input type="button" value="인증확인" class="updateBtn" >
-			</form>
-			<form action="updateMemberAddress.me" method="post">
-			    <input type="text" name="memberAddress" id="sample6_address" class="updateInput" placeholder="주소" th:value="${loginUser.memberAddress}"  required>
-				<input type="button" value="주소검색" class="updateBtn" >
-			</form>
-		    <input type="date" th:value="${loginUser.memberBirth}" class="updateInput" name="memberBirth" placeholder="생년월일" readonly>
 		</div>	
 
 	<script>
@@ -191,7 +112,89 @@
 	 	    modal.style.display = 'none';
 	 	};
 	 	
-	
 	</script>
+	
+	<script>
+		<!-- 비밀번호 확인 + 정규식 -->
+		let checkId = false;
+	    let checkPwd = false;
+	    let checkEmail = false;
+		function focusOut(){
+			let pwd = document.getElementById("pwd");
+	        let pwdConfirm = document.getElementById("pwdConfirm");
+	        let pwdcheck = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#%^&*])[A-Za-z\d!@#%^&*]{8,}$/;
+	        
+			if(pwd2.value.trim() == ''){		// 비밀번호 입력안하고
+			
+			} else if(pwdConfirm.value != pwd.value || !pwdcheck.test(pwd.value)) {	
+				pwd.style.borderColor = 'red';
+				pwdConfirm.style.borderColor = 'red';
+				console.log(pwd.value);
+				console.log(pwdConfirm.value);
+				alert('비밀번호는 영대소문자,숫자로 구성된 8글자 이상으로 조합하시오.')
+				checkPwd = false;
+			} else if(pwdConfirm.value == pwd.value && pwdcheck.test(pwd.value)){// 비밀번호가 같지 않고, 정규식 안 맞을 때
+				pwd.style.borderColor = 'green';
+				pwdConfirm.style.borderColor = 'green';
+				console.log(pwd.value);
+				console.log(pwd2.value);
+				checkPwd = true;
+			} 
+		}
+	</script> 
+	<script type="text/javascript">
+		let check_code=false;
+		let check_num;
+		 
+		$('#send').click(function() {
+			
+			const to = $('#phone').val();
+			
+			$.ajax ({
+				url: '/send-one',
+				type: 'GET',
+				data: {
+					"phone" : to
+				},
+				success: function(data) {
+					check_num = data;
+					alert("인증번호를 입력해주세요!");
+					
+				}
+			});
+			
+		});
+		
+		$('#enterBtn').click(function() {	
+			const userNum = $('#userNum').val();
+			
+			if(check_num === userNum) {
+				alert('인증 성공하였습니다.');
+                this.innerText = '인증성공';
+                check_code = true;
+			}
+			else {
+				alert('인증 실패하였습니다. 다시 입력해주세요.');
+				this.innerText = '인증실패';
+				check_code =false;
+			}
+		});
+		
+		// 모든 폼이 일치해야 넘어오게 
+		function NoSign(){
+			
+			if(check_code){
+			   	checkPwd = true;
+			    checkEmail = true;
+				return true;
+			}else{
+				alert("정보가 올바르게 작성되었는지 확인해주세요.");
+				return false;
+			}
+				
+			
+		}
+	</script>
+	
 </body>
 </html>
