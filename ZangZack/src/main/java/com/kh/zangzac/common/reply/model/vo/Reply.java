@@ -1,5 +1,6 @@
 package com.kh.zangzac.common.reply.model.vo;
 
+
 import java.sql.Date;
 
 import lombok.AllArgsConstructor;
@@ -23,5 +24,5 @@ public class Reply {
    private String replyStatus;
    private String memberId;
    private String memberName;
-   private String profilePath;
+   private String memberProfilePath;
 }

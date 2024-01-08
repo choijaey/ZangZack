@@ -22,4 +22,9 @@ public class ReplyServiceImpl implements ReplyService {
 	public int insertReply(Reply reply) {
 		return rDAO.insertReply(reply);
 	}
+
+	@Override
+	public int countReply(Reply reply) {
+		return rDAO.countReply(reply);
+	}
 }
