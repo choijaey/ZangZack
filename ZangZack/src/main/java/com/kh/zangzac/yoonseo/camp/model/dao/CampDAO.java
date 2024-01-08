@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
 
-import com.kh.zangzac.common.model.vo.Attachment;
+
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.yoonseo.camp.model.vo.CampingGround;
 
@@ -16,7 +16,7 @@ public interface CampDAO {
 
 	int insertCampImg(ArrayList<Photo> campList);
 
-	int insertInfoImg(ArrayList<Attachment> infoList);
+	int insertInfoImg(ArrayList<Photo> infoList);
 
 	int getListCount(int i);
 
@@ -28,11 +28,15 @@ public interface CampDAO {
 
 	ArrayList<Photo> selectPhoto(Integer no);
 
-	ArrayList<Attachment> selectInfoPhoto(int no);
+	ArrayList<Photo> selectInfoPhoto(int no);
 
 	int getRecomendationCount(String recomendation);
 
 	ArrayList<CampingGround> selectRecomendationList(String recomendation);
 
 	ArrayList<Photo> selectOnePhoto(int i);
+
+	int getAllCount();
+
+	ArrayList<CampingGround> selectAllList(RowBounds row);
 }

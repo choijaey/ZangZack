@@ -10,7 +10,7 @@ import com.kh.zangzac.yoonseo.camp.model.vo.CampingGround;
 public interface CampService {
 	int insertCamp(CampingGround camp);
 
-	int insertInfoImg(ArrayList<Attachment> infoList);
+	int insertInfoImg(ArrayList<Photo> infoList);
 
 	int getListCount(int i);
 
@@ -22,7 +22,7 @@ public interface CampService {
 
 	ArrayList<Photo> selectPhoto(Integer no);
 
-	ArrayList<Attachment> selectInfoPhoto(int no);
+	ArrayList<Photo> selectInfoPhoto(int no);
 
 	int getRecomendationCount(String recomendation);
 
@@ -31,5 +31,9 @@ public interface CampService {
 	ArrayList<Photo> selectOnePhoto(int i);
 
 	int insertCampImg(ArrayList<Photo> campList);
+
+	int getAllCount();
+
+	ArrayList<CampingGround> selectAllList(PageInfo pi);
 
 }

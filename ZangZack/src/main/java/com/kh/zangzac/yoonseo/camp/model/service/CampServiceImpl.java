@@ -24,7 +24,7 @@ public class CampServiceImpl implements CampService {
 	}
 
 	@Override
-	public int insertInfoImg(ArrayList<Attachment> infoList) {
+	public int insertInfoImg(ArrayList<Photo> infoList) {
 		return cDAO.insertInfoImg(infoList);
 	}
 
@@ -60,7 +60,7 @@ public class CampServiceImpl implements CampService {
 	}
 
 	@Override
-	public ArrayList<Attachment> selectInfoPhoto(int no) {
+	public ArrayList<Photo> selectInfoPhoto(int no) {
 		return cDAO.selectInfoPhoto(no);
 	}
 
@@ -82,6 +82,20 @@ public class CampServiceImpl implements CampService {
 	@Override
 	public int insertCampImg(ArrayList<Photo> campList) {
 		return cDAO.insertCampImg(campList);
+	}
+
+	@Override
+	public int getAllCount() {
+		return cDAO.getAllCount();
+	}
+
+	@Override
+	public ArrayList<CampingGround> selectAllList(PageInfo pi) {
+		
+		int offSet = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+		RowBounds row = new RowBounds(offSet, pi.getBoardLimit());
+		
+		return cDAO.selectAllList(row);
 	}
 
 

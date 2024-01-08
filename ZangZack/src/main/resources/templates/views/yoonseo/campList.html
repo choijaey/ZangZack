@@ -177,7 +177,7 @@
     	const no = document.getElementById('no').value;
     	const page =document.getElementById('page').value;
     	console.log(no,page);
-    	document.getElementById('detail').addEventListener('click', ()=>{
+    	document.getElementsByClassName('card mb-3').addEventListener('click', ()=>{
     		console.log(no);
     		form.action = 'campDetail.ys?no='+no+'&page='+page;
     		form.submit();

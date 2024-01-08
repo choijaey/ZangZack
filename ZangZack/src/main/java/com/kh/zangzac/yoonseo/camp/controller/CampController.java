@@ -72,40 +72,16 @@ public class CampController {
 		ArrayList<CampingGround> list = cService.selectRecomendationList(pi,recomendation);
 		
 	    ArrayList<Photo> photo = cService.selectOnePhoto(0);
-	    
-	    
-	   
-	    ArrayList<String> infoArray = new ArrayList<>();
-	    ArrayList<Double> pointArray = new ArrayList<>();
-	    
-        String content ="";
-	    for (CampingGround cg : list) {
-	        if(cg != null && cg.getCgImgInfo() != null) {
-	        	String cgAmenity = cg.getCgAmenity();
-	        	String cgInfo = cg.getCgImgInfo();
-	        	cg.calculateCgPoint();
-	        	
-	        	String[] infoList = cgInfo.split(",");
-	        	for(String info : infoList) {
-	 	        	infoArray.add(info.trim());
-	 	        }
-	        	String[] contents = cgAmenity.split("\\.");
-	 	        if (contents.length > 0) {
-	 	            content = contents.length > 0 ? contents[0] : "";
-	 	        }
-	 	        
-	        } 
-	        // 문자열을 "."으로 분리하여 배열로 얻고, 0번째 인덱스의 값만 리스트에 추가합니다.
-	        
+	         
+	    for(CampingGround cg : list) {
+	    	cg.calculateCgPoint();
 	    }
-	     
+	    
 		if(list != null) {
 			model.addAttribute("list", list);
 			model.addAttribute("loc", request.getRequestURI());
 			model.addAttribute("pi", pi);
 			model.addAttribute("photo", photo);
-			
-
 			
 			return "views/yoonseo/campList";
 			
@@ -206,7 +182,16 @@ public class CampController {
 	}
 	
 	@GetMapping("campUpdate.ys")
-	public String campUpdate() {
+	public String campUpdate(@RequestParam(value="page", defaultValue="1") int currentPage,
+			                 Model model, HttpServletRequest request) {
+		
+		
+		int listCount = cService.getAllCount();
+		
+		System.out.println(listCount);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+		ArrayList<CampingGround> list = cService.selectAllList(pi);
+		
 		return "views/yoonseo/campUpdate";
 	}
 	

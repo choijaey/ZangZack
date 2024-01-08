@@ -61,7 +61,7 @@
      where cg_status = 'N' and cg_no = #{no}
    </select>
    
-   <select id="selectPhoto" resultType="Attachment">
+   <select id="selectPhoto" resultType="Photo">
      select *
      from photo
      where photo_status = 'N' 
@@ -69,7 +69,7 @@
      order by photo_no
    </select>
    
-   <select id="selectInfoPhoto" resultType="Attachment">
+   <select id="selectInfoPhoto" resultType="Photo">
       select *
      from photo
      where photo_status = 'N' 
@@ -89,12 +89,21 @@
      where cg_status = 'N' and cg_recomendation = #{recomendation}
    </select>
    
-   <select id="selectOnePhoto" resultType="Attachment">
+   <select id="selectOnePhoto" resultType="Photo">
      select *
      from photo
      where photo_status = 'N' and photo_level = #{i} and board_type=3
      order by photo_no
    </select>
    
+   <select id="getAllCount" resultType="_int">
+     select *
+     from camping_ground
+   </select>
+   
+   <select id="selectAllList" resultType="CampingGround">
+     select *
+     from camping_ground
+   </select>
 
 </mapper>
