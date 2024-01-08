@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.zangzac.jaeyoung.chat.model.dao.ChatDAO;
+import com.kh.zangzac.jaeyoung.chat.model.vo.ChatRoom;
 import com.kh.zangzac.jaeyoung.chat.model.vo.Chatter;
 
 @Service
@@ -22,12 +23,19 @@ public class ChatServiceImpl implements ChatService{
 
 	@Override
 	public int insertChatRoom(Chatter c) {
-		return cDAO.insertChatRoom(c);
+		int result =cDAO.insertChatRoom(c);
+		int result2 =cDAO.updateChatRoomCount(c.getClNo());
+		return result; 
 	}
 
 	@Override
 	public ArrayList<Chatter> selectChatterList(int i) {
 		return cDAO.selectChatterList(i);
+	}
+
+	@Override
+	public ArrayList<ChatRoom> chatRoomList() {
+		return cDAO.chatRoomList();
 	}
 
 }
