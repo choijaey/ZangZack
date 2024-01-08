@@ -3,7 +3,9 @@ package com.kh.zangzac.common.reply.model.dao;
 import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.session.RowBounds;
 
+import com.kh.zangzac.common.controller.BoardCondition;
 import com.kh.zangzac.common.model.vo.SelectCondition;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 
@@ -15,6 +17,8 @@ public interface ReplyDAO {
 
 	int insertReply(Reply reply);
 
-	int countReply(Reply reply);
-	
+	int countReply(SelectCondition b);
+
+	ArrayList<Reply> selectLimitReply(SelectCondition b, RowBounds rowBounds);
+
 }

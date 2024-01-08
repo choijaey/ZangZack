@@ -18,4 +18,11 @@
 		from reply_view
 		where reply_status = 'N' and board_type= #{boardType} and board_no = #{boardNo}
 	</select>
+	
+	<select id="selectLimitReply" resultType="Reply">
+		select * 	
+		from reply_view
+		where reply_status = 'N' and board_type = #{boardType} and board_no = #{board_no}
+		order by reply_no asc
+	</select>
 </mapper>
