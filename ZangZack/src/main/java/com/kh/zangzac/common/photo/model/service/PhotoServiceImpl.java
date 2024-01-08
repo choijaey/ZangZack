@@ -19,6 +19,12 @@ public class PhotoServiceImpl implements PhotoService{
 	public ArrayList<Photo> selectBoardPhoto(SelectCondition b) {
 		return pDAO.selectBoardPhoto(b);
 	}
+
+	@Override
+	public int insertPhotoCampBoard(ArrayList<Photo> fileList) {
+		
+		return pDAO.insertPhotoCampBoard(fileList);
+	}
 	
 	
 

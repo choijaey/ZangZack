@@ -6,4 +6,13 @@
 		from photo
 		where photo_status = 'N' and board_type = #{boardType} and board_no = #{boardNo}
 	</select>
+	
+	<insert id="insertPhotoCampBoard">
+      insert all<!-- insert all 안에서는 nextval이라고 적어놓고 여러번 들어간다하더라도 딱 1번 nextval이 되고 나머지는 같은 값이 들어간다 -->
+      <foreach collection="list" item="item">
+         into photo
+         values (new_aid, #{item.photoRename}, #{item.photoPath}, #{item.photoLevel}, #{item.BOARD_TYPE}, #{item.boardNo}, default)
+      </foreach>
+      select * from dual
+   </insert>
 </mapper>
