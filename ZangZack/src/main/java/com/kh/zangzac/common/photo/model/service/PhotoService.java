@@ -8,5 +8,7 @@ import com.kh.zangzac.common.photo.model.vo.Photo;
 public interface PhotoService {
 	
 	ArrayList<Photo> selectBoardPhoto(SelectCondition b);
+	
+	int insertPhotoCampBoard(ArrayList<Photo> fileList);
 
 }

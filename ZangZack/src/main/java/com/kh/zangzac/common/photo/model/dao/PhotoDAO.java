@@ -10,5 +10,7 @@ import com.kh.zangzac.common.photo.model.vo.Photo;
 @Mapper
 public interface PhotoDAO {
 	ArrayList<Photo> selectBoardPhoto(SelectCondition b);
+	
+	int insertPhotoCampBoard(ArrayList<Photo> fileList);
 
 }
