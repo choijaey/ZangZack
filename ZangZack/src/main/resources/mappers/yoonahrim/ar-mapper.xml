@@ -49,7 +49,25 @@
 	<update id="updateBooking">
 		update SECONDHAND_PRODUCT
 		SET SP_IS_BOOK='Y'
-		where boardType = '4' and boardNo = #{spNo}
+		where SP_NO = #{spNo}
+	</update>
+	
+	<update id="updateBookingundo">
+		update SECONDHAND_PRODUCT
+		SET SP_IS_BOOK='N'
+		where SP_NO = #{spNo}
+	</update>
+	
+	<update id="soldout">
+		update SECONDHAND_PRODUCT
+		SET SP_IS_SELL='Y'
+		where SP_NO = #{spNo}
+	</update>
+	
+	<update id="markDelete">
+		update SECONDHAND_PRODUCT
+		SET SP_STATUS='Y'
+		where SP_NO = #{spNo}
 	</update>
 	
 </mapper>

@@ -81,7 +81,6 @@
        function previewImage(event, previewId,photoId){
           const fReader1 = new FileReader();
           const output = document.getElementById(photoId);
-          
           fReader1.readAsDataURL(event.target.files[0]);
           fReader1.onloadend = function(event){
           output.src = event.target.result;

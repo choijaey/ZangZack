@@ -60,7 +60,7 @@ public class SecondHandController {
 		model.addAttribute("aList", aList);
 		model.addAttribute("list", sList);
 		
-        return "views/yoonahrim/editSecondHand";
+        return "views/yoonahrim/test";
     }
 	
 	//중고 게시글 수정
@@ -237,36 +237,68 @@ public class SecondHandController {
 	//예약 중 -> 예약완료
 	//booking.ah
 	@GetMapping("booking.ah")
-	public String booking(@RequestParam("spNo") int spNo) {
+	public String booking(@RequestParam("spNo") int spNo, Model model) {
 		
-		int result = spService.updateBooking(spNo);
+		 int result = spService.updateBooking(spNo);
 		
-		if(result > 0) {
-			return "views/yoonahrim/secondHandDetail";
-		}else {
-			throw new secondHandException("예약 실패");
-		}
-		
-		
+		 if (result > 0) {
+		        // 예약 성공
+		        return "views/yoonahrim/secondHandList";
+		    } else {
+		        // 예약 실패
+		        throw new secondHandException("예약 실패");
+		    }
 	}
 	
 	//예약 중 -> 예약완료
 	//bookingUndo.ah
-	public String bokingundo() {
-		return "views/yoonahrim/secondHandDetail";
+	@GetMapping("bookingUndo.ah")
+	public String bokingundo(@RequestParam("spNo") int spNo) {
+		
+		int result = spService.updateBookingundo(spNo);
+		
+		 if (result > 0) {
+		        // 예약 취소
+		        return "views/yoonahrim/secondHandList";
+		    } else {
+		        // 예약 실패
+		        throw new secondHandException("예약 실패");
+		    }
+		
 	}
 	
 	//판매
 	//판매완료 -> 삭제
 	//soldout.ah
-	public String soldout() {
-		return "views/yoonahrim/secondHandDetail";
+	@GetMapping("soldout.ah")
+	public String soldout(@RequestParam("spNo") int spNo) {
+		
+		int result = spService.soldout(spNo);
+		
+		 if (result > 0) {
+		        // 판매 완료
+		        return "views/yoonahrim/secondHandList";
+		    } else {
+		        // 판매 완료 실패
+		        throw new secondHandException("판매완료 실패");
+		    }
 	}
 	
 	//삭제 -> 판매완료
 	//delete.ah
-	public String delete() {
-		return "views/yoonahrim/secondHandDetail";
+	@GetMapping("delete.ah")
+	public String markDelete(@RequestParam("spNo") int spNo) {
+		
+		int result = spService.markDelete(spNo);
+		
+		 if (result > 0) {
+		        // 삭제
+		        return "views/yoonahrim/secondHandList";
+		    } else {
+		        // 삭제 실패
+		        throw new secondHandException("삭제 실패");
+		    }
+		
 	}
 	
 	

@@ -25,6 +25,12 @@ public interface secondHandDAO {
 
 	int updateBooking(int spNo);
 
+	int updateBookingundo(int spNo);
+
+	int soldout(int spNo);
+
+	int markDelete(int spNo);
+
 
 
 
