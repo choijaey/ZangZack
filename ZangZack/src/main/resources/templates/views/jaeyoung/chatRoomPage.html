@@ -155,9 +155,6 @@ a {
       cursor: pointer;
   }
   .img-style{
-  	width: 2000px;
-  	height: 1000px;
-  	background-color:#F2ECE3;
   }
   
   .chat-list {
@@ -261,8 +258,7 @@ a {
 	.wrap .ch1 .time{
 		 position: absolute;
 		 text-align: left; /* 닉네임을 왼쪽 정렬 */
-		 top:52px;
-	   	 left: 85px; /* 왼쪽 정렬 */
+		 top:56px;
 	   	 width:100px;
 	   	 font-size: 10px;
 	  	 color: #fff;
@@ -270,8 +266,8 @@ a {
 	.wrap .ch1 .count{
 		 position: absolute;
 		 text-align: left; /* 닉네임을 왼쪽 정렬 */
-		 top:55px;
-	   	 left: 145px; /* 왼쪽 정렬 */
+		 top:59px;
+		 left:65px;
 	   	 width:100px;
 	   	 font-size: 10px;
 	  	 color: yellow;
@@ -279,18 +275,18 @@ a {
 	
 	.wrap .ch2 .time{
 		 position: absolute;
-		 text-align: left; /* 닉네임을 왼쪽 정렬 */
-		 top:52px;
-	   	 right: 35px; /* 왼쪽 정렬 */
+		 text-align: right; /* 닉네임을 왼쪽 정렬 */
+		 top:56px;
+		 right:10;
 	   	 width:100px;
 	   	 font-size: 10px;
 	  	 color: #fff;
 	}
 	.wrap .ch2 .count{
 		 position: absolute;
-		 text-align: left; /* 닉네임을 왼쪽 정렬 */
-		 top:55px;
-	   	 right: 60px; /* 왼쪽 정렬 */
+		 text-align: right; /* 닉네임을 왼쪽 정렬 */
+		 right:65px;
+		 top:59px;
 	   	 width:100px;
 	   	 font-size: 10px;
 	  	 color: yellow;
@@ -320,7 +316,7 @@ a {
             </th:block>
         </div>
 	
-	    <div class="wrap">
+	    <div class="wrap" id="wrap">
 	    
 	    	<th:block th:each="chatLog : ${chatLogs}">
 			    <div th:class="|chat ${chatLog.memberId != session.loginUser.MemberId ? 'ch1' : 'ch2'}|">
@@ -388,6 +384,8 @@ a {
 							addChat(d.msg,d.userName,1,d.profile,d.nickName,d.time,d.unReadChatter);
 						}
 							
+					}else if(d.type == "reset"){
+						location.reload();
 					}else{
 						console.warn("unknown type!")
 					}
@@ -437,6 +435,19 @@ a {
             
             wrap.scrollTop = wrap.scrollHeight;
         }
+	</script>
+	
+	<script >
+		window.addEventListener('load', () => {
+			  // 특정 div 요소 선택
+			  const div = document.getElementById('wrap'); // 'yourDivId'를 해당 div의 ID로 변경하세요.
+	
+			  // div의 스크롤 가능한 높이 계산
+			  const scrollHeight = div.scrollHeight;
+	
+			  // div의 스크롤을 하단으로 이동
+			  div.scrollTop = scrollHeight;
+			});
 	</script>
     
     
