@@ -2,6 +2,7 @@ package com.kh.zangzac.sohwa.product.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import com.kh.zangzac.sohwa.product.model.vo.Attachment;
 import com.kh.zangzac.sohwa.product.model.vo.Cart;
 import com.kh.zangzac.sohwa.product.model.vo.Option;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
+import com.kh.zangzac.sohwa.product.model.vo.Qna;
 
 @Service
 public class ProductServiceImpl implements ProductService{
@@ -114,6 +116,61 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public int insertCart(Cart c) {
 		return pDAO.insertCart(c);
+	}
+
+	@Override
+	public ArrayList<Cart> memberCart(String id) {
+		return pDAO.memberCart(id);
+	}
+
+	@Override
+	public ArrayList<Option> selectAllOption() {
+		return pDAO.selectAllOption();
+	}
+
+	@Override
+	public int deleteCart(int cartKeyNo) {
+		return pDAO.deleteCart(cartKeyNo);
+	}
+
+	@Override
+	public int deleteCarts(List<String> cartKeyNos) {
+		return pDAO.deleteCarts(cartKeyNos);
+	}
+
+	@Override
+	public int updateCartEno(Cart c) {
+		return pDAO.updateCartEno(c);
+	}
+
+	@Override
+	public int insertQna(Qna q) {
+		return pDAO.insertQna(q);
+	}
+
+	@Override
+	public ArrayList<Qna> selectMyQna(String id) {
+		return pDAO.selectMyQna(id);
+	}
+
+	@Override
+	public int getListQnaCount() {
+		return pDAO.getListQnaCount();
+	}
+
+	@Override
+	public ArrayList<Qna> selectQna() {
+		return pDAO.selectQna();
+	}
+
+	@Override
+	public int updateAnswer(Qna q) {
+		return pDAO.updateAnswer(q);
+	}
+
+	@Override
+	public ArrayList<Qna> selectProductQna(int productNo) {
+		return pDAO.selectProductQna(productNo);
 	}
 
 	

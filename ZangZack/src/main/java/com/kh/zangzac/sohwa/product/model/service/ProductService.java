@@ -2,12 +2,14 @@ package com.kh.zangzac.sohwa.product.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.sohwa.product.model.vo.Attachment;
 import com.kh.zangzac.sohwa.product.model.vo.Cart;
 import com.kh.zangzac.sohwa.product.model.vo.Option;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
+import com.kh.zangzac.sohwa.product.model.vo.Qna;
 
 public interface ProductService {
 
@@ -46,6 +48,28 @@ public interface ProductService {
 	ArrayList<Attachment> selectDeletePhoto();
 
 	int insertCart(Cart c);
+
+	ArrayList<Cart> memberCart(String id);
+
+	ArrayList<Option> selectAllOption();
+
+	int deleteCart(int cartKeyNo);
+
+	int deleteCarts(List<String> cartKeyNos);
+
+	int updateCartEno(Cart c);
+
+	int insertQna(Qna q);
+
+	ArrayList<Qna> selectMyQna(String id);
+
+	int getListQnaCount();
+
+	ArrayList<Qna> selectQna();
+
+	int updateAnswer(Qna q);
+
+	ArrayList<Qna> selectProductQna(int productNo);
 
 
 	

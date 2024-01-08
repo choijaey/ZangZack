@@ -2,6 +2,7 @@ package com.kh.zangzac.sohwa.product.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,7 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,9 +26,9 @@ import com.kh.zangzac.sohwa.product.model.vo.Attachment;
 import com.kh.zangzac.sohwa.product.model.vo.Cart;
 import com.kh.zangzac.sohwa.product.model.vo.Option;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
+import com.kh.zangzac.sohwa.product.model.vo.Qna;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 @SessionAttributes("loginUser")
 @Controller
@@ -182,9 +185,11 @@ public class ProductController {
 		Product p = pService.selectProductDetail(productNo);
 		ArrayList<Attachment> list = pService.selectPhotoDetail(productNo);
 		ArrayList<Option> oList = pService.optionDetail(productNo);
+		ArrayList<Qna> qList = pService.selectProductQna(productNo);
 		
 		imageStorage.deleteImage("cb1d55f4-e2c4-42b1-96b9-948d8883b3c5.png","sohwa");
 		
+		model.addAttribute("qList", qList);
 		model.addAttribute("productNo", productNo);
 		model.addAttribute("oList", oList);
 		model.addAttribute("list", list);
@@ -317,27 +322,154 @@ public class ProductController {
 	
 	
 	@GetMapping("insertCart.so")
-	public String insertCart(@RequestParam("price") int price, @RequestParam("option") String option, @RequestParam("productNo") int productNo, @RequestParam("eno") int eno, Model model) {
-		
+	   public String insertCart(@RequestParam("price") int price, @RequestParam("option") String option, @RequestParam("productNo") int productNo, @RequestParam("eno") int eno, Model model) {
+	      
+	      String id = ((Member)model.getAttribute("loginUser")).getMemberId();
+	      Cart c = new Cart();
+	      c.setProductNo(productNo);
+	      c.setProductEno(eno);
+	      c.setBuyOption(option);
+	      c.setMemberId(id);
+	      c.setBuyPrice(price);
+	      int result = pService.insertCart(c);
+	      
+	      if(result > 0) {
+	          return "redirect:productDetail.so?productNo=" + productNo;
+	      }else {
+	         throw new ProductException("장바구니 등록에 실패");
+	      }
+	      
+	 }
+	
+	
+	
+	
+	@GetMapping("cartView.so")
+	public String cartView(Model model) {
 		String id = ((Member)model.getAttribute("loginUser")).getMemberId();
-		Cart c = new Cart();
-		c.setProductNo(productNo);
-		c.setProductEno(eno);
-		c.setBuyOption(option);
-		c.setMemberId(id);
-		c.setBuyPrice(price);
-		int result = pService.insertCart(c);
-		
+		ArrayList<Cart> list = pService.memberCart(id);
+	    ArrayList<Product> pList = pService.selectAllProduct();
+	    ArrayList<Attachment> aList = pService.selectAllPhoto();
+	    ArrayList<Option> oList = pService.selectAllOption();
+	    
+	    model.addAttribute("oList", oList);
+        model.addAttribute("aList", aList);
+        model.addAttribute("pList", pList);
+        model.addAttribute("list", list);
+		return "views/sohwa/cartPage";
+	}
+	
+	
+	
+	@GetMapping("deleteCart.so")
+	public String deleteCart(@RequestParam("cartKeyNo") int cartKeyNo, Model model) {
+		int result = pService.deleteCart(cartKeyNo);
+		if(result > 0) {
+			return "redirect:cartView.so";
+		}else {
+			throw new ProductException("삭제 실패");
+		}
+	}
+	
+	@PostMapping("deleteCarts.so")
+	@ResponseBody
+	public String deleteCarts(@RequestBody List<String> cartKeyNos) {
+		System.out.println(cartKeyNos); //[309, 307]
+		int result = pService.deleteCarts(cartKeyNos);
 		
 		if(result > 0) {
-			model.addAttribute("c", c);
-			return "views/sohwa/cartPage";
+			return "success";
 		}else {
-			throw new ProductException("장바구니 등록에 실패");
+			return "fail";
 		}
+	}
+	
+	
+	
+	@PostMapping("updateCartEno.so")
+	@ResponseBody
+	public String updateCartEno(@RequestParam("cartKeyNo") int cartKeyNo, @RequestParam("price") int price, @RequestParam("quantity") int quantity, Model model) {
+		Cart c = new Cart();
+		c.setCartKeyNo(cartKeyNo);
+		c.setProductEno(quantity);
+		c.setBuyPrice(price);
+		System.out.println(price);
+		int result = pService.updateCartEno(c);
 		
+		if(result > 0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	@GetMapping("centerView.so")
+	public String qnaView(Model model) {
+		String id = ((Member)model.getAttribute("loginUser")).getMemberId();
+		
+		ArrayList<Qna> qList = pService.selectMyQna(id);
+		ArrayList<Product> pList = pService.selectAllProduct();
+		ArrayList<Attachment> aList = pService.selectAllPhoto();
+		
+		model.addAttribute("pList", pList);
+		model.addAttribute("aList", aList);
+		model.addAttribute("qList", qList);
+		return "views/sohwa/centerPage";
 	}
 
+	
+	@PostMapping("insertQna.so")
+	@ResponseBody
+	public String insertQna(@RequestParam("productNo") int productNo, @RequestParam("questionContent") String questionContent, Model model) {
+		String id = ((Member)model.getAttribute("loginUser")).getMemberId();
+		Qna q = new Qna();
+		q.setProductNo(productNo);
+		q.setQuestionContent(questionContent);
+		q.setMemberId(id);
+		int result = pService.insertQna(q);
+		
+		if(result > 0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	@GetMapping("adminQnaListView.so")
+	public String adminQnaListView(@RequestParam(value="page", defaultValue="1") int page, HttpServletRequest request, Model model) {
+		
+		int listCount = pService.getListQnaCount();
+		int currentPage = page;
+		PageInfo pi = new PageInfo();
+		pi = Pagination.getPageInfo(currentPage, listCount, 10);
+		
+		ArrayList<Qna> qList = pService.selectQna();
+		ArrayList<Product> pList = pService.selectAllProduct();
+		ArrayList<Attachment> aList = pService.selectAllPhoto();
+		
+		model.addAttribute("pList", pList);
+		model.addAttribute("aList", aList);
+		model.addAttribute("qList", qList);
+		model.addAttribute("pi", pi);
+		model.addAttribute("loc", request.getRequestURI());
+		return "views/sohwa/(admin)qnaList";
+	}
+	
+	@PostMapping("insertAnswer.so")
+	public String insertAnswer(@RequestParam("questionNo") int questionNo, @RequestParam("answerContent") String answerContent) {
+		Qna q = new Qna();
+		q.setAnswerContent(answerContent);
+		q.setQuestionNo(questionNo);
+		
+		int result = pService.updateAnswer(q);
+		
+		if(result > 0) {
+			return "redirect:adminQnaListView.so";
+		}else {
+			throw new ProductException("문의답글 등록 실패");
+		}
+	}
+	
 	
 	
 	

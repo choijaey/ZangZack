@@ -244,4 +244,79 @@
 		values(cart_key_seq.nextval, #{productNo}, #{memberId}, #{productEno}, #{buyOption}, #{buyPrice})
 	</insert>
 	
+	<select id="memberCart" resultType="Cart">
+      select *
+      from cart 
+          join product using (product_no)
+          join photo on (board_no=product_no)
+      where member_id=#{id} and photo_level=0
+   </select>
+   
+   <select id="selectAllOption">
+      select *
+      from product_option
+   </select>
+   
+   
+   <delete id="deleteCart">
+   	  delete from cart
+   	  where cart_key_no = #{cartKeyNo}
+   </delete>
+   
+   
+   <delete id="deleteCarts">
+   	   DELETE FROM cart
+       WHERE cart_Key_No IN
+   	   <foreach collection="list" item="cartKeyNo" open="(" close=")" separator=",">
+        	#{cartKeyNo}
+       </foreach>
+   </delete>
+   
+   <update id="updateCartEno">
+   	   update cart
+   	   set buy_price = #{buyPrice} , product_eno = #{productEno}
+   	   where cart_key_no = #{cartKeyNo}
+   </update>
+	
+	
+	<insert id="insertQna">
+		insert into qna
+		values(question_seq.nextval, #{questionContent}, sysdate, null, null, default, #{memberId} ,#{productNo})
+	</insert>
+	
+	
+	<select id="selectMyQna" resultType="Qna">
+		select *
+		from qna
+		where member_id=#{memberId}
+		order by question_no desc
+	</select>
+	
+	
+	<select id="getListQnaCount" resultType="_int">
+		select count(*)
+		from qna
+		where qna_status='N' and answer_content is null
+	</select>
+	
+	
+	<select id="selectQna" resultType="Qna">
+		select *
+		from qna
+		where qna_status = 'N' and answer_content is null
+		order by question_no
+	</select>
+	
+	<update id="updateAnswer">
+		update qna
+		set answer_content=#{answerContent}, answer_date = sysdate
+		where question_no = #{questionNo}
+	</update>
+	
+	<select id="selectProductQna" resultType="Qna">
+		select * 
+		from qna
+		where product_no = #{productNo}
+		order by question_no
+	</select>
 </mapper>

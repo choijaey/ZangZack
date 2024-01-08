@@ -5,6 +5,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 <link href="css/sohwa/productDetail.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 <title>Insert title here</title>
 </head>
 <body>
@@ -335,25 +336,27 @@
 									        <h1 class="text-2xl font-bold mb-4">문의 등록</h1>
 									        <div class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
 									            <div class="p-4 flex">
-									                <img class="w-20 h-20 object-cover rounded-full" src="image/sohwa/tent1core1.png" alt="Product">
+									                <img th:each="l:${list}" th:if="${l.photoLevel==0}" th:src="${l.photoPath}" class="w-20 h-20 object-cover rounded-full" alt="Product">
 									                <div class="ml-4">
-									                    <h2 class="text-lg font-semibold">모비가든</h2>
-									                    <p class="text-sm text-gray-600">캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용</p><hr>
-									                    <p>410,000원</p>
+									                    <h2 class="text-lg font-semibold">[[${p.productCompany}]]</h2>
+									                    <p class="text-sm text-gray-600">[[${p.productName}]]</p><hr>
+									                    <p>[[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]</p>
 									                </div>
 									            </div>
+									            
 									            <div class="border-t border-gray-200">
+									            	<input type="hidden" th:value="${p.productNo}" name="productNo">
 									                <div class="p-4">
-									                    
 									                    <div class="mb-4">
-									                        <label for="review" class="text-sm font-semibold">문의를 작성해주세요. 쓰발럼아</label>
-									                        <textarea id="review" rows="3" class="mt-1 p-2 w-full border rounded-md" style="height:250px; overflow: scroll; resize: none;"></textarea>
+									                        <label for="review" class="text-sm font-semibold">문의를 작성해주세요.</label>
+									                        <textarea name="questionContent" id="questionContent" rows="3" class="mt-1 p-2 w-full border rounded-md" style="height:250px; overflow: scroll; resize: none;"></textarea>
 									                    </div>
-									                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" style="float:right; margin-bottom:30px;">
-									                        리뷰등록
+									                    <button id="enrollQna" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" style="float:right; margin-bottom:30px;">
+									                        문의등록
 									                    </button>
 									                </div>
 									            </div>
+									            
 									        </div>
 									    </div>
 									</div>
@@ -361,10 +364,10 @@
 							</div>
 					  <br><br>
 				  
-				  <div id="questionItem">
+				  <div id="questionItem" th:each="q:${qList}" th:if="${q.productNo eq p.productNo}">
 					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-q-64.png"></div>
 					  <div style="display: inline-block; margin-top:0px;">
-						  <span style="color:gray; margin-top:0px; height:20px;">상품명 / 등록일자</span><br>
+						  <span style="color:gray; margin-top:0px; height:20px;">[[${p.productCompany}]] / [[${p.pr]]</span><br>
 					  	  <div style="display:inline-flex;">배송기간은 보통 얼마나 소요되나요?</div>
 					  </div>
 					  <br><br>
@@ -377,37 +380,21 @@
 					  <hr>
 				  </div>
 				  
-				  <div id="questionItem">
-					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-q-64.png"></div>
-					  <div style="display: inline-block; margin-top:0px;">
-						  <span style="color:gray; margin-top:0px; height:20px;">상품명 / 등록일자</span><br>
-					  	  <div style="display:inline-flex;">배송기간은 보통 얼마나 소요되나요?</div>
-					  </div>
-					  <br><br>
-					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-a-64.png"></div>
-					  <div style="display: inline-block; margin-top:0px;">
-						  <span>관리자 :</span><br>
-					  	  <div style="display:inline-flex; margin-bottom:20px;">배송기간은 보통 2~3일 소요됩니다.</div>
+<!-- 				  <div id="questionItem"> -->
+<!-- 					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-q-64.png"></div> -->
+<!-- 					  <div style="display: inline-block; margin-top:0px;"> -->
+<!-- 						  <span style="color:gray; margin-top:0px; height:20px;">상품명 / 등록일자</span><br> -->
+<!-- 					  	  <div style="display:inline-flex;">배송기간은 보통 얼마나 소요되나요?</div> -->
+<!-- 					  </div> -->
+<!-- 					  <br><br> -->
+<!-- 					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-a-64.png"></div> -->
+<!-- 					  <div style="display: inline-block; margin-top:0px;"> -->
+<!-- 						  <span>관리자 :</span><br> -->
+<!-- 					  	  <div style="display:inline-flex; margin-bottom:20px;">배송기간은 보통 2~3일 소요됩니다.</div> -->
 					  	  
-					  </div>
-					  <hr>
-				  </div>
-				  
-				  <div id="questionItem">
-					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-q-64.png"></div>
-					  <div style="display: inline-block; margin-top:0px;">
-						  <span style="color:gray; margin-top:0px; height:20px;">상품명 / 등록일자</span><br>
-					  	  <div style="display:inline-flex;">배송기간은 보통 얼마나 소요되나요?</div>
-					  </div>
-					  <br><br>
-					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-a-64.png"></div>
-					  <div style="display: inline-block; margin-top:0px;">
-						  <span>관리자 :</span><br>
-					  	  <div style="display:inline-flex; margin-bottom:20px;">배송기간은 보통 2~3일 소요됩니다.</div>
-					  	  
-					  </div>
-					  <hr>
-				  </div>
+<!-- 					  </div> -->
+<!-- 					  <hr> -->
+<!-- 				  </div> -->
 				  
 				  <br>
 				  <div class="flex justify-center space-x-1">
@@ -778,6 +765,7 @@
 		
 	    //장바구니
 	    function goCart() {
+	    	alert('해당 상품이 장바구니에 추가되었습니다.');
 	        var option = document.getElementById('colorSelect').value;
 	        var eno = document.querySelector('.quantity').value;
 			var productNo = document.getElementById('productNo').value;
@@ -786,6 +774,33 @@
 	        location.href='insertCart.so?productNo='+productNo + '&option=' + option + '&eno=' + eno +"&price=" + price;
 	        
 	    }
+	    
+	    
+	    document.getElementById('enrollQna').addEventListener('click', ()=>{
+	    	
+	    	const productNo = document.querySelector('input[name="productNo"]').value;
+	        const questionContent = document.getElementById('questionContent').value;
+	        console.log(productNo);
+	        console.log(questionContent);
+	        $.ajax({
+	            type: "POST",
+	            url: "insertQna.so",
+	            data: {productNo: productNo, questionContent: questionContent},
+	            success: (data)=>{
+	                if(data == "success"){
+	                	const confirmation = confirm('내가 쓴 문의내역으로 이동하시겠습니까?');
+						if(confirmation){
+							location.href = 'centerView.so';
+						}else{
+							location.reload();
+						}
+	                }else{
+	                	alert('문의등록에 실패하였습니다.');
+	                }
+	            },
+	            error: data => console.log(data)
+	        });
+	    })
 		
 	</script>
 

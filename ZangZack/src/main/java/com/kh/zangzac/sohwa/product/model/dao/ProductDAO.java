@@ -2,6 +2,7 @@ package com.kh.zangzac.sohwa.product.model.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
@@ -10,6 +11,7 @@ import com.kh.zangzac.sohwa.product.model.vo.Attachment;
 import com.kh.zangzac.sohwa.product.model.vo.Cart;
 import com.kh.zangzac.sohwa.product.model.vo.Option;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
+import com.kh.zangzac.sohwa.product.model.vo.Qna;
 
 @Mapper
 public interface ProductDAO {
@@ -49,6 +51,28 @@ public interface ProductDAO {
 	ArrayList<Attachment> selectDeletePhoto();
 
 	int insertCart(Cart c);
+
+	ArrayList<Cart> memberCart(String id);
+
+	ArrayList<Option> selectAllOption();
+
+	int deleteCart(int cartKeyNo);
+
+	int deleteCarts(List<String> cartKeyNos);
+
+	int updateCartEno(Cart c);
+
+	int insertQna(Qna q);
+
+	ArrayList<Qna> selectMyQna(String id);
+
+	int getListQnaCount();
+
+	ArrayList<Qna> selectQna();
+
+	int updateAnswer(Qna q);
+
+	ArrayList<Qna> selectProductQna(int productNo);
 
 	
 
