@@ -80,8 +80,8 @@ body {
 }
 
 .boardCategory{
-  padding: 2.5px 8px;
-  background-color: #464D0F;
+  padding: 3.5px 9px 2.5px 7px;
+  background-color: #5cb85c;
   color: #fff;
   border-radius: 8px;
   font-size: 0.8rem;
