@@ -67,7 +67,7 @@
 		/*<![CDATA[*/
 		function loadCommentList(replyPage = 1) {
 		    $.ajax({
-		        url: 'selectReplyList.rep', // 서버의 댓글 목록 불러오기 URL
+		        url: 'replyLimitList.rep', // 서버의 댓글 목록 불러오기 URL
 		        method: 'GET',
 		        data: { 
 		        	page: replyPage,
@@ -115,57 +115,6 @@
 		});
 		/*]]>*/
 
-function updatePagination(pageInfo) {
-    const paginationDiv = document.getElementById('pagenation');
-    paginationDiv.innerHTML = '';
-
-    // 이전 페이지 그룹으로 이동
-    if (pageInfo.currentPage > 1) {
-        const prevLi = document.createElement('li');
-        const prevLink = document.createElement('a');
-        prevLink.href = '#';
-        prevLink.textContent = '< 이전';
-        prevLink.onclick = function(event) {
-            event.preventDefault();
-            loadCommentList(pageInfo.currentPage - 1);
-        };
-        prevLi.appendChild(prevLink);
-        paginationDiv.appendChild(prevLi);
-    }
-
-    // 페이지 번호
-    for (let i = pageInfo.startPage; i <= pageInfo.endPage; i++) {
-        const pageLi = document.createElement('li');
-        const pageLink = document.createElement('a');
-        pageLink.href = '#';
-        pageLink.textContent = i;
-        if (i === pageInfo.currentPage) {
-            pageLink.classList.add('active');
-        }
-        pageLink.onclick = function(event) {
-            event.preventDefault();
-            loadCommentList(i);
-        };
-        pageLi.appendChild(pageLink);
-        paginationDiv.appendChild(pageLi);
-    }
-
-    // 다음 페이지 그룹으로 이동
-    if (pageInfo.currentPage < pageInfo.maxPage) {
-        const nextLi = document.createElement('li');
-        const nextLink = document.createElement('a');
-        nextLink.href = '#';
-        nextLink.textContent = '다음 >';
-        nextLink.onclick = function(event) {
-            event.preventDefault();
-            loadCommentList(pageInfo.currentPage + 1);
-        };
-        nextLi.appendChild(nextLink);
-        paginationDiv.appendChild(nextLi);
-    }
-}
-
-	
 		function formatDate(dateString) {
 		    const date = new Date(dateString);
 		    return date.getFullYear() + '-' + 

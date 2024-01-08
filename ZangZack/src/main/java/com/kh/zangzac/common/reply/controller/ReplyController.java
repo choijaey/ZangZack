@@ -48,14 +48,16 @@ public class ReplyController {
 		return rService.countReply(b);
 	}
 	
-	@GetMapping("selectReplyList.rep")
+	@GetMapping("replyLimitList.rep")
 	@ResponseBody
-	public Map<String, Object> selectReply(@ModelAttribute("SelectCondition") SelectCondition b,@RequestParam(value="page", defaultValue="1") int page, HttpSession session) {
+	public Map<String, Object> replyLimitList(@ModelAttribute("SelectCondition") SelectCondition b,@RequestParam(value="page", defaultValue="1") int page, HttpSession session) {
 		//댓글 최대 수
+		System.out.println(b);
 		int listCount = countReply(b);
 		PageInfo pi = Pagination.getReplyPageInfo(page, listCount, 15);
 		
-		ArrayList<Reply> list = rService.selectLimitReply(b, pi);
+		ArrayList<Reply> list = rService.replyLimitList(b, pi);
+		System.out.println(list.toString());
 		
 	    Map<String, Object> map = new HashMap<>();
 	    map.put("list", list);

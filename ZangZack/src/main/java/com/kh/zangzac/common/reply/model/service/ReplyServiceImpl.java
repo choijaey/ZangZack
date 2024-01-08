@@ -37,8 +37,8 @@ public class ReplyServiceImpl implements ReplyService {
 	}
 
 	@Override
-	public ArrayList<Reply> selectLimitReply(SelectCondition b, PageInfo pi) {
+	public ArrayList<Reply> replyLimitList(SelectCondition b, PageInfo pi) {
 		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
-		return rDAO.selectLimitReply(b, rowBounds) ;
+		return rDAO.replyLimitList(b, rowBounds) ;
 	}
 }
