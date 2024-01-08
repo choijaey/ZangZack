@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 <title>Social Media Prototype</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
@@ -113,7 +114,7 @@
 	
 	
 	
-	<div class="max-w-2xl mx-auto my-8">
+	<div class="max-w-2xl mx-auto my-8" id="BoardList">
 		 <div id="header1" class="bg-white rounded-lg shadow-md text-black p-4 flex items-center justify-between">
 		    <span class="text-2xl mx-auto">캠핑 친구를 구해보세요.</span>
 		    <div id="writeButton" class="flex items-center">
@@ -124,44 +125,47 @@
 	    <br>
 
 		<!-- Post 2 -->
-		<div class="bg-white rounded-lg shadow-md p-4">
-			<div class="flex items-center" style="width: 100%;">
-			    <div class="rounded-full h-16 w-16 bg-gray-300 mr-3"></div>
-			    <div class="flex flex-col flex-grow">
-			        <div class="font-semibold text-lg">집에 가고싶다.</div>
-			        <div class="text-gray-500 text-md" style="display:inline-block">@오토캠핑 @testid</div>
-			    </div>
-			    <button type="button" class="review-options-btn l-4">...</button>
-			</div>
-			
-			
-			
-			<div class="mb-4">
-				<br>
-				<p>여긴어디 난 누구?</p>
-				<img src="https://source.unsplash.com/featured/?rocket,night" alt="Rocket Launch" class="rounded-lg mt-3">
-				<div class="post-like-comment">
-	               <img src="image/seongun/offheart.png" alt="좋아요" class="like-button" onclick="toggleLike()"> <span class="like-text">좋아요</span>
-	               <span class="like-count">0</span> 
-	               <span class="comment-text">댓글</span>
-	               <span class="comment-count">0</span>
-	            </div>
-			</div>
-			<div class="flex justify-between items-center text-gray-500 text-sm">
-				<div class="flex items-center">
-					<div name="reply">댓글 달기</div>
+		<th:block th:each="cf:${list}">
+			<div class="bg-white rounded-lg shadow-md p-4">
+				<div class="flex items-center" style="width: 100%;">
+				    <div class="rounded-full h-16 w-16 bg-gray-300 mr-3"></div>
+				    <div class="flex flex-col flex-grow">
+				        <div class="font-semibold text-lg">[[${cf.cfTitle}]]</div>
+				        <div class="text-gray-500 text-md" style="display:inline-block">[[|@${cf.categoryName} @${cf.memberId}|]]</div>
+				    </div>
+				    <button type="button" class="review-options-btn l-4">...</button>
 				</div>
 				
-				<div class="flex items-center">
-        			<span id="toggleComments" style="cursor: pointer;">전체 댓글</span>
-    			</div>
-    			
+				
+				
+				<div class="mb-4">
+					<br>
+					<p>[[${cf.cfContent}]]</p>
+					<img th:if="${cf.photoPath != null}" th:src="${cf.photoPath}" alt="Rocket Launch" class="rounded-lg mt-3">
+					<div class="post-like-comment">
+		               <img src="image/seongun/offheart.png" alt="좋아요" class="like-button" onclick="toggleLike(event)"> <span class="like-text">좋아요</span>
+		               <span class="like-count">0</span> 
+		               <span class="comment-text">댓글</span>
+		               <span class="comment-count">0</span>
+		            </div>
+				</div>
+				<div class="flex justify-between items-center text-gray-500 text-sm">
+					<div class="flex items-center">
+						<div name="reply">댓글 달기</div>
+					</div>
+					
+					<div class="flex items-center">
+	        			<span id="toggleComments" class="toggle-comments" style="cursor: pointer;" onclick="toggleCo(event)">전체 댓글</span>
+	    			</div>
+	    			
+				</div>
+				<div class="comment-section">
+			        <div>댓글1</div>
+			        <div>댓글2</div>
+			    </div>
 			</div>
-			<div class="comment-section" id="commentSection">
-    			<div>댓글1</div>
-    			<div>댓글2</div>
-			</div>
-		</div>
+			<br>
+		</th:block>
 		
 		<div class="modal" id="modal">
 		      <div class="modal-content">
@@ -193,7 +197,7 @@
 
 
 
-	<script>
+	<script th:inline="javascript">
         // Get the modal and close button
         const replyModal = document.getElementById('replyModal');
         const closeModalBtn = document.getElementById('closeModal');
@@ -242,29 +246,38 @@
         }
         
         
-     	// 전체 댓글 토글을 위한 요소와 상태 변수
-        const toggleCommentsBtn = document.getElementById('toggleComments');
-        let commentsVisible = false;
-        const commentSection = document.getElementById('commentSection');
-
-        // 클릭 이벤트 핸들러를 통해 전체 댓글을 토글
-        toggleCommentsBtn.addEventListener('click', function () {
-            if (commentsVisible) {
-                commentSection.classList.remove('show');
-            } else {
-                commentSection.classList.add('show');
-            }
-
-            commentsVisible = !commentsVisible;
+        //
+        function toggleCo(event){
+        	toggleComments(event.target);
+        }
+        
+     // 모든 토글 버튼과 댓글 섹션을 찾아서 이벤트 리스너를 등록
+        document.querySelectorAll('.toggle-comments').forEach(function (toggleBtn) {
+            toggleBtn.addEventListener('click', function () {
+                toggleComments(this); // 토글 버튼을 클릭한 경우 해당 댓글 섹션을 토글
+            });
         });
+
+        // 전체 댓글 토글 함수
+        function toggleComments(toggleBtn) {
+            
+        	const commentSection = toggleBtn.parentNode.parentNode.nextElementSibling;
+
+            console.log(commentSection);
+
+            if (commentSection) {
+                commentSection.classList.toggle('show');
+                
+            }
+        }
         
         
     	 // 이미지 경로 정의
         const emptyHeartPath = "image/seongun/offheart.png";
 	    const filledHeartPath = "image/seongun/onheart.png";
 	
-	    function toggleLike() {
-	        const likeButton = document.querySelector(".like-button");
+	    function toggleLike(event) {
+	        const likeButton = event.target;
 	        const currentImagePath = likeButton.getAttribute("src");
 	
 	        if (currentImagePath === emptyHeartPath) {
@@ -280,10 +293,132 @@
 	    }
         
 	    function goToCampingFriendWrite() {
-	        window.location.href = 'campingFriendWriteView.jy';
+	    	
+	    	/*<![CDATA[*/
+	        let loginUser = /*[[${session.loginUser}]]*/ null;
+	        /*]]>*/
+			
+	        if(loginUser != null){
+	        	window.location.href = 'campingFriendWriteView.jy';
+	        }else{
+	        	alert('로그인 후 이용해주세요!');
+	        }
 	    }
         
         
+	    
+    </script>
+    
+    <script th:inline="javascript">
+    
+     // 무한 스크롤 부분
+	 // 현재 페이지와 한 번에 로드되는 아이템 수
+	    let currentPage = 2;
+	    const itemsPerPage = 3; 
+	    let scrollflag=true;
+	    /*<![CDATA[*/
+        let maxPages = /*[[${maxPage}]]*/1;
+        /*]]>*/
+	
+	    // 스크롤 이벤트 리스너 등록
+	    window.addEventListener('scroll', () => {
+	        // 스크롤이 페이지의 80%에 도달하면 추가 데이터 로드
+	        if(scrollflag){
+		        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight * 0.9) {
+		            loadMoreItems();
+		        	scrollflag=false;
+		        }
+	        }
+	    });
+	
+	    // 추가 데이터 로드 함수
+	    function loadMoreItems() {
+	        
+	    	if(currentPage <= maxPages){
+		    	//ajax 부분 추가 예정
+		    	 $.ajax({
+		              url: 'cfList.jy', // 서버의 댓글 목록 불러오기 URL
+		              method: 'GET',
+		              data: { 
+		            	  currentPage : currentPage
+		              },
+		              success: function(data) {
+		                  console.log(data);
+		                  
+		                  // 리스트 가져와서 만들기
+		                  const newItems = createItems(data);
+		                  
+		                  // 뿌리기
+		                  appendItemsToDOM(newItems);
+		                  
+		                  currentPage=1+currentPage;  
+		                  scrollflag = true;
+		              },
+		              error: function(data) {
+		                  console.log(data);
+		              }
+		          });
+	
+		    	}
+	   	 }
+	
+	    // 가상의 데이터 생성 함수
+	    function createItems(data) {
+   			 const newItems = [];
+		    for (let itemData of data.list) {
+		        // 이 부분에서 각 캠핑 프렌드 아이템에 대한 HTML을 생성하고 데이터를 적용
+		        const photoHTML = itemData.photoPath ? `<img src="${itemData.photoPath}" alt="Rocket Launch" class="rounded-lg mt-3">` : '';
+		        
+		        const newItemHTML = `
+		            <div class="bg-white rounded-lg shadow-md p-4">
+		                <div class="flex items-center" style="width: 100%;">
+		                    <div class="rounded-full h-16 w-16 bg-gray-300 mr-3"></div>
+		                    <div class="flex flex-col flex-grow">
+		                        <div class="font-semibold text-lg">${itemData.cfTitle}</div>
+		                        <div class="text-gray-500 text-md" style="display:inline-block">@${itemData.categoryName} @${itemData.memberId}</div>
+		                    </div>
+		                    <button type="button" class="review-options-btn l-4">...</button>
+		                </div>
+		                
+		                <div class="mb-4">
+		                    <br>
+		                    <p>${itemData.cfContent}</p>
+		                    ${photoHTML}
+		                    <div class="post-like-comment">
+		                        <img src="image/seongun/offheart.png" alt="좋아요" class="like-button" onclick="toggleLike(event)"> 
+		                        <span class="like-text">좋아요</span>
+		                        <span class="like-count">0</span> 
+		                        <span class="comment-text">댓글</span>
+		                        <span class="comment-count">0</span>
+		                    </div>
+		                </div>
+		                <div class="flex justify-between items-center text-gray-500 text-sm">
+		                    <div class="flex items-center">
+		                        <div name="reply">댓글 달기</div>
+		                    </div>
+		                    
+		                    <div class="flex items-center">
+		                        <span class="toggle-comments" style="cursor: pointer;" onclick="toggleCo(event)">전체 댓글</span>
+		                    </div>
+		                    
+		                </div>
+		                <div class="comment-section">
+		                    <div>댓글1</div>
+		                    <div>댓글2</div>
+		                </div>
+		            </div>
+		            <br>
+		        `;
+		        newItems.push(newItemHTML);
+		    }
+		    return newItems;
+		}
+	
+	    // DOM에 아이템 추가 함수
+	    function appendItemsToDOM(newItems) {
+	        const container = document.getElementById('BoardList'); // 실제로 사용하는 컨테이너의 ID로 변경
+	        container.innerHTML += newItems.join('');
+	    }
     </script>
 </body>
 

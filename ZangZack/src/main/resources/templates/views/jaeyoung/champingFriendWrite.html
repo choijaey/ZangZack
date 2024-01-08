@@ -16,7 +16,7 @@
 </head>
 <body >
    <div th:insert="~{common/navbar :: navbar}"></div>
-   <form action="champingFriendWrite.jy">
+   <form action="champingFriendWrite.jy" method="post" enctype="multipart/form-data">
 	    <div class=" max-w-2xl mx-auto my-10">
 	    	<header class="flex justify-between items-center mb-6 ">
 	            <h1 class="text-2xl font-bold ml-12">캠핑 친구 구하기</h1>
@@ -24,6 +24,7 @@
 	        <div class=" bg-gray-50 shadow-md rounded-md p-6">
 	            <!-- Post Title -->
 	            <div class="mb-4">
+	            	<input type="hidden" name="memberId" th:value ="${session.loginUser.memberId}">
 	                <label for="postTitle" class="block text-gray-700 text-sm font-bold mb-2">제목</label>
 	                <input id="postTitle" name="cfTitle" type="text" placeholder="포스트제목" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required="required">
 	            </div>
@@ -71,7 +72,7 @@
 	            <!-- Submit Button -->
 	            <div class="flex justify-end">
 	                <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-	                    수정완료
+	                    등록완료
 	                </button>
 	            </div>
 	        </div>

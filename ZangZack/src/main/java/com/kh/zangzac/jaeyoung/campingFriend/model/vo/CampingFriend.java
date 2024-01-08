@@ -18,5 +18,8 @@ public class CampingFriend {
 	private String memberId;
 	private String categoryName;
 	private int categoryNo;
+	private int replyCount;
+	private int likeCount;
+	private String photoPath;
 
 }
