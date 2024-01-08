@@ -66,5 +66,4 @@ public class ChatController {
         return "views/jaeyoung/chatRoomPage";
     }
 
-
 }
