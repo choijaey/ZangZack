@@ -20,6 +20,7 @@ import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.model.vo.SelectCondition;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.common.photo.service.PhotoService;
+import com.kh.zangzac.common.reply.controller.ReplyController;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.ming.member.model.vo.Member;
 import com.kh.zangzac.seongun.campboard.model.service.CampBoardService;

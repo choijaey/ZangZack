@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,6 +48,21 @@ public class ReplyController {
 
 	private int countReply(Reply reply) {
 		return rService.countReply(reply);
+	}
+	
+	@GetMapping("selectReplyList.rep")
+	@ResponseBody
+	public Map<String, Object> selectReply(@ModelAttribute("Reply") Reply reply,@RequestParam(value="page", defaultValue="1") int page, HttpSession session) {
+		//댓글 list 가져오기
+		ArrayList<Reply> list = rService.selectReply(reply);
+
+		int listCount =  countReply(reply); 
+		
+		PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
+		Map<String, Object> map = new HashMap<>();
+	    map.put("list", list);
+	    map.put("rPi", pi);
+		return map;
 	}
 	
 }

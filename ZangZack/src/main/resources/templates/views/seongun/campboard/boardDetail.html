@@ -46,32 +46,14 @@
 
 			<!-- 댓글 목록 -->
 			<div class="comment-box">
-				<th:block th:if="${!rList.isEmpty}">
-					<h3 class="comment-title">댓글</h3>
-					<div class="comment-list">
-						<!-- 각 댓글 항목 -->
-						<div class="comment-item" th:each="r : ${rList}">
-							<img class="comment-thumb" th:src="${r.memberProfilePath}" alt="프로필 사진">
-							<div class="comment-content">
-								<div class="comment-author">[[${r.memberName}]]</div>
-								<div class="comment-message">[[${r.replyContent}]]</div>
-								<div class="comment-info">[[${#dates.format(r.replyCreateDate, 'yyyy-MM-dd HH:mm')}]]</div>
-							</div>
-						</div>
-						<!-- 추가 댓글 항목들 -->
-					</div>
-					<div id="commentList"></div>
-				</th:block>
-				<th:block th:if="${rList.isEmpty}">
-					<h3 class="comment-title">댓글</h3>
-					<div class="comment-item" style="display: block; border:none;">
-						<div class="comment-message" style="text-align: center; color:black; display:block;">아직 작성된 댓글이 없습니다.</div>
-					</div>
-				</th:block>
+				<div id="commentList"></div>
+				<h3 class="comment-title">댓글</h3>
+				<div class="comment-list">
 				<div class="comment-form" th:if="${session.loginUser != null}">
 					<textarea class="comment-input" placeholder="댓글을 남겨보세요" id="replyContent"></textarea>
 					<button type="button" class="comment-submit" id="insertReply">등록</button>
 				</div>
+				<div id="pagenation"></div>
 			</div>
 		</div>
 	</div>
@@ -88,8 +70,8 @@
 		        method: 'GET',
 		        data: { replyPage: replyPage },
 		        success: function(data) {
-		            updateCommentList(data.comments);
-		            updatePagination(data.pageInfo);
+		            updateCommentList(data.list);
+		            updatePagination(data.rPi);
 		        },
 		        error: function(error) {
 		            console.error('Error loading comments:', error);
@@ -112,7 +94,7 @@
 		        data: {
 		            replyContent: replyContent,
 		            boardNo: /*[[${bList.cbNo}]]*/1, // 예시로 1을 사용, 실제로는 동적으로 설정해야 함
-		            boardType: 1 // 예시로 1을 사용, 실제로는 동적으로 설정해야 함
+		            boardType: 1 
 		        },
 		        success: function(data) {
 		            loadCommentList();
