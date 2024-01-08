@@ -19,11 +19,11 @@ a {
 .wrap {
     padding: 40px 0;
     display:inline-block;
-    width:300px;
+    width:800px;
     height:600px;
-    background-color:rgba(173,178,169,0.5);
+    background-color:rgba(173,178,169,0.3);
     position: absolute;
-    left: 500px;
+    left: 000px;
     top:70px;
     max-height: 600px; /* 최대 높이를 지정 (원하는 값으로 조절) */
     overflow-y: auto; /* 세로 스크롤이 필요한 경우 자동으로 생성 */
@@ -71,6 +71,8 @@ a {
     margin-top: 7px;
     font-size: 13px;
     border-radius: 10px;
+    max-width: 300px;
+    word-wrap: break-word;
 }
 
 .wrap .chat .textbox::before {
@@ -118,7 +120,7 @@ a {
         background: linear-gradient(to bottom, #2B3004,#2B3004, #000); /* 그라데이션 추가 */
         box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.0);
         color: #F2ECE3;
-        z-index: 3;
+        z-index: unset;
         font-size: 27px;
 }
 
@@ -225,12 +227,13 @@ a {
     display: flex;
     align-items: flex-start;
     padding: 8px;
+    margin-bottom: 10px;
 }
 
 .wrap .chat .nickname {
 			position:absolute;
             font-size: 12px; /* 닉네임의 글자 크기 */
-            color: #555; /* 닉네임 텍스트 색상 */
+            color: #fff; /* 닉네임 텍스트 색상 */
             margin-bottom: 5px; /* 닉네임과 텍스트박스 사이의 공간 */
             text-align: left; /* 닉네임을 왼쪽 정렬 */
             
@@ -243,7 +246,7 @@ a {
 		 top:0px;
 	    left: 85px; /* 왼쪽 정렬 */
 	    font-size: 12px;
-	    color: #555;
+	    color: #fff;
 	}
 
 	.wrap .ch2 .nickname {
@@ -252,7 +255,45 @@ a {
 		 top:0px;
 	    right: 85px; /* 왼쪽 정렬 */
 	    font-size: 12px;
-	    color: #555;
+	    color: #fff;
+	}
+	
+	.wrap .ch1 .time{
+		 position: absolute;
+		 text-align: left; /* 닉네임을 왼쪽 정렬 */
+		 top:75px;
+	   	 left: 85px; /* 왼쪽 정렬 */
+	   	 width:100px;
+	   	 font-size: 10px;
+	  	 color: #fff;
+	}
+	.wrap .ch1 .count{
+		 position: absolute;
+		 text-align: left; /* 닉네임을 왼쪽 정렬 */
+		 top:78px;
+	   	 left: 145px; /* 왼쪽 정렬 */
+	   	 width:100px;
+	   	 font-size: 10px;
+	  	 color: yellow;
+	}
+	
+	.wrap .ch2 .time{
+		 position: absolute;
+		 text-align: left; /* 닉네임을 왼쪽 정렬 */
+		 top:52px;
+	   	 right: 35px; /* 왼쪽 정렬 */
+	   	 width:100px;
+	   	 font-size: 10px;
+	  	 color: #fff;
+	}
+	.wrap .ch2 .count{
+		 position: absolute;
+		 text-align: left; /* 닉네임을 왼쪽 정렬 */
+		 top:55px;
+	   	 right: 60px; /* 왼쪽 정렬 */
+	   	 width:100px;
+	   	 font-size: 10px;
+	  	 color: yellow;
 	}
 
 </style>
@@ -265,11 +306,11 @@ a {
 	
 	<div class="move_test">
 		<div class="chat-title">
-			<img src="image/icon1.png">
+			<img src="image/chat/icon1.png">
             <div class="chat-list-title">GLAMPING</div>
         </div>
 		<div class="test">
-			<img src="image/back2.gif"/>
+			<img src="image/chat/back2.gif"/>
 		</div>
 		
 		<!-- 채팅 목록 -->
@@ -302,17 +343,21 @@ a {
         </div>
 	
 	    <div class="wrap">
-	          <div class="chat ch1">
-                <div class="nickname">${id}</div>
-                    <div class="icon"><i class="fa-solid fa-user"></i></div>
-                    <div class="textbox">${message}</div>
-                </div>
-                
-                 <div class="chat ch2">
-                <div class="nickname">${id}</div>
-                    <div class="icon"><img src="https://storage.googleapis.com/zangzac/image/ming/BasicProfile.png" class="fa-solid fa-user" style="width:100%; height:100%; background-size: cover;"></img></div>
-                    <div class="textbox">${message}</div>
-                </div>
+	    	<div class="chat ch1">	
+                <div class="nickname">${nickName}</div>
+                <div class="icon"><img src="${profile}" class="fa-solid fa-user" style="width:100%; height:100%; background-size: cover;"></img></div>
+                <div class="textbox">나는 행복합니다. 나는 행복합니다~~~ 나는 행복합니다 행복행복 합니다??</div>
+            	<div class="time">PM 12:34</div>
+	            <div class="count">23</div>
+             </div>
+             <div class="chat ch2">	
+                <div class="nickname">${nickName}</div>
+                <div class="icon"><img src="${profile}" class="fa-solid fa-user" style="width:100%; height:100%; background-size: cover;"></img></div>
+                <div class="textbox">${message}</div>
+                <div class="time">PM 12:34</div>
+	            <div class="count">23</div>
+             </div>
+	  
   	 	</div>
 	    
 	     <div class="chat-input">
@@ -360,9 +405,9 @@ a {
 					}else if(d.type == "message"){
 						console.log(d.msg);
 						if(d.sessionId == $("#sessionId").val()){
-							addChat(d.msg,d.userName,2,d.profile,d.nickName);
+							addChat(d.msg,d.userName,2,d.profile,d.nickName,d.time,d.unReadChatter);
 						}else{
-							addChat(d.msg,d.userName,1,d.profile,d.nickName);
+							addChat(d.msg,d.userName,1,d.profile,d.nickName,d.time,d.unReadChatter);
 						}
 							
 					}else{
@@ -398,7 +443,7 @@ a {
 			wsOpen();
         };
         
-        function addChat(message, id,type,profile,nickName) {
+        function addChat(message, id,type,profile,nickName,time,count) {
             var wrap = document.querySelector(".wrap");
 
             // innerHTML을 사용하여 문자열로 직접 HTML을 추가
@@ -407,6 +452,8 @@ a {
                 <div class="nickname">${nickName}</div>
                 <div class="icon"><img src="${profile}" class="fa-solid fa-user" style="width:100%; height:100%; background-size: cover;"></img></div>
                     <div class="textbox">${message}</div>
+                    <div class="time">${time}</div>
+    	            <div class="count">${count}</div>
                 </div>
             `;
             

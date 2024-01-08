@@ -35,7 +35,6 @@ public class ChatFileManager {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
                 writer.write(obj.toJSONString());
                 writer.newLine(); // JSON 값 사이에 개행 추가
-                System.out.println("채팅이 파일에 저장되었습니다: " + filePath);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -63,7 +62,6 @@ public class ChatFileManager {
             try (BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    System.out.println(line);
                     JSONObject json = (JSONObject) parser.parse(line);
 
                     // unReadChatter 필드에 memberId가 있는지 확인
@@ -73,7 +71,6 @@ public class ChatFileManager {
 
                         while (iterator.hasNext()) {
                         	String chatterValue = (String) iterator.next();
-                        	 System.out.println(chatterValue);
                         	 if (chatterValue.equals(memberId)) {
                         	        iterator.remove();
                         	  }

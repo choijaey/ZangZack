@@ -19,33 +19,37 @@
         <div class="text-center font-bold text-xl mb-4">채팅방 리스트</div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <!-- Chat Room 1 -->
-            <div class="chat-card rounded-lg  p-4 cursor-pointer">
-                <img src="image/main.jpg" alt="Chat Room 1" class="rounded-full mx-auto mb-4 h-250">
-                <div class="text-center">
-                    <div class="font-semibold">ZANGZAC</div>
-                    <div class="text-gray-600">참가중 1 / 50 인원</div>
-                </div>
-            </div>
-            <!-- Chat Room 2 -->
-            <div class="chat-card  rounded-lg  p-4 cursor-pointer">
-                <img src="image/main2.jpg" alt="Chat Room 2" class="rounded-full mx-auto mb-4 h-250">
-                <div class="text-center">
-                    <div class="font-semibold">ZANGZAC</div>
-                    <div class="text-gray-600">참가중 8 / 50 인원</div>
-                </div>
-            </div>
-            <!-- Chat Room 3 -->
-            <div class="chat-card  rounded-lg  p-4 cursor-pointer">
-                <img src="image/main3.jpg" alt="Chat Room 3" class="rounded-full mx-auto mb-4 h-250">
-                <div class="text-center">
-                    <div class="font-semibold">ZANGZAC</div>
-                    <div class="text-gray-600">참가중 5 / 50 인원</div>
-                </div>
-            </div>
+            <th:block th:each="c:${list}">
+	            <div class="chat-card rounded-lg  p-4 cursor-pointer" th:onclick="enterChatRoom([[${c.clNo}]])">
+	                <img th:src="|image/main${c.clNo}.jpg|" alt="Chat Room 1" class="rounded-full mx-auto mb-4 h-250">
+	                <div class="text-center">
+	                    <div class="font-semibold">[[${c.clName}]]</div>
+	                    <div class="text-gray-600">[[|참가중 ${c.clNowPerson} / ${c.clLimitPerson} 인원|]]</div>
+	                </div>
+	            </div>
+	         </th:block>   
+          
         </div>
         <div class="text-center text-gray-600 mt-6">
             원하는 채팅방 이미지 클릭시 채팅 방으로 입장합니다.<br>
         </div>
     </div>
+    
+<script th:inline="javascript">
+    /* <![CDATA[ */
+    function enterChatRoom(chatRoomId) {
+        var isLoggedIn = /*[[${loginUser}]]*/ null;
+		console.log(isLoggedIn);
+		check=false;
+        if (check) {
+            // 로그인 상태일 때 채팅방으로 이동
+            window.location.href = '/enterChatRoom.jy?chatRoomId=' + chatRoomId;
+        } else {
+            // 비로그인 상태일 때 알림창 표시
+            alert('로그인이 필요합니다.');
+        }
+    }
+    /* ]]> */
+</script>
 </body>
 </html>
