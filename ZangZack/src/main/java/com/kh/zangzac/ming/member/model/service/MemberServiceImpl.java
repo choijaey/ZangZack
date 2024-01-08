@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.zangzac.ming.member.model.dao.MemberDAO;
 import com.kh.zangzac.ming.member.model.vo.Member;
@@ -62,9 +63,42 @@ public class MemberServiceImpl implements MemberService{
 	public int changePwd(HashMap<String, String> map) {
 		return mDAO.changePwd(map);
 	}
+	
+	//마이페이지 수정
+	@Override
+	public int updateMemberName(HashMap<String, String> map) {
+		return mDAO.updateMemberName(map);
+	}
+
+	@Override
+	public int updateMemberNickname(HashMap<String, String> map) {
+		return mDAO.updateMemberNickname(map);
+	}
+
+	@Override
+	public int updatememberPhone(HashMap<String, String> map) {
+		return mDAO.updatememberPhone(map);
+	}
+
+	@Override
+	public int updatememberEmail(HashMap<String, String> map) {
+		return mDAO.updatememberEmail(map);
+	}
+
+	@Override
+	public int updatememberAddress(HashMap<String, String> map) {
+		return mDAO.updatememberAddress(map);
+	}
+
+	@Override
+	public int updateMemberProfile(Member m) {
+		return mDAO.updateMemberProfile(m);
+	}
+
+
 
 	
-	}
+}
 
 	
 

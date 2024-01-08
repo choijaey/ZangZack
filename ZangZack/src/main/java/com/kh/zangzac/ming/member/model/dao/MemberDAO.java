@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.zangzac.ming.member.model.vo.Member;
 
@@ -29,8 +30,22 @@ public interface MemberDAO {
 	//이메일 중복체크
 	int checkEmail(String memberEmail);
 
+	//회원탈퇴
 	int deleteMember(String memberId);
 
 	int changePwd(HashMap<String, String> map);
+
+	//마이페이지
+	int updateMemberName(HashMap<String, String> map);
+
+	int updateMemberNickname(HashMap<String, String> map);
+
+	int updatememberPhone(HashMap<String, String> map);
+
+	int updatememberEmail(HashMap<String, String> map);
+
+	int updatememberAddress(HashMap<String, String> map);
+
+	int updateMemberProfile(Member m);
 
 }

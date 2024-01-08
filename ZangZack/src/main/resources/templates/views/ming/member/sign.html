@@ -245,10 +245,14 @@
 	</script>
 	
 	 <script >
+		//그전 url로 돌아가기
+	
 		window.onload = () =>{
-			//그전 url로 돌아가기
+			
 			const beforeURL = document.referrer;
 			document.getElementsByName('beforeURL')[0].value = beforeURL;
+			document.getElementsByName('beforeURL')[1].value = beforeURL;
+			
 			
 			//아이디 중복 체크 / 정규식
 			document.getElementById('memberId').addEventListener('change', function(){

@@ -160,11 +160,13 @@
   color: black;
   border: solid 1px black;
   cursor: pointer;
-  left: 30%;
+  left: 36%;
   top: 230px;
   position: relative;
+  text-align: center;
 }
 input::file-selector-button{
+	text-align: center;
 	display: none;
 }
 

@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link href="../css/ming/member/MyPage.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <style>
-	
 </style>
 </head>
 <body>
@@ -29,7 +29,7 @@
 				</li>
 				<li>
 					<img src="../image/ming/member/리뷰.png" style="width: 60px;"></img>
-					<a href="#">리뷰</a>
+					<a href="home.me">리뷰</a>
 				</li>
 				<li>
 					<img src="../image/ming/member/택배.png" style="width: 60px;"></img>
@@ -65,14 +65,14 @@
 		
 		<div id="border" class="changeList" style="width: 1000px; height: 1000px;">
 			<span class="editTitle">비밀번호 수정</span><br>
-			<form action="changePwd.me" method="post">
-			    <input type="password" class="updateInput" name="memberPwd" placeholder="현재 비밀번호">
+			<form action="changePwd.me" method="post" onsubmit="return NoSign()">
+			    <input type="password" class="updateInput" name="currentPwd" id="currentPwd" placeholder="현재 비밀번호">
 			    <input type="password" class="updateInput" name="newMemberPwd" placeholder="새 비밀번호">
 			    <input type="password" class="updateInput" name="configPwd" placeholder="새 비밀번호 확인">
-			    <input type="tel" th:value="${loginUser.memberPhone}" class="updateInput" name="memberPhone" placeholder="전화번호(-제외)">
-				<input type="button" value="코드전송" class="updateBtn" >
-				<input type="text" class="updateInput" name="phoneCode" placeholder="인증코드">
-				<input type="button" value="인증확인" class="updateBtn" >
+			    <input type="tel" th:value="${loginUser.memberPhone}" id="phone" class="updateInput" name="memberPhone" placeholder="전화번호(-제외)">
+				<input type="button" id="send" value="코드전송" class="updateBtn" >
+				<input type="text" id="userNum" class="updateInput" name="phoneCode" placeholder="인증코드">
+				<input type="button" id="enterBtn" value="인증확인" class="updateBtn" >
      			<button class="btn-hover color-2" type="submit" style=" left:250px;">수정</button>
 				<button class="btn-hover color-1" type="reset" style=" left:550px;">취소</button>
 			</form>
@@ -116,9 +116,7 @@
 	
 	<script>
 		<!-- 비밀번호 확인 + 정규식 -->
-		let checkId = false;
 	    let checkPwd = false;
-	    let checkEmail = false;
 		function focusOut(){
 			let pwd = document.getElementById("pwd");
 	        let pwdConfirm = document.getElementById("pwdConfirm");
@@ -145,7 +143,6 @@
 	<script type="text/javascript">
 		let check_code=false;
 		let check_num;
-		 
 		$('#send').click(function() {
 			
 			const to = $('#phone').val();
@@ -170,12 +167,12 @@
 			
 			if(check_num === userNum) {
 				alert('인증 성공하였습니다.');
-                this.innerText = '인증성공';
+                this.innerHTML.value = '인증성공';
                 check_code = true;
 			}
 			else {
 				alert('인증 실패하였습니다. 다시 입력해주세요.');
-				this.innerText = '인증실패';
+				this.innerHTML.value = '인증실패';
 				check_code =false;
 			}
 		});
@@ -185,7 +182,7 @@
 			
 			if(check_code){
 			   	checkPwd = true;
-			    checkEmail = true;
+			   	let check_code=true;
 				return true;
 			}else{
 				alert("정보가 올바르게 작성되었는지 확인해주세요.");

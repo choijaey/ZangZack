@@ -48,4 +48,41 @@
 	    set MEMBER_PWD = #{memberPwd}
 	    where MEMBER_ID = #{memberId} and member_status = 'N'
 	</update>
+	
+	<update id="updateMemberName">
+		update member
+		set member_name = #{memberName}
+		where MEMBER_ID = #{memberId} and member_status = 'N'
+	</update>
+	
+	<update id="updateMemberNickname">
+		update member
+		set MEMBER_NICKNAME = #{memberNickname}
+		where MEMBER_ID = #{memberId} and member_status = 'N'
+	</update>
+	
+	<update id="updatememberPhone">
+		update member
+		set MEMBER_PHONE = #{memberPhone}
+		where MEMBER_ID = #{memberId} and member_status = 'N'
+	</update>
+	
+	<update id="updatememberEmail">
+		update member
+		set MEMBER_EMAIL = #{memberEmail}
+		where MEMBER_ID = #{memberId} and member_status = 'N'
+	</update>
+	
+	<update id="updatememberAddress">
+		update member
+		set MEMBER_ADDRESS = #{memberAddress}
+		where MEMBER_ID = #{memberId} and member_status = 'N'
+	</update>
+	
+	<update id="updateMemberProfile">
+		update member
+		set MEMBER_PROFILE_PATH = #{memberProfilePath}
+		where MEMBER_ID = #{memberId} and member_status = 'N'
+	</update>
+	
 </mapper>

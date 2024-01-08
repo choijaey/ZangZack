@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.ming.member.model.service.MemberService;
 import com.kh.zangzac.ming.member.model.vo.Member;
 
@@ -32,6 +34,13 @@ import jakarta.mail.internet.MimeMessage;
 @SessionAttributes("loginUser")
 @Controller
 public class MemberController {
+	
+	private final ImageStorage imageStorage;
+
+	@Autowired
+	public MemberController(ImageStorage imageStorage) {
+		this.imageStorage = imageStorage;
+    }
 	
 	@Autowired
 	private MemberService mService;
@@ -129,7 +138,13 @@ public class MemberController {
 		if(loginUser != null) {
 			if(bcrypt.matches(m.getMemberPwd(), loginUser.getMemberPwd())) {
 				model.addAttribute("loginUser",loginUser);
-				return "redirect:" + beforeURL;
+				
+				if(!beforeURL.equals("http://localhost:8080/logout.me"))
+				{
+					return "redirect:" + beforeURL;
+				}else {
+					return "redirect:home.me";
+				}
 			}else {
 				model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
 				model.addAttribute("searchUrl","views/ming/member/sign");
@@ -226,8 +241,8 @@ public class MemberController {
         String encPwd = bcrypt.encode(str);
         m.setMemberId(m.getMemberId());
         m.setMemberPwd(encPwd);
-        System.out.println(encPwd);
-        System.out.println(m);
+        //System.out.println(encPwd);
+        //System.out.println(m);
         
         int result = mService.updateNewPwd(m);
         
@@ -293,18 +308,23 @@ public class MemberController {
 	}
 	
 	@PostMapping("changePwd.me")
-	public String changePwd(@RequestParam("memberPwd")String memeberPwd, @RequestParam("newMemberPwd")String newMemberPwd, Model model) {
-		 Member m = (Member)model.getAttribute("loginUser");
-		 if(bcrypt.matches(memeberPwd, m.getMemberPwd())) {
+	public String changePwd(@RequestParam("currentPwd")String currentPwd, @RequestParam("newMemberPwd")String newMemberPwd, Model model) {
+		
+		Member m = (Member)model.getAttribute("loginUser");
+		
+		if(bcrypt.matches(currentPwd, m.getMemberPwd())) {
 			 HashMap<String, String> map = new HashMap<String, String>();
 			 
 			 map.put("memberId", m.getMemberId());
 			 map.put("memberPwd", bcrypt.encode(newMemberPwd));
 			 
+			 
 			 int result = mService.changePwd(map);
+			 System.out.println("test1 : " +map);
 			 
 			 if(result > 0) {
 				 model.addAttribute("loginUser", mService.login(m));
+				 System.out.println("test2 : " + m);
 				 return "redirect:myPage.me";
 			 } else {
 				 model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
@@ -317,5 +337,154 @@ public class MemberController {
 			 return "redirect:updatePwd.me";
 		 }
 		 
+	}
+	
+	// 마이페이지 수정
+	@PostMapping("updateMemberName.me")
+	public String updateName(@RequestParam("memberName")String memberName, Model model) {
+		Member m = (Member)model.getAttribute("loginUser");
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("memberId", m.getMemberId());
+		map.put("memberName", memberName);
+		
+		int result = mService.updateMemberName(map);
+		
+		if(result > 0) {
+			model.addAttribute("loginUser", mService.login(m));
+			return "redirect:myPage.me";
+		}else {
+			model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
+			model.addAttribute("searchUrl","views/ming/member/updatePwd");
+			System.out.println("안바뀜!!!!");
+			return "redirect:myPage.me";
+		}
+		
+	}
+	
+	@PostMapping("updateMemberNickName.me")
+	public String updateNickName(@RequestParam("existingNickname")String existingNickname, Model model) {
+		Member m = (Member)model.getAttribute("loginUser");
+		String memberNickName = null;
+		memberNickName = existingNickname + "#" + generateRandomNumbers();
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("memberId", m.getMemberId());
+		map.put("memberNickname", memberNickName);
+		
+		int result = mService.updateMemberNickname(map);
+		
+		if(result > 0) {
+			model.addAttribute("loginUser", mService.login(m));
+			return "redirect:myPage.me";
+		}else {
+			model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
+			model.addAttribute("searchUrl","views/ming/member/updatePwd");
+			return "redirect:myPage.me";
+		}
+		
+	}
+	
+	@PostMapping("updateMemberPhone.me")
+	public String updatePhone(@RequestParam("memberPhone")String memberPhone, Model model) {
+		Member m = (Member)model.getAttribute("loginUser");
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("memberId", m.getMemberId());
+		map.put("memberPhone", memberPhone);
+		
+		int result = mService.updatememberPhone(map);
+		if(result > 0) {
+			model.addAttribute("loginUser", mService.login(m));
+			return "redirect:myPage.me";
+		}else {
+			model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
+			model.addAttribute("searchUrl","views/ming/member/updatePwd");
+			return "redirect:myPage.me";
+		}
+	}
+	
+	@PostMapping("updateMemberEmail.me")
+	public String updateEmail(@RequestParam("memberEmail") String memberEmail, Model model) {
+		Member m = (Member)model.getAttribute("loginUser");
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("memberId", m.getMemberId());
+		map.put("memberEmail", memberEmail);
+		
+		int result = mService.updatememberEmail(map);
+		if(result > 0) {
+			model.addAttribute("loginUser", mService.login(m));
+			return "redirect:myPage.me";
+		}else {
+			model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
+			model.addAttribute("searchUrl","views/ming/member/updatePwd");
+			return "redirect:myPage.me";
+		}
+	}
+	
+	@PostMapping("updateMemberAddress.me")
+	public String updateAddress(@RequestParam("sample6_postcode") String sample6_postcode, Model model,
+								@RequestParam("sample6_address") String sample6_address,@RequestParam("sample6_detailAddress") String sample6_detailAddress,
+								@RequestParam("sample6_extraAddress") String sample6_extraAddress) {
+		
+		Member m = (Member)model.getAttribute("loginUser");
+		String address = null;
+		if(!sample6_postcode.trim().equals("")) {
+			 address = sample6_postcode + "@" + sample6_address + "@" + sample6_detailAddress + "@" + sample6_extraAddress;
+		}
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("memberId", m.getMemberId());
+		map.put("memberAddress", address);
+		
+		int result = mService.updatememberAddress(map);
+		if(result > 0) {
+			model.addAttribute("loginUser", mService.login(m));
+			return "redirect:myPage.me";
+		}else {
+			model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
+			model.addAttribute("searchUrl","views/ming/member/updatePwd");
+			return "redirect:myPage.me";
+		}
+		
+	}
+	
+	@PostMapping("updateProfile.me")
+	public String updateProfile(@RequestParam("memberProfile") MultipartFile file, @ModelAttribute Member m, Model model) {
+		Member user = ((Member)model.getAttribute("loginUser"));
+		String defaultProfile = "https://storage.googleapis.com/zangzac/image/ming/BasicProfile.png";
+		String[] profileResult = null;
+		System.out.println("file:   " + file);
+		int result = 0;
+		
+		profileResult = imageStorage.saveImage(file, "ming");
+		m.setMemberProfileRename(profileResult[0]);
+		m.setMemberProfilePath(profileResult[1]);
+		m.setMemberId(user.getMemberId());
+		
+		
+		if (profileResult[1] != defaultProfile) {
+		    imageStorage.deleteImage(user.getMemberProfilePath(),"ming");
+		}
+		System.out.println(m);
+		
+		result = mService.updateMemberProfile(m);
+		
+		if(result > 0) {
+			model.addAttribute("loginUser", mService.login(m));
+			return "redirect:myPage.me";
+		}else {
+			model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
+			model.addAttribute("searchUrl","views/ming/member/updatePwd");
+			return "redirect:myPage.me";
+		}
+
+	}
+	
+	@PostMapping("deleteProfile.me")
+	public String deleteProfile(Model model) {
+		
+		//낼 삭제 예정
+		
+		return "redirect:myPage.me";
 	}
 }
