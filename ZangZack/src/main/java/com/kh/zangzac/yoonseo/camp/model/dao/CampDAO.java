@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
 
 import com.kh.zangzac.common.model.vo.Attachment;
+import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.yoonseo.camp.model.vo.CampingGround;
 
 @Mapper
@@ -13,7 +14,7 @@ public interface CampDAO {
 
 	int insertCamp(CampingGround camp);
 
-	int insertCampImg(ArrayList<Attachment> campList);
+	int insertCampImg(ArrayList<Photo> campList);
 
 	int insertInfoImg(ArrayList<Attachment> infoList);
 
@@ -25,7 +26,7 @@ public interface CampDAO {
 
 	CampingGround selectCampingDetail(int no);
 
-	ArrayList<Attachment> selectPhoto(Integer no);
+	ArrayList<Photo> selectPhoto(Integer no);
 
 	ArrayList<Attachment> selectInfoPhoto(int no);
 
@@ -33,5 +34,5 @@ public interface CampDAO {
 
 	ArrayList<CampingGround> selectRecomendationList(String recomendation);
 
-	ArrayList<Attachment> selectOnePhoto(int i);
+	ArrayList<Photo> selectOnePhoto(int i);
 }

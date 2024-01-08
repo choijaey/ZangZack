@@ -27,13 +27,22 @@ import lombok.ToString;
 		private String cgManageDate;
 		private String cgBooking;
 		private String cgPage;
-		private double cgStarPoint;
+		private Double cgStarPoint;
 		private String cgAmenity;
 		private String cgInfo;
 		private char cgRecomendation;
 		private char cgStatus;
 		private int categoryNo;
 		private String cgImgInfo;
+		private double point; 
+		
+		public void calculateCgPoint() {
+			if (getCgStarPoint() != null) {
+				this.point = getCgStarPoint() * 100/5;
+			}else {
+				this.point = 0.0;
+			}
+		}
 		
 
 }

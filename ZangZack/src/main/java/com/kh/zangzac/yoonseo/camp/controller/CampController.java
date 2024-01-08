@@ -13,8 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.Pagination;
-import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.yoonseo.camp.model.exception.CampException;
 import com.kh.zangzac.yoonseo.camp.model.service.CampService;
 import com.kh.zangzac.yoonseo.camp.model.vo.CampingGround;
@@ -71,16 +71,41 @@ public class CampController {
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 6);
 		ArrayList<CampingGround> list = cService.selectRecomendationList(pi,recomendation);
 		
-	    ArrayList<Attachment> photo = cService.selectOnePhoto(0);
-	    System.out.println(photo);
-		
-		 
+	    ArrayList<Photo> photo = cService.selectOnePhoto(0);
+	    
+	    
+	   
+	    ArrayList<String> infoArray = new ArrayList<>();
+	    ArrayList<Double> pointArray = new ArrayList<>();
+	    
+        String content ="";
+	    for (CampingGround cg : list) {
+	        if(cg != null && cg.getCgImgInfo() != null) {
+	        	String cgAmenity = cg.getCgAmenity();
+	        	String cgInfo = cg.getCgImgInfo();
+	        	cg.calculateCgPoint();
+	        	
+	        	String[] infoList = cgInfo.split(",");
+	        	for(String info : infoList) {
+	 	        	infoArray.add(info.trim());
+	 	        }
+	        	String[] contents = cgAmenity.split("\\.");
+	 	        if (contents.length > 0) {
+	 	            content = contents.length > 0 ? contents[0] : "";
+	 	        }
+	 	        
+	        } 
+	        // 문자열을 "."으로 분리하여 배열로 얻고, 0번째 인덱스의 값만 리스트에 추가합니다.
+	        
+	    }
+	     
 		if(list != null) {
 			model.addAttribute("list", list);
 			model.addAttribute("loc", request.getRequestURI());
 			model.addAttribute("pi", pi);
 			model.addAttribute("photo", photo);
 			
+
 			
 			return "views/yoonseo/campList";
 			
@@ -97,7 +122,7 @@ public class CampController {
 		
 		CampingGround camp = cService.selectCampingDetail(no);
 		
-		ArrayList<Attachment> campList = cService.selectPhoto(no); //캠핑장 사진
+		ArrayList<Photo> campList = cService.selectPhoto(no); //캠핑장 사진
 		
 	    String info = camp.getCgImgInfo();
 	    String[] infoArray = info.split(",");
@@ -135,7 +160,7 @@ public class CampController {
 			                
 			                 ) {
 		
-		ArrayList<Attachment> campList = new ArrayList<>();
+		ArrayList<Photo> campList = new ArrayList<>();
 		
 		String name = "yoonseo";
 		
@@ -148,10 +173,15 @@ public class CampController {
 			String[] returnArr = imageStorage.saveImage(campUpload, name);
 			
 			if(returnArr != null) {
-				Attachment a = new Attachment();
+				Photo a = new Photo();
+				if(i == 0) {
+					a.setPhotoLevel(0);
+				}else {
+					a.setPhotoLevel(1);
+				}
 				a.setPhotoRename(returnArr[0]);
 				a.setPhotoPath(returnArr[1]);
-				a.setPhotoLevel(1);
+				
 				campList.add(a);
 			}
 		}
@@ -161,7 +191,7 @@ public class CampController {
 		result1 = cService.insertCamp(camp);
 		
 		//캠프상세사진 저장
-		for(Attachment a : campList ) {
+		for(Photo a : campList ) {
 			a.setBoardNo(camp.getCgNo());
 		}
 		result2 = cService.insertCampImg(campList);
@@ -173,6 +203,11 @@ public class CampController {
 		}else {
 			throw new CampException("캠핑장 등록 실패");
 		}
+	}
+	
+	@GetMapping("campUpdate.ys")
+	public String campUpdate() {
+		return "views/yoonseo/campUpdate";
 	}
 	
 	

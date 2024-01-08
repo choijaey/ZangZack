@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.yoonseo.camp.model.dao.CampDAO;
 import com.kh.zangzac.yoonseo.camp.model.vo.CampingGround;
 
@@ -20,11 +21,6 @@ public class CampServiceImpl implements CampService {
 	@Override
 	public int insertCamp(CampingGround camp) {
 		return cDAO.insertCamp(camp);
-	}
-
-	@Override
-	public int insertCampImg(ArrayList<Attachment> campList) {
-		return cDAO.insertCampImg(campList);
 	}
 
 	@Override
@@ -59,7 +55,7 @@ public class CampServiceImpl implements CampService {
 	}
 
 	@Override
-	public ArrayList<Attachment> selectPhoto(Integer no) {
+	public ArrayList<Photo> selectPhoto(Integer no) {
 		return cDAO.selectPhoto(no);
 	}
 
@@ -79,8 +75,18 @@ public class CampServiceImpl implements CampService {
 	}
 
 	@Override
-	public ArrayList<Attachment> selectOnePhoto(int i) {
+	public ArrayList<Photo> selectOnePhoto(int i) {
 		return cDAO.selectOnePhoto(i);
 	}
+
+	@Override
+	public int insertCampImg(ArrayList<Photo> campList) {
+		return cDAO.insertCampImg(campList);
+	}
+
+
+
+	
+	
 
 }
