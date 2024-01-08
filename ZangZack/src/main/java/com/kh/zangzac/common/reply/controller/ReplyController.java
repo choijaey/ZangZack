@@ -20,6 +20,7 @@ import com.kh.zangzac.common.reply.model.service.ReplyService;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.ming.member.model.vo.Member;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @SessionAttributes("loginUser")
@@ -44,24 +45,22 @@ public class ReplyController {
 	    return map;
 	}
 
-	private int countReply(SelectCondition b) {
+	public int countReply(SelectCondition b) {
 		return rService.countReply(b);
 	}
 	
 	@GetMapping("replyLimitList.rep")
 	@ResponseBody
-	public Map<String, Object> replyLimitList(@ModelAttribute("SelectCondition") SelectCondition b,@RequestParam(value="page", defaultValue="1") int page, HttpSession session) {
-		//댓글 최대 수
-		System.out.println(b);
+	public Map<String, Object> replyLimitList(@ModelAttribute("SelectCondition") SelectCondition b,@RequestParam(value="page", defaultValue="1") int page, HttpServletRequest request ) {
 		int listCount = countReply(b);
-		PageInfo pi = Pagination.getReplyPageInfo(page, listCount, 15);
+		PageInfo pi = Pagination.getReplyPageInfo(page, listCount, 10);
 		
 		ArrayList<Reply> list = rService.replyLimitList(b, pi);
-		System.out.println(list.toString());
-		
-	    Map<String, Object> map = new HashMap<>();
-	    map.put("list", list);
+	    
+		Map<String, Object> map = new HashMap<>();
+		map.put("list", list);
 	    map.put("rPi", pi);
+	    map.put("loc", request.getRequestURI());
 	    return map;
 	}
 	
