@@ -47,6 +47,7 @@
       	padding: 7px;
       }
   </style>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
 <body>
 	<div th:replace="~{common/adminNav :: adminNav}"></div>
@@ -91,108 +92,25 @@
             <th class="td5">주소</th>
             <th class="td6">전화번호</th>
             <th class="td7">탈퇴여부</th>
+            <th class="td8">관리자여부</th>
          </tr>
          
-         <tr>
+         <tr th:each="m:${list}">
             <td class="td1"><input type="checkbox"></td>
-            <td class="td2">ming</td>
-            <td class="td3">김민경</th>
-            <td class="td4">ming</th>
-            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
-            <td class="td6">01012345678</td>
-            <td class="td7">Y</td>
+            <td class="td2">[[${m.memberId}]]</td>
+            <td class="td3">[[${m.memberName}]]</th>
+            <td class="td4">[[${m.memberNickName}]]</th>
+            <td class="td5">[[${m.memberAddress.replace('@', ' ')}]]</td>
+            <td class="td6">[[${m.memberPhone}]]</td>
+            <td class="td7"> 
+				<div style="float: left;">Y</div>
+				<div style="float: right;">N</div>
+			</td>
+			<td class="td8"> 
+				<div style="float: left;">Y</div>
+				<div style="float: right; ">N</div>
+			</td>
          </tr>
-         
-        <tr>
-            <td class="td1"><input type="checkbox"></td>
-            <td class="td2">ming</td>
-            <td class="td3">김민경</th>
-            <td class="td4">ming</th>
-            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
-            <td class="td6">01012345678</td>
-            <td class="td7">Y</td>
-         </tr>
-         
-         <tr>
-            <td class="td1"><input type="checkbox"></td>
-            <td class="td2">ming</td>
-            <td class="td3">김민경</th>
-            <td class="td4">ming</th>
-            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
-            <td class="td6">01012345678</td>
-            <td class="td7">Y</td>
-         </tr>
-         
-         <tr>
-            <td class="td1"><input type="checkbox"></td>
-            <td class="td2">ming</td>
-            <td class="td3">김민경</th>
-            <td class="td4">ming</th>
-            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
-            <td class="td6">01012345678</td>
-            <td class="td7">Y</td>
-         </tr>
-         
-         <tr>
-            <td class="td1"><input type="checkbox"></td>
-            <td class="td2">ming</td>
-            <td class="td3">김민경</th>
-            <td class="td4">ming</th>
-            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
-            <td class="td6">01012345678</td>
-            <td class="td7">Y</td>
-         </tr>
-         
-         <tr>
-            <td class="td1"><input type="checkbox"></td>
-            <td class="td2">ming</td>
-            <td class="td3">김민경</th>
-            <td class="td4">ming</th>
-            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
-            <td class="td6">01012345678</td>
-            <td class="td7">Y</td>
-         </tr>
-         
-         <tr>
-            <td class="td1"><input type="checkbox"></td>
-            <td class="td2">ming</td>
-            <td class="td3">김민경</th>
-            <td class="td4">ming</th>
-            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
-            <td class="td6">01012345678</td>
-            <td class="td7">Y</td>
-         </tr>
-         
-         <tr>
-            <td class="td1"><input type="checkbox"></td>
-            <td class="td2">ming</td>
-            <td class="td3">김민경</th>
-            <td class="td4">ming</th>
-            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
-            <td class="td6">01012345678</td>
-            <td class="td7">Y</td>
-         </tr>
-         
-         <tr>
-            <td class="td1"><input type="checkbox"></td>
-            <td class="td2">ming</td>
-            <td class="td3">김민경</th>
-            <td class="td4">ming</th>
-            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
-            <td class="td6">01012345678</td>
-            <td class="td7">Y</td>
-         </tr>
-         
-         <tr>
-            <td class="td1"><input type="checkbox"></td>
-            <td class="td2">ming</td>
-            <td class="td3">김민경</th>
-            <td class="td4">ming</th>
-            <td class="td5">서울시 종로구 어쩌구 저쩌구</td>
-            <td class="td6">01012345678</td>
-            <td class="td7">Y</td>
-         </tr>
-         
          
       </table>
       
@@ -220,15 +138,15 @@
 	<div class="modal">
 		<div class="modal_body">
 			<p class="modal_title">회원정보</p>
-			<img src="/image/ming/icons8-프로필-사진-96.png" style="width: 80px; position: relative; left: 170px;"></img>
-			<p>ID : ming</p>
-			<p>NAME : 김민경</p>
-			<p>NICKNAME : ming</p>
-			<p>EMAIL : ming@naver.com</p>
-			<p>생일</p>
-			<p>PHONE</p>
-			<p>ADDRESS</p>
-			<p>가입일</p>
+			<img id="memberProfilePath" style="width: 80px; position: relative; left: 170px;" alt="프로필 이미지" />
+			<p id="memberId">ID : </p>
+			<p id="memberName">NAME : 김민경</p>
+			<p id="memberNickName">NICKNAME : ming</p>
+			<p id="memberEmail">EMAIL : ming@naver.com</p>
+			<p id="memberBirth">생일</p>
+			<p id="memberPhone">PHONE</p>
+			<p id="memberAddress">ADDRESS</p>
+			<p id="memberEnrollDate">가입일</p>
 		 </div>
 	</div>
    <script>
@@ -263,8 +181,49 @@
 	      for(let i = 0; i <tds.length; i++ ){
 	    	  const indet = i % 7;
 	    	  if(indet != 0){
-			      tds[i].addEventListener('dblclick', () => {
-			        modal.classList.toggle('show');
+			      tds[i].addEventListener('dblclick', function(){
+			    	  //console.log(this.parentNode.children[1].innerText); 아이디로 접근!
+			    	  //ajax 해서 
+			    	  
+			    	  //memberId 보내서 정보가져오기
+			    	  	//모달에 아이디들로 다 가져와서 member 정보 넣기
+			    	  	let m = this.parentNode.children[1].innerText;
+			    	  	console.log(m);
+			    		$.ajax({
+			    			url:'selectMemberList.me',
+			    			data : {memberId:m},
+			    			success : function(data){
+			    				const memberData = data.m;
+			    				
+			    				const memberId = memberData.memberId;
+			    				const memberName = memberData.memberName;
+			    				const memberNickName = memberData.memberNickName;
+			    				const memberEmail = memberData.memberEmail;
+			    				const memberBirth = memberData.memberBirth;
+			    				const memberPhone = memberData.memberPhone;
+			    				const memberAddress = memberData.memberAddress;
+			    				const formattedAddress = memberAddress.replace(/@/g, ' ');
+			    				const memberEnrollDate = memberData.memberEnrollDate;
+			    				const memberProfilePath = memberData.memberProfilePath;
+			    				
+			    				document.getElementById('memberId').innerText = '아이디 : ' + memberId;
+			    				document.getElementById('memberName').innerText = '이름 : ' + memberName;
+			    				document.getElementById('memberNickName').innerText = '닉네임 : ' + memberNickName;
+			    				document.getElementById('memberEmail').innerText = '이메일 : ' + memberEmail;
+			    				document.getElementById('memberBirth').innerText = '생년월일 : ' + memberBirth;
+			    				document.getElementById('memberPhone').innerText = '전화번호 : ' + memberPhone;
+			    				document.getElementById('memberAddress').innerText = '주소 : ' + formattedAddress;
+			    				document.getElementById('memberEnrollDate').innerText = '가입일 : ' + memberEnrollDate;
+			    				document.getElementById('memberProfilePath').src = memberProfilePath;
+			    				
+			    			},
+			    			error:data => console.log("error:" + data)
+			    			
+			    		})
+			    		  
+			          	modal.classList.toggle('show');
+			    	  
+			    	  
 			
 			        if (modal.classList.contains('show')) {
 			          body.style.overflow = 'hidden';
@@ -286,6 +245,55 @@
 	        }
 	     })
     </script>
+    <script>
+    let category;
+    document.addEventListener('DOMContentLoaded', function() {
+        const memberIdElement = document.getElementById('memberId');
+
+        // flag 변수를 사용하여 현재 입력 중인지 여부를 추적
+        let isEditing = false;
+
+        memberIdElement.addEventListener('click', function() {
+            // 입력 중인 경우는 더 이상 실행하지 않음
+            if (isEditing) {
+                return;
+            }
+            
+            // 현재 텍스트 값 가져오기
+            const currentText = this.innerText.trim();
+
+            // input 엘리먼트 생성
+            const inputElement = document.createElement('input');
+            inputElement.type = 'text';
+            inputElement.value = currentText;
+
+            // input 엘리먼트에 포커스 설정
+            inputElement.focus();
+
+            // flag 변수 갱신
+            isEditing = true;
+
+            // 클릭 이벤트 설정
+            inputElement.addEventListener('keyup', function(event) {
+                // input에서 포커스가 떠나면 변경된 값으로 텍스트 업데이트
+                if(event.key == 'Enter'){
+                	memberIdElement.innerText = this.value;
+                	isEditing = false;
+                	
+                }
+                //ajax;
+                
+                // flag 변수 갱신
+            });
+
+            // p 엘리먼트 내용을 input 엘리먼트로 대체
+            this.innerHTML = '';
+            this.appendChild(inputElement);
+        });
+    });
+		
+		
+	</script>
 </body>
 
 </html>

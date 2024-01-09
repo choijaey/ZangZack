@@ -85,4 +85,8 @@
 		where MEMBER_ID = #{memberId} and member_status = 'N'
 	</update>
 	
+	<select id="selectMembers" resultType="Member">
+		select * 
+		from member
+	</select>
 </mapper>

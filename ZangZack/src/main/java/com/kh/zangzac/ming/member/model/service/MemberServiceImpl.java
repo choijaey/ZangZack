@@ -94,6 +94,12 @@ public class MemberServiceImpl implements MemberService{
 	public int updateMemberProfile(Member m) {
 		return mDAO.updateMemberProfile(m);
 	}
+	
+	//관리자페이지
+	@Override
+	public ArrayList<Member> selectMembers() {
+		return mDAO.selectMembers();
+	}
 
 
 

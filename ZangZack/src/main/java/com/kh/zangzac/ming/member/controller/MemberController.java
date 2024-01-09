@@ -494,4 +494,27 @@ public class MemberController {
 		
 		return "redirect:myPage.me";
 	}
+	
+	//관리자 페이지
+	@GetMapping("/adminPage.me")
+	public String adminPage(Model model) {
+		ArrayList<Member> list = mService.selectMembers();
+		model.addAttribute("list", list);
+		return "views/ming/admin/memberList";
+	}
+	
+	@GetMapping("selectMemberList.me")
+	@ResponseBody
+	public HashMap<String, Object> selectMemberList(@RequestParam("memberId")String memberId, Model model) {
+		
+		System.out.println(memberId);
+		Member m = new Member();
+		m.setMemberId(memberId);
+		Member member = mService.login(m);
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("m", member);
+		
+		return map;
+	}
 }

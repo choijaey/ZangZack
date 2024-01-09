@@ -37,6 +37,9 @@ public interface MemberService {
 	int updatememberAddress(HashMap<String, String> map);
 
 	int updateMemberProfile(Member m);
+	
+	//관리자페이지
+	ArrayList<Member> selectMembers();
 
 
 	

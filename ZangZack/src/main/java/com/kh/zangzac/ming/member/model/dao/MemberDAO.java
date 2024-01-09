@@ -48,4 +48,6 @@ public interface MemberDAO {
 
 	int updateMemberProfile(Member m);
 
+	ArrayList<Member> selectMembers();
+
 }
