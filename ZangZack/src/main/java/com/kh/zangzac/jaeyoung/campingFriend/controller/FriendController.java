@@ -133,10 +133,12 @@ public class FriendController {
 		  reply.setBoardType(7);
 		  int result = rService.insertReply(reply);
 		  
+		  Reply r = rService.selectReplyOne(reply);
+		  
 	      Map<String, Object> map = new HashMap<>();
 	      
 	      if(result >0) {
-	    	  map.put("data", reply);
+	    	  map.put("data", r);
 	      }else {
 	    	  map.put("data", "no");
 	      }

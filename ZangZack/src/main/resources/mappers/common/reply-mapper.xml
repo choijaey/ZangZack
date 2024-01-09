@@ -26,7 +26,7 @@
 	<select id="selectReplyOne" resultType="Reply">
 		select *
 		from reply join member using (member_id)
-		where reply_status = 'N' and reply_no = #{replyNo};
+		where reply_status = 'N' and reply_no = #{replyNo}
 		ORDER BY reply_no ASC
 	</select>
 		
