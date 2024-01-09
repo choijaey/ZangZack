@@ -27,6 +27,7 @@ import com.kh.zangzac.sohwa.product.model.vo.Cart;
 import com.kh.zangzac.sohwa.product.model.vo.Option;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
 import com.kh.zangzac.sohwa.product.model.vo.Qna;
+import com.kh.zangzac.sohwa.product.model.vo.Review;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -107,6 +108,8 @@ public class ProductController {
 	@GetMapping("productListView.so")
 	public String productListView(@RequestParam(value="keyword", defaultValue="") String keyword, @RequestParam(value="standard", defaultValue="1") String standard, @RequestParam(value="categoryNo", defaultValue="0") String categoryNo, @RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
 		
+		
+		
 		int listCount = 0;
 		HashMap<String, String> categoryMap = new HashMap<>();
 		HashMap<String, String> searchMap = new HashMap<>();
@@ -136,7 +139,11 @@ public class ProductController {
 			aList = pService.searchPhoto(searchMap);
 		}
 		
-		//카테고리 별 썸네일만 가져오기.
+		
+		
+		
+		
+		
 		
 		if(aList != null) {
 			model.addAttribute("categoryNo", categoryNo);
@@ -181,14 +188,37 @@ public class ProductController {
 //	
 	
 	@GetMapping("productDetail.so")
-	public String productDetailView(@RequestParam("productNo") int productNo, Model model) {
+	public String productDetailView(@RequestParam(value="reviewStatus", defaultValue="1") int reviewStatus, @RequestParam("productNo") int productNo, Model model) {
 		Product p = pService.selectProductDetail(productNo);
+		//상품사진
 		ArrayList<Attachment> list = pService.selectPhotoDetail(productNo);
 		ArrayList<Option> oList = pService.optionDetail(productNo);
 		ArrayList<Qna> qList = pService.selectProductQna(productNo);
 		
+		ArrayList<Member> mList = pService.selectReviewMember(productNo);
+		
+		ArrayList<Review> rList = new ArrayList<>();
+		
+		
+		if(reviewStatus==1) {
+			rList = pService.selectProductReview(productNo);
+		}else {
+			rList = pService.selectProductPhotoReview(productNo);
+		}
+		
+		//리뷰사진
+		ArrayList<Attachment> aList = pService.selectPhotoReview(productNo);
+		
 		imageStorage.deleteImage("cb1d55f4-e2c4-42b1-96b9-948d8883b3c5.png","sohwa");
 		
+		
+		
+		
+		
+		model.addAttribute("reviewStatus", reviewStatus);
+		model.addAttribute("mList", mList);
+		model.addAttribute("aList", aList);
+		model.addAttribute("rList", rList);
 		model.addAttribute("qList", qList);
 		model.addAttribute("productNo", productNo);
 		model.addAttribute("oList", oList);
@@ -543,6 +573,39 @@ public class ProductController {
 		}
 		
 		
+		
+	}
+	
+	
+	
+	@PostMapping("enrollReview.so")
+	public String insertReview(@ModelAttribute Review r, @RequestParam("file") MultipartFile upload, Model model) {
+		
+		String id = ((Member)model.getAttribute("loginUser")).getMemberId();
+		r.setMemberId(id);
+		String name="sohwa";
+		String[] returnArr = imageStorage.saveImage(upload, name);
+		Attachment a = new Attachment();
+		int result1 = pService.insertReview(r);
+		int result2 = 0;
+		
+		
+		if(returnArr != null) {
+			a.setPhotoRename(returnArr[0]);
+			a.setPhotoPath(returnArr[1]);
+			a.setPhotoLevel(0);
+			a.setBoardNo(r.getReviewNo());
+			result2 = pService.insertReviewPhoto(a);
+		}
+		
+
+		
+		
+		if(result1 > 0) {
+			return "redirect:productDetail.so?productNo=" + r.getProductNo();
+		}else {
+			throw new ProductException("리뷰 등록 실패");
+		}
 		
 	}
 	

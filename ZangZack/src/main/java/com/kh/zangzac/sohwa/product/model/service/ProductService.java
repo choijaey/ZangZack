@@ -5,11 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.ming.member.model.vo.Member;
 import com.kh.zangzac.sohwa.product.model.vo.Attachment;
 import com.kh.zangzac.sohwa.product.model.vo.Cart;
 import com.kh.zangzac.sohwa.product.model.vo.Option;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
 import com.kh.zangzac.sohwa.product.model.vo.Qna;
+import com.kh.zangzac.sohwa.product.model.vo.Review;
 
 public interface ProductService {
 
@@ -80,6 +82,19 @@ public interface ProductService {
 	ArrayList<Qna> searchKeyword(HashMap<String, String> map);
 
 	ArrayList<Qna> searchYKeyword(HashMap<String, String> map);
+
+	int insertReview(Review r);
+
+	int insertReviewPhoto(Attachment a);
+
+	ArrayList<Review> selectProductReview(int productNo);
+
+	ArrayList<Attachment> selectPhotoReview(int productNo);
+
+	ArrayList<Member> selectReviewMember(int productNo);
+
+	ArrayList<Review> selectProductPhotoReview(int productNo);
+
 
 
 	

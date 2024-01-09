@@ -525,9 +525,11 @@
  	리뷰별점
 
 */
-
+.fa {
+	color:gray;
+}
 .checked {
-  color: rgb(247, 223, 9); /* 별점 색상 */
+  color: rgb(247, 223, 9) !important; /* 별점 색상 */
 }
 
 #reviewModal .fa{

@@ -42,7 +42,7 @@
 				  <span class="fa fa-star checked"></span>
 				  <span class="fa fa-star checked"></span>
 			</div>
-		    4.7
+		    <span th:with="count=${rList.size()}, totalScore='0'" th:each="r:${rList}" th:if="${r.productNo == p.productNo}">[[${total}]]</span>
 		    <br>
 			<span id="price">[[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]</span>
 			&nbsp;&nbsp;<div class="deliverySpan" th:if="${p.deliveryPrice==0}">무료배송</div><br><br>
@@ -118,14 +118,14 @@
 	    <!-- 리뷰 섹션 -->
 	      <section id="reviews">
 	      	   <div id="review">
-					<span style="margin-left:5%;">리뷰 </span><span style="color:#F9612B;"> 15</span><a href="#" id="openReviewModal" onclick="openModal()">리뷰쓰기</a>
+					<span style="margin-left:5%;">리뷰 </span><span style="color:#F9612B;"> [[${rList.size()}]]</span><a href="#" id="openReviewModal" onclick="openModal()">리뷰쓰기</a>
 				    <div id="reviewContainer">
 							<div class="star-rating">
 								  <span class="fa fa-star checked"></span>
 								  <span class="fa fa-star checked"></span>
 								  <span class="fa fa-star checked"></span>
 								  <span class="fa fa-star checked"></span>
-								  <span class="fa fa-star checked"></span>
+								  <span class="fa fa-star"></span>
 							</div>
 						    <span style="font-size:27px;">4.7</span>
 						    
@@ -139,47 +139,53 @@
 								        <h1 class="text-2xl font-bold mb-4">리뷰 등록</h1>
 								        <div class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
 								            <div class="p-4 flex">
-								                <img class="w-20 h-20 object-cover rounded-full" src="image/sohwa/tent1core1.png" alt="Product">
+								                <img class="w-20 h-20 object-cover rounded-full" th:each="l:${list}" th:if="${l.photoLevel==0 && l.boardType == 5}" th:src="${l.photoPath}" alt="Product">
 								                <div class="ml-4">
-								                    <h2 class="text-lg font-semibold">모비가든</h2>
-								                    <p class="text-sm text-gray-600">캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용</p><hr>
-								                    <p>410,000원</p>
+								                    <h2 class="text-lg font-semibold">[[${p.productCompany}]]</h2>
+								                    <p class="text-sm text-gray-600">[[${p.productName}]]</p><hr>
+								                    <p>[[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]</p>
 								                </div>
 								            </div>
+								            
+								            
 								            <div class="border-t border-gray-200">
-								                <div class="p-4">
-								                    <h3 class="text-lg font-semibold mb-2">별점등록</h3>
-								                    <div class="flex items-center mb-4">
-														
-														
-								                        <div id="starRating">
-															  <span class="fa fa-star"></span>
-															  <span class="fa fa-star"></span>
-															  <span class="fa fa-star"></span>
-															  <span class="fa fa-star"></span>
-															  <span class="fa fa-star"></span>
+								            	<form action="enrollReview.so" method="POST" enctype="multipart/form-data">
+									            	<input type="hidden" th:value="${p.productNo}" name="productNo">
+									            	<input type="file" id="fileUpload" name="file" style="display: none;">
+									            	<input type="hidden" name="reviewScore" value="0">
+									                <div class="p-4">
+									                    <h3 class="text-lg font-semibold mb-2">별점등록</h3>
+									                    <div class="flex items-center mb-4">
+									                        <div id="starRating">
+																  <span class="fa fa-star"></span>
+																  <span class="fa fa-star"></span>
+																  <span class="fa fa-star"></span>
+																  <span class="fa fa-star"></span>
+																  <span class="fa fa-star"></span>
+															</div>
+									                        
+									                    </div>
+									                    <!-- 파일 미리보기 영역 -->
+									                    <div id="imagePreview">
+									                        <img id="preview" src="image/sohwa/icons8-screenshot-64.png">
+									                    </div>
+									                    <br>
+									                    <div id="addPhoto">
+															<img src="image/sohwa/icons8-camera-80.png">사진첨부
 														</div>
-								                        
-								                        
-								                    </div>
-								                    <!-- 파일 미리보기 영역 -->
-								                    <div id="imagePreview">
-								                        <img id="preview" src="image/sohwa/icons8-screenshot-64.png">
-								                    </div>
-								                    <br>
-								                    <div id="addPhoto">
-														<img src="image/sohwa/icons8-camera-80.png">사진첨부
-													</div>
-								                    <br>
-								                    
-								                    <div class="mb-4">
-								                        <label for="review" class="text-sm font-semibold">Write a review</label>
-								                        <textarea id="review" rows="3" class="mt-1 p-2 w-full border rounded-md" style="height:250px; overflow: scroll; resize: none;"></textarea>
-								                    </div>
-								                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" style="float:right; margin-bottom:30px;">
-								                        리뷰등록
-								                    </button>
+									                    <br>
+									                    
+									                    <div class="mb-4">
+									                        <label for="review" class="text-sm font-semibold">리뷰를 작성해주세요.</label>
+									                        <textarea id="review" name="reviewContent" rows="3" class="mt-1 p-2 w-full border rounded-md" style="height:250px; overflow: scroll; resize: none;"></textarea>
+									                    </div>
+									                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" style="float:right; margin-bottom:30px;">
+									                        리뷰등록
+									                    </button>
+								                    </form>
 								                </div>
+								                
+								                
 								            </div>
 								        </div>
 								    </div>
@@ -202,104 +208,66 @@
 						    <div class="container mx-auto px-4 py-8">
 						        <div class="space-y-6">
 									
-									<div class="reviewItem">
+									<div class="reviewItem" th:each="r: ${rList}">
 										<div class="bg-white shadow rounded-lg p-4">
 							                <div class="flex items-center space-x-4">
 							                    <div class="w-12 h-12 rounded-full overflow-hidden">
-							                        <img src="https://unsplash.it/100" alt="Profile" class="object-cover w-full h-full">
+							                        <img th:each="m:${mList}" th:if="${m.memberId == r.memberId}" th:src="${m.memberProfilePath}"alt="Profile" class="object-cover w-full h-full">
 							                    </div>
 							                    <div class="flex-1">
-							                        <div class="font-bold">User Name</div>
-							                        <div class="text-sm text-gray-600">2023-01-01 - Review Title</div>
+							                        <div class="font-bold">[[${r.memberId}]]</div>
+							                        <div class="text-sm text-gray-600">[[${r.reviewUploadDate}]]</div>
 							                    </div>
 							                    <div class="text-sm text-gray-500">별점: 
-							                       <div id="starRating">
-														  <span class="fa fa-star checked"></span>
-														  <span class="fa fa-star checked"></span>
-														  <span class="fa fa-star checked"></span>
-														  <span class="fa fa-star checked"></span>
-														  <span class="fa fa-star checked"></span>
+							                       <div class="starRating">
+														  <span th:class="${r.reviewScore >= 1} ? 'fa fa-star checked' : 'fa fa-star'"></span>
+														  <span th:class="${r.reviewScore >= 2} ? 'fa fa-star checked' : 'fa fa-star'"></span>
+														  <span th:class="${r.reviewScore >= 3} ? 'fa fa-star checked' : 'fa fa-star'"></span>
+														  <span th:class="${r.reviewScore >= 4} ? 'fa fa-star checked' : 'fa fa-star'"></span>
+														  <span th:class="${r.reviewScore >= 5} ? 'fa fa-star checked' : 'fa fa-star'"></span>
 													</div>
 							                    </div>
 							                </div>
 							                <div class="mt-4 text-gray-700">
-							                    This is a sample review content. The user can share their experience with the product here. They can also upload a photo of the product.
+							                    [[${r.reviewContent}]]
 							                </div>
 							                <div class="mt-4">
-							                    <img src="image/sohwa/fire2core1.png" alt="Product" class="rounded">
+							                    <img th:each="a:${aList}" th:if="${a.photoLevel==0 && r.reviewNo == a.boardNo && a.boardType==6}" th:src="${a.photoPath}" alt="Product" class="rounded">
 							                </div>
 							            </div>
 									</div>
 						            
 						            
 						            
-						            <div class="reviewItem">
-										<div class="bg-white shadow rounded-lg p-4">
-							                <div class="flex items-center space-x-4">
-							                    <div class="w-12 h-12 rounded-full overflow-hidden">
-							                        <img src="https://unsplash.it/100" alt="Profile" class="object-cover w-full h-full">
-							                    </div>
-							                    <div class="flex-1">
-							                        <div class="font-bold">User Name</div>
-							                        <div class="text-sm text-gray-600">2023-01-01 - Review Title</div>
-							                    </div>
-							                    <div class="text-sm text-gray-500">별점: 
-							                       <div class="star-rating">
-														  <input type="radio" id="star5" name="rating2" value="1" />
-														  <label for="star5">★</label>
-														  <input type="radio" id="star4" name="rating2" value="2" />
-														  <label for="star4">★</label>
-														  <input type="radio" id="star3" name="rating2" value="3" />
-														  <label for="star3">★</label>
-														  <input type="radio" id="star2" name="rating2" value="4" />
-														  <label for="star2">★</label>
-														  <input type="radio" id="star1" name="rating2" value="5" />
-														  <label for="star1">★</label>
-												    </div>
-							                    </div>
-							                </div>
-							                <div class="mt-4 text-gray-700">
-							                    This is a sample review content. The user can share their experience with the product here. They can also upload a photo of the product.
-							                </div>
-							                <div class="mt-4">
-							                    <img src="image/sohwa/fire2core1.png" alt="Product" class="rounded">
-							                </div>
-							            </div>
-									</div>
+<!-- 						            <div class="reviewItem"> -->
+<!-- 										<div class="bg-white shadow rounded-lg p-4"> -->
+<!-- 							                <div class="flex items-center space-x-4"> -->
+<!-- 							                    <div class="w-12 h-12 rounded-full overflow-hidden"> -->
+<!-- 							                        <img src="https://unsplash.it/100" alt="Profile" class="object-cover w-full h-full"> -->
+<!-- 							                    </div> -->
+<!-- 							                    <div class="flex-1"> -->
+<!-- 							                        <div class="font-bold">User Name</div> -->
+<!-- 							                        <div class="text-sm text-gray-600">2023-01-01 - Review Title</div> -->
+<!-- 							                    </div> -->
+<!-- 							                    <div class="text-sm text-gray-500">별점:  -->
+<!-- 							                       <div class="starRating"> -->
+<!-- 														  <span class="fa fa-star checked"></span> -->
+<!-- 														  <span class="fa fa-star checked"></span> -->
+<!-- 														  <span class="fa fa-star checked"></span> -->
+<!-- 														  <span class="fa fa-star checked"></span> -->
+<!-- 														  <span class="fa fa-star checked"></span> -->
+<!-- 													</div> -->
+<!-- 							                    </div> -->
+<!-- 							                </div> -->
+<!-- 							                <div class="mt-4 text-gray-700"> -->
+<!-- 							                    This is a sample review content. The user can share their experience with the product here. They can also upload a photo of the product. -->
+<!-- 							                </div> -->
+<!-- 							                <div class="mt-4"> -->
+<!-- 							                    <img src="image/sohwa/fire2core1.png" alt="Product" class="rounded"> -->
+<!-- 							                </div> -->
+<!-- 							            </div> -->
+<!-- 									</div> -->
 									
-									<div class="reviewItem">
-										<div class="bg-white shadow rounded-lg p-4">
-							                <div class="flex items-center space-x-4">
-							                    <div class="w-12 h-12 rounded-full overflow-hidden">
-							                        <img src="https://unsplash.it/100" alt="Profile" class="object-cover w-full h-full">
-							                    </div>
-							                    <div class="flex-1">
-							                        <div class="font-bold">User Name</div>
-							                        <div class="text-sm text-gray-600">2023-01-01 - Review Title</div>
-							                    </div>
-							                    <div class="text-sm text-gray-500">별점: 
-							                       <div class="star-rating">
-														  <input type="radio" id="star5" name="rating2" value="1" />
-														  <label for="star5">★</label>
-														  <input type="radio" id="star4" name="rating2" value="2" />
-														  <label for="star4">★</label>
-														  <input type="radio" id="star3" name="rating2" value="3" />
-														  <label for="star3">★</label>
-														  <input type="radio" id="star2" name="rating2" value="4" />
-														  <label for="star2">★</label>
-														  <input type="radio" id="star1" name="rating2" value="5" />
-														  <label for="star1">★</label>
-												    </div>
-							                    </div>
-							                </div>
-							                <div class="mt-4 text-gray-700">
-							                    This is a sample review content. The user can share their experience with the product here. They can also upload a photo of the product.
-							                </div>
-							                <div class="mt-4">
-							                    <img src="image/sohwa/fire2core1.png" alt="Product" class="rounded">
-							                </div>
-							            </div>
-									</div>
 							
 						            <!-- Pagination -->
 						            <div class="flex justify-center space-x-1">
@@ -318,7 +286,9 @@
 						  
 					</div>
 			   </div>
+			   
 	      </section>
+	     
 	
 	
 	    <!-- 문의 섹션 -->
@@ -499,7 +469,7 @@
 	
 
 
-	<input type="file" id="fileUpload" style="display: none;">
+	
 
 
 
@@ -509,20 +479,47 @@
 	<script>
 		
 		
-		//별점 등록
+		//모달 별점 등록
+		
 		var stars = document.querySelectorAll('.modal .fa');;
 
 		stars.forEach(function(star, index) {
+			var checkedStarsCount = 0;
+			star.addEventListener('mouseover', function(){
+				for (var i = 0; i <= index; i++) {
+				      stars[i].style.color = 'yellow';
+			    }
+			})
+			
+			star.addEventListener('mouseout', function(){
+				for (var i = 0; i <= index; i++) {
+				      stars[i].style.color = 'gray';
+			    }
+			})
+			
 		  star.addEventListener('click', function() {
 		    // 클릭된 별을 포함하여 그 앞의 별들을 노란색으로 변경하고, 나머지는 회색으로 유지합니다.
+		    
 		    for (var i = 0; i <= index; i++) {
 		      stars[i].classList.add('checked');
+		      if (stars[i].classList.contains('checked')) {
+			        checkedStarsCount++; // checked 클래스가 있으면 checkedStarsCount를 증가시킵니다
+			    }
 		    }
 		    for (var i = index + 1; i < stars.length; i++) {
 		      stars[i].classList.remove('checked');
 		    }
+		    var starCountInput = document.querySelector('input[name="reviewScore"]');
+		    starCountInput.value = checkedStarsCount;
 		  });
 		});
+
+		//모달 별점 등록 갯수 추출
+		for (var i = 0; i < stars.length; i++) {
+		    if (stars[i].classList.contains('checked')) {
+		        checkedStarsCount++; // checked 클래스가 있으면 checkedStarsCount를 증가시킵니다
+		    }
+		}
 		
 		
 		
@@ -565,7 +562,6 @@
 		
 		
 		
-		//리뷰모달
 		// 파일 첨부 요소를 클릭하는 함수
         document.getElementById('addPhoto').addEventListener('click', function() {
             document.getElementById('fileUpload').click(); // 파일 업로드 클릭 이벤트 발생
@@ -588,6 +584,9 @@
 		        reader.readAsDataURL(file); // 파일을 읽어서 Data URL로 변환하여 onload 이벤트 실행
 		    }
 		});
+		
+		
+		
 		
 		
 		
@@ -810,6 +809,31 @@
 	            error: data => console.log(data)
 	        });
 	    })
+	    
+	    
+	    var productNo = document.getElementById('productNo').value;
+	    
+	    document.getElementById('onlyPhoto').addEventListener('click', ()=>{
+	    	location.href="productDetail.so?productNo="+productNo+'&reviewStatus=2';
+	    	
+	    })
+	    
+	    //url옮겨졌을 때 review섹션으로 가도록
+	    document.addEventListener('DOMContentLoaded', () => {
+		    const urlParams = new URLSearchParams(window.location.search);
+		    const reviewStatus = urlParams.get('reviewStatus');
+		
+		    if (reviewStatus === '2') {
+		        const reviewsSection = document.getElementById('reviews');
+		        if (reviewsSection) {
+		            setTimeout(() => {
+		                reviewsSection.scrollIntoView({
+		                    behavior: 'smooth'
+		                });
+		            }, 10); // 스크롤을 위해 약간의 지연 추가 (시간은 조절 가능)
+		        }
+		    }
+		});
 		
 	</script>
 

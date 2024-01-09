@@ -181,13 +181,13 @@
 			  <h1>PRODUCT ></h1>
 		  	  <section class="products">
 		  	  <th:block th:each="p:${pList}">
-		  	  	<article class="product" th:each="a:${aList}" th:if="${ p.productNo eq a.boardNo && a.boardType==5 }" onclick="redirectToProductDetail(this)">
+		  	  	<article class="product" th:each="a:${aList}" th:if="${ p.productNo eq a.boardNo && a.boardType==5}" onclick="redirectToProductDetail(this)">
 		  	  		<input type="hidden" th:value="${p.productNo}">
 				    <a href="#"><img th:src="${a.photoPath}"></a>
 			        <p>[[${p.productName}]]</p>
 			        <p class="price" th:text="|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|"></p>
 			        <span class="starImage">
-						<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 몇 개!?</span></img>
+						<img src="image/sohwa/icons8-star.gif" style="height: 10px;">[[${p.productScore}]] <span style="color:gray;">리뷰 몇 개!?</span></img>
 					</span><br>
 			        <th:block th:if="${p.eno == 0}"><span class="badge rounded-pill text-bg-dark">일시품절</span></th:block>
 			        <th:block th:if="${p.deliveryPrice == 0}"><span class="badge text-bg-secondary">무료배송</span></th:block>

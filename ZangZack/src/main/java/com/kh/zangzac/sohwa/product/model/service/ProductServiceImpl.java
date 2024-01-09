@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.ming.member.model.vo.Member;
 import com.kh.zangzac.sohwa.product.model.dao.ProductDAO;
 import com.kh.zangzac.sohwa.product.model.vo.Attachment;
 import com.kh.zangzac.sohwa.product.model.vo.Cart;
 import com.kh.zangzac.sohwa.product.model.vo.Option;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
 import com.kh.zangzac.sohwa.product.model.vo.Qna;
+import com.kh.zangzac.sohwa.product.model.vo.Review;
 
 @Service
 public class ProductServiceImpl implements ProductService{
@@ -197,6 +199,38 @@ public class ProductServiceImpl implements ProductService{
 	public ArrayList<Qna> searchYKeyword(HashMap<String, String> map) {
 		return pDAO.searchYKeyword(map);
 	}
+
+	@Override
+	public int insertReview(Review r) {
+		return pDAO.insertReview(r);
+	}
+
+	@Override
+	public int insertReviewPhoto(Attachment a) {
+		return pDAO.insertReviewPhoto(a);
+	}
+
+	@Override
+	public ArrayList<Review> selectProductReview(int productNo) {
+		return pDAO.selectProductReview(productNo);
+	}
+
+	@Override
+	public ArrayList<Attachment> selectPhotoReview(int productNo) {
+		return pDAO.selectPhotoReview(productNo);
+	}
+
+	@Override
+	public ArrayList<Member> selectReviewMember(int productNo) {
+		return pDAO.selectReviewMember(productNo);
+	}
+
+	@Override
+	public ArrayList<Review> selectProductPhotoReview(int productNo) {
+		return pDAO.selectProductPhotoReview(productNo);
+	}
+
+
 
 	
 
