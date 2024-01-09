@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.kh.zangzac.common.model.vo.Attachment;
+import com.kh.zangzac.common.photo.model.vo.Photo;
+import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
 public interface secondHandService {
@@ -12,11 +14,11 @@ public interface secondHandService {
 
 	int updateSecondHand(secondHandProduct sp);
 
-	int insertAttmSecondHand(ArrayList<Attachment> detailList);
+	int insertAttmSecondHand(ArrayList<Photo> detailList);
 
-	ArrayList<secondHandProduct> selectMyList(String memberId);
+	ArrayList<secondHandProduct> selectMyList(secondHandProduct sp);
 
-	ArrayList<Attachment> selectAttachmentList(Integer spNo);
+	ArrayList<Photo> selectAttachmentList(Integer spNo);
 
 	int deleteAttmSecondHand(int spNo);
 
@@ -27,6 +29,12 @@ public interface secondHandService {
 	int soldout(int spNo);
 
 	int markDelete(int spNo);
+
+	ArrayList<secondHandProduct> selectSeconHand(secondHandProduct sp);
+
+	ArrayList<Reply> selectReply(int spNo);
+
+	ArrayList<Photo> selectPhotoSeconHand(secondHandProduct sp);
 
 
 

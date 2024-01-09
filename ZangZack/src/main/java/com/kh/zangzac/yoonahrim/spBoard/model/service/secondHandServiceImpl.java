@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.zangzac.common.model.vo.Attachment;
+import com.kh.zangzac.common.photo.model.vo.Photo;
+import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.yoonahrim.spBoard.model.dao.secondHandDAO;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
@@ -26,18 +28,14 @@ public class secondHandServiceImpl implements secondHandService{
 		return spDAO.updateSecondHand(sp);
 	}
 
+
 	@Override
-	public int insertAttmSecondHand(ArrayList<Attachment> detailList) {
-		return spDAO.insertAttmSecondHand(detailList);
+	public ArrayList<secondHandProduct> selectMyList(secondHandProduct sp) {
+		return (ArrayList)spDAO.selectMyList(sp);
 	}
 
 	@Override
-	public ArrayList<secondHandProduct> selectMyList(String memberId) {
-		return (ArrayList)spDAO.selectMyList(memberId);
-	}
-
-	@Override
-	public ArrayList<Attachment> selectAttachmentList(Integer spNo) {
+	public ArrayList<Photo> selectAttachmentList(Integer spNo) {
 		return (ArrayList)spDAO.selectAttachmentList(spNo);
 	}
 
@@ -66,6 +64,27 @@ public class secondHandServiceImpl implements secondHandService{
 		return spDAO.markDelete(spNo);
 	}
 
+	@Override
+	public int insertAttmSecondHand(ArrayList<Photo> detailList) {
+		return spDAO.insertAttmSecondHand(detailList);
+	}
+
+	@Override
+	public ArrayList<secondHandProduct> selectSeconHand(secondHandProduct sp) {
+		return spDAO.selectSeconHand(sp);
+	}
+
+	@Override
+	public ArrayList<Reply> selectReply(int spNo) {
+		return spDAO.selectReply(spNo);
+	}
+
+	@Override
+	public ArrayList<Photo> selectPhotoSeconHand(secondHandProduct sp) {
+		return spDAO.selectPhotoSeconHand(sp);
+	}
+
+	
 
 
 

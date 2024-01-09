@@ -19,8 +19,8 @@
     <th:block th:each="s : ${list}">
         <input type="hidden" name="spNo" th:value="${s.spNo}"/>
           <div class="row">
-              <div class="col col-2 d-inline" th:each="a : ${aList}">
               <!-- 이미지 출력 -->
+              <th:block th:each="a : ${aList}">
                 <div class="photoNum" style="position: relative;">
                     <div class="photoUploads" style="background-image: url('image/yoonahrim/photo-icon.png'); width: 200px; height: 200px; background-size:50%; background-repeat: no-repeat; background-position:50% 50%;">
                         <img th:src="${a.photoPath}" th:id="'photoUpload/' + ${a.photoNo}" class="clickUpload" style="width:200px; height:200px; border-radius:20%; border: 1px solid black; cursor:pointer;"/>
@@ -28,7 +28,7 @@
                     <br>
                     <div class="input-group mb-3">
                         <label class="input-group-text" th:for="'inputGroupFile/' + ${a.photoNo}" Multiple style="display:none;">
-                            <input type="file" class="form-control" th:id="'inputGroupFile/' + ${a.photoNo}" style="display:none;" th:onchange="previewImage(event, 'photoUpload/' + ${a.photoNo})"/>
+                            <input type="file" class="form-control" th:id="'inputGroupFile/' + ${a.photoNo}" style="display:none;" th:attr="onchange='previewImage(event, \'' + 'photoUpload/' + ${a.photoNo} + '\')'"/>
                         </label>
                     </div>
                     <div class="deleteBtn">
@@ -36,7 +36,7 @@
                         <button type="button" class="btn btn-outline-success">삭제 off</button>
                     </div>
                 </div>
-            	</div>
+              </th:block> 
             <!-- 빈 photoNum 추가 -->
             <th:block th:each="emptyIdx : ${#numbers.sequence(aList.size() + 1, 4)}">
                 <div class="photoNum">
@@ -63,13 +63,13 @@
                      <input class="form-control" type="text" name="spTitle" placeholder="Default input" aria-label="default input example" style="width: 800px;" th:value="${s.spTitle}">
                   </label><br><br>
                   <label>캠핑 카테고리
-                        <select class="form-select" name="categoryNo" th:selected="${s.categoryNo == 1}">
-                       <option value="1" name="categoryNo" th:selected="${ s.categoryNo == '텐트' }">텐트</option>
-                       <option value="2" name="categoryNo" th:selected="${ s.categoryNo == '취침용품' }">취침용품</option>
-                       <option value="3" name="categoryNo" th:selected="${ s.categoryNo == '조리도구' }">조리도구</option>
-                       <option value="4" name="categoryNo" th:selected="${ s.categoryNo == '발화용품' }">발화용품</option>
-                       <option value="5" name="categoryNo" th:selected="${ s.categoryNo == '배낭' }">배낭</option>
-                       <option value="6" name="categoryNo" th:selected="${ s.categoryNo == '기타' }">기타</option>
+                        <select class="form-select" name="categoryNo">
+                       <option value="1" name="categoryNo" th:selected="${ s.categoryNo == 1 }">텐트</option>
+                       <option value="2" name="categoryNo" th:selected="${ s.categoryNo == 2 }">취침용품</option>
+                       <option value="3" name="categoryNo" th:selected="${ s.categoryNo == 3 }">조리도구</option>
+                       <option value="4" name="categoryNo" th:selected="${ s.categoryNo == 4 }">발화용품</option>
+                       <option value="5" name="categoryNo" th:selected="${ s.categoryNo == 5 }">배낭</option>
+                       <option value="6" name="categoryNo" th:selected="${ s.categoryNo == 6 }">기타</option>
                        </select>
                </label><br><br>
                <label>가격

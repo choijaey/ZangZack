@@ -5,7 +5,8 @@ import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.kh.zangzac.common.model.vo.Attachment;
+import com.kh.zangzac.common.photo.model.vo.Photo;
+import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
 @Mapper
@@ -15,13 +16,13 @@ public interface secondHandDAO {
 
 	int updateSecondHand(secondHandProduct sp);
 
-	int insertAttmSecondHand(ArrayList<Attachment> detailList);
+	int insertAttmSecondHand(ArrayList<Photo> detailList);
 
-	ArrayList<secondHandProduct> selectMyList(String memberId);
+	ArrayList<secondHandProduct> selectMyList(secondHandProduct sp);
 
 	int deleteAttmSecondHand(int spNo);
 
-	ArrayList<Attachment> selectAttachmentList(Integer spNo);
+	ArrayList<Photo> selectAttachmentList(Integer spNo);
 
 	int updateBooking(int spNo);
 
@@ -30,6 +31,12 @@ public interface secondHandDAO {
 	int soldout(int spNo);
 
 	int markDelete(int spNo);
+
+	ArrayList<secondHandProduct> selectSeconHand(secondHandProduct sp);
+
+	ArrayList<Reply> selectReply(int spNo);
+
+	ArrayList<Photo> selectPhotoSeconHand(secondHandProduct sp);
 
 
 

@@ -1,7 +1,7 @@
 package com.kh.zangzac.yoonahrim.spBoard.controller;
 
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.zangzac.common.ImageStorage;
-import com.kh.zangzac.common.model.vo.Attachment;
+import com.kh.zangzac.common.photo.model.vo.Photo;
+import com.kh.zangzac.common.reply.model.vo.Reply;
+import com.kh.zangzac.ming.member.model.vo.Member;
 import com.kh.zangzac.yoonahrim.spBoard.model.service.secondHandService;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandException;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
@@ -22,7 +25,7 @@ import jakarta.servlet.http.HttpSession;
 
 
 /* 전체적으로 loginUser랑 board_Type 다 넣어두기*/
-
+@SessionAttributes("loginUser")
 @Controller
 public class SecondHandController {
 	
@@ -38,11 +41,16 @@ public class SecondHandController {
     
 	//중고 메인 페이지로 이동
 	@GetMapping("secondHand.ah")
-	public String secondHand(@ModelAttribute secondHandProduct sp, HttpSession session, Model model) {
-		//String id = ((Member)session.getAttribute("loginUser")).getId();
-		//ArrayList<HashMap<String, Object>> list =  spService.selectSeconHand(id);
-		//System.out.println(list);
-		//model.addAttribute("list", list);
+	public String secondHand(@ModelAttribute secondHandProduct sp, Model model) {
+		int spNo = sp.getSpNo();
+		
+		ArrayList<secondHandProduct> list =  spService.selectSeconHand(sp);
+		ArrayList<Photo> aList = spService.selectPhotoSeconHand(sp);
+		
+		model.addAttribute("aList", aList);
+		model.addAttribute("slist", list);
+		
+		System.out.println(list);
 		
 		return "views/yoonahrim/secondHandList";
 	}
@@ -51,11 +59,13 @@ public class SecondHandController {
 	@GetMapping("edit.ah")
     public String editPage(@ModelAttribute secondHandProduct sp, @RequestParam("spNo") Integer spNo, HttpSession session, Model model) {
 		
-		String memberId = "3";
+		//로그인한 User의 게시물을 update 하기 위해
+		//로그인 유저의 id와 memebr_id가 일치할때 업도르 될 수 있도록 해야함
+		String id = ((Member)session.getAttribute("loginUser")).getMemberId();
+		sp.setMemberId(id);
 		
-		//String id = ((Member)session.getAttribute("loginUser")).getMemberId();
-		ArrayList<secondHandProduct> sList=  spService.selectMyList(memberId);
-		ArrayList<Attachment> aList = spService.selectAttachmentList(spNo);
+		ArrayList<secondHandProduct> sList=  spService.selectMyList(sp);
+		ArrayList<Photo> aList = spService.selectAttachmentList(spNo);
 		
 		model.addAttribute("aList", aList);
 		model.addAttribute("list", sList);
@@ -65,12 +75,13 @@ public class SecondHandController {
 	
 	//중고 게시글 수정
 	@PostMapping("update.ah")
-	public String updatePage(@ModelAttribute secondHandProduct sp, Model model, @RequestParam("inputGroupFile") ArrayList<MultipartFile> inputGroupFile,
+	public String updatePage(@ModelAttribute secondHandProduct sp, Model model, @RequestParam("inputGroupFile") ArrayList<MultipartFile> inputGroupFile, HttpSession session,
 							 @RequestParam("spAddressStreet") String spAddressStreet, @RequestParam("spAddressDetail") String spAddressDetail) {
 		
 		//로그인한 User의 게시물을 update 하기 위해
 		//로그인 유저의 id와 memebr_id가 일치할때 업도르 될 수 있도록 해야함
-		System.out.println(sp);
+		String id = ((Member)session.getAttribute("loginUser")).getMemberId();
+		sp.setMemberId(id);
 		
 		String spAddress = null;
 		
@@ -79,13 +90,11 @@ public class SecondHandController {
 	    }
 	    sp.setSpAddress(spAddress);
 	    
-	    ArrayList<Attachment> aList = spService.selectAttachmentList(sp.getSpNo());
+	    ArrayList<Photo> aList = spService.selectAttachmentList(sp.getSpNo());
 	    String name = "ahrim";
 	    
 	    //기존 파일 삭제
 	    int result = spService.deleteAttmSecondHand(sp.getSpNo());
-	    
-	    System.out.println("Delete result: " + result); //0이 나옴....시벌
 	    
 	    if (result <= 0) {
 	        throw new secondHandException("게시판 수정 실패 - 기존 파일 삭제 실패");
@@ -111,7 +120,7 @@ public class SecondHandController {
 	    }
 	    
 	    //새로운 파일 업로드
-	    ArrayList<Attachment> detailList = new ArrayList<>();
+	    ArrayList<Photo> detailList = new ArrayList<>();
 	    int result1 = 0;
 	    int result2 = 0;
 	    
@@ -119,7 +128,7 @@ public class SecondHandController {
 	    for (int i = 0; i < inputGroupFile.size(); i++) {
 	        MultipartFile upload = inputGroupFile.get(i); // 파일 하나씩 뽑아오기.
 	        String[] returnArr = imageStorage.saveImage(upload, name);
-	        Attachment a = new Attachment();
+	        Photo a = new Photo();
 	        
 	        if (returnArr != null) {
 	            if(i == 0) {
@@ -137,7 +146,7 @@ public class SecondHandController {
 	    result1 = spService.insertSecondHand(sp);
 	    
 	    // 상세사진 저장
-	    for (Attachment a : detailList) {
+	    for (Photo a : detailList) {
 	        a.setBoardNo(sp.getSpNo());
 	    }
 	    
@@ -154,18 +163,21 @@ public class SecondHandController {
 	
 	//중고 게시글 상세페이지
 	@GetMapping("detail.ah")
-	public String detailPage(@ModelAttribute secondHandProduct sp, @RequestParam("spNo") int spNo, HttpSession session, Model model) {
+	public String detailPage(@ModelAttribute secondHandProduct sp, HttpSession session, Model model) {
 		//정보를 가져와서 list에 담은 다음 화면에 뿌리면 됨.
 		
-		String memberId = "3";
+		String id = ((Member)session.getAttribute("loginUser")).getMemberId();
+		sp.setMemberId(id);
 		
-		//String id = ((Member)session.getAttribute("loginUser")).getMemberId();
-		ArrayList<secondHandProduct> sList=  spService.selectMyList(memberId);
-		ArrayList<Attachment> aList = spService.selectAttachmentList(spNo);
+		int spNo = sp.getSpNo();
+		
+		ArrayList<secondHandProduct> sList=  spService.selectMyList(sp);
+		ArrayList<Photo> aList = spService.selectAttachmentList(spNo);
+		ArrayList<Reply> rList = spService.selectReply(spNo);
 		
 		model.addAttribute("aList", aList);
-		model.addAttribute("list", sList);
-		
+		model.addAttribute("slist", sList);
+		model.addAttribute("rList", rList);
 		return "views/yoonahrim/secondHandDetail";
 	}
 	
@@ -176,10 +188,12 @@ public class SecondHandController {
 	}
 	
 	@PostMapping("/insert.ah" )
-	public String insertPage(@ModelAttribute secondHandProduct sp, @RequestParam("spAddressStreet") String spAddressStreet, 
+	public String insertPage(@ModelAttribute secondHandProduct sp, @RequestParam("spAddressStreet") String spAddressStreet, HttpSession session,
 							 @RequestParam("spAddressDetail") String spAddressDetail,  @RequestParam("inputGroupFile") ArrayList<MultipartFile> inputGroupFile, Model model) {
 		//로그인한 User의 게시물을 insert 하기 위해
 		//로그인 유저의 id와 memebr_id가 일치할때 업도르 될 수 있도록 해야함
+		String id = ((Member)session.getAttribute("loginUser")).getMemberId();
+		sp.setMemberId(id);
 		
 		String spAddress = null;
 	    
@@ -189,7 +203,7 @@ public class SecondHandController {
 	    sp.setSpAddress(spAddress);
 	    
 	    String name = "ahrim";
-	    ArrayList<Attachment> detailList = new ArrayList<>();
+	    ArrayList<Photo> detailList = new ArrayList<>();
 	    int result1 = 0;
 	    int result2 = 0;
 	    
@@ -197,7 +211,7 @@ public class SecondHandController {
 	    for (int i = 0; i < inputGroupFile.size(); i++) {
 	        MultipartFile upload = inputGroupFile.get(i); // 파일 하나씩 뽑아오기.
 	        String[] returnArr = imageStorage.saveImage(upload, name);
-	        Attachment a = new Attachment();
+	        Photo a = new Photo();
 	        
 	        if (returnArr != null) {
 	            if(i == 0) {
@@ -215,7 +229,7 @@ public class SecondHandController {
 	    result1 = spService.insertSecondHand(sp);
 	    
 	    // 상세사진 저장
-	    for (Attachment a : detailList) {
+	    for (Photo a : detailList) {
 	        a.setBoardNo(sp.getSpNo());
 	    }
 	    

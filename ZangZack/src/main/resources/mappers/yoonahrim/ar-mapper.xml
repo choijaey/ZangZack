@@ -10,13 +10,13 @@
      	 </selectKey>
 		<!-- 이미 시퀀스로 하나 올려진 글번호를 prodcutNo필드에 대입을 했으므로 시퀀스 돌려주는게(product_seq.nextval) 아니라 productNo 넣어주면 된다. -->
 		insert into SECONDHAND_PRODUCT
-		values (#{spNo}, #{spTitle}, #{spPrice}, #{spContent}, #{spAddress}, default, default, 1, #{categoryNo}, default) 
+		values (#{spNo}, #{spTitle}, #{spPrice}, #{spContent}, #{spAddress}, default, default, #{memberId}, #{categoryNo}, default) 
 	</insert>
 	
 	<update id="updateSecondHand">
 		UPDATE SECONDHAND_PRODUCT
 		SET SP_TITLE = #{spTitle}, SP_PRICE = #{spPrice}, SP_CONTENT = #{spContent}, SP_ADDRESS = #{spAddress}, CATEGORY_NO = #{categoryNo}
-		where member_id = '3'
+		where member_id = #{memberId}
 		<!-- member_id = #{memberId}로 후에 바꿔주기 -->
 	</update>
 	
@@ -28,19 +28,29 @@
 		</foreach>
 		select * from dual
 	</insert>
-	
+	  
+	    
 	<select id="selectMyList" resultType="secondHandProduct">
 		select *
 		from SECONDHAND_PRODUCT
-		where MEMBER_ID = #{memberId}
+		where SP_NO = #{spNo}
 	</select>
+	
+	<!--  
+	<select id="selectMyList" resultType="secondHandProduct">
+	    SELECT s.*, c.category_name
+		FROM SECONDHAND_PRODUCT s
+		     JOIN camping_category c ON s.category_no = c.category_no
+		WHERE s.SP_NO = #{spNo}
+	</select>
+	-->
 	
 	<delete id="deleteAttmSecondHand">
 		delete from photo
 		where BOARD_NO = #{spNo} and BOARD_TYPE = '4'
 	</delete>
 	
-	<select id="selectAttachmentList">
+	<select id="selectAttachmentList" resultType="Photo">
 		select *
 		from photo
 		where BOARD_NO = #{spNo} and board_type = '4'
@@ -69,5 +79,22 @@
 		SET SP_STATUS='Y'
 		where SP_NO = #{spNo}
 	</update>
+	
+	<select id="selectSeconHand" resultType="secondHandProduct">
+		select *
+		from SECONDHAND_PRODUCT
+	</select>
+	
+	<select id="selectReply" resultType="Reply">
+		select *
+		from Reply
+		where BOARD_TYPE = '4' and BOARD_NO = #{spNo}
+	</select>
+	
+	<select id="selectPhotoSeconHand" resultType="Photo">
+		select *
+		from Photo
+		where BOARD_TYPE = '4' and PHOTO_LEVEL = '0'
+	</select>
 	
 </mapper>
