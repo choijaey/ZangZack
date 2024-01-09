@@ -106,7 +106,69 @@
     }
   
  
-  	
+  	comment-item {
+	  display: flex;
+	  align-items: center;
+	  margin-bottom: 10px;
+	  padding-bottom: 10px;
+	  border-bottom: 1px solid #ececec;
+	  flex-wrap: wrap;
+	  display: inline-block;
+	}
+	
+	.comment-thumb {
+	  width: 40px;
+	  height: 50%;
+	  border-radius: 50%;
+	  margin-right: 10px;
+	  display: inline-block;
+	  margin-bottom: 25px;
+	  position: relative;
+	}
+	.comment-content {
+	  margin-bottom: 10px;
+	  padding-bottom: 10px;
+	  flex-grow: 1;
+	  width:500px;
+	  max-width: 500px;
+	  display: inline-block;
+	}
+	
+	.comment-author {
+	  font-weight: bold;
+	  color: #333;
+	  display: inline-block;
+	}
+	
+	.comment-message {
+	  color: #666;
+	  display: inline-block;
+	}
+	
+	.comment-info {
+	  font-size: 0.9em;
+	  color: #999;
+	  display: inline-block;
+	}
+	
+	.comment-list {
+	  margin-top: 20px;
+	  max-width: 100%;
+	  box-sizing: border-box;
+	  display: inline-block;
+	}
+	.edit, .delete{
+		display: inline-block;
+		border-bottom: 2px solid black;
+		cursor: pointer;
+		
+	}
+	.edit:hover, .delete:hover{
+		display: inline-block;
+		border-bottom: 2px solid red;
+		cursor: pointer;
+		
+	}
 </style>
 </head>
 <body class="bg-gray-50">
@@ -161,9 +223,19 @@
 	    			</div>
 	    			
 				</div>
-				<div class="comment-section" th:id="${cf.cfNo}">
-			        <div id="commentList"></div>
-            		<div>확인용</div>
+				<div class="comment-section comment-list" th:id="${cf.cfNo}">
+					<th:block th:each="re:${cf.replys}">
+						<div class="comment-item">
+			 	            <img class="comment-thumb" th:src="${re.memberProfilePath}" alt="프로필 사진">
+			 	            <div class="comment-content">
+			 	                <div class="comment-author">[[${re.memberName}]]</div>
+			 	                <div class="comment-message">[[${re.replyContent}]]</div><br>
+			 	                <div class="comment-info">[[${re.replyCreateDate}]]</div>
+			 	            </div>
+			 	            <div class="edit" onclick="editReply(event)">수정</div>
+    						<div class="delete" onclick="deleteReply(event)">삭제</div>
+			 	        </div>
+					</th:block>
 			    </div>
 			</div>
 			<br>
@@ -213,28 +285,33 @@
         	console.log(replycfNo.value);
         	
         	/*<![CDATA[*/
-	        let User = /*[[${session.loginUser.memberId}]]*/null;
+	        let User = /*[[${session.loginUser}]]*/null;
 	        /*]]>*/
 	        
-        	
-	       	 $.ajax({
-	             url: 'insertReply.jy', // 서버의 댓글 목록 불러오기 URL
-	             method: 'GET',
-	             data: { 
-	              boardNo : replycfNo.value,
-	           	  replyContent : replyContent.value,
-	           	  memberId : User
-	             },
-	             success: function(data) {
-	                 console.log(data);
-	                 replyModal.classList.add('hidden');
-	                 updateCommentList(data);
-	                 
-	             },
-	             error: function(data) {
-	                 console.log(data);
-	             }
-	         });
+	        if(User != null){
+        		console.log(User);
+		       	 $.ajax({
+		             url: 'insertReply.jy', // 서버의 댓글 목록 불러오기 URL
+		             method: 'GET',
+		             dataType: 'json', // 서버에서 JSON 형식으로 응답하는 경우
+		             data: { 
+		              boardNo : replycfNo.value,
+		           	  replyContent : replyContent.value,
+		           	  memberId : User.memberId
+		             },
+		             success: function(data) {
+		                 console.log(data);
+		                 updateCommentList(data);
+		                 replyModal.classList.add('hidden');
+		                 
+		             },
+		             error: function(data) {
+		                 console.log(data);
+		             }
+		         });
+	        }else{
+	        	alert("로그인 후 이용해주세요.");
+	        }
         	
         });
 
@@ -262,7 +339,7 @@
         
         
         
-     // 모달을 가져옵니다.
+        // 모달을 가져옵니다.
         let modal = document.getElementById("modal");
 
         // 모달을 여는 버튼을 가져옵니다.
@@ -398,6 +475,21 @@
 		        // 이 부분에서 각 캠핑 프렌드 아이템에 대한 HTML을 생성하고 데이터를 적용
 		        const photoHTML = itemData.photoPath ? `<img src="${itemData.photoPath}" alt="Rocket Launch" class="rounded-lg mt-3">` : '';
 		        
+		        let replyHTML="";
+		        
+		        for(let reply of itemData.replys){
+		        	replyHTML+=`
+		        		<div class="comment-item">
+			 	            <img class="comment-thumb" src="${reply.memberProfilePath}" alt="프로필 사진">
+			 	            <div class="comment-content">
+			 	                <div class="comment-author">${reply.memberName}</div>
+			 	                <div class="comment-message">${reply.replyContent}</div><br>
+			 	                <div class="comment-info">${reply.replyCreateDate}</div>
+			 	            </div>
+		 	        	</div>
+		        	`
+		        }
+		        
 		        const newItemHTML = `
 		            <div class="bg-white rounded-lg shadow-md p-4">
 		                <div class="flex items-center" style="width: 100%;">
@@ -433,9 +525,8 @@
 		                    </div>
 		                    
 		                </div>
-		                <div class="comment-section" id="${itemData.cfNo}">
-		                    <div id="commentList"></div>
-		                    <div class="comment-list"></div>
+		                <div class="comment-section comment-list" id="${itemData.cfNo}">
+		                	${replyHTML}
 		                </div>
 		            </div>
 		            <br>
@@ -452,7 +543,30 @@
 	    }
     </script>
     
- 
+ 	<script>
+	 	function updateCommentList(data) {
+	 	    // 가정: 서버에서 반환된 데이터에 profilePicture, name, timestamp, content 등의 속성이 있다고 가정
+	 	    let commentList = document.getElementById(replyCfNo.value);
+			
+	 	   let item = data.data;
+	 	
+	 	// 템플릿 문자열을 사용하여 새로운 댓글을 만들고 commentList에 추가
+	 	    const newComment = `
+	 	        <div class="comment-item">
+	 	            <img class="comment-thumb" src="${item.memberProfilePath}" alt="프로필 사진">
+	 	            <div class="comment-content">
+	 	                <div class="comment-author">${item.memberName}</div>
+	 	                <div class="comment-message">${item.replyContent}</div><br>
+	 	                <div class="comment-info">${item.replyCreateDate}</div>
+	 	            </div>
+	 	        </div>
+	 	    `;
+		
+	 	    console.log(newComment);
+	 	// commentList에 HTML을 추가
+	 	    commentList.insertAdjacentHTML('beforeend', newComment);
+	 	}
+ 	</script>
 </body>
 
 </html>
