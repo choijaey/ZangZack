@@ -2,9 +2,8 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta>
 <title>캠핑장 정보 등록</title>
-<link rel="stylesheet" href="styles.css">
 </head>
 <style>
  body {
@@ -22,6 +21,7 @@
     background-color: #fff;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
 
@@ -29,26 +29,141 @@
     margin-bottom: 20px;
 }
 
+.selectState{
+  background: lightgray;
+ }
+.unselectState{
+  background: none;
+ }
+
+.table td>div{
+   border: 1px solid black; 
+   height: 80%; width:25%; 
+   display: inline-block; 
+   padding-top: 3%; 
+   cursor: pointer;
+   text-align: center;
+ }
+ 
+ .table{
+   margin-top: 100px;
+ }
 
 </style>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 <body>
 <div th:replace="~{common/admin :: admin}"></div>
 
 		<div class="container">
-		    <h1>캠핑장 List</h1>
-		
-		    <form action="/submit-camping-info" method="post"> 
-		       <table class="table table-hover">
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-               </table>
-		    </form>
+		   <h1 style="margin-top: 30px;">캠핑장 List</h1>
+	       <table class="table table-hover">
+              <thead>
+                 <tr>
+                   <th>번호</th>
+                   <th>캠핑장</th>
+                   <th>등록날짜</th>
+                   <th>추천여부</th>
+                   <th>삭제여부</th>
+                 </tr>
+              </thead>
+              <tbody>
+                <tr th:each="list : ${list}">
+                  <td th:text="${list.cgNo}"></td>
+                  <td>[ [[${list.cgRegion}]] ] [[${list.cgName}]]</td>
+                  <td>[[${list.cgDate}]]</td>
+                  <td>
+                    <div th:class="${list.cgRecomendation == 'Y' ? 'selectState' : 'unselectState'}">Y</div>
+                    <div th:class="${list.cgRecomendation == 'N' ? 'selectState' : 'unselectState'}">N</div>
+                  </td>
+                  <td>
+                    <div th:class="${list.cgStatus == 'Y' ? 'selectState' : 'unselectState'}">Y</div>
+                    <div th:class="${list.cgStatus == 'N' ? 'selectState' : 'unselectState'}">N</div>
+                  </td>
+                </tr>
+              </tbody>
+           </table>
+           <nav aria-label="Page navigation example" th:with="loc=${loc}">
+			  <ul class="pagination justify-content-center">
+			    <li class="page-item">
+			      <a class="page-link"  th:href="@{${loc}(page=${pi.currentPage-1})}" aria-label="Previous">
+			        <span aria-hidden="true" style="color:#F9612B;">&laquo;</span>
+			      </a>
+			    </li>
+			    <li class="page-item"  th:each ="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+			      <th:block th:if="${pi.currentPage == p}">
+			         <a class="page-link" th:href="@{${loc}(page=${p})}" style="color:#F9612B;">[[${p}]]</a>
+			      </th:block>
+			      <th:block th:if="${pi.currentPage != p}">
+			         <a class="page-link" th:href="@{${loc}(page=${p})}" style="color:#F9612B;">[[${p}]]</a>
+			      </th:block>
+			    </li>
+			    <li class="page-item">
+			      <a class="page-link" th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next">
+			        <span aria-hidden="true" style="color:#F9612B;">&raquo;</span>
+			      </a>
+			    </li>
+			  </ul>
+		    </nav>					    
 		</div>
+   <script>
+     window.onload = () =>{
+    	 const tds = document.getElementsByTagName('td');
+    	 let columnName = "";
+    	 for(let i = 0; i < tds.length; i++){
+    		 const index = i%5;
+    		 if(index == 3){
+    			 columnName ="cg_recomendation";
+    		 }else if(index == 4){
+    			 columnName = "cg_status";
+    		 }
+    		 const nyButtons = tds[i].querySelectorAll('div');
+    		 for(const button of nyButtons){
+    			 button.addEventListener('click', function(){
+    				 if(this.className == 'unselectState'){
+    					 $.ajax({
+        					 url:'stateUpdate.ys',
+        					 data:{no:this.parentElement.parentElement.children[0].innerText,
+        						   state:this.innerText,
+        						   column:columnName
+        						   },
+        				     success: data => {
+        				    	 if(data == 'success'){
+        				    		 this.className = 'selectState';
+        				    		 for(const siblings of this.parentElement.children){
+        				    			 if(siblings != this){
+        				    				 siblings.className = 'unselectState';
+        				    			 }
+        				    		 }
+        				    	 }else{
+        				    		 alert('상태 변경에 실패하여 새로고침 됩니다.');
+        				    		 location.reload();
+        				    	 }	 
+        				     },
+        				     error: data => console.log(data)
+        				 });
+    				 }
+    			 });
+    		 }
+    	 }
+    	 
+    	 const tbody = document.querySelector('tbody');
+    	 const tTd = tbody.querySelectorAll('td');
+    	 
+    	 for(const td of tTd){
+    		 td.addEventListener('click', function(){
+    			 const trTds = this.parentElement.querySelectorAll('td');
+    			 const campNo = trTds[0].innerText;
+    			 /*<![CDATA[*/
+    		      location.href = 'selectUpdate.ys?no='+campNo+'&page='+/*[[${pi.currentPage}]]*/1;
+    		     /*]]>*/
+    			 
+    		 })
+    	 }
+    	 
+    	 
+     }
+   
+   </script>
 
 
 </body>

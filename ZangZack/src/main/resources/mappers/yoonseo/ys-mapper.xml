@@ -9,7 +9,7 @@
       values(#{cgNo},#{cgName}, #{cgRegion},#{cgAddress},#{cgPhone},#{cgType},
             default, sysdate, #{cgArea}, #{cgSeason},#{cgManageDate},
             #{cgBooking}, #{cgPage},#{cgStarPoint},#{cgAmenity},#{cgInfo},
-            #{cgRecomendation},default,5,#{cgImgInfo})
+            #{cgRecomendation},default,3,#{cgImgInfo})
    
    </insert>
 
@@ -97,7 +97,7 @@
    </select>
    
    <select id="getAllCount" resultType="_int">
-     select *
+     select count(*)
      from camping_ground
    </select>
    
@@ -105,5 +105,11 @@
      select *
      from camping_ground
    </select>
+   
+   <update id="stateUpdate">
+     update camping_ground
+     set ${column} = #{state}
+     where cg_no = #{no}
+   </update>
 
 </mapper>

@@ -33,16 +33,15 @@
 		    <p class="py-3" style="margin-left:22%; ">네이버 별점이 4.5점 이상인 캠핑장만 추천하고 있습니다</p>
 		 </div>
 	  </div>
-	  <form id="detailForm">
 		  <div id="detail" class="card mb-3" style="max-width:1200px; height:230px; margin: auto;" th:each="list: ${list}">
-			  <div class="row g-0" style="height:100%;">
+			  <div class="detail row g-0" style="height:100%;">
 			    <div th:each="photo : ${photo}" th:if="${list.cgNo eq photo.boardNo}" class="col-md-4" style="overflow:hidden;width:380px; height:228px;">
 			      <img th:src="${photo.photoPath}" class="img-fluid rounded-start" style=" object-fit: cover;" 
 			           th:if="${#strings.containsIgnoreCase(photo.photoRename, 'jpg') 
 					           or #strings.containsIgnoreCase(photo.photoRename, 'png') 
 					           or #strings.containsIgnoreCase(photo.photoRename, 'jpeg')}">
-				   <input id="no" type="hidden" name="no" th:value="${photo.boardNo}">
-				   <input id="page" type="hidden" name="page" th:value="${pi.currentPage}">
+				   <input class="no" type="hidden" name="no" th:value="${list.cgNo}">
+				   <input class="page" type="hidden" name="page" th:value="${pi.currentPage}">
 			    </div>
 			    <div class="col-md-8" style="position: relative;">
 			      <div class="card-body" style="width:100%;">
@@ -150,40 +149,43 @@
 			   </div>
 			</div>
 		  </div>
-        </form>
-	   <nav aria-label="Page navigation example">
-		  <ul class="pagination pagination justify-content-center">
+	   <nav aria-label="Page navigation example" th:with="loc=${loc}">
+		  <ul class="pagination justify-content-center">
 		    <li class="page-item">
-		      <a class="page-link" href="#" aria-label="Previous">
+		      <a class="page-link"  th:href="@{${loc}(page=${pi.currentPage-1})}" aria-label="Previous">
 		        <span aria-hidden="true" style="color:#F9612B;">&laquo;</span>
 		      </a>
 		    </li>
-		    <li class="page-item" ><a class="page-link" href="#" style="color:#F9612B;">1</a></li>
-		    <li class="page-item"><a class="page-link" href="#" style="color:#F9612B;">2</a></li>
-		    <li class="page-item" ><a class="page-link" href="#" style="color:#F9612B;">3</a></li>
+		    <li class="page-item"  th:each ="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+		      <th:block th:if="${pi.currentPage == p}">
+		         <a class="page-link" th:href="@{${loc}(page=${p})}" style="color:#F9612B;">[[${p}]]</a>
+		      </th:block>
+		      <th:block th:if="${pi.currentPage != p}">
+		         <a class="page-link" th:href="@{${loc}(page=${p})}" style="color:#F9612B;">[[${p}]]</a>
+		      </th:block>
+		    </li>
 		    <li class="page-item">
-		      <a class="page-link" href="#" aria-label="Next">
+		      <a class="page-link" th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next">
 		        <span aria-hidden="true" style="color:#F9612B;">&raquo;</span>
 		      </a>
 		    </li>
 		  </ul>
-	  </nav>					     
+	 </nav>					         
    </div> 
    
   <script th:inline="javascript">
     window.onload =()=>{
-    	/*<![CDATA[*/
-    	const form = document.getElementById('detailForm');
-    	const no = document.getElementById('no').value;
-    	const page =document.getElementById('page').value;
-    	console.log(no,page);
-    	document.getElementsByClassName('card mb-3').addEventListener('click', ()=>{
-    		console.log(no);
-    		form.action = 'campDetail.ys?no='+no+'&page='+page;
-    		form.submit();
-        /*]]>*/
-    	});
     	
+    	const divs = document.getElementsByClassName('detail');
+    	for(const div of divs){
+    		div.addEventListener('click', function(){
+    			const no = this.querySelector('.no').value;
+            	const page =document.querySelector('.page').value;
+            	
+            	location.href = 'campDetail.ys?no='+no+'&page='+page;
+    		});
+       	
+    	}
     }
   </script>
 	

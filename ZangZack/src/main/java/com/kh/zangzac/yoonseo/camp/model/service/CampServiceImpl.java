@@ -1,12 +1,12 @@
 package com.kh.zangzac.yoonseo.camp.model.service;
 
 import java.util.ArrayList;
+import java.util.Properties;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.yoonseo.camp.model.dao.CampDAO;
@@ -97,6 +97,12 @@ public class CampServiceImpl implements CampService {
 		
 		return cDAO.selectAllList(row);
 	}
+
+	@Override
+	public int stateUpdate(Properties prop) {
+		return cDAO.stateUpdate(prop);
+	}
+
 
 
 

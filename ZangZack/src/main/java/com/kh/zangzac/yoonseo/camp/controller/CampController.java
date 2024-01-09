@@ -1,6 +1,7 @@
 package com.kh.zangzac.yoonseo.camp.controller;
 
 import java.util.ArrayList;
+import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,7 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.Pagination;
@@ -125,10 +128,6 @@ public class CampController {
 	public String detailWriter() {
 		return "views/yoonseo/detailWrite";
 	}
-	@GetMapping("recommendWrite.ys")
-	public String recommendWrite () {
-		return "views/yoonseo/recommendWrite";
-	}
 	
 	@PostMapping("campInsert.ys")
 	public String campInsert(@ModelAttribute CampingGround camp,
@@ -185,15 +184,97 @@ public class CampController {
 	public String campUpdate(@RequestParam(value="page", defaultValue="1") int currentPage,
 			                 Model model, HttpServletRequest request) {
 		
-		
 		int listCount = cService.getAllCount();
 		
-		System.out.println(listCount);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 		ArrayList<CampingGround> list = cService.selectAllList(pi);
 		
-		return "views/yoonseo/campUpdate";
+		if(list != null) {
+			model.addAttribute("list", list);
+			model.addAttribute("pi", pi);
+			model.addAttribute("loc", request.getRequestURI());
+			
+			return "views/yoonseo/campUpdate";
+		}else {
+			throw new CampException("게시글 조회 실패");
+		}
+		
 	}
+	
+	@GetMapping("stateUpdate.ys")
+	@ResponseBody
+	public String stateUpdate(@RequestParam("column") String column,
+			                  @RequestParam("state") String state,
+			                  @RequestParam("no") String no) {
+		
+		System.out.println(column);
+		
+		Properties prop = new Properties();//map형식으로 key와 value로 이루어져있음.문자열만 받아줌.
+		prop.setProperty("column",column);
+		prop.setProperty("state", state);
+		prop.setProperty("no", no);
+		
+		int result = cService.stateUpdate(prop);
+		System.out.println(result);
+		
+		return result == 1 ? "success" : "fail";
+	}
+	
+	@GetMapping("selectUpdate.ys")
+	public String selectUpdate(@RequestParam("no") int no,
+			                   @RequestParam("page") int page,
+			                   Model model) {
+		
+		CampingGround campList = cService.selectCampingDetail(no);
+		ArrayList<Photo> photoList = cService.selectPhoto(no);
+		
+		System.out.println(photoList);
+		if(campList != null) {
+			model.addAttribute("campList", campList);
+			model.addAttribute("photoList", photoList);
+			model.addAttribute("page", page);
+			
+			return "views/yoonseo/campEdit";
+		}else {
+			throw new CampException("삭제 되었거나 없는 캠핑장입니다");
+		}
+	}
+	
+	@PostMapping("campEdit.ys")
+	public String campEdit(@ModelAttribute CampingGround camp,
+			               @RequestParam("page") int page,
+			               @RequestParam("deleteFile") String[] deleteFile,
+			               @RequestParam("file") ArrayList<MultipartFile> files,
+			               HttpServletRequest request,
+			               RedirectAttributes redirectAttributes) {
+		
+		String name = "yoonseo";
+		
+		ArrayList<Photo> list = new ArrayList<>();
+		// 새로 추가한 파일들이 들어가 있는곳
+		for(int i = 0; i < files.size(); i++) {
+			MultipartFile upload = files.get(i);
+			
+			if(!upload.getOriginalFilename().equals("")) {
+				//파일이 들어왔으면.
+				String[] returnArr = imageStorage.saveImage(upload, name);
+				
+				if(returnArr != null) {
+					Photo a = new Photo();
+					
+					a.setPhotoRename(returnArr[0]);
+					a.setPhotoPath(returnArr[1]);
+					
+					list.add(a);
+				}
+			}
+		}
+		System.out.println(list);
+		
+		return null;
+	}
+
+
 	
 	
 	

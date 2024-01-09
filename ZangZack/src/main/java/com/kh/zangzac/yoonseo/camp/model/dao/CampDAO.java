@@ -1,6 +1,7 @@
 package com.kh.zangzac.yoonseo.camp.model.dao;
 
 import java.util.ArrayList;
+import java.util.Properties;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
@@ -39,4 +40,6 @@ public interface CampDAO {
 	int getAllCount();
 
 	ArrayList<CampingGround> selectAllList(RowBounds row);
+
+	int stateUpdate(Properties prop);
 }

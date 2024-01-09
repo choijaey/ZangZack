@@ -1,6 +1,7 @@
 package com.kh.zangzac.yoonseo.camp.model.service;
 
 import java.util.ArrayList;
+import java.util.Properties;
 
 import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
@@ -35,5 +36,9 @@ public interface CampService {
 	int getAllCount();
 
 	ArrayList<CampingGround> selectAllList(PageInfo pi);
+
+	int stateUpdate(Properties prop);
+
+	int insertFile(ArrayList<Photo> list);
 
 }
