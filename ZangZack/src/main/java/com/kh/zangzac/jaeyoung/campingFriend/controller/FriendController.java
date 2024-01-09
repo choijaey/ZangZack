@@ -19,8 +19,11 @@ import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.photo.model.service.PhotoService;
 import com.kh.zangzac.common.photo.model.vo.Photo;
+import com.kh.zangzac.common.reply.model.service.ReplyService;
+import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.jaeyoung.campingFriend.model.service.CampingFriendService;
 import com.kh.zangzac.jaeyoung.campingFriend.model.vo.CampingFriend;
+import com.kh.zangzac.ming.member.model.vo.Member;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -35,6 +38,9 @@ public class FriendController {
 	
 	@Autowired
 	CampingFriendService cService;
+	
+	@Autowired
+	ReplyService rService;
 
     @Autowired
     public FriendController(ImageStorage imageStorage) {
@@ -118,6 +124,27 @@ public class FriendController {
 		return "redirect:champingFriend.jy";
 		
 	}
+	
+	
+	   @GetMapping("insertReply.jy")
+	   @ResponseBody
+	   public Map<String, Object> insertReply(@ModelAttribute Reply reply) {
+		  
+		  reply.setBoardType(7);
+		  int result = rService.insertReply(reply);
+		  
+	      Map<String, Object> map = new HashMap<>();
+	      
+	      if(result >0) {
+	    	  map.put("data", reply);
+	      }else {
+	    	  map.put("data", "no");
+	      }
+	      
+	      
+	       
+	       return map;
+	   }
 	
 	
 	
