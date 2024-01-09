@@ -479,6 +479,7 @@
 		        
 		        for(let reply of itemData.replys){
 		        	replyHTML+=`
+		        	
 		        		<div class="comment-item">
 			 	            <img class="comment-thumb" src="${reply.memberProfilePath}" alt="프로필 사진">
 			 	            <div class="comment-content">
@@ -486,6 +487,8 @@
 			 	                <div class="comment-message">${reply.replyContent}</div><br>
 			 	                <div class="comment-info">${reply.replyCreateDate}</div>
 			 	            </div>
+		 	                <div class="edit" onclick="editReply(event)">수정</div>
+							<div class="delete" onclick="deleteReply(event)">삭제</div>
 		 	        	</div>
 		        	`
 		        }
@@ -528,6 +531,7 @@
 		                <div class="comment-section comment-list" id="${itemData.cfNo}">
 		                	${replyHTML}
 		                </div>
+		                
 		            </div>
 		            <br>
 		        `;
@@ -559,6 +563,8 @@
 	 	                <div class="comment-message">${item.replyContent}</div><br>
 	 	                <div class="comment-info">${item.replyCreateDate}</div>
 	 	            </div>
+	 	           <div class="edit" onclick="editReply(event)">수정</div>
+					<div class="delete" onclick="deleteReply(event)">삭제</div>
 	 	        </div>
 	 	    `;
 		

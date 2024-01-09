@@ -82,7 +82,7 @@ public class FriendController {
       int listCount = cService.listCount();
       PageInfo pi = Pagination.getPageInfo(page, listCount, 3);
       
-      //전체 리스트 가져오기~~
+      //전체 리스트 가져오기
       ArrayList<CampingFriend> list = cService.cfLimitList(pi);
       
       
