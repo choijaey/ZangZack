@@ -124,7 +124,7 @@
 		</div>
 	    <br>
 
-		<!-- Post 2 -->
+		<!-- Posts -->
 		<th:block th:each="cf:${list}">
 			<div class="bg-white rounded-lg shadow-md p-4">
 				<div class="flex items-center" style="width: 100%;">
@@ -151,7 +151,8 @@
 				</div>
 				<div class="flex justify-between items-center text-gray-500 text-sm">
 					<div class="flex items-center">
-						<div name="reply">댓글 달기</div>
+						<input type="hidden" th:value="${cf.memberId}">
+						<div name="reply" onclick="openModal(event)">댓글 달기</div>
 					</div>
 					
 					<div class="flex items-center">
@@ -176,11 +177,13 @@
 		      </div>
 		 </div>
 
-		<!-- Reply Modal -->
+	</div>
+	
+	<!-- Reply Modal -->
 		<div id="replyModal" class="fixed inset-0 bg-black bg-opacity-25 flex justify-center items-center hidden">
 			<div class="bg-white p-4 rounded-lg shadow-lg w-full max-w-md">
 				<div class="flex justify-between items-center">
-					<div class="font-semibold">Replying to Elon Musk</div>
+					<div class="font-semibold" id="forwho"></div>
 					<button id="closeModal" class="text-gray-500">&times;</button>
 				</div>
 				<div class="mt-4">
@@ -193,7 +196,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
 
 
 
@@ -201,9 +203,14 @@
         // Get the modal and close button
         const replyModal = document.getElementById('replyModal');
         const closeModalBtn = document.getElementById('closeModal');
+        
 
         // Open the modal
-        function openModal() {
+        function openModal(event) {
+        	
+        	let forwho = document.getElementById('forwho');
+        	let loginUser = event.target.closest('.flex').querySelector('input[type=hidden]').value; //여기에 추가
+        	forwho.innerText = loginUser+"에게 답글";
             replyModal.classList.remove('hidden');
         }
 
@@ -215,21 +222,13 @@
         // Attach click event to open the modal
         closeModalBtn.addEventListener('click', closeModal);
         
-        window.onload = () => {
-            const replys = document.getElementsByName('reply');
-
-            for (const reply of replys) {
-                reply.addEventListener('click', openModal);
-            }
-        };
-        
         
         
      // 모달을 가져옵니다.
-        var modal = document.getElementById("modal");
+        let modal = document.getElementById("modal");
 
         // 모달을 여는 버튼을 가져옵니다.
-        var btn = document.querySelector(".review-options-btn");
+        let btn = document.querySelector(".review-options-btn");
 
         // 모달을 닫는 <span> 요소를 가져옵니다. (여기서는 사용하지 않았습니다. 필요하다면 추가하세요.)
 
@@ -251,23 +250,15 @@
         	toggleComments(event.target);
         }
         
-     // 모든 토글 버튼과 댓글 섹션을 찾아서 이벤트 리스너를 등록
-        document.querySelectorAll('.toggle-comments').forEach(function (toggleBtn) {
-            toggleBtn.addEventListener('click', function () {
-                toggleComments(this); // 토글 버튼을 클릭한 경우 해당 댓글 섹션을 토글
-            });
-        });
+     
 
         // 전체 댓글 토글 함수
         function toggleComments(toggleBtn) {
             
         	const commentSection = toggleBtn.parentNode.parentNode.nextElementSibling;
 
-            console.log(commentSection);
-
             if (commentSection) {
                 commentSection.classList.toggle('show');
-                
             }
         }
         
@@ -394,7 +385,8 @@
 		                </div>
 		                <div class="flex justify-between items-center text-gray-500 text-sm">
 		                    <div class="flex items-center">
-		                        <div name="reply">댓글 달기</div>
+		                    	<input type="hidden" value="${itemData.memberId}">
+		                    	<div name="reply" onclick="openModal(event)">댓글 달기</div>
 		                    </div>
 		                    
 		                    <div class="flex items-center">

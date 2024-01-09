@@ -70,8 +70,6 @@ public class FriendController {
        
       Map<String, Object> map = new HashMap<>();
       
-      System.out.println(list);
-      System.out.println(pi);
       
        map.put("list", list);
        map.put("Pi", pi);
