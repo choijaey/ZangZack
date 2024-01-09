@@ -109,8 +109,9 @@ public class CampBoardController {
 	    
 	    CampBoard bList = cService.selectBoard(cbNo, id);
 	    ArrayList<Photo> pList = pService.selectBoardPhoto(b);
+	    int maxPage = sWork.countReply(cbNo, 1);
 	    if(bList != null) {
-			sWork.BoardDetail(model,bList, pList, page);
+			sWork.BoardDetail(model,bList, maxPage, pList, page);
 			return "views/seongun/campboard/boardDetail";
 		}else {
 			return "redirect:/campBoard.su";
