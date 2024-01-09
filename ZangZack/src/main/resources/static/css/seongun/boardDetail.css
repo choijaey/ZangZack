@@ -270,7 +270,7 @@ body {
 }
 
 .comment-action-button {
-    background-image: url("../../image/seongun/replyButton.png");
+    background-image: url("../../image/seongun/replyButton.svg");
     position: absolute;
     top: 3px;
     right: 5px;
