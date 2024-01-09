@@ -23,10 +23,18 @@
 		where reply_status = 'N' and board_type= #{boardType} and board_no = #{boardNo}
 	</select>
 	
+<<<<<<< HEAD
 	<select id="selectReplyOne" resultType="Reply">
 		select *
 		from reply join member using (member_id)
 		where reply_status = 'N' and reply_no = #{replyNo};
 		ORDER BY reply_no ASC
+=======
+	<select id="replyLimitList" resultType="Reply">
+		select * 	
+		from reply_view
+		where reply_status = 'N' and board_type = #{boardType} and board_no = #{boardNo}
+		order by reply_no asc
+>>>>>>> refs/heads/main
 	</select>
 </mapper>

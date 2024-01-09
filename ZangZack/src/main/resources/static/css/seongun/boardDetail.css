@@ -262,3 +262,27 @@ body {
   cursor: pointer;
   white-space: nowrap; /* 버튼 텍스트가 줄바꿈 되지 않도록 함 */
 }
+
+/* 댓글 수정 버튼*/
+.comment-item {
+	display: flex;
+    position: relative;
+}
+
+.comment-action-button {
+    background-image: url("../../image/seongun/replyButton.png");
+    position: absolute;
+    top: 3px;
+    right: 5px;
+    width: 20px; /* 버튼 너비 */
+    height: 20px; /* 버튼 높이 */
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    background-size: cover; /* 이미지 크기 조정 */
+    background-position: center; /* 이미지 위치 조정 */
+}
+
+.comment-action-button:hover {
+    cursor: point;
+}

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,10 +15,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.common.model.vo.SelectCondition;
 import com.kh.zangzac.common.reply.model.service.ReplyService;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.ming.member.model.vo.Member;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @SessionAttributes("loginUser")
@@ -37,16 +40,28 @@ public class ReplyController {
 	    
 		int result = rService.insertReply(reply);
 		ArrayList<Reply> list = rService.selectReply(reply);
-		int listCount = countReply(reply);
-	    PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
 	    Map<String, Object> map = new HashMap<>();
 	    map.put("list", list);
-	    map.put("rPi", pi);
 	    return map;
 	}
 
-	private int countReply(Reply reply) {
-		return rService.countReply(reply);
+	public int countReply(SelectCondition b) {
+		return rService.countReply(b);
+	}
+	
+	@GetMapping("replyLimitList.rep")
+	@ResponseBody
+	public Map<String, Object> replyLimitList(@ModelAttribute("SelectCondition") SelectCondition b,@RequestParam(value="page", defaultValue="1") int page, HttpServletRequest request ) {
+		int listCount = countReply(b);
+		PageInfo pi = Pagination.getReplyPageInfo(page, listCount, 10);
+		
+		ArrayList<Reply> list = rService.replyLimitList(b, pi);
+	    
+		Map<String, Object> map = new HashMap<>();
+		map.put("list", list);
+	    map.put("rPi", pi);
+	    map.put("loc", request.getRequestURI());
+	    return map;
 	}
 	
 }
