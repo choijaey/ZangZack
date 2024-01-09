@@ -10,5 +10,7 @@ public interface ReplyService {
 	ArrayList<Reply> selectReply(Reply reply);
 
 	int countReply(Reply reply);
+	
+	Reply selectReplyOne(Reply reply);
 
 }

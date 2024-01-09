@@ -27,4 +27,9 @@ public class ReplyServiceImpl implements ReplyService {
 	public int countReply(Reply reply) {
 		return rDAO.countReply(reply);
 	}
+
+	@Override
+	public Reply selectReplyOne(Reply reply) {
+		return rDAO.selectReplyOne(reply);
+	}
 }

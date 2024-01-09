@@ -152,6 +152,7 @@
 				<div class="flex justify-between items-center text-gray-500 text-sm">
 					<div class="flex items-center">
 						<input type="hidden" th:value="${cf.memberId}">
+						<input type="hidden" th:value="${cf.cfNo}">
 						<div name="reply" onclick="openModal(event)">댓글 달기</div>
 					</div>
 					
@@ -160,9 +161,9 @@
 	    			</div>
 	    			
 				</div>
-				<div class="comment-section">
-			        <div>댓글1</div>
-			        <div>댓글2</div>
+				<div class="comment-section" th:id="${cf.cfNo}">
+			        <div id="commentList"></div>
+            		<div>확인용</div>
 			    </div>
 			</div>
 			<br>
@@ -189,10 +190,11 @@
 				<div class="mt-4">
 					<textarea
 						class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-						rows="4" placeholder="Post your reply"></textarea>
+						rows="4" placeholder="Post your reply" id="replyContent"></textarea>
 				</div>
 				<div class="flex justify-end mt-4">
-					<button class="bg-blue-500 text-white px-4 py-2 rounded-lg">Reply</button>
+					<input type="hidden" id="replyCfNo">
+					<button class="bg-blue-500 text-white px-4 py-2 rounded-lg" id="reply">등록</button>
 				</div>
 			</div>
 		</div>
@@ -203,13 +205,49 @@
         // Get the modal and close button
         const replyModal = document.getElementById('replyModal');
         const closeModalBtn = document.getElementById('closeModal');
+        const reply = document.getElementById('reply');
+        const replycfNo = document.getElementById('replyCfNo');
+        const replyContent = document.getElementById('replyContent');
         
+        reply.addEventListener('click', function(){
+        	console.log(replycfNo.value);
+        	
+        	/*<![CDATA[*/
+	        let User = /*[[${session.loginUser.memberId}]]*/null;
+	        /*]]>*/
+	        
+        	
+	       	 $.ajax({
+	             url: 'insertReply.jy', // 서버의 댓글 목록 불러오기 URL
+	             method: 'GET',
+	             data: { 
+	              boardNo : replycfNo.value,
+	           	  replyContent : replyContent.value,
+	           	  memberId : User
+	             },
+	             success: function(data) {
+	                 console.log(data);
+	                 replyModal.classList.add('hidden');
+	                 updateCommentList(data);
+	                 
+	             },
+	             error: function(data) {
+	                 console.log(data);
+	             }
+	         });
+        	
+        });
 
         // Open the modal
         function openModal(event) {
-        	
         	let forwho = document.getElementById('forwho');
-        	let loginUser = event.target.closest('.flex').querySelector('input[type=hidden]').value; //여기에 추가
+        	// 클릭된 요소에서 가장 가까운 .flex 클래스를 찾음
+            
+            // .flex 클래스 내의 input[type=hidden] 요소들을 찾아서 값 가져오기
+            let loginUser = event.target.previousElementSibling.previousElementSibling.value;
+            let cfNo = event.target.previousElementSibling.value;
+            
+            replycfNo.value = cfNo;
         	forwho.innerText = loginUser+"에게 답글";
             replyModal.classList.remove('hidden');
         }
@@ -286,7 +324,7 @@
 	    function goToCampingFriendWrite() {
 	    	
 	    	/*<![CDATA[*/
-	        let loginUser = /*[[${session.loginUser}]]*/ null;
+	        let loginUser = /*[[${session.loginUser}]]*/null;
 	        /*]]>*/
 			
 	        if(loginUser != null){
@@ -386,6 +424,7 @@
 		                <div class="flex justify-between items-center text-gray-500 text-sm">
 		                    <div class="flex items-center">
 		                    	<input type="hidden" value="${itemData.memberId}">
+								<input type="hidden" value="${itemData.cfNo}">
 		                    	<div name="reply" onclick="openModal(event)">댓글 달기</div>
 		                    </div>
 		                    
@@ -394,9 +433,9 @@
 		                    </div>
 		                    
 		                </div>
-		                <div class="comment-section">
-		                    <div>댓글1</div>
-		                    <div>댓글2</div>
+		                <div class="comment-section" id="${itemData.cfNo}">
+		                    <div id="commentList"></div>
+		                    <div class="comment-list"></div>
 		                </div>
 		            </div>
 		            <br>
@@ -412,6 +451,8 @@
 	        container.innerHTML += newItems.join('');
 	    }
     </script>
+    
+ 
 </body>
 
 </html>

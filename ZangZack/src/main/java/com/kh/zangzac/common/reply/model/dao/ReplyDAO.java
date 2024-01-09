@@ -17,4 +17,6 @@ public interface ReplyDAO {
 
 	int countReply(Reply reply);
 	
+	Reply selectReplyOne(Reply reply);
+	
 }
