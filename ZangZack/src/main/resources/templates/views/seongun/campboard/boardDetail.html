@@ -60,6 +60,12 @@
 	</div>
 	<script th:inline="javascript">
 		/*<![CDATA[*/
+		let member = /*[[${session.loginUser}]]*/null;
+		/*]]>*/
+		if(member != null){
+			var memberId = member.memberId;
+		}
+		/*<![CDATA[*/
 		// 페이지 로드 시 댓글 목록 불러오기
 		window.onload = function() {
 			loadCommentList(/*[[${maxPage}]]*/);
@@ -126,42 +132,54 @@
 
 		
 		//댓글 list
-		function updateCommentList(comments) {
-		    const commentList = document.getElementById('commentList');
-		    commentList.innerHTML = '';
-	
-		    comments.forEach(function(comment) {
-		        const commentItem = document.createElement('div');
-		        commentItem.classList.add('comment-item');
-	
-		        const img = document.createElement('img');
-		        img.classList.add('comment-thumb');
-		        img.src = comment.memberProfilePath;
-		        img.alt = '프로필 사진';
-		        commentItem.appendChild(img);
-	
-		        const contentDiv = document.createElement('div');
-		        contentDiv.classList.add('comment-content');
-	
-		        const authorDiv = document.createElement('div');
-		        authorDiv.classList.add('comment-author');
-		        authorDiv.textContent = comment.memberName;
-		        contentDiv.appendChild(authorDiv);
-	
-		        const messageDiv = document.createElement('div');
-		        messageDiv.classList.add('comment-message');
-		        messageDiv.textContent = comment.replyContent;
-		        contentDiv.appendChild(messageDiv);
-	
-		        const infoDiv = document.createElement('div');
-		        infoDiv.classList.add('comment-info');
-		        infoDiv.textContent = formatDate(comment.replyCreateDate);
-		        contentDiv.appendChild(infoDiv);
-	
-		        commentItem.appendChild(contentDiv);
-		        commentList.appendChild(commentItem);
-		    });
-		}
+function updateCommentList(comments) {
+    const commentList = document.getElementById('commentList');
+    commentList.innerHTML = '';
+
+    comments.forEach(function(comment) {
+        const commentItem = document.createElement('div');
+        commentItem.classList.add('comment-item');
+
+        const img = document.createElement('img');
+        img.classList.add('comment-thumb');
+        img.src = comment.memberProfilePath;
+        img.alt = '프로필 사진';
+        commentItem.appendChild(img);
+
+        const contentDiv = document.createElement('div');
+        contentDiv.classList.add('comment-content');
+
+        const authorDiv = document.createElement('div');
+        authorDiv.classList.add('comment-author');
+        authorDiv.textContent = comment.memberName;
+        contentDiv.appendChild(authorDiv);
+
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('comment-message');
+        messageDiv.textContent = comment.replyContent;
+        contentDiv.appendChild(messageDiv);
+
+        const infoDiv = document.createElement('div');
+        infoDiv.classList.add('comment-info');
+        infoDiv.textContent = formatDate(comment.replyCreateDate);
+        contentDiv.appendChild(infoDiv);
+
+        // 댓글마다 버튼 추가
+        if (memberId && memberId === comment.memberId) {
+            const commentButton = document.createElement('button');
+            commentButton.classList.add('comment-action-button');
+            commentButton.textContent = ''; // 텍스트 제거
+            commentButton.onclick = function() {
+                // 버튼 클릭 시 수행할 작업
+                console.log('댓글 ID:', comment.memberId, '의 버튼이 클릭되었습니다.');
+            };
+            contentDiv.appendChild(commentButton); // 버튼을 contentDiv에 추가
+        }
+
+        commentItem.appendChild(contentDiv);
+        commentList.appendChild(commentItem);
+    });
+}
 		
 		function formatDate(dateString) {
 		    const date = new Date(dateString);
