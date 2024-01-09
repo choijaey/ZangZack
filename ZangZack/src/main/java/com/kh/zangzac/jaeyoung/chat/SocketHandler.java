@@ -49,7 +49,7 @@ public class SocketHandler extends TextWebSocketHandler {
    }
    
    
-   @SuppressWarnings("unchecked")
+  @SuppressWarnings("unchecked")
 @Override
    public void handleTextMessage(WebSocketSession session, TextMessage message) {
       //메시지 발송
@@ -67,6 +67,17 @@ public class SocketHandler extends TextWebSocketHandler {
                break;
             }
          }
+         
+         //카운트 쌓아주기
+         if(obj.get("chatType").equals("1")) { // 단체 채팅 
+        	   int chatNum = Integer.parseInt((String)obj.get("roomName"));
+        	         	   
+        	   //전체채팅리스트 - 현재채팅리스  
+        	   obj.put("unReadChatter",chatterList.get(chatNum).size()-(temp.size()-1));
+        	   
+            }else{
+        	   
+           }
          
          //해당 방의 세션들만 찾아서 메시지를 발송해준다.
          for(String k : temp.keySet()) { 
@@ -93,12 +104,13 @@ public class SocketHandler extends TextWebSocketHandler {
          if(obj.get("chatType").equals("1")) { // 단체 채팅 
       	   int chatNum = Integer.parseInt((String)obj.get("roomName"));
       	         	   
-      	 //전체채팅리스트 - 현재채팅리스  
-      	  obj.put("unReadChatter",unReadChatter(chatterList.get(chatNum), nowChatter));
-      	  cFileManager.saveChat(obj);
-         }else{
+      	   //전체채팅리스트 - 현재채팅리스  
+      	   obj.put("unReadChatter",unReadChatter(chatterList.get(chatNum), nowChatter));
+      	   
+          }else{
       	   
          }
+         cFileManager.saveChat(obj);
          
       }
    }
@@ -154,7 +166,6 @@ public class SocketHandler extends TextWebSocketHandler {
     	  //현재 입장한 방에 내가 있는지 체크
     	  Chatter checkChatter = new Chatter();
     	  checkChatter.setMemberId(myId);
-    	  System.out.println("방이름 : "+Integer.parseInt(roomName));
     	  checkChatter.setClNo(Integer.parseInt(roomName));
     	  int count = cService.checkCount(checkChatter);
     	  

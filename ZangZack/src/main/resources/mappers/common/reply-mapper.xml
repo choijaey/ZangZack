@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kh.zangzac.common.reply.model.dao.ReplyDAO">
+	<select id="selectReply" resultType="Reply">
+		select *
+		from reply join member using (member_id)
+		where reply_status = 'N' and board_type= #{boardType} and board_no = #{boardNo}
+		ORDER BY reply_no ASC
+	</select>
+	
+	<insert id="insertReply">
+		insert into reply values
+		(reply_seq.nextVal, #{replyContent}, default, default,#{boardType},#{boardNo},default,#{memberId})
+	</insert>
+	
+	<select id="countReply" resultType="_int">
+		select count(*)
+		from reply_view
+		where reply_status = 'N' and board_type= #{boardType} and board_no = #{boardNo}
+	</select>
+	
+	<select id="replyLimitList" resultType="Reply">
+		select * 	
+		from reply_view
+		where reply_status = 'N' and board_type = #{boardType} and board_no = #{boardNo}
+		order by reply_no asc
+	</select>
+</mapper>
