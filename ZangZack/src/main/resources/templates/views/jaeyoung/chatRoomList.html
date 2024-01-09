@@ -13,7 +13,6 @@
     </style>
 </head>
 <body class="bg-white">
-
 	<div th:insert="~{common/navbar :: navbar}"></div>
     <div class="container mx-auto p-6">
         <div class="text-center font-bold text-xl mb-4">채팅방 리스트</div>
@@ -36,20 +35,22 @@
     </div>
     
 <script th:inline="javascript">
-    /* <![CDATA[ */
-    function enterChatRoom(chatRoomId) {
-        var isLoggedIn = /*[[${loginUser}]]*/ null;
-		console.log(isLoggedIn);
-		check=false;
-        if (check) {
-            // 로그인 상태일 때 채팅방으로 이동
-            window.location.href = '/enterChatRoom.jy?chatRoomId=' + chatRoomId;
-        } else {
-            // 비로그인 상태일 때 알림창 표시
-            alert('로그인이 필요합니다.');
-        }
-    }
-    /* ]]> */
+
+
+	   /*<![CDATA[*/
+		function enterChatRoom(chatRoomId) {
+	        let isLoggedIn = /*[[${session.loginUser}]]*/ null;
+	        console.log(isLoggedIn);
+	        if (isLoggedIn !== null) {
+	            // 로그인 상태일 때 채팅방으로 이동
+	            window.location.href = '/enterChatRoom.jy?chatRoomId=' + chatRoomId;
+	        } else {
+	            // 비로그인 상태일 때 알림창 표시
+	            alert('로그인이 필요합니다.');
+	        }
+    	}
+	   /*]]>*/
+	
 </script>
 </body>
 </html>
