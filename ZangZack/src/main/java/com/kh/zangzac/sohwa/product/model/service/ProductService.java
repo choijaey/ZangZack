@@ -71,6 +71,16 @@ public interface ProductService {
 
 	ArrayList<Qna> selectProductQna(int productNo);
 
+	int deleteQna(int questionNo);
+
+	int getListQnaYCount();
+
+	ArrayList<Qna> selectQnaY();
+
+	ArrayList<Qna> searchKeyword(HashMap<String, String> map);
+
+	ArrayList<Qna> searchYKeyword(HashMap<String, String> map);
+
 
 	
 }

@@ -22,12 +22,12 @@
     <br>
 	<div class="gallery">
 		<div class="thumbnails">
-	        <img th:each="l:${list}" th:if="${l.photoLevel==0}" th:src="${l.photoPath}" alt="Thumbnail 1" class="thumbnail" onmouseover="changeImage(this)" >
-	        <img th:each="l:${list}" th:if="${l.photoLevel==1}" th:src="${l.photoPath}" alt="Thumbnail 1" class="thumbnail" onmouseover="changeImage(this)" >
+	        <img th:each="l:${list}" th:if="${l.photoLevel==0 && l.boardType == 5}" th:src="${l.photoPath}" alt="Thumbnail 1" class="thumbnail" onmouseover="changeImage(this)" >
+	        <img th:each="l:${list}" th:if="${l.photoLevel==1 && l.boardType == 5}" th:src="${l.photoPath}" alt="Thumbnail 1" class="thumbnail" onmouseover="changeImage(this)" >
 	    </div>
 	    
 	    <div class="main-image">
-	      <img th:each="l:${list}" th:if="${l.photoLevel==0}" th:src="${l.photoPath}" alt="Main Image">
+	      <img th:each="l:${list}" th:if="${l.photoLevel==0 && l.boardType == 5}" th:src="${l.photoPath}" alt="Main Image">
 	    </div>
 	    
 	    
@@ -74,7 +74,7 @@
 			</div>
 			
 			<div class="btns" style="margin-left:80px;">
-				<button class="btn-hover color-1" style="color:gray;" onclick="goCart()">장바구니</button>
+				<button class="btn-hover color-1" style="color:gray;" id="cartBtn" onclick="goCart()">장바구니</button>
 				<button class="btn-hover color-2">바로구매</button>
 			</div>
 			
@@ -91,7 +91,7 @@
 		<br>
 		<span>주문금액</span><span id="resultPrice2"></span>
 		<div class="btns">
-			<button class="btn-hover color-1" style="color:gray;">장바구니</button>
+			<button onclick="goCart()" class="btn-hover color-1" style="color:gray;">장바구니</button>
 			<button class="btn-hover color-2">바로구매</button>
 		</div>
 		
@@ -111,7 +111,7 @@
 			
 	    <!-- 상품 상세 정보 섹션 -->
 	      <section id="detail">
-	        <img th:each="l:${list}" th:if="${l.photoLevel==2}" th:src="${l.photoPath}">
+	        <img th:each="l:${list}" th:if="${l.photoLevel==2 && l.boardType == 5}" th:src="${l.photoPath}">
 	      </section>
 	
 	
@@ -325,7 +325,7 @@
 	      <section id="questions">
 			  
 			  <div id="question">
-				  <span style="margin-left:5%;">문의 </span><span style="color:#F9612B;"> 15</span><a href="#" id="qnaOpenModal">문의등록</a>
+				  <span style="margin-left:5%;">문의 </span><span style="color:#F9612B;"> [[${qList.size()}]]</span><span style="font-size:15px; color:lightgray;margin-left:10px;">[문의등록은 익명으로 진행됩니다.]</span><a href="#" id="qnaOpenModal">문의등록</a>
 				  
 				  
 					  <div class="modal" id="qnaModal">
@@ -336,7 +336,7 @@
 									        <h1 class="text-2xl font-bold mb-4">문의 등록</h1>
 									        <div class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
 									            <div class="p-4 flex">
-									                <img th:each="l:${list}" th:if="${l.photoLevel==0}" th:src="${l.photoPath}" class="w-20 h-20 object-cover rounded-full" alt="Product">
+									                <img th:each="l:${list}" th:if="${l.photoLevel==0 && l.boardType == 5}" th:src="${l.photoPath}" class="w-20 h-20 object-cover rounded-full" alt="Product">
 									                <div class="ml-4">
 									                    <h2 class="text-lg font-semibold">[[${p.productCompany}]]</h2>
 									                    <p class="text-sm text-gray-600">[[${p.productName}]]</p><hr>
@@ -367,15 +367,15 @@
 				  <div id="questionItem" th:each="q:${qList}" th:if="${q.productNo eq p.productNo}">
 					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-q-64.png"></div>
 					  <div style="display: inline-block; margin-top:0px;">
-						  <span style="color:gray; margin-top:0px; height:20px;">[[${p.productCompany}]] / [[${p.pr]]</span><br>
-					  	  <div style="display:inline-flex;">배송기간은 보통 얼마나 소요되나요?</div>
+						  <span style="color:gray; margin-top:0px; height:20px;">[[${p.productCompany}]] / [[${p.productName}]]</span><br>
+					  	  <div style="display:inline-flex;">[[${q.questionContent}]]</div>
 					  </div>
 					  <br><br>
 					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-a-64.png"></div>
 					  <div style="display: inline-block; margin-top:0px;">
 						  <span>관리자 :</span><br>
-					  	  <div style="display:inline-flex; margin-bottom:20px;">배송기간은 보통 2~3일 소요됩니다.</div>
-					  	  
+						  <th:block th:if="${q.answerContent == null}"><div style="display:inline-flex; margin-bottom:20px;">관리자의 답변을 기다리는 중입니다.</div></th:block>
+						  <th:block th:unless="${q.answerContent == null}"><div style="display:inline-flex; margin-bottom:20px;">배송기간은 보통 2~3일 소요됩니다.</div></th:block>
 					  </div>
 					  <hr>
 				  </div>
@@ -753,25 +753,34 @@
 	    
 		
 	    function showDiv() {
-    	  var selectElement = document.getElementById("colorSelect");
-    	  var enoDiv = document.getElementById("enoDiv");
-
-    	  if (selectElement.value !== "컬러 선택") {
-    	    enoDiv.style.display = "block";
-    	  } else {
-    	    enoDiv.style.display = "none";
-    	  }
+    	    var selectElement = document.getElementById("colorSelect");
+    	    var enoDiv = document.getElementById("enoDiv");
+ 
+    	   if (selectElement.value !== "컬러 선택") {
+    	      enoDiv.style.display = "block";
+    	   } else {
+    	      enoDiv.style.display = "none";
+    	   } 
     	}
+	    
+	    
 		
 	    //장바구니
 	    function goCart() {
-	    	alert('해당 상품이 장바구니에 추가되었습니다.');
+	    	
 	        var option = document.getElementById('colorSelect').value;
 	        var eno = document.querySelector('.quantity').value;
 			var productNo = document.getElementById('productNo').value;
 			var priceString = document.getElementById('resultPrice2').innerText;
 			var price = parseInt(priceString.replace(/\D/g, ''), 10); // 숫자가 아닌 문자를 모두 제거
-	        location.href='insertCart.so?productNo='+productNo + '&option=' + option + '&eno=' + eno +"&price=" + price;
+			var selectElement = document.getElementById("colorSelect");
+
+		    if (selectElement.value === "컬러 선택") {
+		        alert('옵션을 선택해주세요!'); // 알림 메시지 출력
+		    }else{
+		    	alert('해당 상품이 장바구니에 추가되었습니다.');
+		        location.href='insertCart.so?productNo='+productNo + '&option=' + option + '&eno=' + eno +"&price=" + price;
+		    }
 	        
 	    }
 	    

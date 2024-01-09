@@ -181,7 +181,7 @@
 			  <h1>PRODUCT ></h1>
 		  	  <section class="products">
 		  	  <th:block th:each="p:${pList}">
-		  	  	<article class="product" th:each="a:${aList}" th:if="${ p.productNo eq a.boardNo }" onclick="redirectToProductDetail(this)">
+		  	  	<article class="product" th:each="a:${aList}" th:if="${ p.productNo eq a.boardNo && a.boardType==5 }" onclick="redirectToProductDetail(this)">
 		  	  		<input type="hidden" th:value="${p.productNo}">
 				    <a href="#"><img th:src="${a.photoPath}"></a>
 			        <p>[[${p.productName}]]</p>

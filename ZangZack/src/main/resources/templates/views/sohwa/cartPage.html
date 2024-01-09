@@ -46,7 +46,7 @@
                <td class="td1">
                	  <input class="cartKeyNo" type="hidden" th:value="${l.cartKeyNo}">
                   <input type="checkbox">
-                  <img th:each="a:${aList}" th:if="${a.photoLevel==0 && p.productNo == a.boardNo}" th:src="${a.photoPath}">
+                  <img th:each="a:${aList}" th:if="${a.photoLevel==0 && p.productNo == a.boardNo && a.boardType==5}" th:src="${a.photoPath}">
                   <div>
                      <div>[[${p.productCompany}]]</div>
                      [[${p.productName}]]<br>

@@ -173,6 +173,31 @@ public class ProductServiceImpl implements ProductService{
 		return pDAO.selectProductQna(productNo);
 	}
 
+	@Override
+	public int deleteQna(int questionNo) {
+		return pDAO.deleteQna(questionNo);
+	}
+
+	@Override
+	public int getListQnaYCount() {
+		return pDAO.getListQnaYCount();
+	}
+
+	@Override
+	public ArrayList<Qna> selectQnaY() {
+		return pDAO.selectQnaY();
+	}
+
+	@Override
+	public ArrayList<Qna> searchKeyword(HashMap<String, String> map) {
+		return pDAO.searchKeyword(map);
+	}
+
+	@Override
+	public ArrayList<Qna> searchYKeyword(HashMap<String, String> map) {
+		return pDAO.searchYKeyword(map);
+	}
+
 	
 
 	

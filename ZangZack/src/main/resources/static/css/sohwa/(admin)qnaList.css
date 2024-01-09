@@ -149,6 +149,14 @@ table{
 	display: inline-block;
 }
 
+#answerY{
+	color:#F9612B;
+}
+
+#answerY:hover{
+	opacity:0.6;
+}
+
 
 .modal {
      border:1px solid black;

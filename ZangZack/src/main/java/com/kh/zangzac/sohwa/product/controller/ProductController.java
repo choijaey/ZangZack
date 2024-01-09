@@ -405,16 +405,24 @@ public class ProductController {
 	
 	@GetMapping("centerView.so")
 	public String qnaView(Model model) {
-		String id = ((Member)model.getAttribute("loginUser")).getMemberId();
+		Member loginUser = (Member)model.getAttribute("loginUser");
 		
-		ArrayList<Qna> qList = pService.selectMyQna(id);
 		ArrayList<Product> pList = pService.selectAllProduct();
 		ArrayList<Attachment> aList = pService.selectAllPhoto();
 		
-		model.addAttribute("pList", pList);
-		model.addAttribute("aList", aList);
-		model.addAttribute("qList", qList);
-		return "views/sohwa/centerPage";
+		
+		
+		if(loginUser != null) {
+			String id = ((Member)model.getAttribute("loginUser")).getMemberId();
+			ArrayList<Qna> qList = pService.selectMyQna(id);
+			model.addAttribute("pList", pList);
+			model.addAttribute("aList", aList);
+			model.addAttribute("qList", qList);
+			return "views/sohwa/centerPage";
+		}else {
+			return "views/sohwa/centerPage2";
+		}
+		
 	}
 
 	
@@ -436,24 +444,69 @@ public class ProductController {
 	}
 	
 	@GetMapping("adminQnaListView.so")
-	public String adminQnaListView(@RequestParam(value="page", defaultValue="1") int page, HttpServletRequest request, Model model) {
+	public String adminQnaListView(@RequestParam(value="searchType", defaultValue="1") String searchType, @RequestParam(value="keyword", defaultValue="") String keyword, @RequestParam(value="status", defaultValue="1") int status, @RequestParam(value="page", defaultValue="1") int page, HttpServletRequest request, Model model) {
 		
-		int listCount = pService.getListQnaCount();
-		int currentPage = page;
-		PageInfo pi = new PageInfo();
-		pi = Pagination.getPageInfo(currentPage, listCount, 10);
+		if(status ==1) {
+			int listCount = pService.getListQnaCount();
+			int currentPage = page;
+			PageInfo pi = new PageInfo();
+			pi = Pagination.getPageInfo(currentPage, listCount, 10);
+			
+			ArrayList<Qna> qList = new ArrayList<>();
+			ArrayList<Product> pList = pService.selectAllProduct();
+			ArrayList<Attachment> aList = pService.selectAllPhoto();
+			
+			if(keyword != null) {
+				HashMap<String, String> map = new HashMap<>();
+				map.put("keyword", keyword);
+				map.put("searchType", searchType);
+				qList = pService.searchKeyword(map);
+			}else {
+				qList = pService.selectQna();
+			}
+			
+			model.addAttribute("status", status);
+			model.addAttribute("pList", pList);
+			model.addAttribute("aList", aList);
+			model.addAttribute("qList", qList);
+			model.addAttribute("pi", pi);
+			model.addAttribute("loc", request.getRequestURI());
+			return "views/sohwa/(admin)qnaList";
+			
+		}else {
+			int listCount = pService.getListQnaYCount();
+			int currentPage = page;
+			PageInfo pi = new PageInfo();
+			pi = Pagination.getPageInfo(currentPage, listCount, 10);
+			
+			ArrayList<Qna> qList = new ArrayList<>();
+			ArrayList<Product> pList = pService.selectAllProduct();
+			ArrayList<Attachment> aList = pService.selectAllPhoto();
+			
+			if(keyword != null) {
+				HashMap<String, String> map = new HashMap<>();
+				map.put("keyword", keyword);
+				map.put("searchType", searchType);
+				qList = pService.searchYKeyword(map);
+			}else {
+				qList = pService.selectQnaY();
+			}
+			model.addAttribute("status", status);
+			model.addAttribute("pList", pList);
+			model.addAttribute("aList", aList);
+			model.addAttribute("qList", qList);
+			model.addAttribute("pi", pi);
+			model.addAttribute("loc", request.getRequestURI());
+			return "views/sohwa/(admin)qnaList";
+		}
 		
-		ArrayList<Qna> qList = pService.selectQna();
-		ArrayList<Product> pList = pService.selectAllProduct();
-		ArrayList<Attachment> aList = pService.selectAllPhoto();
-		
-		model.addAttribute("pList", pList);
-		model.addAttribute("aList", aList);
-		model.addAttribute("qList", qList);
-		model.addAttribute("pi", pi);
-		model.addAttribute("loc", request.getRequestURI());
-		return "views/sohwa/(admin)qnaList";
 	}
+	
+//	@GetMapping("answerY.so")
+//	public String selectAnswerY(@RequestParam(value="page", defaultValue="1") int page, HttpServletRequest request, Model model){
+//		
+//		
+//	}
 	
 	@PostMapping("insertAnswer.so")
 	public String insertAnswer(@RequestParam("questionNo") int questionNo, @RequestParam("answerContent") String answerContent) {
@@ -470,6 +523,28 @@ public class ProductController {
 		}
 	}
 	
+	
+	@GetMapping("deleteQna.so")
+	public String deleteQna(@RequestParam("questionNo") int questionNo, Model model) {
+		int result = pService.deleteQna(questionNo);
+		Member loginUser = (Member)model.getAttribute("loginUser");
+		if(loginUser.getMemberIsAdmin() == "Y") {
+			if(result > 0) {
+				return "redirect:adminQnaListView.so";
+			}else {
+				throw new ProductException("문의 삭제 실패");
+			}
+		}else {
+			if(result > 0) {
+				return "redirect:centerView.so";
+			}else {
+				throw new ProductException("문의 삭제 실패");
+			}
+		}
+		
+		
+		
+	}
 	
 	
 	

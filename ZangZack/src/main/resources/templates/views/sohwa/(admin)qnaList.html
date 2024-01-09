@@ -17,39 +17,40 @@
 			<div id="qnaDiv">
 				
 				<div style="float:right;">
+					<a id="answerY" href="adminQnaListView.so?status=2">>>답변완료내역</a>
 					<div class="dropdown">
 		                <button class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-expanded="false">
 		                    상품이름 검색
 		                </button>
 		                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-		                    <li><a class="dropdown-item" href="#" onclick="showSearch('search1', '주문번호 검색')">상품이름 검색</a></li>
-		                    <li><a class="dropdown-item" href="#" onclick="showSearch('search2', '주문자 성함 검색')">주문자 성함 검색</a></li>
-		                    <li><a class="dropdown-item" href="#" onclick="showSearch('search3', '상품번호 검색')">상품번호 검색</a></li>
+		                    <li><a class="dropdown-item" onclick="showSearch('search1', '상품이름 검색')">상품이름 검색</a></li>
+		                    <li><a class="dropdown-item" onclick="showSearch('search2', '문의내용 검색')">문의내용 검색</a></li>
+		                    <li><a class="dropdown-item" onclick="showSearch('search3', '상품번호 검색')">상품번호 검색</a></li>
 		                </ul>
 		            </div>
 					
 					<div class="search" id="search1">
-						<input type="text" placeholder="상품이름 입력">
-			  			<a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+						<input type="text" placeholder="상품이름 입력" id="searchInput1" name="keyword">
+			  			<a id="searchLink1"><img id="searchImg1" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
 					</div>
 					<div class="search" id="search2" style="display: none;">
-						<input type="text" placeholder="주문자 성함 입력">
-			  			<a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+						<input type="text" placeholder="문의내용 입력" name="keyword" id="searchInput2">
+			  			<a id="searchLink2"><img id="searchImg2" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
 					</div>
 					<div class="search" id="search3" style="display: none;">
-						<input type="text" placeholder="상품번호 입력">
-			  			<a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+						<input type="text" placeholder="상품번호 입력" name="keyword" id="searchInput3">
+			  			<a id="searchLink3"><img id="searchImg3" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
 					</div>
 				</div>
 				
 				
-				
+				<input type="hidden" th:value="${status}" id="hiddenStatus">
 				<!--반복-->
 				<div th:each="q:${qList}" class="cart-row">
 		            <table>
 		                <tr>
 		                    <td class="td1">
-		                        <img th:each="a:${aList}" th:if="${a.boardNo eq q.productNo && a.photoLevel==0}" th:src="${a.photoPath}">
+		                        <img th:each="a:${aList}" th:if="${a.boardNo eq q.productNo && a.photoLevel==0 && a.boardType==5}" th:src="${a.photoPath}">
 		                        <div th:each="p:${pList}" th:if="${p.productNo eq q.productNo}">
 		                            <div>[[${p.productCompany}]]</div>
 		                            [[${p.productName}]]<br>
@@ -63,9 +64,21 @@
 		                            [[${q.questionContent}]]
 		                        </div>
 		                    </td>
-		                    <td><button class="btn-hover color-2 openModalButton">답변</button></td>
+		                    <td>
+		                    	<th:block th:if="${q.answerContent ==null}">
+		                    		<button class="btn-hover color-1" th:onclick="'deleteQna(' + ${q.questionNo} + ');'">삭제</button>
+		                    		<button class="btn-hover color-2 openModalButton">답변</button>
+		                    	</th:block>
+		                    	<th:block th:unless="${q.answerContent ==null}">
+		                    		<button class="btn-hover color-1" th:onclick="'deleteQna(' + ${q.questionNo} + ');'">삭제</button>
+		                    		<button class="btn-hover color-2">답변</button>
+		                    	</th:block>
+		                    </td>
 		                </tr>
 		            </table>
+		            <div class="answerDiv">
+	 					<div><img src="image/sohwa/icons8-a-64.png">관리자 : [[${q.answerContent}]]</div> 
+	 				</div>
             		<br><br>
 					<!-- 모달 영역 -->
 					<div class="modal qnaModal" style="display:none; width:640px; height:820px; overflow:hidden;">
@@ -215,7 +228,75 @@
             document.getElementById(searchId).style.display = 'block';
             document.getElementById('dropdownMenuButton').innerText = dropdownText;
         }
+	    
+	    
+		var searchInput1 = document.getElementById("searchInput1");
+		var searchInput2 = document.getElementById("searchInput2");
+		var searchInput3 = document.getElementById("searchInput3");
+		var searchImg1 = document.getElementById("searchImg1");
+		var searchImg2 = document.getElementById("searchImg2");
+		var searchImg3 = document.getElementById("searchImg3");
+		var searchLink1 = document.getElementById('searchLink1');
+		var searchLink2 = document.getElementById('searchLink2');
+		var searchLink3 = document.getElementById('searchLink3');
+		var status = document.getElementById('hiddenStatus').value;
+	    
+
+	    searchImg1.addEventListener("click", function() {
+	        var keyword = searchInput1.value;
+	        
+	        location.href= 'adminQnaListView.so?status=' + status + '&searchType=1&keyword=' + keyword;
+	        console.log(keyword);
+	    });
+	    
+	    searchImg2.addEventListener("click", function() {
+	        var keyword = searchInput2.value;
+	        location.href= 'adminQnaListView.so?status=' + status + '&searchType=2&keyword=' + keyword;
+	    });
+	    
+	    searchImg3.addEventListener("click", function() {
+	        var keyword = searchInput3.value;
+	        location.href= 'adminQnaListView.so?status=' + status + '&searchType=3&keyword=' + keyword;
+	    });
+	    
+	    
+	    
+	    
+	    
+	    //답변보이게 하기
+		document.addEventListener('DOMContentLoaded', function () {
+            // 각 답변 div 요소를 숨깁니다.
+            const answerDivs = document.querySelectorAll('.answerDiv');
+            answerDivs.forEach(answerDiv => {
+                answerDiv.style.display = 'none';
+            });
+
+            // 각 답변 버튼을 찾습니다.
+            const answerButtons = document.querySelectorAll('.cart-row button.btn-hover.color-2');
+
+            // 각 답변 버튼에 대한 클릭 이벤트를 설정합니다.
+            answerButtons.forEach((button, index) => {
+                button.addEventListener('click', function () {
+                    // 해당하는 답변 div를 찾습니다.
+                    const correspondingAnswer = answerDivs[index];
+
+                    // 해당하는 답변이 현재 보이는 상태인지 확인하고 상태를 변경합니다.
+                    const isAnswerVisible = correspondingAnswer.style.display === 'block';
+                    correspondingAnswer.style.display = isAnswerVisible ? 'none' : 'block';
+                });
+            });
+        });
 	
+	    
+		function deleteQna(questionNo){
+        	var confirmation = confirm('해당 문의를 삭제하시겠습니까?');
+        	
+        	if(confirmation){
+        		 location.href='deleteQna.so?questionNo='+questionNo;
+        	}
+        }
+		
+		
 	</script>
 
 </body>

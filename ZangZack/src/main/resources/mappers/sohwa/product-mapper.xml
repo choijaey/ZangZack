@@ -288,7 +288,7 @@
 	<select id="selectMyQna" resultType="Qna">
 		select *
 		from qna
-		where member_id=#{memberId}
+		where member_id=#{memberId} and qna_status = 'N'
 		order by question_no desc
 	</select>
 	
@@ -299,11 +299,58 @@
 		where qna_status='N' and answer_content is null
 	</select>
 	
+	<select id="getListQnaYCount" resultType="_int">
+		select count(*)
+		from qna
+		where qna_status='N' and answer_content is not null
+	</select>
+	
 	
 	<select id="selectQna" resultType="Qna">
 		select *
 		from qna
 		where qna_status = 'N' and answer_content is null
+		order by question_no
+	</select>
+	
+	<select id="searchKeyword" resultType="Qna">
+		select *
+		from qna
+			 join product using (product_no)
+		where qna_status = 'N' and answer_content is null 
+		<if test="searchType==1">
+			and product_name like '%${keyword}%'
+		</if>
+		<if test="searchType==2">
+			and question_content like '%${keyword}%'
+		</if>
+		<if test="searchType==3">
+			and product_no like '%${keyword}%'
+		</if>
+		order by question_no
+	</select>
+	
+	<select id="selectQnaY" resultType="Qna">
+		select *
+		from qna
+		where qna_status = 'N' and answer_content is not null
+		order by question_no
+	</select>
+	
+	<select id="searchYKeyword" resultType="Qna">
+		select *
+		from qna
+			 join product using (product_no)
+		where qna_status = 'N' and answer_content is not null 
+		<if test="searchType==1">
+			and product_name like '%${keyword}%'
+		</if>
+		<if test="searchType==2">
+			and question_content like '%${keyword}%'
+		</if>
+		<if test="searchType==3">
+			and product_no like '%${keyword}%'
+		</if>
 		order by question_no
 	</select>
 	
@@ -316,7 +363,15 @@
 	<select id="selectProductQna" resultType="Qna">
 		select * 
 		from qna
-		where product_no = #{productNo}
+		where product_no = #{productNo} and qna_status = 'N'
 		order by question_no
 	</select>
+	
+	<update id="deleteQna">
+		update qna
+		set qna_status = 'Y'
+		where question_no = #{questionNo}
+	</update>
+	
+	
 </mapper>
