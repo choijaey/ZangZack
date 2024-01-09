@@ -172,19 +172,20 @@ input::file-selector-button{
 
 /* 내정보 수정 박스 */
 
-.updateInput{
-	width: 500px;
-	height: 50px;
-	border-top: none;
-	border-left: none;
-	border-right: none;
-	border-bottom: 3px solid black;
-	position: relative;
-	left: 25%;
-	top: 300px;
-	margin-bottom: 50px;
-	text-align: center;
- 	font-size: 1em;
+.updateInput {
+    width: 500px;
+    height: 50px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 3px solid black;
+    position: relative;
+    left: 25%;
+    top: 300px;
+    margin-bottom: 50px;
+    text-align: center;
+    font-size: 1em;
+    
 }
 
 .updateBtn{

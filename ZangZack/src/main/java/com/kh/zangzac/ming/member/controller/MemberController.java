@@ -448,12 +448,12 @@ public class MemberController {
 		
 	}
 	
+	//프로필 등록
 	@PostMapping("updateProfile.me")
 	public String updateProfile(@RequestParam("memberProfile") MultipartFile file, @ModelAttribute Member m, Model model) {
 		Member user = ((Member)model.getAttribute("loginUser"));
 		String defaultProfile = "https://storage.googleapis.com/zangzac/image/ming/BasicProfile.png";
 		String[] profileResult = null;
-		System.out.println("file:   " + file);
 		int result = 0;
 		
 		profileResult = imageStorage.saveImage(file, "ming");
@@ -465,7 +465,6 @@ public class MemberController {
 		if (profileResult[1] != defaultProfile) {
 		    imageStorage.deleteImage(user.getMemberProfilePath(),"ming");
 		}
-		System.out.println(m);
 		
 		result = mService.updateMemberProfile(m);
 		
@@ -480,10 +479,18 @@ public class MemberController {
 
 	}
 	
-	@PostMapping("deleteProfile.me")
+	// 프로필 삭제
+	@GetMapping("deleteProfile.me")
 	public String deleteProfile(Model model) {
 		
-		//낼 삭제 예정
+		
+		Member user = ((Member)model.getAttribute("loginUser"));
+		String defaultProfile = "https://storage.googleapis.com/zangzac/image/ming/BasicProfile.png";
+		
+		user.setMemberProfileRename("");
+		user.setMemberProfilePath(defaultProfile);
+		
+		int result = mService.updateMemberProfile(user);
 		
 		return "redirect:myPage.me";
 	}

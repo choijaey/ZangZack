@@ -10,11 +10,11 @@
 </head>
 <body>
 	<div class="logo">
-		<img src="../image/ming/member/logo.png" alt="logo">
+		<a href="home.me"><img src="../image/ming/member/logo.png" alt="logo"></a>
 	</div>
 	<aside class="sidebar">
 		<div class="user">
-			<img th:src="${loginUser.memberProfilePath}" style="width: 80px;"></img><br><br>
+			<img th:src="${loginUser.memberProfilePath}" style="width: 80px; height:80px; border-radius: 50%"></img><br><br>
 			<p style="font-weight: bold; font-size: 1.5em;" th:text="${loginUser.memberName}"></p><br><br>
 		</div>
 		<ul class="links">

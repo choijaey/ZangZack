@@ -33,7 +33,7 @@
 	.modal-content {
 	    background-color: white;
 	    margin: 15% auto;
-	    margin-left:60%;
+	    margin-left:35%;
 	    padding: 20px;
 	    border: 1px solid #888;
 	    width: 80%;
@@ -46,6 +46,7 @@
 	    flex-direction: column; /* 수정된 부분 */
     	justify-content: center; /* 추가된 부분 */
     	align-items: center;
+    	border-radius: 10px;
 	}
 	.modal-content Button{
 		background-color: rgb(251, 125, 83);
@@ -96,15 +97,27 @@
 	  	font-size: 15px;
 	  	text-align: center;
 	}
+	.comment-section {
+	    max-height: 0;
+	    transition: max-height 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+	    opacity: 0;
+	    z-index: inherit;
+	}
+   
+   .comment-section.show {
+       max-height: 1000px;
+       opacity: 1;
+   }
+	
 </style>
 </head>
 <body>
 	<div class="logo">
-		<img src="../image/ming/member/logo.png" alt="logo">
+		<a href="home.me"><img src="../image/ming/member/logo.png" alt="logo"></a>
 	</div>
 	<aside class="sidebar">
 		<div class="user">
-			<img th:src="${loginUser.memberProfilePath}" style="width: 80px;"></img><br><br>
+			<img th:src="${loginUser.memberProfilePath}" style="width: 80px; height:80px; border-radius: 50%"></img><br><br>
 			<p style="font-weight: bold; font-size: 1.5em;" th:text="${loginUser.memberName}"></p><br><br>
 		</div>
 		<ul class="links">
@@ -155,13 +168,13 @@
 	
 		<div id="border" class="changeList" style="width: 1000px; height: 1800px;">
 			<span class="editTitle">내 정보 수정</span><br>
-			<form method="post" enctype="multipart/form-data" onsubmit="return NoSign()" id="form">
+			<form method="post" enctype="multipart/form-data" onsubmit="return NoReset()" id="form">
 	            <div class="profile" id="profileContainer">
 	                <div class="profilePoto">
 	                    <img th:src="${loginUser.memberProfilePath}" class="profile-poto" id="profileImage" onclick="changeToInputFile()">
 	                </div>
 				   <input type="file" class="btnFile" name="memberProfile" id="input-file" accept=".jpg,.png,.jpeg" style="text-align: center; width: 0px; display:none;" onchange="changeProfileImage()">
-				   <button type="button" id="deleteBtn" onclick="deleteProfileImage()">삭제</button>
+				   <button type="button" id="deleteBtn" >삭제</button>
 				   <button type="button" id="updateBtn" onclick="updateProfileImage()">수정</button>
 	            </div>
 	         </form>
@@ -174,17 +187,21 @@
 			    <input type="submit" value="수정" class="updateBtn">
 			</form>
 		    <input type="text" th:value="${loginUser.memberId}" class="updateInput" name="memberId" placeholder="Id" readonly>
-			<form action="updateMemberPhone.me" method="post" id="updateForm" onclick="NoSign()">
+			<form action="updateMemberPhone.me" method="post" id="updateForm">
 		    	<input type="tel" th:value="${loginUser.memberPhone}" class="updateInput" id="phone" name="memberPhone" placeholder="전화번호(-제외)">
 				<input type="button" id="send" value="코드전송" class="updateBtn" >
-				<input type="text" class="updateInput" id="userNum" name="phoneCode" placeholder="인증코드">
-				<input type="submit" value="수정" class="updateBtn" id="enterBtn">
+				<div class="comment-section">
+					<input type="text" class="updateInput" id="userNum" name="phoneCode" placeholder="인증코드">
+					<input type="submit" value="수정" class="updateBtn" id="enterBtn">
+				</div>
 			</form>
 			<form action="updateMemberEmail.me" method="post" id="updateEmailForm">
 			    <input type="email" id="memberEmail" name="memberEmail" class="updateInput" placeholder="이메일" th:value="${loginUser.memberEmail}"  required>
 			    <input type="button" id="mail-Check-Btn" value="코드전송" class="updateBtn" >
-			    <input type="text" id="EmailCheckNo" class="updateInput" name="emailCode" placeholder="인증코드">
-			    <input type="submit" value="인증확인" class="updateBtn" id="enterEBtn" >
+			    <div class="comment-section">
+				    <input type="text" id="EmailCheckNo" class="updateInput" name="emailCode" placeholder="인증코드">
+				    <input type="submit" value="인증확인" class="updateBtn" id="enterEBtn" >
+				</div>
 			</form>
 			<form action="updateMemberAddress.me" method="post">
 			    <input type="text" name="sample6_postcode" id="sample6_postcode" class="updateInput" placeholder="우편번호" readonly>
@@ -285,6 +302,40 @@
 	 	    const modal = document.getElementById('myModal');
 	 	    modal.style.display = 'none';
 	 	};
+	 	
+	 	/* 프로필 삭제 모달 */
+	 	document.getElementById('deleteBtn').addEventListener('click', function(event) {
+	 		event.preventDefault();
+	 		const modal = document.getElementById('myModal');
+            const modalContent = document.getElementById('modalContent');
+            modalContent.textContent = '정말 삭제하시겠습니까? \n 삭제 후 사진 복구는 불가능합니다.';
+            modalContent.appendChild(document.createElement('br'));
+            modalContent.appendChild(document.createElement('br'));
+
+            modal.style.display = 'block';
+            
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = '네';
+            deleteButton.className = 'homepage-btn';
+            deleteButton.addEventListener('click', function() {
+                window.location.href = 'deleteProfile.me';
+            });
+            modalContent.appendChild(deleteButton);
+            
+            const homepageButton = document.createElement('button');
+            homepageButton.textContent = '아니오';
+            homepageButton.className = 'homepage-btn';
+            homepageButton.addEventListener('click', function() {
+                closeModal();
+            });
+            modalContent.appendChild(homepageButton);
+            
+	 	});
+	 	
+	 	function closeModal() {
+	 	    const modal = document.getElementById('myModal');
+	 	    modal.style.display = 'none';
+	 	};
 	</script>
 	
 	<script type="text/javascript">
@@ -292,7 +343,7 @@
 		$('#send').click(function() {
 			
 			const to = $('#phone').val();
-			
+			let btn= this;
 			$.ajax ({
 				url: '/send-one',
 				type: 'GET',
@@ -301,6 +352,8 @@
 				},
 				success: function(data) {
 					check_num = data;
+					toggleCo(btn);
+		
 					alert("인증번호를 입력해주세요!");
 					
 				}
@@ -331,21 +384,6 @@
 		});
 		
 		
-		function NoSign(event) {
-		    // 이 함수가 호출되면서 폼이 제출될 때만 check_code를 확인하도록 변경
-		    if (check_code) {
-		        check_code = true;
-		        checkE = true;
-		        return true;
-		    } else {
-		        alert("정보가 올바르게 작성되었는지 확인해주세요.");
-		        check_code = false;
-		        checkE = false;
-		        // 실패 시 이벤트 중지
-		        event.preventDefault();
-		        return false;
-		    }
-		}
 		
 		window.onload = () =>{
 			let check_code = false;
@@ -376,6 +414,7 @@
 
 			$('#mail-Check-Btn').click(function () {
 			    const checkInput = $('.EmailCheckNo'); // 인증번호 입력하는 곳 
+			    let btn=this;
 			    check_button = true;
 			    $.ajax({
 			        type: 'get',
@@ -385,6 +424,7 @@
 			            console.log("data : " + data);
 			            checkInput.attr('disabled', false);
 			            code = data;
+			            toggleCo(btn);
 			            alert('인증번호를 발송했습니다. 인증번호가 오지 않으면 입력하신 정보가 회원정보와 일치하는지 확인해 주세요.');
 			        }
 			    });
@@ -453,7 +493,7 @@
 	
 	    function deleteProfileImage() {
 	    	
-	    	 const form = document.getElementById('form');
+	    	const form = document.getElementById('form');
 	        form.action = "deleteProfile.me";
 	        form.submit();
 	    
@@ -466,7 +506,7 @@
 	    }
 	 	// 파일 변경 여부를 추적하는 전역 변수
 		
-		function NoSign() {
+		function NoReset() {
 		    if (fileChanged) {
 		    	const form = document.getElementById('form');
 		    	form.submit();
@@ -482,8 +522,36 @@
 		// 이벤트 리스너를 파일 입력 필드에 추가
 		document.getElementById('input-file').addEventListener('change', changeProfileImage);
 		
-		// 폼 제출 이벤트에 NoSign 함수를 연결
-		document.querySelector('form').onsubmit = NoSign;
+		 function toggleCo(toggleId){
+	           toggleComments(toggleId);
+	        }
+	        
+	     
+
+        // 전체 댓글 토글 함수
+        function toggleComments(toggleId) {
+           const commentSection = toggleId.nextElementSibling;
+
+            if (commentSection) {
+                commentSection.classList.toggle('show');
+                
+            }
+        }
+		function NoSign(event) {
+		    // 이 함수가 호출되면서 폼이 제출될 때만 check_code를 확인하도록 변경
+		    if (check_code) {
+		        check_code = true;
+		        checkE = true;
+		        return true;
+		    } else {
+		        alert("정보가 올바르게 작성되었는지 확인해주세요.");
+		        check_code = false;
+		        checkE = false;
+		        // 실패 시 이벤트 중지
+		        event.preventDefault();
+		        return false;
+		    }
+		}
 	</script>
 </body>
 </html>
