@@ -6,6 +6,9 @@
   font-style: normal;
 }
 
+*{
+	font-family: 'GmarketSansMedium';
+}
 body {
   font-family: 'GmarketSansMedium';
   margin: 0;
@@ -285,4 +288,126 @@ body {
 
 .comment-action-button:hover {
     cursor: point;
+}
+
+/*댓글 수정 삭제*/
+.comment-dropdown-container {
+  position: absolute;
+  top: 3px;
+  right: 5px;
+}
+
+.comment-action-button {
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  background-size: cover;
+  background-position: center;
+}
+
+.comment-action-button:hover {
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 16.8px;
+  top: -12px;
+  background-color: #f9f9f9;
+  min-width: 50px;
+  height: 30px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 4px;
+  padding: 0;
+  align-content: center;
+  align-items: center;
+  background: #5cb85c;
+}
+
+.dropdown-menu li {
+  	list-style: none;
+}
+
+.dropdown-menu .dropdown-item {
+	margin : auto;
+  	padding: 10px;
+  	cursor: pointer;
+  	display: block;
+  	color: #fff;
+  	background: #5cb85c;
+  	border: none;
+  	text-align: center;
+  	width: 100%;
+}
+
+.dropdown-menu .reply-del{
+	border-radius: 4px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+}
+.dropdown-menu .reply-update{
+	border-radius: 4px;
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 0px;
+}
+.dropdown-menu .dropdown-item:hover {
+  background-color: #f1f1f1;
+  color: black;
+}
+
+ .dropdown-menu:hover{
+  	background-color: #f1f1f1;
+  }
+
+/*댓글 수정*/.comment-edit-form {
+  display: flex; /* Flex 컨테이너로 설정 */
+  align-items: center; /* 내부 요소들을 수직 중앙에 정렬 */
+  width: 95%;
+}
+
+.comment-input {
+  flex: 1; /* 사용 가능한 공간을 모두 채움 */
+  min-height: 60px; /* 최소 높이 설정 */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 10px; /* 오른쪽 여백 */
+}
+
+.buttons-container {
+  display: flex; /* Flex 컨테이너로 설정 */
+  flex-direction: column; /* 버튼들을 수직으로 쌓음 */
+  align-items: center; /* 버튼들을 수직 중앙에 정렬 */
+  margin-left: 10px; /* 왼쪽 여백 */
+}
+
+.update-submit,
+.comment-cancel {
+  width: 80px; /* 버튼의 너비 */
+  padding: 10px; /* 내부 여백 */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 5px; /* 버튼 사이의 간격 */
+}
+
+.update-submit {
+  background-color: #5cb85c; /* '등록' 버튼의 배경색 */
+  color: white; /* '등록' 버튼의 텍스트 색상 */
+}
+
+.comment-cancel {
+  background-color: #f44336; /* '취소' 버튼의 배경색 */
+  color: white; /* '취소' 버튼의 텍스트 색상 */
+  margin-top: 10px; /* '취소' 버튼의 상단 여백 */
+}
+
+/* 버튼 호버 스타일 */
+.update-submit:hover,
+.comment-cancel:hover {
+  opacity: 0.8;
 }

@@ -165,16 +165,119 @@ function updateCommentList(comments) {
         contentDiv.appendChild(infoDiv);
 
         // 댓글마다 버튼 추가
-        if (memberId && memberId === comment.memberId) {
-            const commentButton = document.createElement('button');
-            commentButton.classList.add('comment-action-button');
-            commentButton.textContent = ''; // 텍스트 제거
-            commentButton.onclick = function() {
-                // 버튼 클릭 시 수행할 작업
-                console.log('댓글 ID:', comment.memberId, '의 버튼이 클릭되었습니다.');
-            };
-            contentDiv.appendChild(commentButton); // 버튼을 contentDiv에 추가
+        // 댓글마다 드롭다운 메뉴와 버튼 추가
+if (memberId && memberId === comment.memberId) {
+    // 드롭다운 컨테이너 div
+    const dropdownContainer = document.createElement('div');
+    dropdownContainer.classList.add('comment-dropdown-container');
+
+    // 드롭다운을 표시하는 버튼
+    const commentButton = document.createElement('button');
+    commentButton.classList.add('comment-action-button');
+    commentButton.style.backgroundImage = 'url("image/seongun/replyButton.svg")'; // 가정한 경로입니다.
+
+    // 드롭다운 메뉴
+    const dropdownMenu = document.createElement('ul');
+    dropdownMenu.classList.add('dropdown-menu');
+
+    // 수정 옵션
+    const editItem = document.createElement('li');
+    const editButton = document.createElement('button');
+    editButton.textContent = '수정';
+    editButton.classList.add('dropdown-item');
+    editButton.classList.add('reply-update');
+    editButton.onclick = function() {
+    	// 기존 댓글 내용을 저장합니다.
+    	const originalContent = messageDiv.textContent;
+
+    	// 댓글 수정 폼을 생성합니다.
+    	const editForm = document.createElement('div');
+    	editForm.classList.add('comment-edit-form');
+
+    	// 텍스트 입력 영역 생성
+    	const textarea = document.createElement('textarea');
+    	textarea.classList.add('comment-input');
+    	textarea.value = originalContent; // 기존 댓글 내용으로 초기화합니다.
+
+    	// 버튼들을 감쌀 컨테이너 생성
+    	const buttonsContainer = document.createElement('div');
+    	buttonsContainer.classList.add('buttons-container');
+
+    	// '등록' 버튼 생성
+    	const submitButton = document.createElement('button');
+    	submitButton.type = 'button';
+    	submitButton.classList.add('update-submit');
+    	submitButton.textContent = '등록';
+    	submitButton.onclick = function() {
+    	    // 서버에 수정 내용을 전송하는 코드를 여기에 추가합니다.
+    	    console.log('댓글 수정:', textarea.value);
+
+    	    // 수정된 내용으로 댓글을 업데이트합니다.
+    	    messageDiv.textContent = textarea.value;
+    	    contentDiv.replaceChild(messageDiv, editForm);
+    	};
+
+    	// '취소' 버튼 생성
+    	const cancelButton = document.createElement('button');
+    	cancelButton.type = 'button';
+    	cancelButton.classList.add('comment-cancel');
+    	cancelButton.textContent = '취소';
+    	cancelButton.onclick = function() {
+    	    // 수정 폼을 취소하고 원래의 댓글 내용으로 돌아갑니다.
+    	    contentDiv.replaceChild(messageDiv, editForm);
+    	};
+
+    	// 버튼들을 컨테이너에 추가
+    	buttonsContainer.appendChild(submitButton);
+    	buttonsContainer.appendChild(cancelButton);
+
+    	// 수정 폼에 텍스트 영역과 버튼 컨테이너를 추가합니다.
+    	editForm.appendChild(textarea);
+    	editForm.appendChild(buttonsContainer);
+
+    	// 기존 댓글 내용을 수정 폼으로 대체합니다.
+    	contentDiv.replaceChild(editForm, messageDiv);
+
+    };
+
+    // 삭제 옵션
+    const deleteItem = document.createElement('li');
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = '삭제';
+    deleteButton.classList.add('dropdown-item');
+    deleteButton.classList.add('reply-del');
+    deleteButton.onclick = function() {
+        // 삭제 로직 실행
+    };
+
+    // 옵션을 드롭다운 메뉴에 추가
+    editItem.appendChild(editButton);
+    deleteItem.appendChild(deleteButton);
+    dropdownMenu.appendChild(editItem);
+    dropdownMenu.appendChild(deleteItem);
+
+    // 드롭다운 메뉴를 표시하고 숨기는 로직
+    commentButton.onclick = function(event) {
+        const isDisplayed = dropdownMenu.style.display === 'block';
+        dropdownMenu.style.display = isDisplayed ? 'none' : 'block';
+        event.stopPropagation();
+    };
+
+    // 클릭 이벤트가 버블링되지 않도록 합니다.
+    document.addEventListener('click', function(event) {
+        if (!dropdownContainer.contains(event.target)) {
+            dropdownMenu.style.display = 'none';
         }
+    });
+
+    // 드롭다운 컨테이너에 버튼과 메뉴를 추가
+    dropdownContainer.appendChild(commentButton);
+    dropdownContainer.appendChild(dropdownMenu);
+
+    // 컨테이너를 contentDiv에 추가
+    contentDiv.appendChild(dropdownContainer);
+}
+
 
         commentItem.appendChild(contentDiv);
         commentList.appendChild(commentItem);
@@ -261,6 +364,7 @@ function updateCommentList(comments) {
 		        nextGroupDiv.appendChild(nextGroupLink);
 		    }
 		}
+		
 	</script>
 </body>
 </html>
