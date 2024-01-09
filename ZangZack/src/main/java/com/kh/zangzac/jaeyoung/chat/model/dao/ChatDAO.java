@@ -20,4 +20,6 @@ public interface ChatDAO {
 
 	ArrayList<ChatRoom> chatRoomList();
 
+	ArrayList<Chatter> chatterList(String roomName);
+
 }

@@ -38,4 +38,9 @@ public class ChatServiceImpl implements ChatService{
 		return cDAO.chatRoomList();
 	}
 
+	@Override
+	public ArrayList<Chatter> chatterList(String roomName) {
+		return cDAO.chatterList(roomName);
+	}
+
 }

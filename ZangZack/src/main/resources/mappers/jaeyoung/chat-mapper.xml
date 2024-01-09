@@ -20,9 +20,9 @@
 	</select>
 	
 	<update id="updateChatRoomCount">
-		update chat_list
-		set cl_nowperson += 1;
-		where cl_no = ${clNo}
+	    update chat_list
+	    set cl_nowperson = cl_nowperson + 1
+	    where cl_no = ${clNo}
 	</update>
 	
 	<select id="chatRoomList">
@@ -30,6 +30,12 @@
 		from chat_list
 		left join camping_category using(category_no) 
 	</select>
-
+	
+	<select id="chatterList">
+	 	select *
+	 	from chatter
+	 	left join member using(member_id)
+	 	where cl_no = ${roomName}
+	</select>
 	
 </mapper>
