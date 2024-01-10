@@ -64,10 +64,13 @@ public class ReplyServiceImpl implements ReplyService {
     public void format(Reply r) {
     	String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
-        if(r.getReplyCreateDate() != r.getReplyModifyDate()) {
-        	r.setFormatDate("(수정)"+r.getReplyModifyDate().format(formatter));
+        String create = r.getReplyCreateDate().format(formatter);
+        String modify = r.getReplyModifyDate().format(formatter);
+        
+        if(create.equals(modify)) {
+        	r.setFormatDate(create);
         }else {
-        	r.setFormatDate(r.getReplyCreateDate().format(formatter));
+        	r.setFormatDate("(수정)"+modify);
         }
     }
 	
