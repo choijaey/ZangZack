@@ -36,13 +36,13 @@
 			<span style="font-size: 15px; color:gray;">[[${p.productCompany}]]</span>
 			<h1>[[${p.productName}]]</h1>
 			<div class="star-rating">
-				  <span class="fa fa-star checked"></span>
-				  <span class="fa fa-star checked"></span>
-				  <span class="fa fa-star checked"></span>
-				  <span class="fa fa-star checked"></span>
-				  <span class="fa fa-star checked"></span>
+				  <span class="fa fa-star" th:classappend="${roundScore >= 1 ? 'checked' : ''}"></span>
+				  <span class="fa fa-star" th:classappend="${roundScore >= 2 ? 'checked' : ''}"></span>
+				  <span class="fa fa-star" th:classappend="${roundScore >= 3 ? 'checked' : ''}"></span>
+				  <span class="fa fa-star" th:classappend="${roundScore >= 4 ? 'checked' : ''}"></span>
+				  <span class="fa fa-star" th:classappend="${roundScore >= 5 ? 'checked' : ''}"></span>
 			</div>
-		    <span th:with="count=${rList.size()}, totalScore='0'" th:each="r:${rList}" th:if="${r.productNo == p.productNo}">[[${total}]]</span>
+		    <span>[[${p.productScore}]]</span>
 		    <br>
 			<span id="price">[[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]</span>
 			&nbsp;&nbsp;<div class="deliverySpan" th:if="${p.deliveryPrice==0}">무료배송</div><br><br>
@@ -121,13 +121,13 @@
 					<span style="margin-left:5%;">리뷰 </span><span style="color:#F9612B;"> [[${rList.size()}]]</span><a href="#" id="openReviewModal" onclick="openModal()">리뷰쓰기</a>
 				    <div id="reviewContainer">
 							<div class="star-rating">
-								  <span class="fa fa-star checked"></span>
-								  <span class="fa fa-star checked"></span>
-								  <span class="fa fa-star checked"></span>
-								  <span class="fa fa-star checked"></span>
-								  <span class="fa fa-star"></span>
+								  <span class="fa fa-star" th:classappend="${roundScore >= 1 ? 'checked' : ''}"></span>
+								  <span class="fa fa-star" th:classappend="${roundScore >= 2 ? 'checked' : ''}"></span>
+								  <span class="fa fa-star" th:classappend="${roundScore >= 3 ? 'checked' : ''}"></span>
+								  <span class="fa fa-star" th:classappend="${roundScore >= 4 ? 'checked' : ''}"></span>
+								  <span class="fa fa-star" th:classappend="${roundScore >= 5 ? 'checked' : ''}"></span>
 							</div>
-						    <span style="font-size:27px;">4.7</span>
+						    <span style="font-size:27px;">[[${p.productScore}]]</span>
 						    
 					   </div>
 						<!--모달-->
@@ -147,9 +147,8 @@
 								                </div>
 								            </div>
 								            
-								            
 								            <div class="border-t border-gray-200">
-								            	<form action="enrollReview.so" method="POST" enctype="multipart/form-data">
+								            	<form id="reviewForm" action="enrollReview.so" method="POST" enctype="multipart/form-data">
 									            	<input type="hidden" th:value="${p.productNo}" name="productNo">
 									            	<input type="file" id="fileUpload" name="file" style="display: none;">
 									            	<input type="hidden" name="reviewScore" value="0">
@@ -163,8 +162,8 @@
 																  <span class="fa fa-star"></span>
 																  <span class="fa fa-star"></span>
 															</div>
-									                        
 									                    </div>
+									                    
 									                    <!-- 파일 미리보기 영역 -->
 									                    <div id="imagePreview">
 									                        <img id="preview" src="image/sohwa/icons8-screenshot-64.png">
@@ -177,7 +176,7 @@
 									                    
 									                    <div class="mb-4">
 									                        <label for="review" class="text-sm font-semibold">리뷰를 작성해주세요.</label>
-									                        <textarea id="review" name="reviewContent" rows="3" class="mt-1 p-2 w-full border rounded-md" style="height:250px; overflow: scroll; resize: none;"></textarea>
+									                        <textarea id="reviewContent" name="reviewContent" rows="3" class="mt-1 p-2 w-full border rounded-md" style="height:250px; overflow: scroll; resize: none;"></textarea>
 									                    </div>
 									                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" style="float:right; margin-bottom:30px;">
 									                        리뷰등록
@@ -208,7 +207,7 @@
 						    <div class="container mx-auto px-4 py-8">
 						        <div class="space-y-6">
 									
-									<div class="reviewItem" th:each="r: ${rList}">
+									<div class="reviewItem" th:each="r, status: ${rList}">
 										<div class="bg-white shadow rounded-lg p-4">
 							                <div class="flex items-center space-x-4">
 							                    <div class="w-12 h-12 rounded-full overflow-hidden">
@@ -229,12 +228,83 @@
 							                    </div>
 							                </div>
 							                <div class="mt-4 text-gray-700">
-							                    [[${r.reviewContent}]]
+							                    [[${r.reviewContent}]]<br>
+							                    <th:block th:if="${session.loginUser !=null && r.memberId == session.loginUser.memberId}">
+								                    <div style=" float:right;">
+								                    	<a href="#" style ="color:blue; margin-right:0px;" class="updateButton" onclick="toggleUpdateModal(/* status.index */);">수정</a>
+								                    	<a href="#" th:onclick="'return confirmDelete(\'' + @{deleteReview.so(reviewNo=${r.reviewNo}, productNo=${p.productNo})} + '\');'" style="margin-right:15px;">삭제</a>
+								                    </div>
+							                    </th:block>
 							                </div>
 							                <div class="mt-4">
 							                    <img th:each="a:${aList}" th:if="${a.photoLevel==0 && r.reviewNo == a.boardNo && a.boardType==6}" th:src="${a.photoPath}" alt="Product" class="rounded">
 							                </div>
 							            </div>
+							            
+							            <br>
+							            <div style="background-color:white; display:none;" class="updateModal">
+									  		<div class="update-modal-content" style="margin-bottom:30px;">
+									    		<span class="close-update-modal">&times;</span>
+									    		<div class="bg-gray-50">
+													<div class="max-w-2xl mx-auto p-6">
+												        <h1 class="text-2xl font-bold mb-4">리뷰 수정</h1>
+												        <div class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
+												            <div class="p-4 flex">
+												                <img th:each="l:${list}" th:if="${l.photoLevel==0 && l.boardType == 5}" th:src="${l.photoPath}" class="w-20 h-20 object-cover rounded-full" alt="Product">
+												                <div class="ml-4">
+												                    <h2 class="text-lg font-semibold">[[${p.productCompany}]]</h2>
+												                    <p class="text-sm text-gray-600">[[${p.productName}]]</p><hr>
+												                    <p>[[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]</p>
+												                </div>
+												            </div>
+												            
+												            
+												            <div class="border-t border-gray-200">
+												            	<form action="updateReview.so" method="POST" enctype="multipart/form-data">
+													            	<input type="hidden" th:value="${p.productNo}" name="productNo">
+													            	<input type="file" class="fileUpload2" name="updateFile" style="display: none;">
+													            	<input type="hidden" name="reviewScore" value="0">
+													                <div class="p-4">
+													                    <h3 class="text-lg font-semibold mb-2">별점수정</h3>
+													                    <div class="flex items-center mb-4">
+													                        <div class="updateRating">
+																				  <span th:class="${r.reviewScore >= 1} ? 'fa fa-star checked' : 'fa fa-star'"></span>
+																				  <span th:class="${r.reviewScore >= 2} ? 'fa fa-star checked' : 'fa fa-star'"></span>
+																				  <span th:class="${r.reviewScore >= 3} ? 'fa fa-star checked' : 'fa fa-star'"></span>
+																				  <span th:class="${r.reviewScore >= 4} ? 'fa fa-star checked' : 'fa fa-star'"></span>
+																				  <span th:class="${r.reviewScore >= 5} ? 'fa fa-star checked' : 'fa fa-star'"></span>
+																			</div>
+													                    </div>
+													                    <!-- 파일 미리보기 영역 -->
+													                    <div class="updatePreviewDiv">
+												                    		<img th:each="a:${aList}" th:if="${a.boardNo == r.reviewNo && a.boardType==6}" style="width:200px; height:200px;" th:src="${a.photoPath}">
+													                    </div>
+													                    <div class="updateReviewDiv">
+													                    	
+													                    </div>
+													                    <br>
+													                    <div class="updatePhoto" onclick="openFileUploadModal()">
+																			<img src="image/sohwa/icons8-camera-80.png">사진첨부
+																		</div>
+													                    <br>
+													                    
+													                    <div class="mb-4">
+													                        <label for="review" class="text-sm font-semibold">리뷰를 수정해주세요.</label>
+													                        <textarea name="reviewContent" rows="3" class="mt-1 p-2 w-full border rounded-md" style="height:250px; overflow: scroll; resize: none;">[[${r.reviewContent}]]</textarea>
+													                    </div>
+													                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" style="float:right; margin-bottom:30px;">
+													                        리뷰수정
+													                    </button>
+												                    </form>
+												                </div>
+												                
+												                
+												            </div>
+												        </div>
+												    </div>
+												</div>
+										    </div>
+										    
 									</div>
 						            
 						            
@@ -478,6 +548,81 @@
 
 	<script>
 		
+	
+	 function openFileUploadModal(btn) {
+	        var fileInput = btn.closest('form').querySelector('.fileUpload2');
+	        if (fileInput) {
+	            fileInput.click(); // 파일 업로드 input 클릭
+	        } else {
+	            console.error("File input element not found.", btn);
+	        }
+	    }
+
+	    function previewImage(input) {
+	        var reader = new FileReader();
+	        reader.onload = function (e) {
+	            var previewDiv = input.closest('form').querySelector('.updatePreviewDiv');
+	            if (previewDiv) {
+	                var img = document.createElement('img');
+	                img.src = e.target.result;
+	                img.style.width = "200px";
+	                img.style.height = "200px";
+	                previewDiv.innerHTML = ''; // 기존 내용 지우기
+	                previewDiv.appendChild(img); // 미리보기 영역에 이미지 추가
+	            }
+	        };
+	        reader.readAsDataURL(input.files[0]);
+	    }
+
+	    document.addEventListener('DOMContentLoaded', function () {
+	        var updatePhotoBtns = document.querySelectorAll('.updatePhoto');
+	        updatePhotoBtns.forEach(function (btn) {
+	            btn.addEventListener('click', function () {
+	                openFileUploadModal(this);
+	            });
+	        });
+
+	        var fileInputs = document.querySelectorAll('.fileUpload2');
+	        fileInputs.forEach(function (input) {
+	            input.addEventListener('change', function () {
+	                previewImage(this);
+	            });
+	        });
+	    });
+	
+		
+		
+		
+		
+	
+		
+		// 수정 버튼을 누를 때 모달을 열고 닫는 함수
+	    function toggleUpdateModal(reviewIndex) {
+	        var modals = document.querySelectorAll('.updateModal');
+	        modals.forEach(function(modal, index) {
+	            if (index === reviewIndex) {
+	                modal.style.display = 'block'; // 선택된 reviewItem의 모달을 보이게 설정
+	            } else {
+	                modal.style.display = 'none'; // 다른 reviewItem의 모달을 숨기게 설정
+	            }
+	        });
+	    }
+	
+	    // 수정 버튼에 대한 이벤트 핸들러를 추가합니다.
+	    var updateButtons = document.querySelectorAll('.updateButton');
+	    updateButtons.forEach(function(button, index) {
+	        button.addEventListener('click', function() {
+	            toggleUpdateModal(index); // 수정 버튼을 클릭할 때 모달을 열고 닫습니다.
+	        });
+	    });
+	
+	
+	
+	
+	
+	
+	
+		
 		
 		//모달 별점 등록
 		
@@ -520,6 +665,65 @@
 		        checkedStarsCount++; // checked 클래스가 있으면 checkedStarsCount를 증가시킵니다
 		    }
 		}
+		
+		
+		
+		
+		
+		
+		//모달 별점 수정
+		window.onload=()=>{
+			var stars = document.querySelectorAll('.updateModal .fa');
+			var stars = 
+
+			stars.forEach(function(star, index) {
+				var checkedStarsCount = 0;
+				star.addEventListener('mouseover', function(){
+					for (var i = 0; i <= index; i++) {
+					      stars[i].style.color = 'yellow';
+				    }
+				})
+				
+				star.addEventListener('mouseout', function(){
+					for (var i = 0; i <= index; i++) {
+					      stars[i].style.color = 'gray';
+				    }
+				})
+				
+			  star.addEventListener('click', function() {
+			    // 클릭된 별을 포함하여 그 앞의 별들을 노란색으로 변경하고, 나머지는 회색으로 유지합니다.
+			    
+			    for (var i = 0; i <= index; i++) {
+			      stars[i].classList.add('checked');
+			      if (stars[i].classList.contains('checked')) {
+				        checkedStarsCount++; // checked 클래스가 있으면 checkedStarsCount를 증가시킵니다
+				    }
+			    }
+			    for (var i = index + 1; i < stars.length; i++) {
+			      stars[i].classList.remove('checked');
+			    }
+			    var starCountInput = document.querySelector('input[name="updateReviewScore"]');
+			    starCountInput.value = checkedStarsCount;
+			  });
+			});
+
+			//모달 별점 등록 갯수 추출
+			for (var i = 0; i < stars.length; i++) {
+			    if (stars[i].classList.contains('checked')) {
+			        checkedStarsCount++; // checked 클래스가 있으면 checkedStarsCount를 증가시킵니다
+			    }
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		
@@ -784,32 +988,66 @@
 	    }
 	    
 	    
-	    document.getElementById('enrollQna').addEventListener('click', ()=>{
+// 	    document.getElementById('enrollQna').addEventListener('click', ()=>{
 	    	
-	    	const productNo = document.querySelector('input[name="productNo"]').value;
-	        const questionContent = document.getElementById('questionContent').value;
-	        console.log(productNo);
-	        console.log(questionContent);
-	        $.ajax({
-	            type: "POST",
-	            url: "insertQna.so",
-	            data: {productNo: productNo, questionContent: questionContent},
-	            success: (data)=>{
-	                if(data == "success"){
-	                	const confirmation = confirm('내가 쓴 문의내역으로 이동하시겠습니까?');
-						if(confirmation){
-							location.href = 'centerView.so';
-						}else{
-							location.reload();
-						}
-	                }else{
-	                	alert('문의등록에 실패하였습니다.');
+// 	    	const productNo = document.querySelector('input[name="productNo"]').value;
+// 	        const questionContent = document.getElementById('questionContent').value;
+// 	        console.log(productNo);
+// 	        console.log(questionContent);
+// 	        $.ajax({
+// 	            type: "POST",
+// 	            url: "insertQna.so",
+// 	            data: {productNo: productNo, questionContent: questionContent},
+// 	            success: (data)=>{
+// 	                if(data == "success"){
+// 	                	const confirmation = confirm('내가 쓴 문의내역으로 이동하시겠습니까?');
+// 						if(confirmation){
+// 							location.href = 'centerView.so';
+// 						}else{
+// 							location.reload();
+// 						}
+// 	                }else{
+// 	                	alert('문의등록에 실패하였습니다.');
+// 	                }
+// 	            },
+// 	            error: data => console.log(data)
+// 	        });
+// 	    })
+	    document.getElementById('enrollQna').addEventListener('click', () => {
+		    const productNo = document.querySelector('input[name="productNo"]').value;
+		    const questionContent = document.getElementById('questionContent').value;
+		    const forbiddenWords = ['ㅅㅂ', '비속어2', '금지어3']; // 금지어 목록
+		
+		    for (let i = 0; i < forbiddenWords.length; i++) {
+		        if (questionContent.toLowerCase().includes(forbiddenWords[i].toLowerCase())) {
+		            alert('비속어를 사용할 수 없습니다.');
+		            return;
+		        }
+		  }
+
+	    // 여기까지 도달하면 금지어가 없으므로 AJAX 요청을 보냄
+	    $.ajax({
+	        type: "POST",
+	        url: "insertQna.so",
+	        data: { productNo: productNo, questionContent: questionContent },
+	        success: (data) => {
+	            if (data == "success") {
+	                const confirmation = confirm('내가 쓴 문의내역으로 이동하시겠습니까?');
+	                if (confirmation) {
+	                    location.href = 'centerView.so';
+	                } else {
+	                    location.reload();
 	                }
-	            },
-	            error: data => console.log(data)
-	        });
-	    })
-	    
+	            } else {
+	                alert('문의등록에 실패하였습니다.');
+	            }
+	        },
+	        error: (data) => console.log(data)
+	    });
+	});
+
+
+
 	    
 	    var productNo = document.getElementById('productNo').value;
 	    
@@ -834,6 +1072,37 @@
 		        }
 		    }
 		});
+	    
+	    
+	    
+	    
+	    //금지어
+	    document.addEventListener('DOMContentLoaded', function() {
+        var form = document.getElementById('reviewForm');
+
+        form.addEventListener('submit', function(event) {
+            var reviewContent = document.getElementById('reviewContent').value;
+            var forbiddenWords = ['시발', '병신', '좆', '새끼', '섹스', 'tlqkf', '미친', 'ㅅㅂ', 'ㅂㅅ']; // 금지어 목록
+
+            for (var i = 0; i < forbiddenWords.length; i++) {
+                if (reviewContent.includes(forbiddenWords[i])) {
+                    event.preventDefault(); // 폼 제출 막기
+                    alert('비속어 사용 금지'); // 알림창 표시
+                    return;
+                }
+            }
+        });
+    });
+	    
+	    
+	    function confirmDelete(url) {
+	        var result = confirm("정말 삭제하시겠습니까?");
+	        if (result) {
+	            window.location.href = url;
+	        }
+	        return false; // 기본 이벤트 방지
+	    }
+	    
 		
 	</script>
 

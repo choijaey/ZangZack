@@ -230,6 +230,36 @@ public class ProductServiceImpl implements ProductService{
 		return pDAO.selectProductPhotoReview(productNo);
 	}
 
+	@Override
+	public int[] selectAllProductScore(int productNo) {
+		return pDAO.selectAllProductScore(productNo);
+	}
+
+	@Override
+	public int updateScore(Product p) {
+		return pDAO.updateScore(p);
+	}
+
+	@Override
+	public ArrayList<Review> selectproductAllReview() {
+		return pDAO.selectProductAllReview();
+	}
+
+	@Override
+	public int deleteReview(int reviewNo) {
+		return pDAO.deleteReview(reviewNo);
+	}
+
+	@Override
+	public int updateReviewPhoto(Attachment a) {
+		return pDAO.updateReviewPhoto(a);
+	}
+
+	@Override
+	public int updateReviewInfo(Review r) {
+		return pDAO.updateReviewInfo(r);
+	}
+
 
 
 	

@@ -42,6 +42,18 @@
 	</insert>
 	
 	
+	<insert id="updateReviewPhoto">
+		insert into photo
+		values (new_aid, #{photoRename), #{photoPath}, #{photoLevel}, 6, #{boardNo}, default}
+	</insert>
+	
+	
+	
+	<update id="updateReviewInfo">
+		update review
+		set review_content=#{reviewContent} , review_score=#{reviewScore}
+		where review_no = #{reviewNo}
+	</update>
 	
 	
 	
@@ -418,6 +430,32 @@
 		where product_no = #{productNo} and review_status = 'N' and board_type=6
 		order by review_no desc
 	</select>
+	
+	
+	<select id="selectAllProductScore" resultType="_int">
+		select review_score
+		from review
+		where product_no = #{productNo} and review_status = 'N'
+	</select>
+	
+	<update id="updateScore">
+		update product
+		set product_score = #{productScore}
+		where product_no = #{productNo}
+	</update>
+	
+	<select id="selectProductAllReview" resultType="Review">
+		select *
+		from review
+		where review_status = 'N'
+	</select>
+	
+	
+	<update id="deleteReview">
+		update review
+		set review_status = 'Y'
+		where review_no = #{reviewNo}
+	</update>
 	
 	
 	

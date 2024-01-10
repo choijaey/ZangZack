@@ -104,7 +104,6 @@ public class ProductController {
 	
 	
 	
-	//상품등록페이지 view
 	@GetMapping("productListView.so")
 	public String productListView(@RequestParam(value="keyword", defaultValue="") String keyword, @RequestParam(value="standard", defaultValue="1") String standard, @RequestParam(value="categoryNo", defaultValue="0") String categoryNo, @RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
 		
@@ -140,12 +139,11 @@ public class ProductController {
 		}
 		
 		
-		
-		
-		
+		ArrayList<Review> rList = pService.selectproductAllReview();
 		
 		
 		if(aList != null) {
+			model.addAttribute("rList", rList);
 			model.addAttribute("categoryNo", categoryNo);
 			model.addAttribute("keyword", keyword);
 			model.addAttribute("aList", aList);
@@ -212,9 +210,9 @@ public class ProductController {
 		imageStorage.deleteImage("cb1d55f4-e2c4-42b1-96b9-948d8883b3c5.png","sohwa");
 		
 		
+		int roundScore = (int) Math.round(p.getProductScore());
 		
-		
-		
+		model.addAttribute("roundScore", roundScore);
 		model.addAttribute("reviewStatus", reviewStatus);
 		model.addAttribute("mList", mList);
 		model.addAttribute("aList", aList);
@@ -598,8 +596,26 @@ public class ProductController {
 			result2 = pService.insertReviewPhoto(a);
 		}
 		
-
+		System.out.println(r);  //Review(reviewNo=59, reviewContent=wagfwe, reviewUploadDate=null, reviewScore=4, reviewModifyDate=null, reviewStatus=null, productNo=111, memberId=ming11)
 		
+		int[] scoreArr = pService.selectAllProductScore(r.getProductNo());
+		double avgScore = 0;
+		double total = 0;
+		for (int i = 0; i < scoreArr.length; i++) {
+			 total += scoreArr[i];
+		}
+
+		// 배열의 길이로 나누어 평균 계산
+		avgScore = total / scoreArr.length;
+		
+		System.out.println(total);
+		System.out.println(avgScore);
+		
+		Product p = new Product();
+		p.setProductNo(r.getProductNo());
+		p.setProductScore(avgScore);
+		
+		int result3 = pService.updateScore(p);
 		
 		if(result1 > 0) {
 			return "redirect:productDetail.so?productNo=" + r.getProductNo();
@@ -610,6 +626,65 @@ public class ProductController {
 	}
 	
 	
+	@GetMapping("deleteReview.so")
+	public String deleteReview(@RequestParam("reviewNo") int reviewNo, @RequestParam("productNo") int productNo) {
+		
+		int result = pService.deleteReview(reviewNo);
+		
+		if(result > 0) {
+			return "redirect:productDetail.so?productNo=" + productNo;
+		}else {
+			throw new ProductException("리뷰 삭제 실패");
+		}
+	}
+	
+	
+	@PostMapping("updateReview.so")
+	public String updateReview(@RequestParam(value="deleteRename", defaultValue="") String deleteRename, @RequestParam("reviewContent") String reviewContent, @RequestParam("updateFile") MultipartFile updateFile, @RequestParam("productNo") int productNo, @RequestParam("reviewScore") int reviewScore, @RequestParam("reviewNo") int reviewNo) {
+		String name="sohwa";
+		
+		String[] returnArr = imageStorage.saveImage(updateFile, name);
+		Attachment a = new Attachment();
+		Review r = new Review();
+		
+		System.out.println(reviewScore);
+		System.out.println(deleteRename);
+		
+		if(returnArr != null) {
+			if(deleteRename != "") {
+				imageStorage.deleteImage(deleteRename, name);
+			}
+			
+			a.setPhotoRename(returnArr[0]);
+			a.setPhotoPath(returnArr[1]);
+			a.setBoardNo(reviewNo);
+			a.setBoardType(6);
+			a.setPhotoLevel(0);
+			
+			r.setProductNo(productNo);
+			r.setReviewContent(reviewContent);
+			r.setReviewNo(reviewNo);
+			r.setReviewScore(reviewScore);
+			
+			int result = pService.updateReviewPhoto(a);
+			
+		}else {
+			r.setProductNo(productNo);
+			r.setReviewContent(reviewContent);
+			r.setReviewNo(reviewNo);
+			r.setReviewScore(reviewScore);
+		}
+		
+		int result2 = pService.updateReviewInfo(r);
+	
+	
+		if(result2 > 0) {
+			return "redirect:productDetail.so?productNo=" + productNo;
+		}else {
+			throw new ProductException("리뷰 수정 실패");
+		}
+		
+	}
 	
 	
 }

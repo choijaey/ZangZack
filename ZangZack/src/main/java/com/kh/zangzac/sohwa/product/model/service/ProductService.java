@@ -95,6 +95,18 @@ public interface ProductService {
 
 	ArrayList<Review> selectProductPhotoReview(int productNo);
 
+	int[] selectAllProductScore(int productNo);
+
+	int updateScore(Product p);
+
+	ArrayList<Review> selectproductAllReview();
+
+	int deleteReview(int reviewNo);
+
+	int updateReviewPhoto(Attachment a);
+
+	int updateReviewInfo(Review r);
+
 
 
 	
