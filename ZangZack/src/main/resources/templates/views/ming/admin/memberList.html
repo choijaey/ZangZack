@@ -56,12 +56,11 @@
 </head>
 <body>
 	<div th:replace="~{common/adminNav :: adminNav}"></div>
-	
 	<div style="height:100px; width:100%;"></div>
 	<div id="orderListWrapped">
       <h1>회원 관리</h1>
-      
-      <button class="cateBtn active">회원 목록</button>      
+      <button class="cateBtn active" onclick="toggleTable('allMember', 'refundMember')">회원 목록</button>
+      <button class="cateBtn" style="margin-left:40px;" onclick="toggleTable('refundMember', 'allMember')">탈퇴 회원</button>      
       <div style="float:right;">
          <div class="nav-item dropdown">
 		    <button class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-expanded="false">회원 검색</button>
@@ -74,20 +73,12 @@
          
          <div class="search" id="search1">
             <input type="text" placeholder="ID 입력">
-              <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+              <a href="searchId.me"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
          </div>
          <div class="search" id="search2" style="display: none;">
             <input type="text" placeholder="이름 입력">
               <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
          </div>
-         
-         
-         
-         
-         
-         
-         
-         
          <div class="search" id="search3" style="display: none;">
             <input type="text" placeholder="연락처 입력">
               <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
@@ -96,7 +87,7 @@
       </div>
       
       
-      <table id="allOrder">
+      <table id="allMember">
          <tr>
             <th class="td1"><input type="checkbox" id="allSelect" onclick="toggleAllCheckboxes('allOrder', 'allSelect')"></th>
             <th class="td2">아이디</th>
@@ -109,6 +100,37 @@
          </tr>
          
          <tr th:each="m:${list}">
+	            <td class="td1"><input type="checkbox"></td>
+	            <td class="td2">[[${m.memberId}]]</td>
+	            <td class="td3">[[${m.memberName}]]</td>
+	            <td class="td4">[[${m.memberNickName}]]</td>
+	            <td class="td5">[[${m.memberAddress.replace('@', ' ')}]]</td>
+	            <td class="td6">[[${m.memberPhone}]]</td>
+	            <td class="td7"> 
+					<div th:class="${m.memberStatus == 'Y' ? 'selectState' : 'unselectState'}" style="float: left;">Y</div>
+					<div th:class="${m.memberStatus == 'N' ? 'selectState' : 'unselectState'}" style="float: right;">N</div>
+				</td>
+				<td class="td8"> 
+					<div th:class="${m.memberIsAdmin == 'Y' ? 'selectState' : 'unselectState'}" style="float: left;">Y</div>
+					<div th:class="${m.memberIsAdmin == 'N' ? 'selectState' : 'unselectState'}" style="float: right; ">N</div>
+				</td>
+         </tr>
+         
+      </table>
+      
+      <table id="refundMember" class="hidden">
+         <tr>
+            <th class="td1"><input type="checkbox" id="allSelect2" onclick="toggleAllCheckboxes('allOrder', 'allSelect2')"></th>
+            <th class="td2">아이디</th>
+            <th class="td3">이름</th>
+            <th class="td4">닉네임</th>
+            <th class="td5">주소</th>
+            <th class="td6">전화번호</th>
+            <th class="td7">탈퇴여부</th>
+            <th class="td8">관리자여부</th>
+         </tr>
+         
+          <tr th:each="m:${list}" th:if="${m.memberStatus=='Y'}">
             <td class="td1"><input type="checkbox"></td>
             <td class="td2">[[${m.memberId}]]</td>
             <td class="td3">[[${m.memberName}]]</td>
@@ -163,7 +185,36 @@
 		 </div>
 	</div>
    <script>
-			let beforeData = null;
+        //멤버전체내역/ 멤버탈퇴내역
+        function toggleTable(showId, hideId, element) {
+          document.getElementById(showId).classList.remove('hidden');
+          document.getElementById(hideId).classList.add('hidden');
+          
+        }
+        
+        const buttons = document.querySelectorAll('.cateBtn');
+	  	  	buttons.forEach(btn => btn.addEventListener('click', () => {
+	  	    buttons.forEach(otherBtn => {
+	  	        if (otherBtn !== btn) {
+	  	            otherBtn.classList.remove('active');
+	  	        }
+	  	    });
+	  	
+	  	    btn.classList.add('active');
+	  	}));
+  		
+  		
+  		
+  		//드롭다운 변경
+  		function showSearch(searchId, dropdownText) {
+              document.querySelectorAll('.search').forEach(function(searchElement) {
+                  searchElement.style.display = 'none';
+              });
+              document.getElementById(searchId).style.display = 'block';
+              document.getElementById('dropdownMenuButton').innerText = dropdownText;
+          }
+  		
+		let beforeData = null;
 	      //체크박스 전체 선택/해제
 	        function toggleAllCheckboxes(tableId, selectId) {
 	         const checkboxes = document.querySelectorAll(`#${tableId} input[type="checkbox"]:not(#${selectId})`);
@@ -176,14 +227,6 @@
 	     }
 	      
 	      
-	      //드롭다운 변경
-	      function showSearch(searchId, dropdownText) {
-	            document.querySelectorAll('.search').forEach(function(searchElement) {
-	                searchElement.style.display = 'none';
-	            });
-	            document.getElementById(searchId).style.display = 'block';
-	            document.getElementById('dropdownMenuButton').innerText = dropdownText;
-	        };
 	        
 	        
 	        //모달창 열기
@@ -415,7 +458,6 @@
 	            this.appendChild(inputElement);
 	        });
             
-
 	    
  	</script>
 </body>
