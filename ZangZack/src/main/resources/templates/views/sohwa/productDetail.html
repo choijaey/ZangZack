@@ -5,49 +5,57 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 <link href="css/sohwa/productDetail.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 <title>Insert title here</title>
 </head>
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
 	
 	<br><br>
-	<p id="category">캠핑물품판매 >> 텐트</p>
+	<p id="category">캠핑물품판매 >> [[${(p.getCategoryNo() == 11) ? "텐트" :
+                  (p.getCategoryNo() == 12) ? "취침용품" :
+                  (p.getCategoryNo() == 13) ? "조리도구" :
+                  (p.getCategoryNo() == 14) ? "발화용품" :
+                  (p.getCategoryNo() == 15) ? "백팩" :
+                  (p.getCategoryNo() == 16) ? "기타용품" :
+                  "기타"}]]</p>
+    <br>
 	<div class="gallery">
 		<div class="thumbnails">
-	        <img src="image/sohwa/tent1core1.png" alt="Thumbnail 1" class="thumbnail" onmouseover="changeImage(this)">
-	        <img src="image/sohwa/tent1core2.png" alt="Thumbnail 2" class="thumbnail" onmouseover="changeImage(this)">
-	        <img src="image/sohwa/tent1core3.png" alt="Thumbnail 3" class="thumbnail" onmouseover="changeImage(this)">
-	        <img src="image/sohwa/tent1core4.png" alt="Thumbnail 4" class="thumbnail" onmouseover="changeImage(this)">
+	        <img th:each="l:${list}" th:if="${l.photoLevel==0 && l.boardType == 5}" th:src="${l.photoPath}" alt="Thumbnail 1" class="thumbnail" onmouseover="changeImage(this)" >
+	        <img th:each="l:${list}" th:if="${l.photoLevel==1 && l.boardType == 5}" th:src="${l.photoPath}" alt="Thumbnail 1" class="thumbnail" onmouseover="changeImage(this)" >
 	    </div>
 	    
 	    <div class="main-image">
-	      <img src="image/sohwa/tent1core1.png" alt="Main Image">
+	      <img th:each="l:${list}" th:if="${l.photoLevel==0 && l.boardType == 5}" th:src="${l.photoPath}" alt="Main Image">
 	    </div>
 	    
 	    
 	    
 	    <div id="explain">
-			<span style="font-size: 15px; color:gray;">모비가든</span>
-			<h1>캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용</h1>
+			<span style="font-size: 15px; color:gray;">[[${p.productCompany}]]</span>
+			<h1>[[${p.productName}]]</h1>
 			<div class="star-rating">
-				  <span class="fa fa-star checked"></span>
-				  <span class="fa fa-star checked"></span>
-				  <span class="fa fa-star checked"></span>
-				  <span class="fa fa-star checked"></span>
-				  <span class="fa fa-star checked"></span>
+				  <span class="fa fa-star" th:classappend="${roundScore >= 1 ? 'checked' : ''}"></span>
+				  <span class="fa fa-star" th:classappend="${roundScore >= 2 ? 'checked' : ''}"></span>
+				  <span class="fa fa-star" th:classappend="${roundScore >= 3 ? 'checked' : ''}"></span>
+				  <span class="fa fa-star" th:classappend="${roundScore >= 4 ? 'checked' : ''}"></span>
+				  <span class="fa fa-star" th:classappend="${roundScore >= 5 ? 'checked' : ''}"></span>
 			</div>
-		    4.7
+		    <span>[[${p.productScore}]]</span>
 		    <br>
-			<span id="price">410,000</span>원
-			<span class="badge text-bg-secondary">무료배송</span><br><br>
-			<p>배송</p>
-			<div style="display: inline-block;">무료배송<br>일반택배<br>☝지역별 차등배송비&nbsp;✌제주도/도서산간 지역 7,000원</br></div>
+			<span id="price">[[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]</span>
+			&nbsp;&nbsp;<div class="deliverySpan" th:if="${p.deliveryPrice==0}">무료배송</div><br><br>
+			<p>배송비</p>
+			<div style="display: inline-block;">
+				<span th:if="${p.deliveryPrice==0}">무료배송</span>
+    			<span th:unless="${p.deliveryPrice==0}" th:text="|${#numbers.formatDecimal(p.deliveryPrice, 0, 'COMMA', 0, 'POINT')}원|"></span>
+    			<br>일반택배<br>☝무료배송 상품&nbsp;✌무료배송 상품 제외 배송비 2,500원</div>
 			<br><br>
 			
 			<select style="border:1px solid gray; width:100%; height:40px; border-radius:3px;" id="colorSelect" onchange="showDiv()">
 				<option>컬러 선택</option>
-				<option>그린</option>
-				<option>주황</option>
+				<option th:each="o:${oList}">[[${o.productOptionColor}]]</option>
 			</select>
 			
 			
@@ -55,7 +63,7 @@
 			
 			
 			
-			<div id="enoDiv" style="display: none;">&nbsp;&nbsp;&nbsp;캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용
+			<div id="enoDiv" style="display: none;">&nbsp;&nbsp;&nbsp;[[${p.productName}]]
 				<br><br>
 				<div class="quantity-input">&nbsp;&nbsp;&nbsp;
 				    <button class="quantity-btn" id="decrementBtn">-</button>
@@ -66,10 +74,11 @@
 			</div>
 			
 			<div class="btns" style="margin-left:80px;">
-				<button class="btn-hover color-1" style="color:gray;">장바구니</button>
+				<button class="btn-hover color-1" style="color:gray;" id="cartBtn" onclick="goCart()">장바구니</button>
 				<button class="btn-hover color-2">바로구매</button>
 			</div>
 			
+			<input type="hidden" id="productNo" th:value="${p.productNo}">
 		</div>
 	</div>
 	
@@ -82,7 +91,7 @@
 		<br>
 		<span>주문금액</span><span id="resultPrice2"></span>
 		<div class="btns">
-			<button class="btn-hover color-1" style="color:gray;">장바구니</button>
+			<button onclick="goCart()" class="btn-hover color-1" style="color:gray;">장바구니</button>
 			<button class="btn-hover color-2">바로구매</button>
 		</div>
 		
@@ -102,24 +111,23 @@
 			
 	    <!-- 상품 상세 정보 섹션 -->
 	      <section id="detail">
-	        <img src="image/sohwa/tent1Detail1.jpg">
-	        <img src="image/sohwa/tent1Detail2.jpg">
+	        <img th:each="l:${list}" th:if="${l.photoLevel==2 && l.boardType == 5}" th:src="${l.photoPath}">
 	      </section>
 	
 	
 	    <!-- 리뷰 섹션 -->
 	      <section id="reviews">
 	      	   <div id="review">
-					<span style="margin-left:5%;">리뷰 </span><span style="color:#F9612B;"> 15</span><a href="#" id="openReviewModal" onclick="openModal()">리뷰쓰기</a>
+					<span style="margin-left:5%;">리뷰 </span><span style="color:#F9612B;"> [[${rList.size()}]]</span><a href="#" id="openReviewModal" onclick="openModal()">리뷰쓰기</a>
 				    <div id="reviewContainer">
 							<div class="star-rating">
-								  <span class="fa fa-star checked"></span>
-								  <span class="fa fa-star checked"></span>
-								  <span class="fa fa-star checked"></span>
-								  <span class="fa fa-star checked"></span>
-								  <span class="fa fa-star checked"></span>
+								  <span class="fa fa-star" th:classappend="${roundScore >= 1 ? 'checked' : ''}"></span>
+								  <span class="fa fa-star" th:classappend="${roundScore >= 2 ? 'checked' : ''}"></span>
+								  <span class="fa fa-star" th:classappend="${roundScore >= 3 ? 'checked' : ''}"></span>
+								  <span class="fa fa-star" th:classappend="${roundScore >= 4 ? 'checked' : ''}"></span>
+								  <span class="fa fa-star" th:classappend="${roundScore >= 5 ? 'checked' : ''}"></span>
 							</div>
-						    <span style="font-size:27px;">4.7</span>
+						    <span style="font-size:27px;">[[${p.productScore}]]</span>
 						    
 					   </div>
 						<!--모달-->
@@ -131,47 +139,52 @@
 								        <h1 class="text-2xl font-bold mb-4">리뷰 등록</h1>
 								        <div class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
 								            <div class="p-4 flex">
-								                <img class="w-20 h-20 object-cover rounded-full" src="image/sohwa/tent1core1.png" alt="Product">
+								                <img class="w-20 h-20 object-cover rounded-full" th:each="l:${list}" th:if="${l.photoLevel==0 && l.boardType == 5}" th:src="${l.photoPath}" alt="Product">
 								                <div class="ml-4">
-								                    <h2 class="text-lg font-semibold">모비가든</h2>
-								                    <p class="text-sm text-gray-600">캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용</p><hr>
-								                    <p>410,000원</p>
+								                    <h2 class="text-lg font-semibold">[[${p.productCompany}]]</h2>
+								                    <p class="text-sm text-gray-600">[[${p.productName}]]</p><hr>
+								                    <p>[[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]</p>
 								                </div>
 								            </div>
+								            
 								            <div class="border-t border-gray-200">
-								                <div class="p-4">
-								                    <h3 class="text-lg font-semibold mb-2">별점등록</h3>
-								                    <div class="flex items-center mb-4">
-														
-														
-								                        <div id="starRating">
-															  <span class="fa fa-star"></span>
-															  <span class="fa fa-star"></span>
-															  <span class="fa fa-star"></span>
-															  <span class="fa fa-star"></span>
-															  <span class="fa fa-star"></span>
+								            	<form id="reviewForm" action="enrollReview.so" method="POST" enctype="multipart/form-data">
+									            	<input type="hidden" th:value="${p.productNo}" name="productNo">
+									            	<input type="file" id="fileUpload" name="file" style="display: none;">
+									            	<input type="hidden" name="reviewScore" value="0">
+									                <div class="p-4">
+									                    <h3 class="text-lg font-semibold mb-2">별점등록</h3>
+									                    <div class="flex items-center mb-4">
+									                        <div id="starRating">
+																  <span class="fa fa-star"></span>
+																  <span class="fa fa-star"></span>
+																  <span class="fa fa-star"></span>
+																  <span class="fa fa-star"></span>
+																  <span class="fa fa-star"></span>
+															</div>
+									                    </div>
+									                    
+									                    <!-- 파일 미리보기 영역 -->
+									                    <div id="imagePreview">
+									                        <img id="preview" src="image/sohwa/icons8-screenshot-64.png">
+									                    </div>
+									                    <br>
+									                    <div id="addPhoto">
+															<img src="image/sohwa/icons8-camera-80.png">사진첨부
 														</div>
-								                        
-								                        
-								                    </div>
-								                    <!-- 파일 미리보기 영역 -->
-								                    <div id="imagePreview">
-								                        <img id="preview" src="image/sohwa/icons8-screenshot-64.png">
-								                    </div>
-								                    <br>
-								                    <div id="addPhoto">
-														<img src="image/sohwa/icons8-camera-80.png">사진첨부
-													</div>
-								                    <br>
-								                    
-								                    <div class="mb-4">
-								                        <label for="review" class="text-sm font-semibold">Write a review</label>
-								                        <textarea id="review" rows="3" class="mt-1 p-2 w-full border rounded-md" style="height:250px; overflow: scroll; resize: none;"></textarea>
-								                    </div>
-								                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" style="float:right; margin-bottom:30px;">
-								                        리뷰등록
-								                    </button>
+									                    <br>
+									                    
+									                    <div class="mb-4">
+									                        <label for="review" class="text-sm font-semibold">리뷰를 작성해주세요.</label>
+									                        <textarea id="reviewContent" name="reviewContent" rows="3" class="mt-1 p-2 w-full border rounded-md" style="height:250px; overflow: scroll; resize: none;"></textarea>
+									                    </div>
+									                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" style="float:right; margin-bottom:30px;">
+									                        리뷰등록
+									                    </button>
+								                    </form>
 								                </div>
+								                
+								                
 								            </div>
 								        </div>
 								    </div>
@@ -194,104 +207,139 @@
 						    <div class="container mx-auto px-4 py-8">
 						        <div class="space-y-6">
 									
-									<div class="reviewItem">
+									<div class="reviewItem" th:each="r, status: ${rList}">
 										<div class="bg-white shadow rounded-lg p-4">
 							                <div class="flex items-center space-x-4">
 							                    <div class="w-12 h-12 rounded-full overflow-hidden">
-							                        <img src="https://unsplash.it/100" alt="Profile" class="object-cover w-full h-full">
+							                        <img th:each="m:${mList}" th:if="${m.memberId == r.memberId}" th:src="${m.memberProfilePath}"alt="Profile" class="object-cover w-full h-full">
 							                    </div>
 							                    <div class="flex-1">
-							                        <div class="font-bold">User Name</div>
-							                        <div class="text-sm text-gray-600">2023-01-01 - Review Title</div>
+							                        <div class="font-bold">[[${r.memberId}]]</div>
+							                        <div class="text-sm text-gray-600">[[${r.reviewUploadDate}]]</div>
 							                    </div>
 							                    <div class="text-sm text-gray-500">별점: 
-							                       <div id="starRating">
-														  <span class="fa fa-star checked"></span>
-														  <span class="fa fa-star checked"></span>
-														  <span class="fa fa-star checked"></span>
-														  <span class="fa fa-star checked"></span>
-														  <span class="fa fa-star checked"></span>
+							                       <div class="starRating">
+														  <span th:class="${r.reviewScore >= 1} ? 'fa fa-star checked' : 'fa fa-star'"></span>
+														  <span th:class="${r.reviewScore >= 2} ? 'fa fa-star checked' : 'fa fa-star'"></span>
+														  <span th:class="${r.reviewScore >= 3} ? 'fa fa-star checked' : 'fa fa-star'"></span>
+														  <span th:class="${r.reviewScore >= 4} ? 'fa fa-star checked' : 'fa fa-star'"></span>
+														  <span th:class="${r.reviewScore >= 5} ? 'fa fa-star checked' : 'fa fa-star'"></span>
 													</div>
 							                    </div>
 							                </div>
 							                <div class="mt-4 text-gray-700">
-							                    This is a sample review content. The user can share their experience with the product here. They can also upload a photo of the product.
+							                    [[${r.reviewContent}]]<br>
+							                    <th:block th:if="${session.loginUser !=null && r.memberId == session.loginUser.memberId}">
+								                    <div style=" float:right;">
+								                    	<a href="#" style ="color:blue; margin-right:0px;" class="updateButton" onclick="toggleUpdateModal(/* status.index */);">수정</a>
+								                    	<a href="#" th:onclick="'return confirmDelete(\'' + @{deleteReview.so(reviewNo=${r.reviewNo}, productNo=${p.productNo})} + '\');'" style="margin-right:15px;">삭제</a>
+								                    </div>
+							                    </th:block>
 							                </div>
 							                <div class="mt-4">
-							                    <img src="image/sohwa/fire2core1.png" alt="Product" class="rounded">
+							                    <img th:each="a:${aList}" th:if="${a.photoLevel==0 && r.reviewNo == a.boardNo && a.boardType==6}" th:src="${a.photoPath}" alt="Product" class="rounded">
 							                </div>
 							            </div>
-									</div>
-						            
-						            
-						            
-						            <div class="reviewItem">
-										<div class="bg-white shadow rounded-lg p-4">
-							                <div class="flex items-center space-x-4">
-							                    <div class="w-12 h-12 rounded-full overflow-hidden">
-							                        <img src="https://unsplash.it/100" alt="Profile" class="object-cover w-full h-full">
-							                    </div>
-							                    <div class="flex-1">
-							                        <div class="font-bold">User Name</div>
-							                        <div class="text-sm text-gray-600">2023-01-01 - Review Title</div>
-							                    </div>
-							                    <div class="text-sm text-gray-500">별점: 
-							                       <div class="star-rating">
-														  <input type="radio" id="star5" name="rating2" value="1" />
-														  <label for="star5">★</label>
-														  <input type="radio" id="star4" name="rating2" value="2" />
-														  <label for="star4">★</label>
-														  <input type="radio" id="star3" name="rating2" value="3" />
-														  <label for="star3">★</label>
-														  <input type="radio" id="star2" name="rating2" value="4" />
-														  <label for="star2">★</label>
-														  <input type="radio" id="star1" name="rating2" value="5" />
-														  <label for="star1">★</label>
+							            
+							            <br>
+							            <div style="background-color:white; display:none;" class="updateModal">
+									  		<div class="update-modal-content" style="margin-bottom:30px;">
+									    		<span class="close-update-modal">&times;</span>
+									    		<div class="bg-gray-50">
+													<div class="max-w-2xl mx-auto p-6">
+												        <h1 class="text-2xl font-bold mb-4">리뷰 수정</h1>
+												        <div class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
+												            <div class="p-4 flex">
+												                <img th:each="l:${list}" th:if="${l.photoLevel==0 && l.boardType == 5}" th:src="${l.photoPath}" class="w-20 h-20 object-cover rounded-full" alt="Product">
+												                <div class="ml-4">
+												                    <h2 class="text-lg font-semibold">[[${p.productCompany}]]</h2>
+												                    <p class="text-sm text-gray-600">[[${p.productName}]]</p><hr>
+												                    <p>[[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]</p>
+												                </div>
+												            </div>
+												            
+												            
+												            <div class="border-t border-gray-200">
+												            	<form action="updateReview.so" method="POST" enctype="multipart/form-data">
+												            		<input type="hidden" th:each="a:${aList}" th:if="${a.boardNo == r.reviewNo && a.boardType==6}" th:value="${a.photoRename}" name="deleteRename">
+												            		<input type="hidden" th:value="${r.reviewNo}" name="reviewNo">
+													            	<input type="hidden" th:value="${p.productNo}" name="productNo">
+													            	<input type="file" class="fileUpload2" name="updateFile" style="display: none;">
+													            	<input type="hidden" name="reviewScore" value="0">
+													                <div class="p-4">
+													                    <h3 class="text-lg font-semibold mb-2">별점수정</h3>
+													                    <div class="flex items-center mb-4">
+													                        <div class="updateRating">
+																				  <span th:class="${r.reviewScore >= 1} ? 'fa fa-star checked' : 'fa fa-star'"></span>
+																				  <span th:class="${r.reviewScore >= 2} ? 'fa fa-star checked' : 'fa fa-star'"></span>
+																				  <span th:class="${r.reviewScore >= 3} ? 'fa fa-star checked' : 'fa fa-star'"></span>
+																				  <span th:class="${r.reviewScore >= 4} ? 'fa fa-star checked' : 'fa fa-star'"></span>
+																				  <span th:class="${r.reviewScore >= 5} ? 'fa fa-star checked' : 'fa fa-star'"></span>
+																			</div>
+													                    </div>
+													                    <!-- 파일 미리보기 영역 -->
+													                    <div class="updatePreviewDiv">
+												                    		<img th:each="a:${aList}" th:if="${a.boardNo == r.reviewNo && a.boardType==6}" style="width:200px; height:200px;" th:src="${a.photoPath}">
+													                    </div>
+													                    <div class="updateReviewDiv">
+													                    	
+													                    </div>
+													                    <br>
+													                    <div class="updatePhoto" onclick="openFileUploadModal()">
+																			<img src="image/sohwa/icons8-camera-80.png">사진첨부
+																		</div>
+													                    <br>
+													                    
+													                    <div class="mb-4">
+													                        <label for="review" class="text-sm font-semibold">리뷰를 수정해주세요.</label>
+													                        <textarea name="reviewContent" rows="3" class="mt-1 p-2 w-full border rounded-md" style="height:250px; overflow: scroll; resize: none;">[[${r.reviewContent}]]</textarea>
+													                    </div>
+													                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" style="float:right; margin-bottom:30px;">
+													                        리뷰수정
+													                    </button>
+												                    </form>
+												                </div>
+												                
+												                
+												            </div>
+												        </div>
 												    </div>
-							                    </div>
-							                </div>
-							                <div class="mt-4 text-gray-700">
-							                    This is a sample review content. The user can share their experience with the product here. They can also upload a photo of the product.
-							                </div>
-							                <div class="mt-4">
-							                    <img src="image/sohwa/fire2core1.png" alt="Product" class="rounded">
-							                </div>
-							            </div>
+												</div>
+										    </div>
+										    
 									</div>
+						            
+						            
+						            
+<!-- 						            <div class="reviewItem"> -->
+<!-- 										<div class="bg-white shadow rounded-lg p-4"> -->
+<!-- 							                <div class="flex items-center space-x-4"> -->
+<!-- 							                    <div class="w-12 h-12 rounded-full overflow-hidden"> -->
+<!-- 							                        <img src="https://unsplash.it/100" alt="Profile" class="object-cover w-full h-full"> -->
+<!-- 							                    </div> -->
+<!-- 							                    <div class="flex-1"> -->
+<!-- 							                        <div class="font-bold">User Name</div> -->
+<!-- 							                        <div class="text-sm text-gray-600">2023-01-01 - Review Title</div> -->
+<!-- 							                    </div> -->
+<!-- 							                    <div class="text-sm text-gray-500">별점:  -->
+<!-- 							                       <div class="starRating"> -->
+<!-- 														  <span class="fa fa-star checked"></span> -->
+<!-- 														  <span class="fa fa-star checked"></span> -->
+<!-- 														  <span class="fa fa-star checked"></span> -->
+<!-- 														  <span class="fa fa-star checked"></span> -->
+<!-- 														  <span class="fa fa-star checked"></span> -->
+<!-- 													</div> -->
+<!-- 							                    </div> -->
+<!-- 							                </div> -->
+<!-- 							                <div class="mt-4 text-gray-700"> -->
+<!-- 							                    This is a sample review content. The user can share their experience with the product here. They can also upload a photo of the product. -->
+<!-- 							                </div> -->
+<!-- 							                <div class="mt-4"> -->
+<!-- 							                    <img src="image/sohwa/fire2core1.png" alt="Product" class="rounded"> -->
+<!-- 							                </div> -->
+<!-- 							            </div> -->
+<!-- 									</div> -->
 									
-									<div class="reviewItem">
-										<div class="bg-white shadow rounded-lg p-4">
-							                <div class="flex items-center space-x-4">
-							                    <div class="w-12 h-12 rounded-full overflow-hidden">
-							                        <img src="https://unsplash.it/100" alt="Profile" class="object-cover w-full h-full">
-							                    </div>
-							                    <div class="flex-1">
-							                        <div class="font-bold">User Name</div>
-							                        <div class="text-sm text-gray-600">2023-01-01 - Review Title</div>
-							                    </div>
-							                    <div class="text-sm text-gray-500">별점: 
-							                       <div class="star-rating">
-														  <input type="radio" id="star5" name="rating2" value="1" />
-														  <label for="star5">★</label>
-														  <input type="radio" id="star4" name="rating2" value="2" />
-														  <label for="star4">★</label>
-														  <input type="radio" id="star3" name="rating2" value="3" />
-														  <label for="star3">★</label>
-														  <input type="radio" id="star2" name="rating2" value="4" />
-														  <label for="star2">★</label>
-														  <input type="radio" id="star1" name="rating2" value="5" />
-														  <label for="star1">★</label>
-												    </div>
-							                    </div>
-							                </div>
-							                <div class="mt-4 text-gray-700">
-							                    This is a sample review content. The user can share their experience with the product here. They can also upload a photo of the product.
-							                </div>
-							                <div class="mt-4">
-							                    <img src="image/sohwa/fire2core1.png" alt="Product" class="rounded">
-							                </div>
-							            </div>
-									</div>
 							
 						            <!-- Pagination -->
 						            <div class="flex justify-center space-x-1">
@@ -310,14 +358,16 @@
 						  
 					</div>
 			   </div>
+			   
 	      </section>
+	     
 	
 	
 	    <!-- 문의 섹션 -->
 	      <section id="questions">
 			  
 			  <div id="question">
-				  <span style="margin-left:5%;">문의 </span><span style="color:#F9612B;"> 15</span><a href="#" id="qnaOpenModal">문의등록</a>
+				  <span style="margin-left:5%;">문의 </span><span style="color:#F9612B;"> [[${qList.size()}]]</span><span style="font-size:15px; color:lightgray;margin-left:10px;">[문의등록은 익명으로 진행됩니다.]</span><a href="#" id="qnaOpenModal">문의등록</a>
 				  
 				  
 					  <div class="modal" id="qnaModal">
@@ -328,25 +378,27 @@
 									        <h1 class="text-2xl font-bold mb-4">문의 등록</h1>
 									        <div class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
 									            <div class="p-4 flex">
-									                <img class="w-20 h-20 object-cover rounded-full" src="image/sohwa/tent1core1.png" alt="Product">
+									                <img th:each="l:${list}" th:if="${l.photoLevel==0 && l.boardType == 5}" th:src="${l.photoPath}" class="w-20 h-20 object-cover rounded-full" alt="Product">
 									                <div class="ml-4">
-									                    <h2 class="text-lg font-semibold">모비가든</h2>
-									                    <p class="text-sm text-gray-600">캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용</p><hr>
-									                    <p>410,000원</p>
+									                    <h2 class="text-lg font-semibold">[[${p.productCompany}]]</h2>
+									                    <p class="text-sm text-gray-600">[[${p.productName}]]</p><hr>
+									                    <p>[[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]</p>
 									                </div>
 									            </div>
+									            
 									            <div class="border-t border-gray-200">
+									            	<input type="hidden" th:value="${p.productNo}" name="productNo">
 									                <div class="p-4">
-									                    
 									                    <div class="mb-4">
-									                        <label for="review" class="text-sm font-semibold">문의를 작성해주세요. 쓰발럼아</label>
-									                        <textarea id="review" rows="3" class="mt-1 p-2 w-full border rounded-md" style="height:250px; overflow: scroll; resize: none;"></textarea>
+									                        <label for="review" class="text-sm font-semibold">문의를 작성해주세요.</label>
+									                        <textarea name="questionContent" id="questionContent" rows="3" class="mt-1 p-2 w-full border rounded-md" style="height:250px; overflow: scroll; resize: none;"></textarea>
 									                    </div>
-									                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" style="float:right; margin-bottom:30px;">
-									                        리뷰등록
+									                    <button id="enrollQna" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" style="float:right; margin-bottom:30px;">
+									                        문의등록
 									                    </button>
 									                </div>
 									            </div>
+									            
 									        </div>
 									    </div>
 									</div>
@@ -354,53 +406,37 @@
 							</div>
 					  <br><br>
 				  
-				  <div id="questionItem">
+				  <div id="questionItem" th:each="q:${qList}" th:if="${q.productNo eq p.productNo}">
 					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-q-64.png"></div>
 					  <div style="display: inline-block; margin-top:0px;">
-						  <span style="color:gray; margin-top:0px; height:20px;">상품명 / 등록일자</span><br>
-					  	  <div style="display:inline-flex;">배송기간은 보통 얼마나 소요되나요?</div>
+						  <span style="color:gray; margin-top:0px; height:20px;">[[${p.productCompany}]] / [[${p.productName}]]</span><br>
+					  	  <div style="display:inline-flex;">[[${q.questionContent}]]</div>
 					  </div>
 					  <br><br>
 					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-a-64.png"></div>
 					  <div style="display: inline-block; margin-top:0px;">
 						  <span>관리자 :</span><br>
-					  	  <div style="display:inline-flex; margin-bottom:20px;">배송기간은 보통 2~3일 소요됩니다.</div>
-					  	  
+						  <th:block th:if="${q.answerContent == null}"><div style="display:inline-flex; margin-bottom:20px;">관리자의 답변을 기다리는 중입니다.</div></th:block>
+						  <th:block th:unless="${q.answerContent == null}"><div style="display:inline-flex; margin-bottom:20px;">배송기간은 보통 2~3일 소요됩니다.</div></th:block>
 					  </div>
 					  <hr>
 				  </div>
 				  
-				  <div id="questionItem">
-					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-q-64.png"></div>
-					  <div style="display: inline-block; margin-top:0px;">
-						  <span style="color:gray; margin-top:0px; height:20px;">상품명 / 등록일자</span><br>
-					  	  <div style="display:inline-flex;">배송기간은 보통 얼마나 소요되나요?</div>
-					  </div>
-					  <br><br>
-					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-a-64.png"></div>
-					  <div style="display: inline-block; margin-top:0px;">
-						  <span>관리자 :</span><br>
-					  	  <div style="display:inline-flex; margin-bottom:20px;">배송기간은 보통 2~3일 소요됩니다.</div>
+<!-- 				  <div id="questionItem"> -->
+<!-- 					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-q-64.png"></div> -->
+<!-- 					  <div style="display: inline-block; margin-top:0px;"> -->
+<!-- 						  <span style="color:gray; margin-top:0px; height:20px;">상품명 / 등록일자</span><br> -->
+<!-- 					  	  <div style="display:inline-flex;">배송기간은 보통 얼마나 소요되나요?</div> -->
+<!-- 					  </div> -->
+<!-- 					  <br><br> -->
+<!-- 					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-a-64.png"></div> -->
+<!-- 					  <div style="display: inline-block; margin-top:0px;"> -->
+<!-- 						  <span>관리자 :</span><br> -->
+<!-- 					  	  <div style="display:inline-flex; margin-bottom:20px;">배송기간은 보통 2~3일 소요됩니다.</div> -->
 					  	  
-					  </div>
-					  <hr>
-				  </div>
-				  
-				  <div id="questionItem">
-					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-q-64.png"></div>
-					  <div style="display: inline-block; margin-top:0px;">
-						  <span style="color:gray; margin-top:0px; height:20px;">상품명 / 등록일자</span><br>
-					  	  <div style="display:inline-flex;">배송기간은 보통 얼마나 소요되나요?</div>
-					  </div>
-					  <br><br>
-					  <div style="display: inline-flex;"><img src="image/sohwa/icons8-a-64.png"></div>
-					  <div style="display: inline-block; margin-top:0px;">
-						  <span>관리자 :</span><br>
-					  	  <div style="display:inline-flex; margin-bottom:20px;">배송기간은 보통 2~3일 소요됩니다.</div>
-					  	  
-					  </div>
-					  <hr>
-				  </div>
+<!-- 					  </div> -->
+<!-- 					  <hr> -->
+<!-- 				  </div> -->
 				  
 				  <br>
 				  <div class="flex justify-center space-x-1">
@@ -426,24 +462,24 @@
 					<div class="max-w-4xl mx-auto py-10 px-6">
 					  
 					  <div class="bg-white shadow rounded-lg p-6 mb-6">
-					    <h2 class="text-xl font-bold mb-4">납부/결제 사유에 대한 요청 가이드</h2>
-					    <p class="mb-4">납부 및 이자 지급에 있어서의 사유를 적는 칸입니다. 배송비, 반품비, 반품지 주소 등을 입력하시면 됩니다. 납부방법을 선택하시기 바랍니다.</p>
+					    <h2 class="text-xl font-bold mb-4">반품/교환 사유에 따른 요청 가능 기간</h2>
+					    <p class="mb-4">반품 시 사유를 확실히 적어주시고, 반품신청을 해주시길 바랍니다.</p>
 					    <ol class="list-decimal pl-4 mb-4">
-					      <li>구매자는 반품 비용을 상품 수령 후 7일 이내에 (방법: 납부방법 선택)</li>
-					      <li>결제 취소시 납부, 자동납부해지 등 다양한 이유로 인해 상품 수령 후 3개월 이내, 그 사유를 입력해 주시면 됩니다. 상품 수령후 30일 이내. (방법: 납부방법 선택)</li>
+					      <li>구매자 단순 변심은 상품 수령 후 7일 이내 (구매자 반품배송비 부담)</li>
+					      <li>표시/광고와 상이, 계약내용과 다르게 이행된 경우 상품 수령 후 3개월 이내, 그 사실을 안 날 또는 알 수 있었던 날로부터 30일 이내. 둘 중 하나 경과 시 반품/교환 불가 (판매자 반품배송비 부담)</li>
 					    </ol>
 					  </div>
 					  <div class="bg-white shadow rounded-lg p-6">
 					    <h2 class="text-xl font-bold mb-4">납부/결제 취소 가능 사유</h2>
 					    <p class="mb-4">아래와 같은 경우 납부/결제가 취소될 수 있습니다.</p>
 					    <ol class="list-decimal pl-4">
-					      <li>반품완료일기준 2년 초과</li>
-					      <li>구매자의 계정 삭제 사유로 인해 5일 이내에 셀러로부터 환불 요청 (예, 판매자의 사업자 등록증 사본이 필요한 경우 등)</li>
-					      <li>구매자의 개인정보유출로 인해 셀러에게 환불이 필요한 경우 (예, 해킹, 바이러스)</li>
-					      <li>구매자의 신용 또는 신뢰 상실에 의하여 셀러가 환불이 필요하다고 요청한 경우 (예, 신용 불량, 불법)</li>
-					      <li>기타 셀러의 신용이나 신뢰에 관하여 셀러로부터 환불 요청이 있었던 경우 (예, 신용 불량, 불법)</li>
-					      <li>구매자로부터의 요청에 의하여 셀러가 환불을 요청하였음</li>
-					      <li>셀러가 사업을 영위할 목적으로 셀러에게 환불 요청 (CD/DVD/GAME/도서류 등 제외 제품)</li>
+					      <li>반품요청기간이 지난 경우</li>
+					      <li>구매자의 책임 있는 사유로 상품 등이 멸실 또는 훼손된 경우 (단, 상품의 내용을 확인하기 위하여 포장 등을 훼손한 경우는 제외)</li>
+					      <li>포장을 개봉하였으나 포장이 훼손되어 상품가치가 현저히 상실된 경우 (예: 식품, 화장품)</li>
+					      <li>구매자의 사용 또는 일부 소비에 의하여 상품의 가치가 현저히 감소한 경우 (라벨이 떨어진 의류 또는 태그가 떨어진 명품관 상품인 경우)</li>
+					      <li>시간의 경과에 의하여 재판매가 곤란할 정도로 상품 등의 가치가 현저히 감소한 경우 (예: 식품, 화장품)</li>
+					      <li>고객주문 확인 후 상품제작에 들어가는 주문제작상품</li>
+					      <li>복제가 가능한 상품 등의 포장을 훼손한 경우 (CD/DVD/GAME/도서의 경우 포장 개봉 시)</li>
 					    </ol>
 					  </div>
 					  <div class="bg-white shadow rounded-lg p-6 mt-6">
@@ -505,7 +541,7 @@
 	
 
 
-	<input type="file" id="fileUpload" style="display: none;">
+	
 
 
 
@@ -514,21 +550,182 @@
 
 	<script>
 		
+	
+	 function openFileUploadModal(btn) {
+	        var fileInput = btn.closest('form').querySelector('.fileUpload2');
+	        if (fileInput) {
+	            fileInput.click(); // 파일 업로드 input 클릭
+	        } else {
+	            console.error("File input element not found.", btn);
+	        }
+	    }
+
+	    function previewImage(input) {
+	        var reader = new FileReader();
+	        reader.onload = function (e) {
+	            var previewDiv = input.closest('form').querySelector('.updatePreviewDiv');
+	            if (previewDiv) {
+	                var img = document.createElement('img');
+	                img.src = e.target.result;
+	                img.style.width = "200px";
+	                img.style.height = "200px";
+	                previewDiv.innerHTML = ''; // 기존 내용 지우기
+	                previewDiv.appendChild(img); // 미리보기 영역에 이미지 추가
+	            }
+	        };
+	        reader.readAsDataURL(input.files[0]);
+	    }
+
+	    document.addEventListener('DOMContentLoaded', function () {
+	        var updatePhotoBtns = document.querySelectorAll('.updatePhoto');
+	        updatePhotoBtns.forEach(function (btn) {
+	            btn.addEventListener('click', function () {
+	                openFileUploadModal(this);
+	            });
+	        });
+
+	        var fileInputs = document.querySelectorAll('.fileUpload2');
+	        fileInputs.forEach(function (input) {
+	            input.addEventListener('change', function () {
+	                previewImage(this);
+	            });
+	        });
+	    });
+	
 		
-		//별점 등록
+		
+		
+		
+	
+		
+		// 수정 버튼을 누를 때 모달을 열고 닫는 함수
+	    function toggleUpdateModal(reviewIndex) {
+	        var modals = document.querySelectorAll('.updateModal');
+	        modals.forEach(function(modal, index) {
+	            if (index === reviewIndex) {
+	                modal.style.display = 'block'; // 선택된 reviewItem의 모달을 보이게 설정
+	            } else {
+	                modal.style.display = 'none'; // 다른 reviewItem의 모달을 숨기게 설정
+	            }
+	        });
+	    }
+	
+	    // 수정 버튼에 대한 이벤트 핸들러를 추가합니다.
+	    var updateButtons = document.querySelectorAll('.updateButton');
+	    updateButtons.forEach(function(button, index) {
+	        button.addEventListener('click', function() {
+	            toggleUpdateModal(index); // 수정 버튼을 클릭할 때 모달을 열고 닫습니다.
+	        });
+	    });
+	
+	
+	
+	
+	
+	
+	
+		
+		
+		//모달 별점 등록
+		
 		var stars = document.querySelectorAll('.modal .fa');;
 
 		stars.forEach(function(star, index) {
+			var checkedStarsCount = 0;
+			star.addEventListener('mouseover', function(){
+				for (var i = 0; i <= index; i++) {
+				      stars[i].style.color = 'yellow';
+			    }
+			})
+			
+			star.addEventListener('mouseout', function(){
+				for (var i = 0; i <= index; i++) {
+				      stars[i].style.color = 'gray';
+			    }
+			})
+			
 		  star.addEventListener('click', function() {
 		    // 클릭된 별을 포함하여 그 앞의 별들을 노란색으로 변경하고, 나머지는 회색으로 유지합니다.
+		    
 		    for (var i = 0; i <= index; i++) {
 		      stars[i].classList.add('checked');
+		      if (stars[i].classList.contains('checked')) {
+			        checkedStarsCount++; // checked 클래스가 있으면 checkedStarsCount를 증가시킵니다
+			    }
 		    }
 		    for (var i = index + 1; i < stars.length; i++) {
 		      stars[i].classList.remove('checked');
 		    }
+		    var starCountInput = document.querySelector('input[name="reviewScore"]');
+		    starCountInput.value = checkedStarsCount;
 		  });
 		});
+
+		//모달 별점 등록 갯수 추출
+		for (var i = 0; i < stars.length; i++) {
+		    if (stars[i].classList.contains('checked')) {
+		        checkedStarsCount++; // checked 클래스가 있으면 checkedStarsCount를 증가시킵니다
+		    }
+		}
+		
+		
+		
+		
+		
+		
+		//모달 별점 수정
+		window.onload=()=>{
+			var stars = document.querySelectorAll('.updateModal .fa');
+			var stars = 
+
+			stars.forEach(function(star, index) {
+				var checkedStarsCount = 0;
+				star.addEventListener('mouseover', function(){
+					for (var i = 0; i <= index; i++) {
+					      stars[i].style.color = 'yellow';
+				    }
+				})
+				
+				star.addEventListener('mouseout', function(){
+					for (var i = 0; i <= index; i++) {
+					      stars[i].style.color = 'gray';
+				    }
+				})
+				
+			  star.addEventListener('click', function() {
+			    // 클릭된 별을 포함하여 그 앞의 별들을 노란색으로 변경하고, 나머지는 회색으로 유지합니다.
+			    
+			    for (var i = 0; i <= index; i++) {
+			      stars[i].classList.add('checked');
+			      if (stars[i].classList.contains('checked')) {
+				        checkedStarsCount++; // checked 클래스가 있으면 checkedStarsCount를 증가시킵니다
+				    }
+			    }
+			    for (var i = index + 1; i < stars.length; i++) {
+			      stars[i].classList.remove('checked');
+			    }
+			    var starCountInput = document.querySelector('input[name="updateReviewScore"]');
+			    starCountInput.value = checkedStarsCount;
+			  });
+			});
+
+			//모달 별점 등록 갯수 추출
+			for (var i = 0; i < stars.length; i++) {
+			    if (stars[i].classList.contains('checked')) {
+			        checkedStarsCount++; // checked 클래스가 있으면 checkedStarsCount를 증가시킵니다
+			    }
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		
@@ -571,7 +768,6 @@
 		
 		
 		
-		//리뷰모달
 		// 파일 첨부 요소를 클릭하는 함수
         document.getElementById('addPhoto').addEventListener('click', function() {
             document.getElementById('fileUpload').click(); // 파일 업로드 클릭 이벤트 발생
@@ -594,6 +790,9 @@
 		        reader.readAsDataURL(file); // 파일을 읽어서 Data URL로 변환하여 onload 이벤트 실행
 		    }
 		});
+		
+		
+		
 		
 		
 		
@@ -759,16 +958,152 @@
 	    
 		
 	    function showDiv() {
-    	  var selectElement = document.getElementById("colorSelect");
-    	  var enoDiv = document.getElementById("enoDiv");
-
-    	  if (selectElement.value !== "컬러 선택") {
-    	    enoDiv.style.display = "block";
-    	  } else {
-    	    enoDiv.style.display = "none";
-    	  }
+    	    var selectElement = document.getElementById("colorSelect");
+    	    var enoDiv = document.getElementById("enoDiv");
+ 
+    	   if (selectElement.value !== "컬러 선택") {
+    	      enoDiv.style.display = "block";
+    	   } else {
+    	      enoDiv.style.display = "none";
+    	   } 
     	}
+	    
+	    
 		
+	    //장바구니
+	    function goCart() {
+	    	
+	        var option = document.getElementById('colorSelect').value;
+	        var eno = document.querySelector('.quantity').value;
+			var productNo = document.getElementById('productNo').value;
+			var priceString = document.getElementById('resultPrice2').innerText;
+			var price = parseInt(priceString.replace(/\D/g, ''), 10); // 숫자가 아닌 문자를 모두 제거
+			var selectElement = document.getElementById("colorSelect");
+
+		    if (selectElement.value === "컬러 선택") {
+		        alert('옵션을 선택해주세요!'); // 알림 메시지 출력
+		    }else{
+		    	alert('해당 상품이 장바구니에 추가되었습니다.');
+		        location.href='insertCart.so?productNo='+productNo + '&option=' + option + '&eno=' + eno +"&price=" + price;
+		    }
+	        
+	    }
+	    
+	    
+// 	    document.getElementById('enrollQna').addEventListener('click', ()=>{
+	    	
+// 	    	const productNo = document.querySelector('input[name="productNo"]').value;
+// 	        const questionContent = document.getElementById('questionContent').value;
+// 	        console.log(productNo);
+// 	        console.log(questionContent);
+// 	        $.ajax({
+// 	            type: "POST",
+// 	            url: "insertQna.so",
+// 	            data: {productNo: productNo, questionContent: questionContent},
+// 	            success: (data)=>{
+// 	                if(data == "success"){
+// 	                	const confirmation = confirm('내가 쓴 문의내역으로 이동하시겠습니까?');
+// 						if(confirmation){
+// 							location.href = 'centerView.so';
+// 						}else{
+// 							location.reload();
+// 						}
+// 	                }else{
+// 	                	alert('문의등록에 실패하였습니다.');
+// 	                }
+// 	            },
+// 	            error: data => console.log(data)
+// 	        });
+// 	    })
+	    document.getElementById('enrollQna').addEventListener('click', () => {
+		    const productNo = document.querySelector('input[name="productNo"]').value;
+		    const questionContent = document.getElementById('questionContent').value;
+		    const forbiddenWords = ['ㅅㅂ', '비속어2', '금지어3']; // 금지어 목록
+		
+		    for (let i = 0; i < forbiddenWords.length; i++) {
+		        if (questionContent.toLowerCase().includes(forbiddenWords[i].toLowerCase())) {
+		            alert('비속어를 사용할 수 없습니다.');
+		            return;
+		        }
+		  }
+
+	    // 여기까지 도달하면 금지어가 없으므로 AJAX 요청을 보냄
+	    $.ajax({
+	        type: "POST",
+	        url: "insertQna.so",
+	        data: { productNo: productNo, questionContent: questionContent },
+	        success: (data) => {
+	            if (data == "success") {
+	                const confirmation = confirm('내가 쓴 문의내역으로 이동하시겠습니까?');
+	                if (confirmation) {
+	                    location.href = 'centerView.so';
+	                } else {
+	                    location.reload();
+	                }
+	            } else {
+	                alert('문의등록에 실패하였습니다.');
+	            }
+	        },
+	        error: (data) => console.log(data)
+	    });
+	});
+
+
+
+	    
+	    var productNo = document.getElementById('productNo').value;
+	    
+	    document.getElementById('onlyPhoto').addEventListener('click', ()=>{
+	    	location.href="productDetail.so?productNo="+productNo+'&reviewStatus=2';
+	    	
+	    })
+	    
+	    //url옮겨졌을 때 review섹션으로 가도록
+	    document.addEventListener('DOMContentLoaded', () => {
+		    const urlParams = new URLSearchParams(window.location.search);
+		    const reviewStatus = urlParams.get('reviewStatus');
+		
+		    if (reviewStatus === '2') {
+		        const reviewsSection = document.getElementById('reviews');
+		        if (reviewsSection) {
+		            setTimeout(() => {
+		                reviewsSection.scrollIntoView({
+		                    behavior: 'smooth'
+		                });
+		            }, 10); // 스크롤을 위해 약간의 지연 추가 (시간은 조절 가능)
+		        }
+		    }
+		});
+	    
+	    
+	    
+	    
+	    //금지어
+	    document.addEventListener('DOMContentLoaded', function() {
+        var form = document.getElementById('reviewForm');
+
+        form.addEventListener('submit', function(event) {
+            var reviewContent = document.getElementById('reviewContent').value;
+            var forbiddenWords = ['시발', '병신', '좆', '새끼', '섹스', 'tlqkf', '미친', 'ㅅㅂ', 'ㅂㅅ']; // 금지어 목록
+
+            for (var i = 0; i < forbiddenWords.length; i++) {
+                if (reviewContent.includes(forbiddenWords[i])) {
+                    event.preventDefault(); // 폼 제출 막기
+                    alert('비속어 사용 금지'); // 알림창 표시
+                    return;
+                }
+            }
+        });
+    });
+	    
+	    
+	    function confirmDelete(url) {
+	        var result = confirm("정말 삭제하시겠습니까?");
+	        if (result) {
+	            window.location.href = url;
+	        }
+	        return false; // 기본 이벤트 방지
+	    }
 	    
 		
 	</script>

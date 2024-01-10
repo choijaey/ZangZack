@@ -21,14 +21,8 @@
 	            <div class="slider__btns justify-between">
 	              <button class="slider__btn-buy">buy</button>
 	              <div class="flex-center">
-	                <button
-	                  data-type="prev"
-	                  class="slider__btn-switch slider__btn-switch--dark flex-center"
-	                ></button>
-	                <button
-	                  data-type="next"
-	                  class="slider__btn-switch slider__btn-switch--light flex-center"
-	                ></button>
+	                <button data-type="prev" class="slider__btn-switch slider__btn-switch--dark flex-center"></button>
+	                <button data-type="next" class="slider__btn-switch slider__btn-switch--light flex-center"></button>
 	              </div>
 	            </div>
 	            <div class="slider__index"></div>
@@ -40,7 +34,8 @@
 	    
 	     <div class="additional-section">
 			 <div class="category">
-			     <div onclick="sendCategoryNo(11)"><img src="image/sohwa/tent.png">텐트</div>
+			 	<div onclick="sendCategoryNo(0)"><img src="image/sohwa/tent.png">전체</div>
+			     <div onclick="sendCategoryNo(11)"><img src="image/sohwa/tent-removebg-preview.png">텐트</div>
 			     <div onclick="sendCategoryNo(12)"><img src="image/sohwa/bed.png">취침용품</div>
 			     <div onclick="sendCategoryNo(13)"><img src="image/sohwa/cook.png">조리도구</div>
 			     <div onclick="sendCategoryNo(14)"><img src="image/sohwa/fire.png">발화용품</div>
@@ -54,9 +49,9 @@
 			</form>
 	
 	
-			<div class="search">
-		  		<input type="text" placeholder="검색어 입력">
-		  		<img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+			<div class="search">			
+		  		<input id="searchInput" type="text" placeholder="상품명 검색" th:value="${keyword}">
+		  		<img id="searchImg" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
 			</div>
 			
 			<div class="dropdown" style="background-color: white !important; color:black;">
@@ -64,10 +59,10 @@
 		    		등록일자 순
 		  		</button>
 		  		<ul class="dropdown-menu">
-		  			<li><a class="dropdown-item" onclick="standardSelect(1);">등록 일자 순</a></li>
-		    		<li><a class="dropdown-item" onclick="standardSelect(2);">낮은 가격 순</a></li>
-		    		<li><a class="dropdown-item" onclick="standardSelect(3);">높은 가격 순</a></li>
-		    		<li><a class="dropdown-item" onclick="standardSelect(4);">평점 높은 순</a></li>
+		  			<li><a class="dropdown-item" th:href="'productListView.so?categoryNo=' +${categoryNo} + '&keyword=' + ${keyword} + '&standard=1'">등록 일자 순</a></li>
+		    		<li><a class="dropdown-item" th:href="'productListView.so?categoryNo=' +${categoryNo} + '&keyword=' + ${keyword} + '&standard=2'">낮은 가격 순</a></li>
+		    		<li><a class="dropdown-item" th:href="'productListView.so?categoryNo=' +${categoryNo} + '&keyword=' + ${keyword} + '&standard=3'">높은 가격 순</a></li>
+		    		<li><a class="dropdown-item" th:href="'productListView.so?categoryNo=' +${categoryNo} + '&keyword=' + ${keyword} + '&standard=4'">평점 높은 순</a></li>
 		  		</ul>
 			</div>
 			
@@ -186,12 +181,13 @@
 			  <h1>PRODUCT ></h1>
 		  	  <section class="products">
 		  	  <th:block th:each="p:${pList}">
-		  	  	<article class="product" th:each="a:${aList}" th:if="${ p.productNo eq a.boardNo}">
+		  	  	<article class="product" th:each="a:${aList}" th:if="${ p.productNo eq a.boardNo && a.boardType==5}" onclick="redirectToProductDetail(this)">
+		  	  		<input type="hidden" th:value="${p.productNo}">
 				    <a href="#"><img th:src="${a.photoPath}"></a>
 			        <p>[[${p.productName}]]</p>
 			        <p class="price" th:text="|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|"></p>
-			        <span class="starImage">
-						<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 몇 개!?</span></img>
+			        <span class="starImage" th:each="r, iterStat : ${rList}" th:if="${iterStat.index == 0 && p.productNo == r.productNo}">
+						<img src="image/sohwa/icons8-star.gif" style="height: 10px;">[[${p.productScore}]] <span style="color:gray;">리뷰 [[${rList.size()}]]개</span></img>
 					</span><br>
 			        <th:block th:if="${p.eno == 0}"><span class="badge rounded-pill text-bg-dark">일시품절</span></th:block>
 			        <th:block th:if="${p.deliveryPrice == 0}"><span class="badge text-bg-secondary">무료배송</span></th:block>
@@ -478,25 +474,33 @@
 		
 		
 		
-		
-		//카테고리 value값 넘기기
-		function sendCategoryNo(categoryNo) {
-			localStorage.setItem('selectedCategory', categoryNo);
-		    document.getElementById('categoryNoInput').value = categoryNo;
-		    document.getElementById('categoryForm').submit();
+		function sendCategoryNo(categoryNo){
+			location.href='productListView.so?categoryNo='+ categoryNo +'&keyword=' + '&standard=1';
 		}
 		
 		
+		//검색
+		document.getElementById('searchImg').addEventListener('click', ()=>{
+			var searchInputValue = document.getElementById('searchInput').value;
+		    var url = 'productListView.so?categoryNo=0&keyword=' + searchInputValue + '&standard=1' ;
+		    window.location.href = url;
+		})
+
+
 		
 		
-		//정렬
-		function standardSelect(value) {
-	        // value에 따라 URL 파라미터를 설정하고 페이지를 리로드합니다.
-	         var selectedCategory = localStorage.getItem('selectedCategory');
-	        location.href = 'productListView.so?categoryNo='+ selectedCategory +'&standard=' +value + '&page='+ /*[[${pi.currentPage}]]*/1 ;
+		//상세보기
+		function redirectToProductDetail(element) {
+	        var hiddenInput = element.querySelector('input[type="hidden"]');
+	        var productNo = hiddenInput.value;
+	
+	        // productNo를 query parameter로 사용하여 productDetail.so 엔드포인트로 이동
+	        window.location.href = 'productDetail.so?productNo=' + productNo;
 	    }
 
-
+		
+		
+		    
 		
 		
 	</script>

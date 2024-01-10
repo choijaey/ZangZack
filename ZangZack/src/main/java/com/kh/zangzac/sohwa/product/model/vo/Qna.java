@@ -13,18 +13,17 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Product {
+
+public class Qna {
 	
+	private int questionNo;
+	private String questionContent;
+	private Date questionDate;
+	private String answerContent;
+	private Date answerDate;
+	private String qnaStatus;
+	private String memberId;
 	private int productNo;
-	private String productName;
-	private int productPrice;
-	private Date productUploadDate;
-	private String productStatus;
-	private double productScore;
-	private int categoryNo;
-	private String productCompany;
-	private int deliveryPrice;
-	private int eno;
 	
 
 }
