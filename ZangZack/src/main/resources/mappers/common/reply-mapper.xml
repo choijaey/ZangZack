@@ -29,6 +29,12 @@
 		where reply_status = 'N' and reply_no = #{replyNo};
 		ORDER BY reply_no ASC
 	</select>
+	
+	<update id="updateReply">
+		update reply
+		set reply_content = #{replyContent}, reply_modifydate = sysdate
+		where reply_no = #{replyNo}
+	</update>
 		
 	<select id="replyLimitList" resultType="Reply">
       select *    
@@ -36,5 +42,10 @@
       where reply_status = 'N' and board_type = #{boardType} and board_no = #{boardNo}
       order by reply_no asc
    	</select>
-
+	
+	<update id="deleteReply">
+		update reply
+		set reply_status = 'Y'
+		where reply_no = #{replyNo}
+	</update>
 </mapper>
