@@ -1,5 +1,7 @@
 package com.kh.zangzac.common.reply.model.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import org.apache.ibatis.session.RowBounds;
@@ -18,7 +20,12 @@ public class ReplyServiceImpl implements ReplyService {
 	
 	@Override
 	public ArrayList<Reply> selectReply(Reply reply) {
-		return rDAO.selectReply(reply);
+		ArrayList<Reply> list = rDAO.selectReply(reply);
+		
+		for(Reply r : list) {
+			format(r);
+		}
+		return list;
 	}
 	
 	@Override
@@ -33,17 +40,54 @@ public class ReplyServiceImpl implements ReplyService {
 
 	@Override
 	public ArrayList<Reply> selectReply(SelectCondition b) {
-		return rDAO.selectReply(b);
+		
+		ArrayList<Reply> list = rDAO.selectReply(b);
+		
+		for(Reply r : list) {
+			format(r);
+		}
+		return list;
 	}
 
 	@Override
 	public ArrayList<Reply> replyLimitList(SelectCondition b, PageInfo pi) {
 		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
-		return rDAO.replyLimitList(b, rowBounds) ;
+		ArrayList<Reply> list = rDAO.replyLimitList(b, rowBounds);
+		for(Reply r : list) {
+			format(r);
+		}
+		return list;
+	}
+	
+	
+	
+    public void format(Reply r) {
+    	String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+        if(r.getReplyCreateDate() != r.getReplyModifyDate()) {
+        	r.setFormatDate("(수정)"+r.getReplyModifyDate().format(formatter));
+        }else {
+        	r.setFormatDate(r.getReplyCreateDate().format(formatter));
+        }
+    }
+	
+	
+	
+
+	@Override
+	public int updateReply(Reply r) {
+		return rDAO.updateReply(r);
+	}
+	
+	@Override
+	public Reply selectReplyOne(Reply reply) {
+		Reply r = rDAO.selectReplyOne(reply);
+		format(r);
+		return r;
 	}
 
 	@Override
-	public Reply selectReplyOne(Reply reply) {
-		return rDAO.selectReplyOne(reply);
+	public int deleteReply(Reply r) {
+		return rDAO.deleteReply(r);
 	}
 }

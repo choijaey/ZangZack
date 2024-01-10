@@ -10,76 +10,82 @@
 	
 	<br><br><br><br>
 	<div id="enrollProduct">
-		<h1>상품 등록</h1>
+		<h1>상품 수정</h1>
 		<hr style="border:1px solid black;">
 		<br>
 		<form>
 			<h3>▸▸상품 대표 사진 (최대 4개): </h3>
-			<div id="resultDiv1" class="resultDiv">
-				<div style="display: inline-block;width:250px;height:200px;">
-					1.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview1')"><br>
-					<img id="preview1" src="image/sohwa/icons8-camera-80.png">
-					<button style="margin-left:65px;">취소</button>
-				</div>
-			</div>
+				<div class="thumbnails">
+			        <div th:each="l:${list}" th:if="${l.photoLevel==0}" style="display:inline-block;"><img th:src="${l.photoPath}" alt="Thumbnail 1" class="thumbnail">&nbsp;<br><button style="margin-right:20px;">삭제 on</button></div>
+			        <div th:each="l:${list}" th:if="${l.photoLevel==1}" style="display:inline-block;"><img th:src="${l.photoPath}" alt="Thumbnail 1" class="thumbnail" onmouseover="changeImage(this)">&nbsp;<button style="margin-right:20px;">삭제 on</button></div>
+			    </div>
 			
-			<div id="resultDiv2" class="resultDiv">
-				<div style="display: inline-block;width:250px;height:200px;">
-					2.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview2')"><br>
-					<img id="preview2" src="image/sohwa/icons8-camera-80.png">
-					<button style="margin-left:65px;">취소</button>
+				<div id="resultDiv1" class="resultDiv">
+					<div style="display: inline-block;width:250px;height:200px;">
+						1.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview1')" name="coreFile"><br>
+						<img id="preview1" src="image/sohwa/icons8-camera-80.png">
+						<button style="margin-left:65px;">취소</button>
+					</div>
 				</div>
-			</div>
+				
+				<div id="resultDiv2" class="resultDiv">
+					<div style="display: inline-block;width:250px;height:200px;">
+						2.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview2')" name="coreFile"><br>
+						<img id="preview2" src="image/sohwa/icons8-camera-80.png">
+						<button style="margin-left:65px;">취소</button>
+					</div>
+				</div>
+				
+				<div id="resultDiv3" class="resultDiv">
+					<div style="display: inline-block;width:250px;height:200px;">
+						3.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview3')" name="coreFile"><br>
+						<img id="preview3" src="image/sohwa/icons8-camera-80.png">
+						<button style="margin-left:65px;">취소</button>
+					</div>
+				</div>
+				
+				<div id="resultDiv4" class="resultDiv">
+					<div style="display: inline-block;width:250px;height:200px;">
+						4.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview4')" name="coreFile"><br>
+						<img id="preview4" src="image/sohwa/icons8-camera-80.png">
+						<button style="margin-left:65px;">취소</button>
+					</div>
+				</div>
 			
-			<div id="resultDiv3" class="resultDiv">
-				<div style="display: inline-block;width:250px;height:200px;">
-					3.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview3')"><br>
-					<img id="preview3" src="image/sohwa/icons8-camera-80.png">
-					<button style="margin-left:65px;">취소</button>
-				</div>
-			</div>
-			
-			<div id="resultDiv4" class="resultDiv">
-				<div style="display: inline-block;width:250px;height:200px;">
-					4.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview4')"><br>
-					<img id="preview4" src="image/sohwa/icons8-camera-80.png">
-					<button style="margin-left:65px;">취소</button>
-				</div>
-			</div>
 			
 			<br><br><br><br>
 			
 			<label for="productCompany" style="font-size: 20px;">▸▸상품 업체 : </label>
-			<input type="text" name="productCompany" id="productCompany">
+			<input type="text" name="productCompany" id="productCompany" th:value="${p.productCompany}">
 			
 			
 			<br><br><br>
 			
 			<label for="productName" style="font-size: 20px;">▸▸상품명 : </label>
-			<input type="text" name="productName" id="productName">
+			<input type="text" name="productName" id="productName" th:value="${p.productName}">
 			
 			<br><br><br>
 			
 	         <label for="productCategory" style="font-size: 20px;">▸▸카테고리:</label>
 	         <select id="productCategory" name="productCategory" required>
-	             <option value="tent">텐트</option>
-	             <option value="bed">취침용품</option>
-	             <option value="cook">조리도구</option>
-	             <option value="fire">발화용품</option>
-	             <option value="bag">백팩</option>
-	             <option value="others">기타용품</option>
+	             <option th:selected="${p.categoryNo == 11}" value="tent">텐트</option>
+	             <option th:selected="${p.categoryNo == 12}" value="bed">취침용품</option>
+	             <option th:selected="${p.categoryNo == 13}" value="cook">조리도구</option>
+	             <option th:selected="${p.categoryNo == 14}" value="fire">발화용품</option>
+	             <option th:selected="${p.categoryNo == 15}" value="bag">백팩</option>
+	             <option th:selected="${p.categoryNo == 16}" value="others">기타용품</option>
 	           <!-- 카테고리 옵션 추가 -->
 	         </select>
 		
 		    <br><br><br>
 		  
 		    <label for="productPrice" style="font-size: 20px;">▸▸상품가격 : </label>
-		    <input type="number" name="productPrice" id="productPrice"> 원
+		    <input type="number" name="productPrice" id="productPrice" th:value="${p.productPrice}"> 원
 		  
 		    <br><br><br>
 		  
 		    <label for="productEno" style="font-size: 20px;">▸▸상품수량 : </label>
-		    <input type="number" name="productEno" id="productEno"> 개
+		    <input type="number" name="productEno" id="productEno" th:value="${p.eno}"> 개
 		  
 		  
 		  <br><br><br>
@@ -142,24 +148,36 @@
 	
 	
 	
-	<script>
+	<script th:inline="javascript">
+	
 		//미리보기
+// 		function previewImage(event, previewId) {
+// 	      const input = event.target;
+// 	      const preview = document.getElementById(previewId);
+// 	      const file = input.files[0];
+// 	      const reader = new FileReader();
+	
+// 	      reader.onload = function(e) {
+// 	        preview.src = e.target.result;
+// 	      };
+	
+// 	      reader.readAsDataURL(file);
+// 	    }
+	    
+	    
+		// 미리보기
 		function previewImage(event, previewId) {
-	      const input = event.target;
-	      const preview = document.getElementById(previewId);
-	      const file = input.files[0];
-	      const reader = new FileReader();
-	
-	      reader.onload = function(e) {
-	        preview.src = e.target.result;
-	      };
-	
-	      reader.readAsDataURL(file);
-	    }
-	    
-	    
-	    
-	    
+        const input = event.target;
+        const preview = document.getElementById(previewId);
+        const file = input.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    } 
 	    
 	    
 	    
@@ -194,6 +212,13 @@
 		      resetFileInput(this);
 		    });
 		  });
+		  
+		  
+		  
+		  
+		  
+		    
+	
 
 
   

@@ -19,4 +19,8 @@ public interface ReplyService {
 	
 	Reply selectReplyOne(Reply reply);
 
+	int updateReply(Reply r);
+
+	int deleteReply(Reply r);
+
 }
