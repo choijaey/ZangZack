@@ -67,6 +67,10 @@ public class ProductController {
 		return "views/sohwa/(admin)productUpdate";
 	}
 	
+	
+	
+	
+	
 	//관리자 상품 목록페이지 view
 	@GetMapping("adminProductList.so")
 	public String adminProductListView(Model model) {
@@ -647,7 +651,7 @@ public class ProductController {
 	
 	
 	@PostMapping("updateReview.so")
-	public String updateReview(@RequestParam(value="deleteRename", defaultValue="") String deleteRename, @RequestParam("reviewContent") String reviewContent, @RequestParam("updateFile") MultipartFile updateFile, @RequestParam("productNo") int productNo, @RequestParam("reviewScore") int reviewScore, @RequestParam("reviewNo") int reviewNo) {
+	public String updateReview(@RequestParam(value="deleteRename", defaultValue="") String deleteRename, @RequestParam("reviewContent") String reviewContent, @RequestParam("updateFile") MultipartFile updateFile, @RequestParam("productNo") int productNo, @RequestParam("updateReviewScore") int reviewScore, @RequestParam("reviewNo") int reviewNo) {
 		
 		Review r = new Review();
 		Attachment a = new Attachment();
@@ -675,6 +679,7 @@ public class ProductController {
 				result1 = pService.updateReviewInfo(r);
 				
 			}else if(!updateFile.getOriginalFilename().equals("")) {
+				//deleteRename은 비어있고, updateFile이 있을 때 (새로 추가)
 				a.setBoardNo(reviewNo);
 				a.setBoardType(6);
 				a.setPhotoLevel(0);
@@ -689,9 +694,55 @@ public class ProductController {
 				}
 				result1 = pService.updateReviewInfo(r);
 			}
+		}else {
+			//deleteRename 차있고, updateFile이 비어있을 때 (사진 그대로 유지)
+			if(updateFile.getOriginalFilename().equals("")) {
+				result1 = pService.updateReviewInfo(r);
+			}else {
+				//deleteRename 차있고, updateFile도 차있을 때 (사진 변경)
+				Boolean sf = imageStorage.deleteImage(deleteRename, name);
+				System.out.println("sf:" + sf);
+				pService.deleteReviewPhoto(reviewNo);
+				a.setBoardNo(reviewNo);
+				a.setBoardType(6);
+				a.setPhotoLevel(0);
+				String[] returnArr = imageStorage.saveImage(updateFile, name);
+				
+				if(returnArr != null) {
+					a.setPhotoPath(returnArr[1]);
+					a.setPhotoRename(returnArr[0]);
+					
+					System.out.println(a);
+					result2 = pService.updateReviewPhoto(a);
+				}
+				result1 = pService.updateReviewInfo(r);
+			}
+			
+			
+			
 		}
 		
-		System.out.println("deleteRename:" + deleteRename);
+		
+		int[] scoreArr = pService.selectAllProductScore(r.getProductNo());
+		double avgScore = 0;
+		double total = 0;
+		for (int i = 0; i < scoreArr.length; i++) {
+			 total += scoreArr[i];
+		}
+
+		// 배열의 길이로 나누어 평균 계산
+		avgScore = total / scoreArr.length;
+		
+		Product p = new Product();
+		p.setProductNo(r.getProductNo());
+		p.setProductScore(avgScore);
+		
+		int result3 = pService.updateScore(p);
+		
+		
+		
+		
+		
 		return "redirect:productDetail.so?productNo=" + productNo;
 		
 	}

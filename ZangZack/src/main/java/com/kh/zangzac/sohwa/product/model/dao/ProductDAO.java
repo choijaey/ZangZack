@@ -112,6 +112,8 @@ public interface ProductDAO {
 
 	int updateReviewPhoto(Attachment a);
 
+	void deleteReviewPhoto(int reviewNo);
+
 
 
 	

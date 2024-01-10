@@ -15,9 +15,9 @@
 		<br>
 		<form>
 			<h3>▸▸상품 대표 사진 (최대 4개): </h3>
-				<div class="thumbnails">
-			        <div th:each="l:${list}" th:if="${l.photoLevel==0}" style="display:inline-block;"><img th:src="${l.photoPath}" alt="Thumbnail 1" class="thumbnail">&nbsp;<br><button style="margin-right:20px;">삭제 on</button></div>
-			        <div th:each="l:${list}" th:if="${l.photoLevel==1}" style="display:inline-block;"><img th:src="${l.photoPath}" alt="Thumbnail 1" class="thumbnail" onmouseover="changeImage(this)">&nbsp;<button style="margin-right:20px;">삭제 on</button></div>
+				<div class="thumbnails" th:each="l:${list}">
+			        <div th:if="${l.photoLevel==0}" style="display:inline-block;"><img th:src="${l.photoPath}" alt="Thumbnail 1" class="thumbnail">&nbsp;<br><button type="button" class="btn btn-outline-dark btn-sm deleteAttm" th:id="|delete-${ l.photoRename }/${l.photoLevel}|">삭제 OFF</button></div>
+			        <div th:if="${l.photoLevel==1}" style="display:inline-block;"><img th:src="${l.photoPath}" alt="Thumbnail 1" class="thumbnail" onmouseover="changeImage(this)">&nbsp;<button type="button" class="btn btn-outline-dark btn-sm deleteAttm" th:id="|delete-${ l.photoRename }/${l.photoLevel}|">삭제 OFF</button></div>
 			    </div>
 			
 				<div id="resultDiv1" class="resultDiv">
@@ -219,6 +219,94 @@
 		  
 		    
 	
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+		  //삭제 on/off
+		  window.onload=()=>{
+			const fileArea = document.querySelector('#fileArea');
+			document.getElementById('addFile').addEventListener('click', function () {
+				const newDiv = document.createElement('div');
+				newDiv.classList.add('mb-3');
+				newDiv.innerHTML = '<input type="file" class="form-control form-control-lg" name="file">';
+				
+				fileArea.append(newDiv);
+			})
+			
+			const form = document.getElementById('attmForm');
+			document.getElementById('submitAttm').addEventListener('click', ()=>{
+				
+				const files = document.getElementsByName('file');
+				let isEmpty = true;
+				
+				//첨부파일 비어져있는지 확인
+				for(const f of files){
+					if(f.value != ''){
+						isEmpty = false;
+					}
+				}
+				
+				//모두 다 삭제하겠다.
+				let isAllRemove = true;
+				for(const btn of delBtns){
+					//파일 중에 하나라도 삭제 off라면 
+					if(btn.innerText == '삭제 OFF'){
+						isAllRemove = false;
+					}
+				}
+				
+				//추가할 파일도 없고, 모두 다 삭제할 것이라면 일반게시판으로 옮기겠다.
+				if(isEmpty && isAllRemove){
+					$('#modalChoice').modal('show');
+				}else{
+					form.submit();
+				}
+				
+			});
+			
+			
+			
+			//일반게시글로 옮겨진다는 모달에 네를 눌렀을 때도 제출되도록 함.
+			document.getElementById('moveBoard').addEventListener('click', ()=>{
+				form.submit();
+			})
+			
+			
+			const delBtns = document.getElementsByClassName('deleteAttm');
+			for(const btn of delBtns){
+				//이렇게 for문으로 delete영역 돌려버리면 id = 'delete' 가 더이상 유일해지지 않는다.
+				//따라서 위에 올라가서 id부분 변경해준다. renameName, attmLevel이용해서 구분 가능하도록.
+				btn.addEventListener('click', function(){
+					const nextHidden = this.nextElementSibling;
+					if(this.innerText =='삭제 OFF'){
+						this.style.background='black';
+						this.style.color='white';
+						this.innerText='삭제 ON';
+						nextHidden.value=this.id.split('-')[1]; //delete- 뒤에있는 renameName 가져오겠다는 뜻
+					}else{
+						this.style.background='none';
+						this.style.color='black';
+						this.innerText='삭제 OFF';
+						nextHidden.value="none";
+					}
+				});
+			}
+			
+			
+			
+			
+		}
 
 
   

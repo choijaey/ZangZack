@@ -109,6 +109,8 @@ public interface ProductService {
 
 	int updateReviewPhoto(Attachment a);
 
+	void deleteReviewPhoto(int reviewNo);
+
 
 
 	

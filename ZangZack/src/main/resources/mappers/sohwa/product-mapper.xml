@@ -55,6 +55,10 @@
 		where review_no = #{reviewNo}
 	</update>
 	
+	<delete id="deleteReviewPhoto">
+		delete from photo
+		where board_type = 6 and board_no = #{reviewNo}
+	</delete>
 	
 	<select id="deleteSelectReview" resultType="string">
 		select photo_rename
