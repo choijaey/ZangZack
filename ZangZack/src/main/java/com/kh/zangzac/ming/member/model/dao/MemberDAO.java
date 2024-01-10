@@ -53,4 +53,8 @@ public interface MemberDAO {
 
 	int updateInfo(Properties prop);
 
+	int adminUpdateNickName(Member m);
+
+	int adminUpdateName(Member m);
+
 }

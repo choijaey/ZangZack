@@ -107,6 +107,16 @@ public class MemberServiceImpl implements MemberService{
 		return mDAO.updateInfo(prop);
 	}
 
+	@Override
+	public int adminUpdateNickName(Member m) {
+		return mDAO.adminUpdateNickName(m);
+	}
+
+	@Override
+	public int adminUpdateName(Member m) {
+		return mDAO.adminUpdateName(m);
+	}
+
 
 
 	

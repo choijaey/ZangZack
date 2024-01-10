@@ -95,4 +95,17 @@
 		set ${column} = #{data}
 		where member_id = #{id}
 	</update>
+	
+	<update id="adminUpdateNickName">
+	    update member
+	    set MEMBER_NICKNAME = #{memberNickName}
+	    where MEMBER_ID = #{memberId}
+	</update>
+	
+	<update id="adminUpdateName">
+		update member
+		set MEMBER_NAME = #{memberName}
+		where MEMBER_ID = #{memberId}
+	</update>
+	
 </mapper>

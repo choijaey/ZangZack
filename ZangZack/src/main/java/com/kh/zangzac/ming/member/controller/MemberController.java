@@ -357,7 +357,6 @@ public class MemberController {
 		}else {
 			model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
 			model.addAttribute("searchUrl","views/ming/member/updatePwd");
-			System.out.println("안바뀜!!!!");
 			return "redirect:myPage.me";
 		}
 		
@@ -508,7 +507,6 @@ public class MemberController {
 	@ResponseBody
 	public HashMap<String, Object> selectMemberList(@RequestParam("memberId")String memberId, Model model) {
 		
-		System.out.println(memberId);
 		Member m = new Member();
 		m.setMemberId(memberId);
 		Member member = mService.login(m);
@@ -523,7 +521,6 @@ public class MemberController {
 	@ResponseBody
 	public String updateInfo(@RequestParam("column") String column, @RequestParam("data") String data, @RequestParam("id") String id) {
 		Properties prop = new Properties();
-		System.out.println(column);
 		
 		prop.setProperty("column", column);
 		prop.setProperty("data", data);
@@ -533,4 +530,33 @@ public class MemberController {
 		return result == 1? "success" : "fail";
 	}
 	
+	@GetMapping("adminUpdateNickName.me")
+	@ResponseBody
+	public String adminUpdateNickName(@ModelAttribute Member m) {
+		String memberNickName = null;
+		memberNickName = m.getMemberNickName() + "#" + generateRandomNumbers();
+		System.out.println(memberNickName);
+		
+		
+		m.setMemberNickName(memberNickName);
+		/*
+		 * HashMap<String,String>map = new HashMap<String, String>();
+		 * map.put("memberId", memberId); map.put("memberNickName", memberNickName);
+		 */
+		
+		int result = mService.adminUpdateNickName(m);
+		System.out.println(result);
+		
+		return result == 1? "success" : "fail";
+	}
+	
+	@GetMapping("adminUpdateName.me")
+	@ResponseBody
+	public String adminUpdateName(@ModelAttribute Member m) {
+		String memberName = m.getMemberName();
+		System.out.println(memberName);
+		
+		int result = mService.adminUpdateName(m);
+		return result == 1? "success" : "fail";
+	}
 }

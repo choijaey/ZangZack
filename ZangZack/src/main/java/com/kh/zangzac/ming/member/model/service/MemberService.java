@@ -44,6 +44,10 @@ public interface MemberService {
 
 	int updateInfo(Properties prop);
 
+	int adminUpdateNickName(Member m);
+
+	int adminUpdateName(Member m);
+
 
 	
 	

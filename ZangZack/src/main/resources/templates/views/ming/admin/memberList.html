@@ -80,6 +80,14 @@
             <input type="text" placeholder="이름 입력">
               <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
          </div>
+         
+         
+         
+         
+         
+         
+         
+         
          <div class="search" id="search3" style="display: none;">
             <input type="text" placeholder="연락처 입력">
               <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
@@ -144,7 +152,7 @@
 		<div class="modal_body">
 			<p class="modal_title">회원정보</p>
 			<img id="memberProfilePath" style="width: 80px; position: relative; left: 170px;" alt="프로필 이미지" />
-			<p id="memberId">ID</p>
+			<p id="memberId">ID:</p>
 			<p id="memberName">NAME</p>
 			<p id="memberNickName">NICKNAME</p>
 			<p id="memberEmail">EMAIL</p>
@@ -182,7 +190,7 @@
 	          const body = document.querySelector('body');
 		      const modal = document.querySelector('.modal');
 		      const tds = document.getElementsByTagName('td');
-			
+			  let changeId;
 		      for(let i = 0; i <tds.length; i++ ){
 		    	  const index = i % 8;
 		    	  if(index != 0 && index != 6 && index != 7){
@@ -193,6 +201,7 @@
 				    	  //memberId 보내서 정보가져오기
 				    	  	//모달에 아이디들로 다 가져와서 member 정보 넣기
 				    	  	let m = this.parentNode.children[1].innerText;
+				    	  	changeId = this.parentNode;
 				    	  	console.log(m);
 				    		$.ajax({
 				    			url:'selectMemberList.me',
@@ -292,12 +301,11 @@
 		     })
 	    
 	    
-	    	let category;
-	        const memberNameElement = document.getElementById('memberName');
-	
 	        // flag 변수를 사용하여 현재 입력 중인지 여부를 추적
 	        let isEditing = false;
 	
+		    //이름 수정
+	        const memberNameElement = document.getElementById('memberName');
 	        memberNameElement.addEventListener('click', function() {
 	            // 입력 중인 경우는 더 이상 실행하지 않음
 	            if (isEditing) {
@@ -321,8 +329,22 @@
 	            // 클릭 이벤트 설정
 	            inputElement.addEventListener('keyup', function(event) {
 	                // input에서 포커스가 떠나면 변경된 값으로 텍스트 업데이트
+	                 let stopAjax=false;
 	                if(event.key == 'Enter'){
 	                	memberNameElement.innerText = this.value;
+	                	$.ajax({
+	                		url:'adminUpdateName.me',
+	                		data : {memberName:memberNameElement.innerText, memberId:changeId.children[1].innerText},
+	                		success: data=>{
+	                			if(data == 'success'){
+	                				changeId.children[2].innerHTML = '<td class="td3">' + memberName + '</td>';
+	                			}else{
+	                				alert('수정이 실패하여 페이지가 새로고침 됩니다.');
+									location.reload();
+	                			}
+	                		},
+	                		error : data=>console.log("실패"+data)
+	                	})
 	                	isEditing = false;
 	                	
 	                }
@@ -340,7 +362,7 @@
 	        const memberNickNameElement = document.getElementById('memberNickName');
 	        memberNickNameElement.addEventListener('click', function() {
 	        	
-	        	console.log(tds[4].parentElement.parentElement.children[0].children[3].innerHTML);
+	        	//console.log(changeId.children[3]);
 	            // 입력 중인 경우는 더 이상 실행하지 않음
 	            if (isEditing) {
 	                return;
@@ -362,27 +384,29 @@
 	            // 클릭 이벤트 설정
 	            inputElement.addEventListener('keyup', function(event) {
 	                // input에서 포커스가 떠나면 변경된 값으로 텍스트 업데이트
+	                let stopAjax=false;
 	                if(event.key == 'Enter'){
 	                	memberNickNameElement.innerText = this.value;
-	                	isEditing = false;
-	                	
-	                }
-	                //ajax;
 	                	$.ajax({
 	                		url:'adminUpdateNickName.me',
-	                		data :{existingNickname:memberNickNameElement.innerText},
+	                		data :{memberNickName:memberNickNameElement.innerText, memberId:changeId.children[1].innerText},
 	                		success : data=>{
 	                			console.log(data)
 	                			if(data == 'success'){
-									tds[i].innerText = '<class="td4">' + existingNickname + '</td>';
+	                				console.log("성공");
+	                				memberNickNameElement.innerText = this.value;
+	                				changeId.children[3].innerHTML = '<td  class="td4">' + this.value + '</td>';
 									
 								} else {
 									alert('수정이 실패하여 페이지가 새로고침 됩니다.');
 									location.reload();
 								}
 	                		},
-	                		error: data => console.log(data)
+	                		error: data => console.log("실패"+data)
 	                	});
+	                }
+	                	isEditing = false;
+	                //ajax;
 	                // flag 변수 갱신
 	            });
 	
