@@ -16,7 +16,21 @@ public class HeartController {
 	
 	@PostMapping("selectHeart.like")
 	@ResponseBody
-	public void selectHeart(@ModelAttribute Heart h) {
-		hService.selectHeart(h);
+	public Heart selectHeart(@ModelAttribute Heart h) {
+		Heart heart = hService.selectHeart(h);
+		System.out.println(heart);
+		return heart;
+	}
+	
+	@PostMapping("insertHeart.like")
+	@ResponseBody
+	public int insertHeart(@ModelAttribute Heart h) {
+		return hService.insertHeart(h);
+	}
+	
+	@PostMapping("deleteHeart.like")
+	@ResponseBody
+	public int deleteHeart(@ModelAttribute Heart h) {
+		return hService.deleteHeart(h);
 	}
 }

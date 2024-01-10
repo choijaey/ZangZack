@@ -4,6 +4,9 @@ import com.kh.zangzac.common.heart.model.vo.Heart;
 
 public interface HeartService {
 
-	void selectHeart(Heart h);
+	Heart selectHeart(Heart h);
+	
+	int insertHeart(Heart h);
 
+	int deleteHeart(Heart h);
 }

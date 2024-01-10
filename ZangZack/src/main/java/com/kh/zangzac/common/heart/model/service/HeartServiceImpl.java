@@ -13,8 +13,17 @@ public class HeartServiceImpl implements HeartService{
 	private HeartDAO hDAO;
 	
 	@Override
-	public void selectHeart(Heart h) {
-		hDAO.selectHeart(h);
+	public Heart selectHeart(Heart h) {
+		return hDAO.selectHeart(h);
+	}
+	
+	@Override
+	public int insertHeart(Heart h) {
+		return hDAO.insertHeart(h);
 	}
 
+	@Override
+	public int deleteHeart(Heart h) {
+		return hDAO.deleteHeart(h);
+	}
 }
