@@ -99,7 +99,9 @@ public class CampController {
 			                       @RequestParam("page") int page,
 			                       Model model) {
 		
+		System.out.println("dd"+no);
 		CampingGround camp = cService.selectCampingDetail(no);
+		System.out.println(camp.getCgImgInfo());
 		
 		ArrayList<Photo> campList = cService.selectPhoto(no); //캠핑장 사진
 		
@@ -246,9 +248,10 @@ public class CampController {
 			               RedirectAttributes redirectAttributes) {
 		
 		String name = "yoonseo";
+		System.out.println("캠핑장번호"+camp.getCgNo());
 		
 		ArrayList<Photo> list = new ArrayList<>();
-		// 새로 추가한 파일들이 들어가 있는곳
+		//files 새로 추가한 파일들이 들어가 있는곳
 		for(int i = 0; i < files.size(); i++) {
 			MultipartFile upload = files.get(i);
 			
@@ -272,7 +275,6 @@ public class CampController {
 		
 		for(int i =0; i < deleteFile.length; i++) { //삭제할 파일들을
 			String rename = deleteFile[i]; //rename에 담음
-			System.out.println(rename);
 			if(!rename.equals("none")) { //none이 아니면
 				String[] split = rename.split("/");// 슬래시로 잘라서
 				delRename.add(split[0]); //0번은 여기 담고
@@ -281,20 +283,55 @@ public class CampController {
 		}
 		
 		int deleteFileResult = 0;
+		int updateCampResult = 0;
+		
 		if(!delRename.isEmpty()) {//담긴 파일명이 있으면.
 			deleteFileResult = cService.deleteFile(delRename);
-			if(deleteFileResult > 0) {
-				for(String rename : delRename) {
-					//deleteFile(rename);
+			if(deleteFileResult > 0) { //db에서 삭제가 됐으면.
+				for(String rename: delRename) { 
+					imageStorage.deleteImage(rename,name);//삭제 메소드
+				}
+			}
+			for(int level : delLevel) {
+				if(level == 0) {
+					cService.updatePhotoLevel(camp.getCgNo());
+					break;
 				}
 			}
 			
 		}
 		
+		for(int i = 0; i <list.size(); i++) {
+			Photo p = list.get(i);
+			p.setBoardNo(camp.getCgNo());
+			if(i == 0) { //첫번째 파일은 0레벨 주기
+				p.setPhotoLevel(0); 
+			}else {
+				p.setPhotoLevel(1);
+			}
+		}
+		updateCampResult = cService.updateCamp(camp); //camp정보 update
+		int updateFileResult = 0;
+		if(!list.isEmpty()) { //새로 추가한 파일이 있으면
+			updateFileResult = cService.insertCampImg(list); //camp사진 insert
+		}
 		
-		return null;
+		if(updateCampResult +  updateFileResult == list.size()+1) { 
+			//camp정보 update된 결과(행 갯수)와 캠프사진 insert한 결과(행 갯수)를 합한 것과
+			//추가한 사진 길이에 +1 한 것이 같으면.
+			redirectAttributes.addAttribute("no", camp.getCgNo());
+			redirectAttributes.addAttribute("page", page);
+			return "redirect:campDetail.ys";
+		}else {
+			throw new CampException("캠핑장 수정에 실패");
+		}
+		
 	}
 
+
+	
+
+	
 
 	
 

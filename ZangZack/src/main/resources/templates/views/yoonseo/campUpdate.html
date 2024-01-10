@@ -105,12 +105,13 @@
 			  </ul>
 		    </nav>					    
 		</div>
-   <script>
+   <script th:inline="javascript">
      window.onload = () =>{
     	 const tds = document.getElementsByTagName('td');
     	 let columnName = "";
     	 for(let i = 0; i < tds.length; i++){
     		 const index = i%5;
+    		
     		 if(index == 3){
     			 columnName ="cg_recomendation";
     		 }else if(index == 4){

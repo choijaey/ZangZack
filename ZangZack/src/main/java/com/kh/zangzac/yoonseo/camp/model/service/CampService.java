@@ -43,5 +43,11 @@ public interface CampService {
 
 	CampingGround selectAllCamping(int no);
 
+	void updatePhotoLevel(int cgNo);
+
+	int updateCamp(CampingGround camp);
+
+	int insertPhoto(ArrayList<Photo> list);
+
 	
 }

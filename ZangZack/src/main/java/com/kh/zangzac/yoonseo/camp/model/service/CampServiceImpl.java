@@ -113,6 +113,21 @@ public class CampServiceImpl implements CampService {
 		return cDAO.selectAllCamping(no);
 	}
 
+	@Override
+	public void updatePhotoLevel(int cgNo) {
+		cDAO.updatePhotoLevel(cgNo);
+	}
+
+	@Override
+	public int updateCamp(CampingGround camp) {
+		return cDAO.updateCamp(camp);
+	}
+
+	@Override
+	public int insertPhoto(ArrayList<Photo> list) {
+		return cDAO.insertPhoto(list);
+	}
+
 
 
 

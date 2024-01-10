@@ -46,4 +46,10 @@ public interface CampDAO {
 	int deleteFile(ArrayList<String> delRename);
 
 	CampingGround selectAllCamping(int no);
+
+	int updateCamp(CampingGround camp);
+
+	int insertPhoto(ArrayList<Photo> list);
+
+	void updatePhotoLevel(int cgNo);
 }
