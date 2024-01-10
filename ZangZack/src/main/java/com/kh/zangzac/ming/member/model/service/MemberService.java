@@ -2,6 +2,7 @@ package com.kh.zangzac.ming.member.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,6 +41,8 @@ public interface MemberService {
 	
 	//관리자페이지
 	ArrayList<Member> selectMembers();
+
+	int updateInfo(Properties prop);
 
 
 	

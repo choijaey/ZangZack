@@ -2,6 +2,7 @@ package com.kh.zangzac.ming.member.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -99,6 +100,11 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public ArrayList<Member> selectMembers() {
 		return mDAO.selectMembers();
+	}
+
+	@Override
+	public int updateInfo(Properties prop) {
+		return mDAO.updateInfo(prop);
 	}
 
 

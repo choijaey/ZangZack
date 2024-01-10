@@ -2,6 +2,7 @@ package com.kh.zangzac.ming.member.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.Random;
 
 import org.json.JSONArray;
@@ -516,5 +517,19 @@ public class MemberController {
 		map.put("m", member);
 		
 		return map;
+	}
+	
+	@GetMapping("updateInfo.me")
+	@ResponseBody
+	public String updateInfo(@RequestParam("column") String column, @RequestParam("data") String data, @RequestParam("id") String id) {
+		Properties prop = new Properties();
+		System.out.println(column);
+		
+		prop.setProperty("column", column);
+		prop.setProperty("data", data);
+		prop.setProperty("id", id);
+		
+		int result = mService.updateInfo(prop);
+		return result == 1? "success" : "fail";
 	}
 }
