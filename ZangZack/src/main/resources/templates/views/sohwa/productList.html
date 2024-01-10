@@ -186,7 +186,7 @@
 				    <a href="#"><img th:src="${a.photoPath}"></a>
 			        <p>[[${p.productName}]]</p>
 			        <p class="price" th:text="|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|"></p>
-			        <span class="starImage" th:each="r, iterStat : ${rList}" th:if="${iterStat.index == 0}" th:if="${iterStat.index == 0 && p.productNo == r.productNo}">
+			        <span class="starImage" th:each="r, iterStat : ${rList}" th:if="${iterStat.index == 0 && p.productNo == r.productNo}">
 						<img src="image/sohwa/icons8-star.gif" style="height: 10px;">[[${p.productScore}]] <span style="color:gray;">리뷰 [[${rList.size()}]]개</span></img>
 					</span><br>
 			        <th:block th:if="${p.eno == 0}"><span class="badge rounded-pill text-bg-dark">일시품절</span></th:block>

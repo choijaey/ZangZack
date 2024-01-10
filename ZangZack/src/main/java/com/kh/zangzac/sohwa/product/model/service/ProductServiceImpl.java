@@ -251,14 +251,20 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public int updateReviewPhoto(Attachment a) {
-		return pDAO.updateReviewPhoto(a);
+	public String deleteSelectReview(int reviewNo) {
+		return pDAO.deleteSelectReview(reviewNo);
 	}
 
 	@Override
 	public int updateReviewInfo(Review r) {
 		return pDAO.updateReviewInfo(r);
 	}
+
+	@Override
+	public int updateReviewPhoto(Attachment a) {
+		return pDAO.updateReviewPhoto(a);
+	}
+
 
 
 

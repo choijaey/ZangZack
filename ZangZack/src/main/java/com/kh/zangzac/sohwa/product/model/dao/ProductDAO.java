@@ -106,9 +106,12 @@ public interface ProductDAO {
 
 	int deleteReview(int reviewNo);
 
-	int updateReviewPhoto(Attachment a);
+	String deleteSelectReview(int reviewNo);
 
 	int updateReviewInfo(Review r);
+
+	int updateReviewPhoto(Attachment a);
+
 
 
 	
