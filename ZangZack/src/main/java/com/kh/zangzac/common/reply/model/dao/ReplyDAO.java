@@ -20,4 +20,6 @@ public interface ReplyDAO {
 
 	ArrayList<Reply> replyLimitList(SelectCondition b, RowBounds rowBounds);
 
+	int updateReply(Reply r);
+
 }

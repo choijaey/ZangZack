@@ -41,4 +41,9 @@ public class ReplyServiceImpl implements ReplyService {
 		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
 		return rDAO.replyLimitList(b, rowBounds) ;
 	}
+
+	@Override
+	public int updateReply(Reply r) {
+		return rDAO.updateReply(r);
+	}
 }

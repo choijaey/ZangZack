@@ -19,6 +19,7 @@ import com.kh.zangzac.common.model.vo.SelectCondition;
 import com.kh.zangzac.common.reply.model.service.ReplyService;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.ming.member.model.vo.Member;
+import com.kh.zangzac.seongun.common.WorkController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -29,10 +30,13 @@ public class ReplyController {
 	@Autowired
 	private ReplyService rService;
 	
+	@Autowired
+	private ReplyWork work;
 	@PostMapping("insertReply.rep")
 	@ResponseBody
 	public Map<String, Object> insertReply(@ModelAttribute("Reply") Reply reply,@RequestParam(value="page", defaultValue="1") int page, HttpSession session) {
 		Member loginUser = (Member)session.getAttribute("loginUser");
+		int maxPage = -1;
 		
 		if(loginUser != null) {
 			 reply.setMemberId(loginUser.getMemberId()); 
@@ -41,12 +45,22 @@ public class ReplyController {
 		int result = rService.insertReply(reply);
 		ArrayList<Reply> list = rService.selectReply(reply);
 	    Map<String, Object> map = new HashMap<>();
-	    map.put("list", list);
+	    
+		if(result > 0) {
+			maxPage = maxPage(reply);
+		}
+		
+		map.put("list", list);
+		map.put("maxPage", maxPage);
 	    return map;
 	}
 
 	public int countReply(SelectCondition b) {
 		return rService.countReply(b);
+	}
+	
+	private int maxPage(Reply r) {
+		return Pagination.getReplyPageInfo(1, countReply(work.changeReply(r)), 10).getMaxPage();
 	}
 	
 	@GetMapping("replyLimitList.rep")
@@ -64,4 +78,16 @@ public class ReplyController {
 	    return map;
 	}
 	
+	@PostMapping("updateReply.rep")
+	@ResponseBody
+	public int updateReply(@ModelAttribute Reply r){
+		int result = rService.updateReply(r);
+		int maxPage = -1;
+		if(result > 0) {
+			maxPage = maxPage(r);
+		}
+		
+		return maxPage;
+	}
+
 }

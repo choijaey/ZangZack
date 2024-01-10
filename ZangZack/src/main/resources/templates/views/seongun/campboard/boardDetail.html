@@ -118,7 +118,7 @@
 		                    boardType: 1 
 		                },
 		                success: function(data) {
-		                    loadCommentList();
+		                    loadCommentList(maxPage);
 		                    document.getElementById('replyContent').value = '';
 		                },
 		                error: function(error) {
@@ -210,8 +210,8 @@ if (memberId && memberId === comment.memberId) {
     	submitButton.textContent = '등록';
     	submitButton.onclick = function() {
     	    // 서버에 수정 내용을 전송하는 코드를 여기에 추가합니다.
-    	    console.log('댓글 수정:', textarea.value);
-
+    	    let text = textarea.value
+    	    updateReply(text, comment);
     	    // 수정된 내용으로 댓글을 업데이트합니다.
     	    messageDiv.textContent = textarea.value;
     	    contentDiv.replaceChild(messageDiv, editForm);
@@ -224,7 +224,9 @@ if (memberId && memberId === comment.memberId) {
     	cancelButton.textContent = '취소';
     	cancelButton.onclick = function() {
     	    // 수정 폼을 취소하고 원래의 댓글 내용으로 돌아갑니다.
+    	    
     	    contentDiv.replaceChild(messageDiv, editForm);
+    	    
     	};
 
     	// 버튼들을 컨테이너에 추가
@@ -363,6 +365,25 @@ if (memberId && memberId === comment.memberId) {
 		        };
 		        nextGroupDiv.appendChild(nextGroupLink);
 		    }
+		}
+		function updateReply(text, comment){
+			console.log(text, comment);
+			$.ajax({
+				url: 'updateReply.rep',
+				method: 'POST',
+				data: {
+					replyContent: text,
+					boardNo: comment.boardNo, 
+					boardType: 1,
+					replyNo: comment.replyNo
+				},
+				success: function(data) {
+					loadCommentList();
+				},
+				error: function(error) {
+					console.error('Error adding comment:', error);
+				}
+			});
 		}
 		
 	</script>

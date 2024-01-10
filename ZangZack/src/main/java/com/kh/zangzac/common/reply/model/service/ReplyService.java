@@ -17,4 +17,6 @@ public interface ReplyService {
 
 	ArrayList<Reply> replyLimitList(SelectCondition b, PageInfo pi);
 
+	int updateReply(Reply r);
+
 }

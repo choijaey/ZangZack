@@ -25,4 +25,10 @@
 		where reply_status = 'N' and board_type = #{boardType} and board_no = #{boardNo}
 		order by reply_no asc
 	</select>
+	
+	<update id="updateReply">
+		update reply
+		set reply_content = #{replyContent}, reply_modifydate = sysdate
+		where reply_no = #{replyNo}
+	</update>
 </mapper>
