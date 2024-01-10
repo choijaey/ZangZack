@@ -164,9 +164,26 @@ public class FriendController {
 	    	  map.put("data", "no");
 	      }
 	      
+	       return map;
+	   }
+	   
+	   @GetMapping(value = "/updateReply.jy")
+	   @ResponseBody
+	   public String updateReply(@ModelAttribute Reply reply) {
+		  
+		  int result = rService.updateReply(reply);
+		  
+		  String answer;
+	      
+	      if(result >0) {
+	    	  answer= "yes";
+	      }else {
+	    	  answer= "no";
+	      }
+	      
 	      
 	       
-	       return map;
+	       return answer;
 	   }
 	
 	

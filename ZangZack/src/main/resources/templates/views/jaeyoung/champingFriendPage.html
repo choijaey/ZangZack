@@ -331,7 +331,29 @@
         
         edit.addEventListener('click', function(){
         	// 누른 댓글 아이디 가져와야함
-        	replyEditCfNo.value
+        	const replyId = 'reply'+replyEditCfNo.value;
+        	const editTitle = document.getElementById(replyId);
+        	
+        	//댓글 아이디를 가져왔으니 이걸 통해 수정해야함 아작스로 DB수정하고 그다음에 innerText 수정
+        	 $.ajax({
+	              url: 'updateReply.jy', // 서버의 댓글 목록 불러오기 URL
+	              method: 'GET',
+	              data: { 
+	            	  replyNo : replyEditCfNo.value, replyContent : replyEditContent.innerText
+	              },
+	              success: function(data) {
+	                  
+	                  // 성공했으면 innerText 바꾸기
+	                  console.log(data);
+	              },
+	              error: function(data) {
+	                  console.log(data);
+	              }
+	          });
+        	
+        	
+        	
+        	 
         });
 	
 	</script>
@@ -548,7 +570,7 @@
 		        	if(User){
 		        		if(User.memberId == reply.memberId){
 				        	ButtonHTML+=`
-				        		<input type="hidden" value ="${reply.replyNo}">
+				        		<input type="hidden" value ="${reply.replyNo}" id="reply${reply.replyNo}">
 					 	        <div class="edit" onclick="openEditModal(event)" >수정</div>
 							    <div class="delete" onclick="deleteReply(event)" >삭제</div>
 				        	`
@@ -642,7 +664,7 @@
 	      		if(User.memberId == item.memberId){
 	      			console.log(item.memberId);		
 		        	ButtonHTML+=`
-		        		<input type="hidden" value ="${item.replyNo}">
+		        		<input type="hidden" value ="${item.replyNo}" id="reply${item.replyNo}">
 			 	        <div class="edit" onclick="openEditModal(event)" >수정</div>
 					    <div class="delete" onclick="deleteReply(event)" >삭제</div>
 		        	`
