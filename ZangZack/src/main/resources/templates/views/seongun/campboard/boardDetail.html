@@ -71,12 +71,8 @@
 		clickHeart = () =>{
 			if(member != null){
 				if(heart == null){
-					console.log(heart);
-					console.log("야 이거 이상하다 ㅅㅂ?");
 					deleteHeart();
 				}else{
-					console.log(heart);
-					console.log("너가 작동하는데 이유가 머야?");
 					insertHeart();
 				}
 			}else{
@@ -111,8 +107,8 @@
 		            memberId: memberId
 		        },
 		        success: data => {
-		        	 console.log("좋아요 눌림");
-		        	 selectHeart();
+					console.log("insert :" + heart);
+					selectHeart();
 		        },
 		        error : data => console.log(data)
 		    });
@@ -127,8 +123,8 @@
 					memberId: memberId
 				},
 				success: data => {
-		        	 console.log("삭제 눌림");
-		        	 selectHeart();
+					console.log("delete :" + heart);
+					selectHeart();
 		        },
 		        error : data => console.log(data)
 			});
