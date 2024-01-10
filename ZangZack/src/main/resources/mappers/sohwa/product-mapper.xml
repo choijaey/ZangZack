@@ -43,18 +43,24 @@
 	
 	
 	<insert id="updateReviewPhoto">
-		insert into photo
-		values (new_aid, #{photoRename), #{photoPath}, #{photoLevel}, 6, #{boardNo}, default}
+	    insert into photo
+	    values (new_aid, #{photoRename}, #{photoPath}, 0, 6, #{boardNo}, default)
 	</insert>
 	
 	
 	
 	<update id="updateReviewInfo">
 		update review
-		set review_content=#{reviewContent} , review_score=#{reviewScore}
+		set review_content=#{reviewContent} , review_score=#{reviewScore}, review_modify_date = sysdate
 		where review_no = #{reviewNo}
 	</update>
 	
+	
+	<select id="deleteSelectReview" resultType="string">
+		select photo_rename
+        from photo
+        where board_type = 6 and board_no=#{review_no}
+	</select>
 	
 	
 	<insert id="insertOption">

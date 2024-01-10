@@ -625,11 +625,18 @@ public class ProductController {
 		
 	}
 	
-	
+	//리뷰삭제
 	@GetMapping("deleteReview.so")
 	public String deleteReview(@RequestParam("reviewNo") int reviewNo, @RequestParam("productNo") int productNo) {
 		
+		String name="sohwa";
 		int result = pService.deleteReview(reviewNo);
+		String deleteRename = pService.deleteSelectReview(reviewNo);
+		System.out.println(deleteRename);
+		
+		Boolean sf = imageStorage.deleteImage(deleteRename, name);
+		System.out.println(sf);
+		
 		
 		if(result > 0) {
 			return "redirect:productDetail.so?productNo=" + productNo;
@@ -641,48 +648,51 @@ public class ProductController {
 	
 	@PostMapping("updateReview.so")
 	public String updateReview(@RequestParam(value="deleteRename", defaultValue="") String deleteRename, @RequestParam("reviewContent") String reviewContent, @RequestParam("updateFile") MultipartFile updateFile, @RequestParam("productNo") int productNo, @RequestParam("reviewScore") int reviewScore, @RequestParam("reviewNo") int reviewNo) {
-		String name="sohwa";
 		
-		String[] returnArr = imageStorage.saveImage(updateFile, name);
-		Attachment a = new Attachment();
 		Review r = new Review();
+		Attachment a = new Attachment();
+		String name="sohwa";
+		r.setProductNo(productNo);
+		r.setReviewContent(reviewContent);
+		r.setReviewNo(reviewNo);
+		r.setReviewScore(reviewScore);
 		
 		System.out.println(reviewScore);
-		System.out.println(deleteRename);
+		System.out.println(reviewContent);
+		System.out.println(reviewNo);
+		System.out.println(updateFile.getOriginalFilename());
 		
-		if(returnArr != null) {
-			if(deleteRename != "") {
-				imageStorage.deleteImage(deleteRename, name);
+		int result1 = 0;
+		int result2 = 0;
+		//deleteRename도 비어있고, updateFile이 비어있을 때 (사진 X)
+		//deleteRename은 비어있고, updateFile이 있을 때 (새로 추가)
+		//deleteRename 차있고, updateFile이 비어있을 때 (사진 그대로 유지)
+		//deleteRename 차있고, updateFile도 차있을 때 (사진 변경)
+		
+		//deleteRename도 비어있고, updateFile이 비어있을 때 (사진 X)
+		if(deleteRename.equals("")) {
+			if(updateFile.getOriginalFilename().equals("")) {
+				result1 = pService.updateReviewInfo(r);
+				
+			}else if(!updateFile.getOriginalFilename().equals("")) {
+				a.setBoardNo(reviewNo);
+				a.setBoardType(6);
+				a.setPhotoLevel(0);
+				String[] returnArr = imageStorage.saveImage(updateFile, name);
+				
+				if(returnArr != null) {
+					a.setPhotoPath(returnArr[1]);
+					a.setPhotoRename(returnArr[0]);
+					
+					System.out.println(a);
+					result2 = pService.updateReviewPhoto(a);
+				}
+				result1 = pService.updateReviewInfo(r);
 			}
-			
-			a.setPhotoRename(returnArr[0]);
-			a.setPhotoPath(returnArr[1]);
-			a.setBoardNo(reviewNo);
-			a.setBoardType(6);
-			a.setPhotoLevel(0);
-			
-			r.setProductNo(productNo);
-			r.setReviewContent(reviewContent);
-			r.setReviewNo(reviewNo);
-			r.setReviewScore(reviewScore);
-			
-			int result = pService.updateReviewPhoto(a);
-			
-		}else {
-			r.setProductNo(productNo);
-			r.setReviewContent(reviewContent);
-			r.setReviewNo(reviewNo);
-			r.setReviewScore(reviewScore);
 		}
 		
-		int result2 = pService.updateReviewInfo(r);
-	
-	
-		if(result2 > 0) {
-			return "redirect:productDetail.so?productNo=" + productNo;
-		}else {
-			throw new ProductException("리뷰 수정 실패");
-		}
+		System.out.println("deleteRename:" + deleteRename);
+		return "redirect:productDetail.so?productNo=" + productNo;
 		
 	}
 	

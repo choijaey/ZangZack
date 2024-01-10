@@ -261,6 +261,8 @@
 												            
 												            <div class="border-t border-gray-200">
 												            	<form action="updateReview.so" method="POST" enctype="multipart/form-data">
+												            		<input type="hidden" th:each="a:${aList}" th:if="${a.boardNo == r.reviewNo && a.boardType==6}" th:value="${a.photoRename}" name="deleteRename">
+												            		<input type="hidden" th:value="${r.reviewNo}" name="reviewNo">
 													            	<input type="hidden" th:value="${p.productNo}" name="productNo">
 													            	<input type="file" class="fileUpload2" name="updateFile" style="display: none;">
 													            	<input type="hidden" name="reviewScore" value="0">
