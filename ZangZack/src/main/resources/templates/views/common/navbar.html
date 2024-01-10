@@ -27,9 +27,16 @@
             <li><a href="signUp.me">로그인</a></li>
          </ul>
          <ul th:if="${session.loginUser != null}">
-            <li><a href="logout.me">로그아웃</a></li>
-            <li><span>/</span></li>
-            <li><a href="myPage.me">마이페이지</a></li>
+	         <th:block th:if="${loginUser.memberIsAdmin =='Y'}">
+	            <li><a href="logout.me">로그아웃</a></li>
+	            <li><span>/</span></li>
+	            <li><a href="myPage.me">관리자 페이지</a></li>
+	        </th:block>
+	        <th:block th:if="${loginUser.memberIsAdmin =='N'}">
+	            <li><a href="logout.me">로그아웃</a></li>
+	            <li><span>/</span></li>
+	            <li><a href="myPage.me">마이페이지</a></li>
+	        </th:block>
          </ul>
       </div>
    </div>
@@ -131,17 +138,17 @@
             <li class="main-menu"><a href="#" class="main-menu-name">게시판</a>
                <ul>
                   <li class="sub-menu-1">
-                     <a href="secondHand.ah" class="sub-menu-name">중고물품<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
-                     </a>
-                  </li>
-                  <li class="sub-menu-1">
                      <a href="campBoard.su" class="sub-menu-name">캠핑게시판<span class="gt"></span> 
                         <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
                      </a>
                   </li>
                   <li class="sub-menu-1">
                      <a href="recipe.su" class="sub-menu-name">레시피<span class="gt"></span> 
+                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
+                     </a>
+                  </li>
+                  <li class="sub-menu-1">
+                     <a href="secondHand.ah" class="sub-menu-name">중고물품<span class="gt"></span> 
                         <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
                      </a>
                   </li>

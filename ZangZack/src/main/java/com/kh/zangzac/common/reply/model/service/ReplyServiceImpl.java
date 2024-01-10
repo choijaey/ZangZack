@@ -46,4 +46,9 @@ public class ReplyServiceImpl implements ReplyService {
 	public int updateReply(Reply r) {
 		return rDAO.updateReply(r);
 	}
+	
+	@Override
+	public Reply selectReplyOne(Reply reply) {
+		return rDAO.selectReplyOne(reply);
+	}
 }
