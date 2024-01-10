@@ -38,7 +38,7 @@
 		<div class="comments-section">
 			<div class="post-details">
 				<div class="post-like-comment">
-					<img src="image/seongun/offheart.png" alt="좋아요" class="like-button" onclick="increaseLikeCount()"> <span class="like-text">좋아요</span>
+					<img src="image/seongun/offheart.png" alt="좋아요" class="like-button" onclick="selectHeart()"> <span class="like-text">좋아요</span>
 					<span class="like-count">[[${bList.heartCount}]]</span> 
 					<span class="comment-text">댓글</span>
 					<span class="comment-count">[[${bList.replyCount}]]</span>
@@ -65,10 +65,32 @@
 		if(member != null){
 			var memberId = member.memberId;
 		}
-		
-		increaseLikeCount = () =>{
-			
+		selectHeart = () =>{
+			console.log(1);
+			if(member != null){
+				$.ajax({
+			        url: 'selectHeart.like', // 서버의 댓글 목록 불러오기 URL
+			        method: 'post',
+			        data: { 
+			        	page: replyPage,
+			            boardNo: /*[[${bList.cbNo}]]*/1, 
+			            boardType: 1 
+			        	
+			        },
+			        success: function(data) {
+			        	 console.log('Received data:', formatDate(data.list[0].replyCreateDate));
+			            updateCommentList(data.list);
+			            updatePagination(data.rPi);
+			        },
+			        error: function(error) {
+			            console.error('Error loading comments:', error);
+			        }
+			    });
+			}else{
+				alert("로그인하고 누르삼");
+			}
 		}
+		
 		/*<![CDATA[*/
 		// 페이지 로드 시 댓글 목록 불러오기
 		window.onload = function() {
