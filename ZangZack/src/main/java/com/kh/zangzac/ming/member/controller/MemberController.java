@@ -532,4 +532,5 @@ public class MemberController {
 		int result = mService.updateInfo(prop);
 		return result == 1? "success" : "fail";
 	}
+	
 }

@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
   <link href="css/ming/admin/memberList.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <style>
   .modal {
         position: absolute;
@@ -52,7 +53,6 @@
       }
 	  .unselectState{background: none;}
   </style>
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
 <body>
 	<div th:replace="~{common/adminNav :: adminNav}"></div>
@@ -103,8 +103,8 @@
          <tr th:each="m:${list}">
             <td class="td1"><input type="checkbox"></td>
             <td class="td2">[[${m.memberId}]]</td>
-            <td class="td3">[[${m.memberName}]]</th>
-            <td class="td4">[[${m.memberNickName}]]</th>
+            <td class="td3">[[${m.memberName}]]</td>
+            <td class="td4">[[${m.memberNickName}]]</td>
             <td class="td5">[[${m.memberAddress.replace('@', ' ')}]]</td>
             <td class="td6">[[${m.memberPhone}]]</td>
             <td class="td7"> 
@@ -183,7 +183,6 @@
 		      const modal = document.querySelector('.modal');
 		      const tds = document.getElementsByTagName('td');
 			
-		      console.log(tds.length);
 		      for(let i = 0; i <tds.length; i++ ){
 		    	  const index = i % 8;
 		    	  if(index != 0 && index != 6 && index != 7){
@@ -236,6 +235,9 @@
 				        }
 				        
 				      })
+				      
+				      
+				      
 		    	  };
 		    	  
 		    	  if (index == 6 || index == 7) {
@@ -275,7 +277,6 @@
 		    		      });
 		    		  	}
 		    		}
-					
 		      };
 		      
 		       // 모달창 외부를 클릭했을때 창 닫기
@@ -334,9 +335,12 @@
 	            this.innerHTML = '';
 	            this.appendChild(inputElement);
 	        });
-	   		
+	        
+	        //닉네임 수정
 	        const memberNickNameElement = document.getElementById('memberNickName');
 	        memberNickNameElement.addEventListener('click', function() {
+	        	
+	        	console.log(tds[4].parentElement.parentElement.children[0].children[3].innerHTML);
 	            // 입력 중인 경우는 더 이상 실행하지 않음
 	            if (isEditing) {
 	                return;
@@ -344,7 +348,6 @@
 	            
 	            // 현재 텍스트 값 가져오기
 	            const currentText = this.innerText.trim();
-	
 	            // input 엘리먼트 생성
 	            const inputElement = document.createElement('input');
 	            inputElement.type = 'text';
@@ -365,10 +368,21 @@
 	                	
 	                }
 	                //ajax;
-	                	/* $.ajax({
+	                	$.ajax({
 	                		url:'adminUpdateNickName.me',
-	                		data : 
-	                	}); */
+	                		data :{existingNickname:memberNickNameElement.innerText},
+	                		success : data=>{
+	                			console.log(data)
+	                			if(data == 'success'){
+									tds[i].innerText = '<class="td4">' + existingNickname + '</td>';
+									
+								} else {
+									alert('수정이 실패하여 페이지가 새로고침 됩니다.');
+									location.reload();
+								}
+	                		},
+	                		error: data => console.log(data)
+	                	});
 	                // flag 변수 갱신
 	            });
 	
@@ -376,7 +390,8 @@
 	            this.innerHTML = '';
 	            this.appendChild(inputElement);
 	        });
-	    
+            
+
 	    
  	</script>
 </body>
