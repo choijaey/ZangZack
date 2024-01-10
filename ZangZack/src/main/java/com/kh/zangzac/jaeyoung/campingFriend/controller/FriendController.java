@@ -167,22 +167,39 @@ public class FriendController {
 	       return map;
 	   }
 	   
-	   @GetMapping(value = "/updateReply.jy")
+	   @GetMapping(value = "/updateReply.jy", produces = "application/json")
 	   @ResponseBody
-	   public String updateReply(@ModelAttribute Reply reply) {
+	   public Map<String, Object> updateReply(@ModelAttribute Reply reply) {
 		  
 		  int result = rService.updateReply(reply);
 		  
-		  String answer;
+		  Reply r = rService.selectReplyOne(reply);
+		  
+		  Map<String, Object> map = new HashMap<>();
 	      
 	      if(result >0) {
-	    	  answer= "yes";
+	    	  map.put("data", r);
 	      }else {
-	    	  answer= "no";
+	    	  map.put("data", "no");
 	      }
 	      
-	      
-	       
+	       return map;
+	   }
+	   
+	   @GetMapping(value = "/deleteReply.jy")
+	   @ResponseBody
+	   public String deleteReply(@ModelAttribute Reply reply) {
+		  
+		   System.out.println(reply);
+		  int result = rService.deleteReply(reply);
+		  
+		  String answer ="";
+		  
+		  if(result>0) {
+			  answer="yes";
+		  }else {
+			  answer="no";
+		  }
 	       return answer;
 	   }
 	
