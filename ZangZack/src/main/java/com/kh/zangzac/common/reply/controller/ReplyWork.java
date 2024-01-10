@@ -2,7 +2,6 @@ package com.kh.zangzac.common.reply.controller;
 
 import org.springframework.stereotype.Controller;
 
-import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.SelectCondition;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 
@@ -16,4 +15,5 @@ public class ReplyWork {
 		
 		return b;
 	}
+	
 }

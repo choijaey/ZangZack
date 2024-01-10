@@ -24,4 +24,6 @@ public interface ReplyDAO {
 
 	int updateReply(Reply r);
 
+	int deleteReply(Reply r);
+
 }

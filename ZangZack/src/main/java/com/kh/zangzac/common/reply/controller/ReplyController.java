@@ -19,7 +19,6 @@ import com.kh.zangzac.common.model.vo.SelectCondition;
 import com.kh.zangzac.common.reply.model.service.ReplyService;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.ming.member.model.vo.Member;
-import com.kh.zangzac.seongun.common.WorkController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -70,7 +69,7 @@ public class ReplyController {
 		PageInfo pi = Pagination.getReplyPageInfo(page, listCount, 10);
 		
 		ArrayList<Reply> list = rService.replyLimitList(b, pi);
-	    
+
 		Map<String, Object> map = new HashMap<>();
 		map.put("list", list);
 	    map.put("rPi", pi);
@@ -90,4 +89,14 @@ public class ReplyController {
 		return maxPage;
 	}
 
+	@PostMapping("deleteReply.rep")
+	@ResponseBody
+	public int deleteReply(@ModelAttribute Reply r) {
+		int result = rService.deleteReply(r);
+		int maxPage = -1;
+		if(result > 0) {
+			maxPage = maxPage(r);
+		}
+		return maxPage;
+	}
 }
