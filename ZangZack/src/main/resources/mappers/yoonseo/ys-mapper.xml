@@ -111,5 +111,19 @@
      set ${column} = #{state}
      where cg_no = #{no}
    </update>
+   
+   <delete id="deleteFile">
+     delete from photo
+     where photo_rename in
+     <foreach collection="list" item="item" open="(" close=")" separator=",">
+       #{item}
+     </foreach>
+   </delete>
+   
+   <select id="selectAllCamping" resultType="CampingGround">
+     select *
+     from camping_ground
+     where cg_no = #{no}
+   </select>
 
 </mapper>

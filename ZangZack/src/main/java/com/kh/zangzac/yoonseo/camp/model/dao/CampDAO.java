@@ -42,4 +42,8 @@ public interface CampDAO {
 	ArrayList<CampingGround> selectAllList(RowBounds row);
 
 	int stateUpdate(Properties prop);
+
+	int deleteFile(ArrayList<String> delRename);
+
+	CampingGround selectAllCamping(int no);
 }

@@ -148,21 +148,21 @@
     	 
     	 const tbody = document.querySelector('tbody');
     	 const tTd = tbody.querySelectorAll('td');
-    	 
-    	 for(const td of tTd){
-    		 td.addEventListener('click', function(){
-    			 const trTds = this.parentElement.querySelectorAll('td');
-    			 const campNo = trTds[0].innerText;
-    			 /*<![CDATA[*/
-    		      location.href = 'selectUpdate.ys?no='+campNo+'&page='+/*[[${pi.currentPage}]]*/1;
-    		     /*]]>*/
-    			 
-    		 })
-    	 }
-    	 
-    	 
-     }
-   
+    	 for(let i = 0 ; i < tTd.length; i++){
+    		 const index = i%5;
+    		 if(index != 3 && index != 4){
+    		    const td = tTd[i];
+	    		td.addEventListener('click', function(){
+	    		   const trTds = this.parentElement.querySelectorAll('td');
+	    		   const campNo = trTds[0].innerText;
+	    			/*<![CDATA[*/
+	    		    location.href = 'selectUpdate.ys?no='+campNo+'&page='+/*[[${pi.currentPage}]]*/1;
+	    		    /*]]>*/
+	    			 
+	    		 }); 
+    	     }
+         }
+      } 
    </script>
 
 

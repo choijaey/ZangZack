@@ -207,7 +207,6 @@ public class CampController {
 			                  @RequestParam("state") String state,
 			                  @RequestParam("no") String no) {
 		
-		System.out.println(column);
 		
 		Properties prop = new Properties();//map형식으로 key와 value로 이루어져있음.문자열만 받아줌.
 		prop.setProperty("column",column);
@@ -215,7 +214,6 @@ public class CampController {
 		prop.setProperty("no", no);
 		
 		int result = cService.stateUpdate(prop);
-		System.out.println(result);
 		
 		return result == 1 ? "success" : "fail";
 	}
@@ -225,10 +223,9 @@ public class CampController {
 			                   @RequestParam("page") int page,
 			                   Model model) {
 		
-		CampingGround campList = cService.selectCampingDetail(no);
+		CampingGround campList = cService.selectAllCamping(no);
 		ArrayList<Photo> photoList = cService.selectPhoto(no);
 		
-		System.out.println(photoList);
 		if(campList != null) {
 			model.addAttribute("campList", campList);
 			model.addAttribute("photoList", photoList);
@@ -269,11 +266,37 @@ public class CampController {
 				}
 			}
 		}
-		System.out.println(list);
+		
+		ArrayList<String> delRename = new ArrayList<>();
+		ArrayList<Integer> delLevel = new ArrayList<>();
+		
+		for(int i =0; i < deleteFile.length; i++) { //삭제할 파일들을
+			String rename = deleteFile[i]; //rename에 담음
+			System.out.println(rename);
+			if(!rename.equals("none")) { //none이 아니면
+				String[] split = rename.split("/");// 슬래시로 잘라서
+				delRename.add(split[0]); //0번은 여기 담고
+				delLevel.add(Integer.parseInt(split[1]));//1번은 여기 담음.
+			}
+		}
+		
+		int deleteFileResult = 0;
+		if(!delRename.isEmpty()) {//담긴 파일명이 있으면.
+			deleteFileResult = cService.deleteFile(delRename);
+			if(deleteFileResult > 0) {
+				for(String rename : delRename) {
+					//deleteFile(rename);
+				}
+			}
+			
+		}
+		
 		
 		return null;
 	}
 
+
+	
 
 	
 	

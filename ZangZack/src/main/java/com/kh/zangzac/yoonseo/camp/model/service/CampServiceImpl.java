@@ -103,6 +103,16 @@ public class CampServiceImpl implements CampService {
 		return cDAO.stateUpdate(prop);
 	}
 
+	@Override
+	public int deleteFile(ArrayList<String> delRename) {
+		return cDAO.deleteFile(delRename);
+	}
+
+	@Override
+	public CampingGround selectAllCamping(int no) {
+		return cDAO.selectAllCamping(no);
+	}
+
 
 
 

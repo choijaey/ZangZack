@@ -39,6 +39,9 @@ public interface CampService {
 
 	int stateUpdate(Properties prop);
 
-	int insertFile(ArrayList<Photo> list);
+	int deleteFile(ArrayList<String> delRename);
 
+	CampingGround selectAllCamping(int no);
+
+	
 }
