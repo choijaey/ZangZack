@@ -155,6 +155,25 @@
 		</if>
 	</select>
 	
+	<select id="searchPhototh" resultType="Attachment">
+		select *
+		from photo
+			 join product on (board_no = product_no)
+		where photo_status = 'N' and product_name like '%${keyword}%' and photo_level in (0,1)
+		<if test="standard==1">
+			order by product_no desc
+		</if>
+		<if test="standard==2">
+			order by product_price
+		</if>
+		<if test="standard==3">
+			order by product_price desc
+		</if>
+		<if test="standard==4">
+			order by product_score desc
+		</if>
+	</select>
+	
 	
 	
 	<select id="selectProductList" resultType="Product">
@@ -194,6 +213,16 @@
 		order by board_no
 	</select>
 	
+	<select id="selectPhotothList" resultType="Attachment">
+		select *
+		from photo
+			 join product on (product_no = board_no)
+		where photo_status = 'N' and photo_level in (0,1)
+		<if test="categoryNo != 0">
+			and category_no = #{categoryNo}
+		</if>
+		order by board_no
+	</select>
 	
 	
 	<select id="selectProductDetail" resultType="Product">

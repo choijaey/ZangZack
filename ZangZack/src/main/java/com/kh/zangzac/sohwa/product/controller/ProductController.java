@@ -118,6 +118,7 @@ public class ProductController {
 		HashMap<String, String> searchMap = new HashMap<>();
 		ArrayList<Product> pList = new ArrayList<>();
 		ArrayList<Attachment> aList = new ArrayList<>();
+		ArrayList<Attachment> thList = new ArrayList<>();
 		PageInfo pi = new PageInfo();
 		
 		//categoryNo가 0일때는 keyword가져가기
@@ -130,6 +131,7 @@ public class ProductController {
 			categoryMap.put("standard", standard);
 			pList = pService.selectProductList(pi, categoryMap);
 			aList = pService.selectPhotoList(categoryNo);
+			thList = pService.selectPhotothList(categoryNo);
 		}else {
 			listCount = pService.getListCountKeyword(keyword);
 			int currentPage = page;
@@ -140,6 +142,7 @@ public class ProductController {
 			
 			pList = pService.searchProduct(pi, searchMap);
 			aList = pService.searchPhoto(searchMap);
+			thList = pService.searchPhototh(searchMap);
 		}
 		
 		
@@ -147,6 +150,7 @@ public class ProductController {
 		
 		
 		if(aList != null) {
+			model.addAttribute("thList", thList);
 			model.addAttribute("rList", rList);
 			model.addAttribute("categoryNo", categoryNo);
 			model.addAttribute("keyword", keyword);

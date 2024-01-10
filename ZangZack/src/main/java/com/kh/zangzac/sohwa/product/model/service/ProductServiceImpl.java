@@ -270,6 +270,16 @@ public class ProductServiceImpl implements ProductService{
 		pDAO.deleteReviewPhoto(reviewNo);
 	}
 
+	@Override
+	public ArrayList<Attachment> selectPhotothList(String categoryNo) {
+		return pDAO.selectPhotothList(categoryNo);
+	}
+
+	@Override
+	public ArrayList<Attachment> searchPhototh(HashMap<String, String> searchMap) {
+		return pDAO.searchPhototh(searchMap);
+	}
+
 
 
 

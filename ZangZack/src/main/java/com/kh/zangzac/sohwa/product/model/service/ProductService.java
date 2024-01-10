@@ -111,6 +111,10 @@ public interface ProductService {
 
 	void deleteReviewPhoto(int reviewNo);
 
+	ArrayList<Attachment> selectPhotothList(String categoryNo);
+
+	ArrayList<Attachment> searchPhototh(HashMap<String, String> searchMap);
+
 
 
 	

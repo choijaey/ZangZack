@@ -18,7 +18,10 @@
 			<div id="resultDiv1" class="resultDiv">
 				<div style="display: inline-block;width:250px;height:200px;">
 					1.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview1')" name="coreFile"><br>
-					<img id="preview1" src="image/sohwa/icons8-camera-80.png">
+					<div class="image-container" style="display:inline-block; position: relative; text-align: center;">
+						<img id="preview1" src="image/sohwa/icons8-camera-80.png">
+						<p class="centered-text" style="position: absolute;top: 50%;left: 50%; transform: translate(-50%, -50%); font-size:20px; font-weight:bolder; color:gray;">[썸네일]</p>
+					</div>
 					<button style="margin-left:65px;">취소</button>
 				</div>
 			</div>

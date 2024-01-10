@@ -114,6 +114,10 @@ public interface ProductDAO {
 
 	void deleteReviewPhoto(int reviewNo);
 
+	ArrayList<Attachment> selectPhotothList(String categoryNo);
+
+	ArrayList<Attachment> searchPhototh(HashMap<String, String> searchMap);
+
 
 
 	

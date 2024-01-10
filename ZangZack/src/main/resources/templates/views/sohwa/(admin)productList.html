@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link href="css/sohwa/(admin)productList.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 </head>
 <body>
 
@@ -164,7 +165,22 @@
         
         //상품삭제 및 복구
         function updateStatus(){
-        	
+        	var selectedProducts = [];
+
+            $('input[type="checkbox"]:checked').each(function() {
+                var productNo = $(this).closest('tr').find('input[name="productNo"]').val();
+                selectedProducts.push(productNo);
+            });
+
+            alert('선택된 상품번호들: ' + selectedProducts);
+            
+            $.ajax({
+            	url:'updateStatus.so',
+            	data:{checked:selectedProducts}, //숫자배열
+            	success:(data)=>{
+            		console.log(123);
+            	},error:data=>console.log(data)
+            })
         }
     </script>
 
