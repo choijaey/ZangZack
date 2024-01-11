@@ -79,17 +79,18 @@ public class FriendController {
 		      cf.setReplys(replyList);
 		      cf.setReplyCount(replyList.size());
 		      
+		      Heart h = new Heart();
+	    	  h.setBoardNo(cf.getCfNo());
+	    	  h.setBoardType(7);
+		      cf.setLikeCount(hService.countHeart(h));
+		      
 		      //하트 세팅하기
 		      if(loginUser != null) {// 유저가 있을때만 셋팅
 		    	  // 하트리스트 가져와서 셋팅..?
 		    	  // 보드 번호도 같고 아이디도 같은경우에만 셋팅 해야함
-		    	  Heart h = new Heart();
-		    	  h.setBoardNo(cf.getCfNo());
-		    	  h.setBoardType(7);
 		    	  h.setMemberId(loginUser.getMemberId());
 		    	  // 좋아요 있나 없나 검사
 		    	  Heart heart = hService.selectHeart(h);
-		    	  
 		    	  if(heart == null) {// 좋아요가 없으면
 		    		  cf.setLikeStatus("<img src=\"image/seongun/offheart.png\" alt=\"좋아요\" class=\"like-button\" onclick=\"toggleLike(event)\">");
 		    	  }else { // 좋아요가 있으면
@@ -135,17 +136,19 @@ public class FriendController {
 	      cf.setReplys(replyList);
 	      cf.setReplyCount(replyList.size());
 	      
+	      Heart h = new Heart();
+    	  h.setBoardNo(cf.getCfNo());
+    	  h.setBoardType(7);
+	      cf.setLikeCount(hService.countHeart(h));
+	      
 	      //하트 세팅하기
 	      if(loginUser != null) {// 유저가 있을때만 셋팅
 	    	  // 하트리스트 가져와서 셋팅..?
 	    	  // 보드 번호도 같고 아이디도 같은경우에만 셋팅 해야함
-	    	  Heart h = new Heart();
-	    	  h.setBoardNo(cf.getCfNo());
-	    	  h.setBoardType(7);
+	    	  
 	    	  h.setMemberId(loginUser.getMemberId());
 	    	  // 좋아요 있나 없나 검사
 	    	  Heart heart = hService.selectHeart(h);
-	    	  
 	    	  if(heart == null) {// 좋아요가 없으면
 	    		  cf.setLikeStatus("<img src=\"image/seongun/offheart.png\" alt=\"좋아요\" class=\"like-button\" onclick=\"toggleLike(event)\">");
 	    	  }else { // 좋아요가 있으면
@@ -253,7 +256,6 @@ public class FriendController {
 	   @ResponseBody
 	   public String deleteReply(@ModelAttribute Reply reply) {
 		  
-		   System.out.println(reply);
 		  int result = rService.deleteReply(reply);
 		  
 		  String answer ="";
@@ -270,8 +272,6 @@ public class FriendController {
 	   @ResponseBody
 	   public String updateLike(@ModelAttribute Heart heart,@RequestParam("changeLike") int changeLike) {
 		  
-		   System.out.println(heart);
-		   System.out.println(changeLike);
 		   
 		   int result = 1;
 		   heart.setBoardType(7);
@@ -289,6 +289,16 @@ public class FriendController {
 		  }
 	       return answer;
 	   }
+	   
+	   
+	   @GetMapping("campingFriendEditView.jy")
+		public String campingFriendEditView() {
+		   
+		   //보드 정보 가져와서 넘기기
+		   
+			return "views/jaeyoung/champingFriendEdit";
+			
+		}
 	
 	
 }
