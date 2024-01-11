@@ -500,7 +500,7 @@ public class MemberController {
 	public String adminPage(Model model) {
 		ArrayList<Member> list = mService.selectMembers();
 		model.addAttribute("list", list);
-		return "views/ming/admin/memberList";
+		return "views/ming/admin/allMemberList";
 	}
 	
 	@GetMapping("selectMemberList.me")
