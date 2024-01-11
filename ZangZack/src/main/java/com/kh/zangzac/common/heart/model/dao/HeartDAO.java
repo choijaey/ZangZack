@@ -1,12 +1,17 @@
-package com.kh.zangzac.common.heart.model.service;
+package com.kh.zangzac.common.heart.model.dao;
+
+import org.apache.ibatis.annotations.Mapper;
 
 import com.kh.zangzac.common.heart.model.vo.Heart;
 
-public interface HeartService {
+@Mapper
+public interface HeartDAO {
 
 	Heart selectHeart(Heart h);
 	
 	int insertHeart(Heart h);
-
+	
 	int deleteHeart(Heart h);
+
+
 }
