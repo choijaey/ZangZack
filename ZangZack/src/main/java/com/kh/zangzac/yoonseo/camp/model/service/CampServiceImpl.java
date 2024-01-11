@@ -1,6 +1,7 @@
 package com.kh.zangzac.yoonseo.camp.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
 import org.apache.ibatis.session.RowBounds;
@@ -126,6 +127,18 @@ public class CampServiceImpl implements CampService {
 	@Override
 	public int insertPhoto(ArrayList<Photo> list) {
 		return cDAO.insertPhoto(list);
+	}
+
+	@Override
+	public int searchCampCount(String keyword, String city, String country, String type) {
+		
+		HashMap<String,String> map = new HashMap<>();
+		map.put("keyword", keyword);
+		map.put("city", city);
+		map.put("country",country);
+		map.put("type", type);
+		
+		return cDAO.searchCampCount(map);
 	}
 
 

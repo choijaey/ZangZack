@@ -1,6 +1,7 @@
 package com.kh.zangzac.yoonseo.camp.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -52,4 +53,6 @@ public interface CampDAO {
 	int insertPhoto(ArrayList<Photo> list);
 
 	void updatePhotoLevel(int cgNo);
+
+	int searchCampCount(HashMap<String, String> map);
 }

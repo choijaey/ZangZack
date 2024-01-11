@@ -1,6 +1,8 @@
 package com.kh.zangzac.yoonseo.camp.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +107,7 @@ public class CampController {
 		
 		ArrayList<Photo> campList = cService.selectPhoto(no); //캠핑장 사진
 		
+		
 	    String info = camp.getCgImgInfo();
 	    String[] infoArray = info.split(",");
 	  
@@ -122,8 +125,6 @@ public class CampController {
 		}else {
 			throw new CampException("상세보기를 실패했습니다");
 		}
-		
-		
 	}
 	
 	@GetMapping("detailWrite.ys")
@@ -209,7 +210,7 @@ public class CampController {
 			                  @RequestParam("state") String state,
 			                  @RequestParam("no") String no) {
 		
-		
+		System.out.println(column);
 		Properties prop = new Properties();//map형식으로 key와 value로 이루어져있음.문자열만 받아줌.
 		prop.setProperty("column",column);
 		prop.setProperty("state", state);
@@ -277,13 +278,14 @@ public class CampController {
 			String rename = deleteFile[i]; //rename에 담음
 			if(!rename.equals("none")) { //none이 아니면
 				String[] split = rename.split("/");// 슬래시로 잘라서
-				delRename.add(split[0]); //0번은 여기 담고
-				delLevel.add(Integer.parseInt(split[1]));//1번은 여기 담음.
+				delRename.add(split[0]); //reanme은 여기 담고
+				delLevel.add(Integer.parseInt(split[1]));//level은 여기 담음.
 			}
 		}
 		
 		int deleteFileResult = 0;
 		int updateCampResult = 0;
+		boolean existBeforeAttm = true;
 		
 		if(!delRename.isEmpty()) {//담긴 파일명이 있으면.
 			deleteFileResult = cService.deleteFile(delRename);
@@ -292,23 +294,31 @@ public class CampController {
 					imageStorage.deleteImage(rename,name);//삭제 메소드
 				}
 			}
-			for(int level : delLevel) {
-				if(level == 0) {
-					cService.updatePhotoLevel(camp.getCgNo());
-					break;
+			if(delRename.size() == deleteFile.length) {
+				existBeforeAttm = false;
+			}else {
+				for(int level : delLevel) { 
+					if(level == 0) { //지운 사진의 레벨이 0이면 
+						cService.updatePhotoLevel(camp.getCgNo());//사진중 가장적은 사진번호에 level 0 주기
+						break;
+					}
 				}
 			}
-			
 		}
 		
 		for(int i = 0; i <list.size(); i++) {
 			Photo p = list.get(i);
-			p.setBoardNo(camp.getCgNo());
-			if(i == 0) { //첫번째 파일은 0레벨 주기
-				p.setPhotoLevel(0); 
-			}else {
+			p.setBoardNo(camp.getCgNo()); //추가된 사진에 캠핑장 번호 부여 해줌
+			if(existBeforeAttm) {
 				p.setPhotoLevel(1);
+			}else {
+				if(i == 0) {
+					p.setPhotoLevel(0);
+				}else {
+					p.setPhotoLevel(1);
+				}
 			}
+			
 		}
 		updateCampResult = cService.updateCamp(camp); //camp정보 update
 		int updateFileResult = 0;
@@ -326,6 +336,22 @@ public class CampController {
 			throw new CampException("캠핑장 수정에 실패");
 		}
 		
+	}
+	
+	@PostMapping("campSearchList.ys")
+	public String campSerchList(@RequestParam("keyword") String keyword,
+			                    @RequestParam("city") String city,
+			                    @RequestParam("country") String country,
+			                    @RequestParam("type") String type,
+			                    @RequestParam(value="page", defaultValue="1") int page,
+			                    Model model) {
+		
+		int result = cService.searchCampCount(keyword,city,country,type);
+		
+		int currentPage = page;
+		PageInfo pi = Pagination.getPageInfo(currentPage, page,6);
+		
+		return "views/yoonseo/campSearchList";
 	}
 
 

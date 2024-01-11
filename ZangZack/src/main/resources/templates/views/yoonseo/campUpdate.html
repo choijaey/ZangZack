@@ -86,7 +86,7 @@
 			  <ul class="pagination justify-content-center">
 			    <li class="page-item">
 			      <a class="page-link"  th:href="@{${loc}(page=${pi.currentPage-1})}" aria-label="Previous">
-			        <span aria-hidden="true" style="color:#F9612B;">&laquo;</span>
+			        <span aria-hidden="true" style="color:#F9612B;">< 이전</span>
 			      </a>
 			    </li>
 			    <li class="page-item"  th:each ="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
@@ -99,7 +99,7 @@
 			    </li>
 			    <li class="page-item">
 			      <a class="page-link" th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next">
-			        <span aria-hidden="true" style="color:#F9612B;">&raquo;</span>
+			        <span aria-hidden="true" style="color:#F9612B;">다음 ></span>
 			      </a>
 			    </li>
 			  </ul>
@@ -111,42 +111,63 @@
     	 let columnName = "";
     	 for(let i = 0; i < tds.length; i++){
     		 const index = i%5;
-    		
-    		 if(index == 3){
-    			 columnName ="cg_recomendation";
-    		 }else if(index == 4){
-    			 columnName = "cg_status";
-    		 }
-    		 const nyButtons = tds[i].querySelectorAll('div');
-    		 for(const button of nyButtons){
-    			 button.addEventListener('click', function(){
-    				 if(this.className == 'unselectState'){
-    					 $.ajax({
-        					 url:'stateUpdate.ys',
-        					 data:{no:this.parentElement.parentElement.children[0].innerText,
-        						   state:this.innerText,
-        						   column:columnName
-        						   },
-        				     success: data => {
-        				    	 if(data == 'success'){
-        				    		 this.className = 'selectState';
-        				    		 for(const siblings of this.parentElement.children){
-        				    			 if(siblings != this){
-        				    				 siblings.className = 'unselectState';
-        				    			 }
-        				    		 }
-        				    	 }else{
-        				    		 alert('상태 변경에 실패하여 새로고침 됩니다.');
-        				    		 location.reload();
-        				    	 }	 
-        				     },
-        				     error: data => console.log(data)
-        				 });
-    				 }
-    			 });
-    		 }
+	    		 const nyButtons = tds[i].querySelectorAll('div');
+	    		 for(const button of nyButtons){
+	    			 button.addEventListener('click', function(){
+	    				 if(index==3){
+	    					 columnName ="cg_recomendation";
+	    					 if(this.className == 'unselectState'){
+		    					 $.ajax({
+		        					 url:'stateUpdate.ys',
+		        					 data:{no:this.parentElement.parentElement.children[0].innerText,
+		        						   state:this.innerText,
+		        						   column:columnName
+		        						   },
+		        				     success: data => {
+		        				    	 if(data == 'success'){
+		        				    		 this.className = 'selectState';
+		        				    		 for(const siblings of this.parentElement.children){
+		        				    			 if(siblings != this){
+		        				    				 siblings.className = 'unselectState';
+		        				    			 }
+		        				    		 }
+		        				    	 }else{
+		        				    		 alert('상태 변경에 실패하여 새로고침 됩니다.');
+		        				    		 location.reload();
+		        				    	 }	 
+		        				     },
+		        				     error: data => console.log(data)
+		        				 });
+		    				 }
+	    				 }else if(index==4){
+	    					 columnName ="cg_status";
+	    					 if(this.className == 'unselectState'){
+		    					 $.ajax({
+		        					 url:'stateUpdate.ys',
+		        					 data:{no:this.parentElement.parentElement.children[0].innerText,
+		        						   state:this.innerText,
+		        						   column:columnName
+		        						   },
+		        				     success: data => {
+		        				    	 if(data == 'success'){
+		        				    		 this.className = 'selectState';
+		        				    		 for(const siblings of this.parentElement.children){
+		        				    			 if(siblings != this){
+		        				    				 siblings.className = 'unselectState';
+		        				    			 }
+		        				    		 }
+		        				    	 }else{
+		        				    		 alert('상태 변경에 실패하여 새로고침 됩니다.');
+		        				    		 location.reload();
+		        				    	 }	 
+		        				     },
+		        				     error: data => console.log(data)
+		        				 });
+		    				 }
+	    				 }	 
+	    			 });
+	    		 } 
     	 }
-    	 
     	 const tbody = document.querySelector('tbody');
     	 const tTd = tbody.querySelectorAll('td');
     	 for(let i = 0 ; i < tTd.length; i++){

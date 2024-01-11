@@ -153,7 +153,7 @@
 		  <ul class="pagination justify-content-center">
 		    <li class="page-item">
 		      <a class="page-link"  th:href="@{${loc}(page=${pi.currentPage-1})}" aria-label="Previous">
-		        <span aria-hidden="true" style="color:#F9612B;">&laquo;</span>
+		        <span aria-hidden="true" style="color:#F9612B;">< 이전</span>
 		      </a>
 		    </li>
 		    <li class="page-item"  th:each ="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
@@ -166,7 +166,7 @@
 		    </li>
 		    <li class="page-item">
 		      <a class="page-link" th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next">
-		        <span aria-hidden="true" style="color:#F9612B;">&raquo;</span>
+		        <span aria-hidden="true" style="color:#F9612B;">다음 ></span>
 		      </a>
 		    </li>
 		  </ul>
@@ -178,6 +178,7 @@
     	
     	const divs = document.getElementsByClassName('detail');
     	for(const div of divs){
+    		div.style.cursor = 'pointer';
     		div.addEventListener('click', function(){
     			const no = this.querySelector('.no').value;
             	const page =document.querySelector('.page').value;
