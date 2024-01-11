@@ -38,7 +38,7 @@
 		<div class="comments-section">
 			<div class="post-details">
 				<div class="post-like-comment">
-					<img src="image/seongun/offheart.png" alt="좋아요" class="like-button" onclick="increaseLikeCount()"> <span class="like-text">좋아요</span>
+					<img src="image/seongun/offheart.png" alt="좋아요" class="like-button" onclick="clickHeart()"> <span class="like-text">좋아요</span>
 					<span class="like-count">[[${bList.heartCount}]]</span> 
 					<span class="comment-text">댓글</span>
 					<span class="comment-count">[[${bList.replyCount}]]</span>
@@ -62,17 +62,80 @@
 		/*<![CDATA[*/
 		let member = /*[[${session.loginUser}]]*/null;
 		/*]]>*/
+		let heart = null;
+		
 		if(member != null){
 			var memberId = member.memberId;
 		}
 		
-		increaseLikeCount = () =>{
-			
+		clickHeart = () =>{
+			if(member != null){
+				if(heart == null){
+					deleteHeart();
+				}else{
+					insertHeart();
+				}
+			}else{
+				alert("로그인하고 누르삼");
+			}
+		}
+		
+		selectHeart = () =>{
+			$.ajax({
+				url: 'selectHeart.like',
+				method: 'post',
+				data: { 
+		            boardNo: /*[[${bList.cbNo}]]*/1, 
+		            boardType: 1,
+		            memberId: memberId
+		        },
+		        success:(data) => {
+		        	heart = data
+		        	console.log(heart);
+		        },
+		        error : data => console.log(data)
+			})
+		}
+		
+		insertHeart = () =>{
+			$.ajax({
+		        url: 'insertHeart.like', // 서버의 댓글 목록 불러오기 URL
+		        method: 'post',
+		        data: { 
+		            boardNo: /*[[${bList.cbNo}]]*/1, 
+		            boardType: 1,
+		            memberId: memberId
+		        },
+		        success: data => {
+					console.log("insert :" + heart);
+					selectHeart();
+		        },
+		        error : data => console.log(data)
+		    });
+		}
+		deleteHeart = () =>{
+			$.ajax({
+				url: 'deleteHeart.like',
+				method: 'post',
+				data:{
+					boardNo: /*[[${bList.cbNo}]]*/1, 
+					boardType: 1,
+					memberId: memberId
+				},
+				success: data => {
+					console.log("delete :" + heart);
+					selectHeart();
+		        },
+		        error : data => console.log(data)
+			});
 		}
 		/*<![CDATA[*/
 		// 페이지 로드 시 댓글 목록 불러오기
 		window.onload = function() {
 			loadCommentList(/*[[${maxPage}]]*/);
+			if(member != null){
+				selectHeart();
+			}
 		};
 		/*]]>*/
 	
