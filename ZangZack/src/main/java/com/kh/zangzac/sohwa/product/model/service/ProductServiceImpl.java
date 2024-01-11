@@ -280,6 +280,43 @@ public class ProductServiceImpl implements ProductService{
 		return pDAO.searchPhototh(searchMap);
 	}
 
+	@Override
+	public int updateYProduct(ArrayList<String> checkBoxArr) {
+		return pDAO.updateYProduct(checkBoxArr);
+	}
+
+	@Override
+	public ArrayList<String> selectYPhoto(ArrayList<String> checkBoxArr) {
+		return pDAO.selectYPhoto(checkBoxArr);
+	}
+
+	@Override
+	public void updateYPhoto(ArrayList<String> checkBoxArr) {
+		pDAO.updateYPhoto(checkBoxArr);
+	}
+
+	@Override
+	public void deleteOption(int productNo) {
+		pDAO.deleteOption(productNo);
+		
+	}
+
+	@Override
+	public int deleteProductPhoto(ArrayList<String> delRename) {
+		return pDAO.deleteProductPhoto(delRename);
+	}
+
+	@Override
+	public int updateProductPhotoY(ArrayList<Attachment> coreList) {
+		return pDAO.updateProductPhotoY(coreList);
+	}
+
+	@Override
+	public int updateProduct(Product p) {
+		return pDAO.updateProduct(p);
+	}
+
+
 
 
 

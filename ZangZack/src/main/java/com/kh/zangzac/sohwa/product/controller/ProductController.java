@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -30,6 +31,7 @@ import com.kh.zangzac.sohwa.product.model.vo.Qna;
 import com.kh.zangzac.sohwa.product.model.vo.Review;
 
 import jakarta.servlet.http.HttpServletRequest;
+import kotlin.reflect.jvm.internal.impl.types.model.TypeSystemOptimizationContext;
 
 @SessionAttributes("loginUser")
 @Controller
@@ -60,7 +62,7 @@ public class ProductController {
 		ArrayList<Attachment> list = pService.selectPhotoDetail(productNo);
 		ArrayList<Option> oList = pService.optionDetail(productNo);
 		
-		
+		model.addAttribute("productNo", productNo);
 		model.addAttribute("oList", oList);
 		model.addAttribute("list", list);
 		model.addAttribute("p", p);
@@ -750,6 +752,187 @@ public class ProductController {
 		return "redirect:productDetail.so?productNo=" + productNo;
 		
 	}
+	
+	
+	
+	
+	
+	@GetMapping("updateStatus.so")
+	@ResponseBody
+	public String deleteList(@RequestParam("checked[]") ArrayList<String> checkBoxArr) {
+	   String name="sohwa";
+       
+       int result = pService.updateYProduct(checkBoxArr);
+       ArrayList<String> delRenames = pService.selectYPhoto(checkBoxArr);
+       
+       for(String delRename:delRenames) {
+    	   Boolean sf = imageStorage.deleteImage(delRename, name);
+    	   System.out.println(delRename);
+    	   pService.updateYPhoto(checkBoxArr);
+    	   System.out.println(sf);
+       }
+       
+       if(result > 0){
+    	   return "성공";
+       }else {
+    	   return "실패";
+       }
+       
+	}
+	
+	
+	
+	
+	
+	@PostMapping("productUpdate.so")
+	public String updateAttm(@RequestParam(value="option") String[] options, @RequestParam("productEno") Integer[] productEnos, @ModelAttribute Product p, @RequestParam("deleteAttm") String[] deleteAttm, @RequestParam("coreFile") ArrayList<MultipartFile> coreFiles, @RequestParam("detailFile") ArrayList<MultipartFile> detailFiles) {
+		
+		
+		//product 정보
+		System.out.println(p);
+		pService.updateProduct(p);
+		
+		//옵션 삭제하고 다시 insert처리
+		ArrayList<Attachment> coreList = new ArrayList<>();
+		ArrayList<Attachment> detailList = new ArrayList<>();
+		String name = "sohwa";
+		int coreResult = 0;
+		int detailResult = 0;
+		int deleteResult = 0;
+		
+		System.out.println("deleteAttm:" +deleteAttm);
+		pService.deleteOption(p.getProductNo());
+		
+		ArrayList<Option> oList = new ArrayList<>();
+				
+			for(int i=0; i<options.length; i++) {
+				String option = options[i];
+				Integer productEno = productEnos[i];
+				
+				
+				
+				Option o = new Option();
+			    o.setProductOptionColor(option);
+			    o.setProductOptionEno(productEno);
+			    o.setProductNo(p.getProductNo());
+			    oList.add(o);
+			}
+			
+		int optionResult = pService.insertOption(oList);
+		
+		
+		
+		
+		//deleteAttm이 비워져있고, coreFiles와 detailFiles도 비워져있을 때
+		//deleteAttm이 비워져있고, coreFiles만 비워져있고, detailFiles는 존재
+		//deleteAttm이 비워져있고, coreFiles는 존재하고, detailFiles는 비워져있을 때
+		//deleteAttm이 비워져있고, coreFiles와 detailFiles 둘 다 존재
+		//deleteAttm이 채워져있고, coreFiles와 detailFiles는 비워져있을 때
+		//deleteAttm이 채워져있고, coreFiles만 비워져있고, detailFiles는 존재
+		//deleteAttm이 채워져있고, coreFiles는 존재하고, detailFiles는 비워져있을 때
+		//deleteAttm이 채워져있고, coreFiles와 detailFiles 둘 다 존재
+				
+				
+		
+		ArrayList<String> delRename = new ArrayList<>();
+		//deleteAttm이 비워져있고, coreFiles와 detailFiles도 비워져있을 때
+		for(int i=0; i<deleteAttm.length; i++) {
+			String deleteRename = deleteAttm[i];
+			if(!deleteRename.equals("none")) {
+				 delRename.add(deleteRename);
+			 }
+		 }
+		
+		if(!delRename.isEmpty()) {
+			deleteResult = pService.deleteProductPhoto(delRename);
+			if(deleteResult > 0) {
+				for(String rename : delRename) {
+					imageStorage.deleteImage(rename, name);
+				}
+			}
+		}
+		
+		
+		
+		for(int i=0; i<coreFiles.size(); i++) {
+			MultipartFile coreUpload = coreFiles.get(i);
+			
+			if(!coreUpload.getOriginalFilename().equals("")) {
+				String[] returnArr1 = imageStorage.saveImage(coreUpload, name);
+				
+				if(returnArr1 != null) {
+					Attachment a = new Attachment();
+					a.setPhotoRename(returnArr1[0]);
+					a.setPhotoPath(returnArr1[1]);
+					a.setPhotoLevel(1);
+					a.setBoardType(5);
+					a.setBoardNo(p.getProductNo());
+					
+					coreList.add(a);
+				}
+			}
+			
+		}
+		
+		
+		
+		
+		
+		
+		for(int i=0; i<detailFiles.size(); i++) {
+			MultipartFile detailUpload = detailFiles.get(i);
+			
+			if(!detailUpload.getOriginalFilename().equals("")) {
+				String[] returnArr2 = imageStorage.saveImage(detailUpload, name);
+				
+				if(returnArr2 != null) {
+					Attachment a = new Attachment();
+					a.setPhotoRename(returnArr2[0]);
+					a.setPhotoPath(returnArr2[1]);
+					a.setPhotoLevel(2);
+					a.setBoardType(5);
+					a.setBoardNo(p.getProductNo());
+					
+					detailList.add(a);
+				}
+			}
+		}
+		
+		
+		if(!coreList.isEmpty()) {
+			coreResult = pService.insertProductPhoto(coreList);
+		}
+		if(!detailList.isEmpty()) {
+			detailResult = pService.insertProductPhoto(detailList);
+		}
+		
+		if(optionResult > 0) {
+			return "redirect:adminProductList.so";
+		}else {
+			throw new ProductException("상품수정실패");
+		}
+	
+	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }

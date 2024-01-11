@@ -118,6 +118,20 @@ public interface ProductDAO {
 
 	ArrayList<Attachment> searchPhototh(HashMap<String, String> searchMap);
 
+	int updateYProduct(ArrayList<String> checkBoxArr);
+
+	ArrayList<String> selectYPhoto(ArrayList<String> checkBoxArr);
+
+	void updateYPhoto(ArrayList<String> checkBoxArr);
+
+	void deleteOption(int productNo);
+
+	int deleteProductPhoto(ArrayList<String> delRename);
+
+	int updateProductPhotoY(ArrayList<Attachment> coreList);
+
+	int updateProduct(Product p);
+
 
 
 	

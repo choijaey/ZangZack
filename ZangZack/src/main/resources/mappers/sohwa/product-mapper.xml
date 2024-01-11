@@ -228,7 +228,7 @@
 	<select id="selectProductDetail" resultType="Product">
 		select *
 		from product
-		where product_status='N' and product_no = #{productNo}
+		where product_no = #{productNo}
 	</select>
 	
 	
@@ -236,14 +236,14 @@
 		select *
 		from photo
 			  join product on (product_no = board_no)
-		where product_no = #{productNo}
+		where product_no = #{productNo} and photo_status='N'
 	</select>
 	
 	<select id="selectPhotoReview" resultType="Attachment">
 		select *
 		from photo 
 			 join review on (review_no = board_no)
-		where product_No = #{productNo}
+		where product_No = #{productNo} and photo_status='N'
 	</select>
 	
 	<select id="optionDetail" resultType="Option">
@@ -312,7 +312,7 @@
       from cart 
           join product using (product_no)
           join photo on (board_no=product_no)
-      where member_id=#{id} and photo_level=0
+      where member_id=#{id} and photo_level=0 and photo_status='N'
    </select>
    
    <select id="selectAllOption">
@@ -420,7 +420,7 @@
 	<update id="updateAnswer">
 		update qna
 		set answer_content=#{answerContent}, answer_date = sysdate
-		where question_no = #{questionNo}
+		where question_no = #{questionNo} and question_status ='N'
 	</update>
 	
 	<select id="selectProductQna" resultType="Qna">
@@ -496,6 +496,61 @@
 		where review_no = #{reviewNo}
 	</update>
 	
+	<update id="updateYProduct">
+		update product
+		set product_status='Y'
+		where product_no in
+		<foreach item="productNo" collection="list" open="(" separator="," close=")">
+			#{productNo}
+		</foreach>
+	</update>
 	
+	<select id="selectYPhoto" resultType="string">
+		select photo_rename
+		from photo
+		where board_type = 5 and board_no in
+		<foreach collection="list" item="productNo"  open="(" separator="," close=")">
+			#{productNo}
+		</foreach>
+	</select>
+	
+	<update id="updateYPhoto">
+		update photo
+		set photo_status='Y'
+		where board_type=5 and board_no in
+		<foreach collection="list" item="productNo"  open="(" separator="," close=")">
+			#{productNo}
+		</foreach>
+	</update>
+	
+	<delete id="deleteOption">
+		delete from product_option
+		where product_no = #{productNo}
+	</delete>
+	
+	
+	<update id="deleteProductPhoto">
+		update photo
+		set photo_status = 'Y'
+		where photo_rename in
+		<foreach item="rename" collection="list" open="(" separator="," close=")">
+			#{rename}
+		</foreach>
+	</update>
+	
+	<update id="updateProductPhotoY">
+		update photo
+		set photo_status = 'N'
+		where photo_rename in
+		<foreach item="item" collection="list" open="(" separator="," close=")">
+			#{item.photoRename}
+		</foreach>
+	</update>
+	
+	<update id="updateProduct">
+		update product
+		set product_name = #{productName} , product_price= #{productPrice}, category_no = #{categoryNo}, product_company=#{productCompany}, delivery_price = #{deliveryPrice}
+		where product_no = #{productNo} and product_status = 'Y'
+	</update>
 	
 </mapper>
