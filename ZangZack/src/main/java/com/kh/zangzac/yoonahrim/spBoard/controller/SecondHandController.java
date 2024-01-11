@@ -116,9 +116,9 @@ public class SecondHandController {
 	            
 	            if(returnArr != null) {
 	               Photo a = new Photo();
+	               a.setBoardType(4);
 	               a.setPhotoRename(returnArr[0]);
 	               a.setPhotoPath(returnArr[1]);
-	               
 	               list.add(a);
 	            }
 	         }
@@ -182,7 +182,11 @@ public class SecondHandController {
 			if(!list.isEmpty()) {
 		    	 result2 = spService.insertAttmSecondHand(list);
 		    }
-
+			
+		System.out.println(result1);
+		System.out.println(result2);
+		System.out.println(list);
+		
 	    if (result1 + result2 == list.size() + 1) {
 	    	redirectAttributes.addAttribute("no", sp.getSpNo());
 	        return "redirect:secondHand.ah";

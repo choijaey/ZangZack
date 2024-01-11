@@ -16,7 +16,7 @@
 	<update id="updateSecondHand">
 		UPDATE SECONDHAND_PRODUCT
 		SET SP_TITLE = #{spTitle}, SP_PRICE = #{spPrice}, SP_CONTENT = #{spContent}, SP_ADDRESS = #{spAddress}, CATEGORY_NO = #{categoryNo}
-		where member_id = #{memberId}
+		where member_id = #{memberId} and SP_STATUS = 'N'
 		<!-- member_id = #{memberId}로 후에 바꿔주기 -->
 	</update>
 	
@@ -29,19 +29,11 @@
 		select * from dual
 	</insert>
 	  
-	<!-- 
-	<select id="selectMyList" resultType="secondHandProduct">
-		select *
-		from SECONDHAND_PRODUCT
-		where SP_NO = #{spNo}
-	</select>
-	-->
-	  
 	<select id="selectMyList" resultType="secondHandProduct">
 	    SELECT s.*, c.category_name
 		FROM SECONDHAND_PRODUCT s
 		     JOIN camping_category c ON s.category_no = c.category_no
-		WHERE s.SP_NO = #{spNo}
+		WHERE s.SP_NO = #{spNo} and s.SP_STATUS = 'N'
 	</select>
 	
 	<delete id="deleteAttmSecondHand">
@@ -60,7 +52,7 @@
 	<select id="selectAttachmentList" resultType="Photo">
 		select *
 		from photo
-		where BOARD_NO = #{spNo} and board_type = '4'
+		where BOARD_NO = #{spNo} and board_type = '4' and PHOTO_STATUS = 'N'
 	</select>
 	
 	<update id="updateBooking">
@@ -96,6 +88,7 @@
 		select s.*, c.category_name 
 		from SECONDHAND_PRODUCT s
 			 JOIN camping_category c ON s.category_no = c.category_no
+		WHERE s.SP_STATUS = 'N'
 	</select>
 	
 	<select id="selectReply" resultType="Reply">
