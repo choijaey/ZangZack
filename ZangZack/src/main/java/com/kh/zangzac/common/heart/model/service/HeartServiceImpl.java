@@ -26,4 +26,9 @@ public class HeartServiceImpl implements HeartService{
 	public int deleteHeart(Heart h) {
 		return hDAO.deleteHeart(h);
 	}
+
+	@Override
+	public int countHeart(Heart h) {
+		return hDAO.countHeart(h);
+	}
 }

@@ -13,5 +13,7 @@ public interface HeartDAO {
 	
 	int deleteHeart(Heart h);
 
+	int countHeart(Heart h);
+
 
 }
