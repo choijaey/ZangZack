@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.ming.member.model.dao.MemberDAO;
 import com.kh.zangzac.ming.member.model.vo.Member;
 
@@ -98,8 +100,12 @@ public class MemberServiceImpl implements MemberService{
 	
 	//관리자페이지
 	@Override
-	public ArrayList<Member> selectMembers() {
-		return mDAO.selectMembers();
+	public ArrayList<Member> selectMembers(int i, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return mDAO.selectMembers(i, rowBounds);
 	}
 
 	@Override
@@ -115,6 +121,25 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int adminUpdateName(Member m) {
 		return mDAO.adminUpdateName(m);
+	}
+
+	@Override
+	public int getListCount() {
+		return mDAO.getListCount();
+	}
+
+	@Override
+	public int searchList(HashMap<String, String> map) {
+		return mDAO.searchList(map);
+	}
+
+	@Override
+	public ArrayList<Member> searchtNoticeList(PageInfo pi, HashMap<String, String> map) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return mDAO.searchtNoticeList(map,rowBounds);
 	}
 
 

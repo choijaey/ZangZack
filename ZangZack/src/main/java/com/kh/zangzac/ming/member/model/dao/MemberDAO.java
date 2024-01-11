@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.Properties;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.ming.member.model.vo.Member;
 
 
@@ -49,12 +51,18 @@ public interface MemberDAO {
 
 	int updateMemberProfile(Member m);
 
-	ArrayList<Member> selectMembers();
+	ArrayList<Member> selectMembers(int i, RowBounds rowBounds);
 
 	int updateInfo(Properties prop);
 
 	int adminUpdateNickName(Member m);
 
 	int adminUpdateName(Member m);
+
+	int getListCount();
+
+	int searchList(HashMap<String, String> map);
+
+	ArrayList<Member> searchtNoticeList(HashMap<String, String> map, RowBounds rowBounds);
 
 }

@@ -6,6 +6,7 @@ import java.util.Properties;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.ming.member.model.vo.Member;
 
 public interface MemberService {
@@ -40,13 +41,19 @@ public interface MemberService {
 	int updateMemberProfile(Member m);
 	
 	//관리자페이지
-	ArrayList<Member> selectMembers();
+	ArrayList<Member> selectMembers(int i, PageInfo pi);
 
 	int updateInfo(Properties prop);
 
 	int adminUpdateNickName(Member m);
 
 	int adminUpdateName(Member m);
+
+	int getListCount();
+
+	int searchList(HashMap<String, String> map);
+
+	ArrayList<Member> searchtNoticeList(PageInfo pi, HashMap<String, String> map);
 
 
 	

@@ -108,4 +108,40 @@
 		where MEMBER_ID = #{memberId}
 	</update>
 	
+	<select id="getListCount" resultType="_int">
+		select count(*)
+		from member
+	</select>
+	
+	<select id="searchList" resultType="int">
+	    SELECT COUNT(*)
+	    FROM member
+	    where
+	    <if test="searchType =='memberId'">
+	       MEMBER_ID LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    <if test="searchType == 'memberName'">
+	        MEMBER_NAME LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    <if test="searchType == 'memberNickName'">
+	       MEMBER_NICKNAME LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    ORDER BY MEMBER_NAME DESC
+	</select>
+	
+	<select id="searchtNoticeList" resultType="Member">
+		SELECT *
+	    FROM member
+	    where
+	    <if test="searchType =='memberId'">
+	         MEMBER_ID LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    <if test="searchType == 'memberName'">
+	         MEMBER_NAME LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    <if test="searchType == 'memberNickName'">
+	         MEMBER_NICKNAME LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    ORDER BY MEMBER_NAME DESC
+	</select>
 </mapper>

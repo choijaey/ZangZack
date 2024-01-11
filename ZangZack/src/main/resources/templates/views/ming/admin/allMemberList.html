@@ -60,30 +60,18 @@
 	<div id="orderListWrapped">
       <h1>회원 관리</h1>
       <button class="cateBtn active" onclick="toggleTable('allMember', 'refundMember')">회원 목록</button>
-      <button class="cateBtn" style="margin-left:40px;" onclick="toggleTable('refundMember', 'allMember')">탈퇴 회원</button>      
       <div style="float:right;">
-         <div class="nav-item dropdown">
-		    <button class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-expanded="false">회원 검색</button>
-		    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-		        <li><a class="dropdown-item" href="#" onclick="showSearch('search1', 'ID 검색')">ID 검색</a></li>
-		        <li><a class="dropdown-item" href="#" onclick="showSearch('search2', '이름 검색')">이름 검색</a></li>
-		        <li><a class="dropdown-item" href="#" onclick="showSearch('search3', '연락처 검색')">연락처 검색</a></li>
-		    </ul>
-          </div>
-         
-         <div class="search" id="search1">
-            <input type="text" placeholder="ID 입력">
-              <a href="searchId.me"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
-         </div>
-         <div class="search" id="search2" style="display: none;">
-            <input type="text" placeholder="이름 입력">
-              <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
-         </div>
-         <div class="search" id="search3" style="display: none;">
-            <input type="text" placeholder="연락처 입력">
-              <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
-         </div>
-         
+         <form action="search.me" method="post">
+	         <div class="nav-item dropdown" id="search1">
+	         	<select name="searchType" class="dropdown-item">
+	         		<option value="memberId" name="memberId" th:selected="${searchType eq 'memberId'}">아이디</option>
+	         		<option value="memberName" name="memberName" th:selected="${searchType eq 'memberName'}">이름</option>
+	         		<option value="memberNickName" name="memberNickName" th:selected="${searchType eq 'memberNickName'}">닉네임</option>
+	         	</select>
+	            <input type="text" name="keyword">
+	            <button type="submit" id="searchMem">검색</button>
+	         </div>
+         </form>
       </div>
       
       
@@ -118,54 +106,28 @@
          
       </table>
       
-      <table id="refundMember" class="hidden">
-         <tr>
-            <th class="td1"><input type="checkbox" id="allSelect2" onclick="toggleAllCheckboxes('allOrder', 'allSelect2')"></th>
-            <th class="td2">아이디</th>
-            <th class="td3">이름</th>
-            <th class="td4">닉네임</th>
-            <th class="td5">주소</th>
-            <th class="td6">전화번호</th>
-            <th class="td7">탈퇴여부</th>
-            <th class="td8">관리자여부</th>
-         </tr>
-         
-          <tr th:each="m:${list}" th:if="${m.memberStatus=='Y'}">
-            <td class="td1"><input type="checkbox"></td>
-            <td class="td2">[[${m.memberId}]]</td>
-            <td class="td3">[[${m.memberName}]]</td>
-            <td class="td4">[[${m.memberNickName}]]</td>
-            <td class="td5">[[${m.memberAddress.replace('@', ' ')}]]</td>
-            <td class="td6">[[${m.memberPhone}]]</td>
-            <td class="td7"> 
-				<div th:class="${m.memberStatus == 'Y' ? 'selectState' : 'unselectState'}" style="float: left;">Y</div>
-				<div th:class="${m.memberStatus == 'N' ? 'selectState' : 'unselectState'}" style="float: right;">N</div>
-			</td>
-			<td class="td8"> 
-				<div th:class="${m.memberIsAdmin == 'Y' ? 'selectState' : 'unselectState'}" style="float: left;">Y</div>
-				<div th:class="${m.memberIsAdmin == 'N' ? 'selectState' : 'unselectState'}" style="float: right; ">N</div>
-			</td>
-         </tr>
-         
-      </table>
-      
-      <nav class="nav2" aria-label="Page navigation example" style="float: right;">
-          <ul class="pagination">
-             <li class="page-item">
-               <a class="page-link" href="#" aria-label="Previous">
-                 <span aria-hidden="true">&laquo;</span>
-               </a>
-             </li>
-             <li class="page-item"><a class="page-link" href="#">1</a></li>
-             <li class="page-item"><a class="page-link" href="#">2</a></li>
-             <li class="page-item"><a class="page-link" href="#">3</a></li>
-             <li class="page-item"><a class="page-link" href="#">4</a></li>
-             <li class="page-item"><a class="page-link" href="#">5</a></li>
-             <li class="page-item">
-             <a class="page-link" href="#" aria-label="Next">
-                 <span aria-hidden="true">&raquo;</span>
-             </a>
-             </li>
+      <nav class="nav2" aria-label="Page navigation example" style="float: right;" th:with="loc=${loc}">
+         <ul class="pagination">
+               <li class="page-item">
+               	  <a class="page-link" th:if="${pi.currentPage <= 1}" aria-label="Previous">
+                  	<span aria-hidden="true">&laquo;</span>
+                  </a>
+                  <a class="page-link" th:if="${pi.currentPage > 1}" th:href="@{${loc}(page=${pi.currentPage-1})}" aria-label="Previous">
+                  	<span aria-hidden="true">&laquo;</span>
+                  </a>
+               </li>
+               <li class="page-item" th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+                  <a class="page-link" th:href="@{${loc}(page=${p})}">[[${ p }]]</a>
+               </li>
+               
+	          <li class="page-item">
+	              <a class="page-link" th:if="${pi.currentPage >= pi.maxPage}" aria-label="Next">
+	                 <span aria-hidden="true">&raquo;</span>
+	              </a>
+	              <a class="page-link" th:if="${pi.currentPage < pi.maxPage}" th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next">
+	                 <span aria-hidden="true">&raquo;</span>
+	              </a>
+	          </li>
           </ul>
       </nav>
    </div>

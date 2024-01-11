@@ -27,10 +27,14 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.zangzac.common.ImageStorage;
+import com.kh.zangzac.common.Pagination;
+import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.ming.member.model.exception.MemberException;
 import com.kh.zangzac.ming.member.model.service.MemberService;
 import com.kh.zangzac.ming.member.model.vo.Member;
 
 import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.HttpServletRequest;
 
 @SessionAttributes("loginUser")
 @Controller
@@ -68,7 +72,11 @@ public class MemberController {
 		return "index";
 	}
 	
-	
+	//심리테스트 메인화면
+	@GetMapping("psychologicalTestMain.me")
+	public String psychologicalTest() {
+		return "views/ming/psychologicalTest/psychologicalTestMain";
+	}
 	
 	//회원가입
 	@PostMapping("/insertMember.me")
@@ -497,10 +505,21 @@ public class MemberController {
 	
 	//관리자 페이지
 	@GetMapping("/adminPage.me")
-	public String adminPage(Model model) {
-		ArrayList<Member> list = mService.selectMembers();
-		model.addAttribute("list", list);
-		return "views/ming/admin/allMemberList";
+	public String adminPage(Model model, HttpServletRequest request, @RequestParam(value="page", defaultValue="1") int page) {
+		
+		int listCount = mService.getListCount();
+		int currentPage = page;
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
+		ArrayList<Member> list = mService.selectMembers(1, pi);
+		
+		if(list != null) {
+			model.addAttribute("pi", pi);
+			model.addAttribute("list", list);
+			model.addAttribute("loc", request.getRequestURI()); // url 다 가져옴 / uri 뒤에만 가져옴
+			return "views/ming/admin/allMemberList";
+		} else {
+			throw new MemberException("게시글 목록 조회에 실패하였습니다.");
+		}
 	}
 	
 	@GetMapping("selectMemberList.me")
@@ -558,5 +577,33 @@ public class MemberController {
 		
 		int result = mService.adminUpdateName(m);
 		return result == 1? "success" : "fail";
+	}
+	
+	
+	//회원 검색
+	@PostMapping("search.me")
+	public String searchId(@RequestParam(value = "page", defaultValue = "1") int page,
+							@RequestParam(value = "searchType", defaultValue = "") String searchType,
+							@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
+							HttpServletRequest request) {
+		
+		HashMap<String, String>map = new HashMap<>();
+		map.put("keyword", keyword);
+		map.put("searchType", searchType);
+		
+		int currentPage = page;
+		int listCount = mService.searchList(map);
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
+		ArrayList<Member> list = mService.searchtNoticeList(pi, map);
+		
+		if(list != null) {
+			model.addAttribute("pi", pi);
+			model.addAttribute("list", list);
+			model.addAttribute("loc", request.getRequestURI()); // url 다 가져옴 / uri 뒤에만 가져옴
+			return "views/ming/admin/allMemberList";
+		} else {
+			throw new MemberException("게시글 목록 조회에 실패하였습니다.");
+		}
 	}
 }
