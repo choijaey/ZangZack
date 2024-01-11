@@ -22,4 +22,6 @@ public class secondHandProduct {
 	private String memberId;
 	private int categoryNo;
 	private String spIsBook;
+	
+	private String categoryName;
 }

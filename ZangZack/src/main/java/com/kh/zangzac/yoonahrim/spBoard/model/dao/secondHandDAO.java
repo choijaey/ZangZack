@@ -38,6 +38,14 @@ public interface secondHandDAO {
 
 	ArrayList<Photo> selectPhotoSeconHand(secondHandProduct sp);
 
+	int updateAttmSecondHand(ArrayList<Photo> detailList);
+
+	int deleteAttm(ArrayList<String> delRename);
+
+	int deleteAttmForN(int spNo);
+
+	void updatePhotoLevel(int spNo);
+
 
 
 

@@ -19,15 +19,22 @@
     left: 550px;
 }
 
+/*
 .deleteBtn{
    position:relative;
    left: 15px;
+}
+*/
+
+.deleteAttm{
+	position:relative;
+    left: 70px;
 }
 
 .edit{
    position: absolute;
    left: 600px;
-   top: 650px;
+   top: 800px;
 }
 
 .pointerBtn{

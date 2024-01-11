@@ -84,6 +84,26 @@ public class secondHandServiceImpl implements secondHandService{
 		return spDAO.selectPhotoSeconHand(sp);
 	}
 
+	@Override
+	public int updateAttmSecondHand(ArrayList<Photo> detailList) {
+		return spDAO.updateAttmSecondHand(detailList);
+	}
+
+	@Override
+	public int deleteAttm(ArrayList<String> delRename) {
+		return spDAO.deleteAttm(delRename);
+	}
+
+	@Override
+	public int deleteAttmForN(int spNo) {
+		return spDAO.deleteAttmForN(spNo);
+	}
+
+	@Override
+	public void updatePhotoLevel(int spNo) {
+		spDAO.updatePhotoLevel(spNo);
+	}
+
 	
 
 

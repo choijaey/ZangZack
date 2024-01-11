@@ -18,12 +18,12 @@
    <form action="update.ah" method="post" enctype="multipart/form-data">>
     <th:block th:each="s : ${list}">
         <input type="hidden" name="spNo" th:value="${s.spNo}"/>
-          <div class="row">
-              <!-- 이미지 출력 -->
+         <div class="row">
+          <!-- 이미지 출력 -->
               <th:block th:each="a : ${aList}">
-                <div class="photoNum" style="position: relative;">
+                <div class="photoNum" style="position: relative; margin: 10px">
                     <div class="photoUploads" style="background-image: url('image/yoonahrim/photo-icon.png'); width: 200px; height: 200px; background-size:50%; background-repeat: no-repeat; background-position:50% 50%;">
-                        <img th:src="${a.photoPath}" th:id="'photoUpload/' + ${a.photoNo}" class="clickUpload" style="width:200px; height:200px; border-radius:20%; border: 1px solid black; cursor:pointer;"/>
+                        <img th:src="${a.photoPath}" th:id="'photoUpload/' + ${a.photoNo}" class="clickUpload" style="width:200px; height:200px; border-radius:20%; border: 1px solid black;"/>
                     </div>
                     <br>
                     <div class="input-group mb-3">
@@ -37,30 +37,16 @@
                     </div>
                 </div>
               </th:block> 
-            <!-- 빈 photoNum 추가 -->
-            <th:block th:each="emptyIdx : ${#numbers.sequence(aList.size() + 1, 4)}">
-                <div class="photoNum">
-                    <div class="photoUploads" style="background-image: url('image/yoonahrim/photo-icon.png'); width: 200px; height: 200px; background-size:50%; background-repeat: no-repeat; background-position:50% 50%;">
-                        <img th:id="'photoUpload/' + ${emptyIdx}" class="clickUpload" style="width:200px; height:200px; border-radius:20%; border: 1px solid black; cursor:pointer;"/>
-                    </div>
-                    <br>
-                    <div class="input-group mb-3">
-                        <label class="input-group-text" th:for="'inputGroupFile/' + ${emptyIdx}" Multiple style="display:none;">
-                            <input type="file" class="form-control" th:id="'inputGroupFile/' + ${emptyIdx}" name="inputGroupFile" style="display:none;" th:attr="onchange='previewImage(event, \'' + 'photoUpload/' + ${emptyIdx} + '\')'"/>
-                        </label>
-                    </div>
-                    <div class="deleteBtn">
-                    	<!--
-                        <button type="button" class="delOnBtn btn btn-outline-success" value="삭제 on">삭제 on</button>
-                        <button type="button" class="delOffBtn btn btn-outline-success">삭제 off</button>
-                        -->
-                        <button type="button" class="btn btn-outline-dark btn-sm deleteAttm">삭제 OFF</button>
-						<input type="hidden" name="deleteAttm" th:value="none">
-                    </div>
-                </div>
-         </th:block>
-       </div>
-   
+			
+			<button type="button" class="w-25 btn btn-outline-success" id="addFile" style="width:300px; position: absolute; left:750px; top: 600px;">+ 파일 추가</button>
+			
+		    <div id="fileArea" style="position: absolute; left: 730px; top: 650px">
+		    	<div class="mb-1">
+		        	<input type="file" class="form-control form-control-lg" name="inputGroupFile" style="width:500px;">
+		    	</div>
+		    </div>
+						
+   			<br><br><br><br><br>
       <!-- 업로드할 내용 -->
          <div class="edit">
                <label >제목
@@ -113,23 +99,6 @@
        }
        
        
-       $(function() {
-           $(".input-group").hide();
-           $(document).on("click", ".clickUpload", function() {
-               $(this).closest(".photoNum").find(".form-control").click();
-           });
-       });
-       
-       /*
-       $(function() {
-    	   $(".input-group").hide();
-           $(".clickUpload").click(function() {
-        	   console.log("Image clicked");
-               $(this).closest(".photoNum").find(".form-control").click();
-           });
-       });
-       */
-       
        function execDaumPostcode() {
            new daum.Postcode({
              oncomplete: function( data ) {
@@ -139,7 +108,16 @@
            }).open();
          }
        
-       document.getElementById('submitAttm').addEventListener('click',() =>{
+		const fileArea = document.querySelector('#fileArea');
+		document.getElementById('addFile').addEventListener('click', () =>{
+			const newDiv = document.createElement('div');
+			newDiv.classList.add('mb-3');
+			newDiv.innerHTML = '<input type="file" class="form-control form -control-lg" name="inputGroupFile" style="width:500px;">'
+			
+			fileArea.append(newDiv);
+		})
+      
+       	document.getElementById('submitAttm').addEventListener('click',() =>{
     	   const files = document.getElementsByClassName('file');
     	   const delBtns = document.getElementsByClassName('deleteAttm');
     	   
@@ -178,7 +156,6 @@
 							this.innerHTML = "삭제 ON";
 							this.style.background = 'black';
 							this.style.color = 'white';
-							nextHidden.value = this.id.split('~')[1];
 							
 						}else{
 							this.innerHTML = "삭제 OFF";

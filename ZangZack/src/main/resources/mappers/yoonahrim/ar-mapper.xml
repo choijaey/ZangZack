@@ -29,26 +29,33 @@
 		select * from dual
 	</insert>
 	  
-	    
+	<!-- 
 	<select id="selectMyList" resultType="secondHandProduct">
 		select *
 		from SECONDHAND_PRODUCT
 		where SP_NO = #{spNo}
 	</select>
-	
-	<!--  
+	-->
+	  
 	<select id="selectMyList" resultType="secondHandProduct">
 	    SELECT s.*, c.category_name
 		FROM SECONDHAND_PRODUCT s
 		     JOIN camping_category c ON s.category_no = c.category_no
 		WHERE s.SP_NO = #{spNo}
 	</select>
-	-->
 	
+	<delete id="deleteAttmSecondHand">
+		update photo
+		set photo_status = 'Y'
+		where BOARD_NO = #{spNo} and BOARD_TYPE = '4'
+	</delete>
+
+	<!--  
 	<delete id="deleteAttmSecondHand">
 		delete from photo
 		where BOARD_NO = #{spNo} and BOARD_TYPE = '4'
 	</delete>
+	-->
 	
 	<select id="selectAttachmentList" resultType="Photo">
 		select *
@@ -79,10 +86,16 @@
 		SET SP_STATUS='Y'
 		where SP_NO = #{spNo}
 	</update>
-	
+	<!--  
 	<select id="selectSeconHand" resultType="secondHandProduct">
 		select *
 		from SECONDHAND_PRODUCT
+	</select>
+	-->
+	<select id="selectSeconHand" resultType="secondHandProduct">
+		select s.*, c.category_name 
+		from SECONDHAND_PRODUCT s
+			 JOIN camping_category c ON s.category_no = c.category_no
 	</select>
 	
 	<select id="selectReply" resultType="Reply">
@@ -97,4 +110,30 @@
 		where BOARD_TYPE = '4' and PHOTO_LEVEL = '0'
 	</select>
 	
+	<update id="updateAttmSecondHand">
+		update photo
+		set (new_aid, #{item.photoRename}, #{item.photoPath}, #{item.photoLevel}, 4, #{item.boardNo}, default)
+	</update>
+	
+	<delete id="deleteAttm">
+		delete from photo
+		where photo_rename in 
+		<foreach collection="list" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>	
+	
+	<update id="deleteAttmForN">
+		update photo
+		set Photo_status = 'N'
+		where PHOTO_NO = #{spNo}
+	</update>
+	
+	<update id="updatePhotoLevel">
+		update photo
+	      set photo_Level = 0
+	      where photo_No = (select min(photo_No)
+	                  from photo
+	                  where BOARD_NO = #{spNo})
+	</update>
 </mapper>
