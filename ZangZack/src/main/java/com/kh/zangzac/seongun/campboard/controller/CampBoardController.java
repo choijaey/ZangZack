@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.controller.BoardCondition;
+import com.kh.zangzac.common.heart.model.service.HeartService;
+import com.kh.zangzac.common.heart.model.vo.Heart;
 import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.model.vo.SelectCondition;
@@ -50,6 +52,9 @@ public class CampBoardController {
 	
 	@Autowired
 	private BoardCondition boardSet;
+	
+	@Autowired
+	private HeartService hService;
 	
 	@GetMapping("campBoard.su")
 	public String campBoardListView(@RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
@@ -97,6 +102,7 @@ public class CampBoardController {
 		return "views/seongun/recipe";
 	}
 	
+	//캠핑 게시판 조회
 	@GetMapping("selectBoard.su")
 	public String campBoardView(@RequestParam("cbNo") int cbNo, @RequestParam(value="page", defaultValue="1") int page, HttpSession session,Model model) {
 		Member loginUser = (Member)session.getAttribute("loginUser");
@@ -108,6 +114,12 @@ public class CampBoardController {
 		}
 	    
 	    CampBoard bList = cService.selectBoard(cbNo, id);
+	    if(id != null) {
+		    Heart heart = hService.selectHeart(sWork.addHeart(cbNo, id, 1));
+		    if(heart != null) {
+		    	bList.setHeartCheck(true);
+		    }
+	    }
 	    ArrayList<Photo> pList = pService.selectBoardPhoto(b);
 	    int maxPage = sWork.countReply(cbNo, 1);
 	    if(bList != null) {

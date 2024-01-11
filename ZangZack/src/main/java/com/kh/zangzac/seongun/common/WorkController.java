@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import com.kh.zangzac.common.Pagination;
+import com.kh.zangzac.common.heart.model.vo.Heart;
 import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.model.vo.SelectCondition;
@@ -66,6 +67,14 @@ public class WorkController {
 		int listCount = rController.countReply(b);
 		
 		return Pagination.getReplyPageInfo(1, listCount, 10).getMaxPage();
+	}
+
+	public Heart addHeart(int cbNo, String memberId, int i) {
+		Heart h = new Heart();
+		h.setBoardNo(cbNo);
+		h.setMemberId(memberId);
+		h.setBoardType(i);
+		return h;
 	}
 	
 }

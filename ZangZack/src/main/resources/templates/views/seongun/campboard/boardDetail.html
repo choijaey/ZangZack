@@ -14,6 +14,7 @@
 	<div class="container">
 		<div class="article_header">
 			<span class="boardCategory">[[${bList.categoryName}]]</span>
+			<button id="board_edit_btn"><img src="image/seongun/boardAdd.png" alt="게시판 설정 버튼"></button>
 			<div class="post-header">
 				<h2>[[${bList.cbTitle}]]</h2>
 				<div class="post-details">
@@ -38,9 +39,9 @@
 		<div class="comments-section">
 			<div class="post-details">
 				<div class="post-like-comment">
-					<img src="image/seongun/offheart.png" alt="좋아요" id="likeButton" class="like-button" onclick="clickHeart()">
+					<img th:attr="src=${bList.heartCheck == true ? 'image/seongun/onheart.png' : 'image/seongun/offheart.png'}" alt="좋아요" id="likeButton" class="like-button" onclick="clickHeart()">
 					<span class="like-text">좋아요</span>
-					<span class="like-count" id="like-count"></span> 
+					<span class="like-count" id="like-count">[[${bList.heartCount}]]</span> 
 					<span class="comment-text">댓글</span>
 					<span class="comment-count">[[${bList.replyCount}]]</span>
 				</div>
@@ -62,60 +63,32 @@
 	<script th:inline="javascript">
 		/*<![CDATA[*/
 		let member = /*[[${session.loginUser}]]*/null;
-		let heart = null;
-		let heartCount = 0;
+		let heart = /*[[${bList.heartCheck}]]*/true;
+		let heartCountNum = /*[[${bList.heartCount}]]*/1;
+		let memberId = null;
 		
-		if(member != null){
-			var memberId = member.memberId;
+		const heartCount = document.getElementById("like-count");
+		const heartImg = document.getElementById("likeButton");
+		
+		if (member != null) {
+		    memberId = member.memberId;
 		}
 		
 		clickHeart = () => {
 		    if (member != null) {
-		        if (heart == null) {
-		            insertHeart();
-		        } else {
+		        if (heart) {
 		            deleteHeart();
+		        } else {
+		            insertHeart();
 		        }
 		    } else {
 		        alert("로그인하고 누르삼");
 		    }
 		};
 		
-		selectHeart = () =>{
-			$.ajax({
-				url: 'selectHeart.like',
-				method: 'post',
-				data: { 
-		            boardNo: /*[[${bList.cbNo}]]*/1, 
-		            boardType: 1,
-		            memberId: memberId
-		        },
-		        success:(data) => {
-		        	if(data != null){
-		        		heart = data;
-		        		setHeart(heart,countHeat());
-		        	}else{
-		        		heart = null;
-		        		setHeart(heart,countHeat());
-		        	}
-		        },
-		        error : data => console.log(data)
-			})
-		}
-		setHeart = (heart) =>{
-			countHeart();
-			if(heart != null){
-				document.getElementById("likeButton").src = "image/seongun/onheart.png";
-				document.getElementById("like-count").innerHTML = countHeart +"";
-			}else{
-				document.getElementById("likeButton").src = "image/seongun/offheart.png";
-				document.getElementById("like-count").innerHTML = countHeart +"";
-			}
-		}
-		
-		insertHeart = () =>{
-			$.ajax({
-		        url: 'insertHeart.like', // 서버의 댓글 목록 불러오기 URL
+		insertHeart = () => {
+		    $.ajax({
+		        url: 'insertHeart.like',
 		        method: 'post',
 		        data: { 
 		            boardNo: /*[[${bList.cbNo}]]*/1, 
@@ -123,52 +96,37 @@
 		            memberId: memberId
 		        },
 		        success: data => {
-					selectHeart();
+		        	heartCountNum += 1;
+		        	heartCount.innerText = heartCountNum;
+		        	heartImg.src = "image/seongun/onheart.png";
+		        	heart = true;
 		        },
-		        error : data => console.log(data)
+		        error: data => console.log(data)
 		    });
-		}
+		};
 		
-		deleteHeart = () =>{
-			$.ajax({
-				url: 'deleteHeart.like',
-				method: 'post',
-				data:{
-					boardNo: /*[[${bList.cbNo}]]*/1, 
-					boardType: 1,
-					memberId: memberId
-				},
-				success: data => {
-					selectHeart();
+		deleteHeart = () => {
+		    $.ajax({
+		        url: 'deleteHeart.like',
+		        method: 'post',
+		        data: {
+		            boardNo: /*[[${bList.cbNo}]]*/1, 
+		            boardType: 1,
+		            memberId: memberId
 		        },
-		        error : data => console.log(data)
-			});
-		}
-		countHeart = () =>{
-			$.ajax({
-				url: 'countHeart.like',
-				method: 'post',
-				data:{
-					boardNo: /*[[${bList.cbNo}]]*/1, 
-					boardType: 1
-				},
-				success: data => {
-					console.log("count :" + data);
-					heartCount = data;
+		        success: data => {
+		        	heartCountNum -= 1;
+		        	heartCount.innerText = heartCountNum;
+		        	heartImg.src = "image/seongun/offheart.png";
+		        	heart = false;
 		        },
-		        error : data => console.log(data)
-			});
-		}
+		        error: data => console.log(data)
+		    });
+		};
 		
-		
-		// 페이지 로드 시 댓글 목록 불러오기
+		// 페이지 로드 시 댓글 목록 및 좋아요 상태 불러오기
 		window.onload = function() {
-			console.log(heart);
-			loadCommentList(/*[[${maxPage}]]*/);
-			countHeart();
-			if(member != null){
-				selectHeart();
-			}
+		    loadCommentList(/*[[${maxPage}]]*/);
 		};
 	
 		// 댓글 목록 불러오는 함수
