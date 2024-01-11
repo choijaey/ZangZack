@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.photo.model.vo.Photo;
@@ -78,8 +79,9 @@ public class SecondHandController {
 	
 	//중고 게시글 수정
 	@PostMapping("update.ah")
-	public String updatePage(@ModelAttribute secondHandProduct sp, Model model, @RequestParam("inputGroupFile") ArrayList<MultipartFile> inputGroupFiles, HttpSession session, HttpServletRequest request,
-							 @RequestParam("spAddressStreet") String spAddressStreet, @RequestParam("deleteAttm") String[] deleteAttm, @RequestParam("spAddressDetail") String spAddressDetail) {
+	public String updatePage(@ModelAttribute secondHandProduct sp, Model model, @RequestParam("file") ArrayList<MultipartFile> files, HttpSession session, HttpServletRequest request,
+							 @RequestParam("spAddressStreet") String spAddressStreet, @RequestParam("deleteAttm") String[] deleteAttm, 
+							 RedirectAttributes redirectAttributes, @RequestParam("spAddressDetail") String spAddressDetail) {
 		
 		
 		//로그인한 User의 게시물을 update 하기 위해
@@ -98,47 +100,49 @@ public class SecondHandController {
 	    String name = "ahrim";
 	    ArrayList<Photo> aList = spService.selectAttachmentList(sp.getSpNo());
 	   
-	    ArrayList<Photo> detailList = new ArrayList<>();
 	    int result1 = 0;
 	    int result2 = 0;
 	    
-	    for (int i = 0; i < inputGroupFiles.size(); i++) {
-	        MultipartFile upload = inputGroupFiles.get(i); // 파일 하나씩 뽑아오기.
-	        String[] returnArr = imageStorage.saveImage(upload, name);
-	        
-	        if (returnArr != null) {
-	        	Photo a = new Photo();
-	            if(i == 0) {
-	            	a.setPhotoRename(returnArr[0]);
-	 	            a.setPhotoPath(returnArr[1]);
-	 	            a.setPhotoLevel(0);
-	            }else {
-	            	a.setPhotoRename(returnArr[0]);
-	 	            a.setPhotoPath(returnArr[1]);
-	 	            a.setPhotoLevel(1);
+	    ArrayList<Photo> list = new ArrayList<>();
+	      //files 새로 추가한 파일들이 들어가 있는곳
+	      for(int i = 0; i < files.size(); i++) {
+	         MultipartFile upload = files.get(i);
+	         
+	         if(!upload.getOriginalFilename().equals("")) {
+	            //파일이 들어왔으면.
+	            String[] returnArr = imageStorage.saveImage(upload, name);
+	            
+	            if(returnArr != null) {
+	               Photo a = new Photo();
+	               a.setPhotoRename(returnArr[0]);
+	               a.setPhotoPath(returnArr[1]);
+	               
+	               list.add(a);
 	            }
-	            detailList.add(a);
-	        } 
-	    }
+	         }
+	      }
+
 	    
 	    // 2. 삭제될 첨부파일 처리
 	    ArrayList<String> delRename = new ArrayList<>();
 		ArrayList<Integer> delLevel = new ArrayList<>();
 		
-		for(int i =0; i < deleteAttm.length; i++) { //삭제할 파일들을
+		 for(int i =0; i < deleteAttm.length; i++) { //삭제할 파일들을
 	         String rename = deleteAttm[i]; //rename에 담음
 	         if(!rename.equals("none")) { //none이 아니면
-	            String[] split = rename.split("~");// 슬래시로 잘라서
+	            String[] split = rename.split("/");// 슬래시로 잘라서
 	            delRename.add(split[0]); //0번은 여기 담고
 	            delLevel.add(Integer.parseInt(split[1]));//1번은 여기 담음.
 	         }
 	      }
-	    
+		
+		
 		int deleteAttmResult = 0;
 		boolean existBeforeAttm = true;
 		
 		if(!delRename.isEmpty()) {
 			deleteAttmResult = spService.deleteAttm(delRename);
+			System.out.println(deleteAttmResult);
 			if(deleteAttmResult > 0) {
 				for(String rename : delRename) {
 					imageStorage.deleteImage(rename,name);
@@ -157,8 +161,8 @@ public class SecondHandController {
 		         }
 		      }
 		
-		for(int i = 0; i < detailList.size(); i++) {
-			Photo a = detailList.get(i);
+		for(int i = 0; i < list.size(); i++) {
+			Photo a = list.get(i);
 			a.setBoardNo(sp.getSpNo());
 			
 			if(existBeforeAttm) {
@@ -173,11 +177,12 @@ public class SecondHandController {
 		}
 		
 		result1 = spService.updateSecondHand(sp);
-			if(!detailList.isEmpty()) {
-		    	 result2 = spService.updateAttmSecondHand(detailList);
+			if(!list.isEmpty()) {
+		    	 result2 = spService.insertAttmSecondHand(list);
 		    }
 
-	    if (result1 + result2 == detailList.size() + 1) {
+	    if (result1 + result2 == list.size() + 1) {
+	    	redirectAttributes.addAttribute("no", sp.getSpNo());
 	        return "redirect:secondHand.ah";
 	    } else {
 	        throw new secondHandException("게시판 등록 실패");
@@ -368,6 +373,12 @@ public class SecondHandController {
 			throw new secondHandException("삭제 실패");
 		}
 	}
+	
+	@GetMapping("admin.ah")
+	public String adminSecondPage() {
+		return "views/yoonahrim/adminSecondHand";
+	}
+	
 }
 	
 	

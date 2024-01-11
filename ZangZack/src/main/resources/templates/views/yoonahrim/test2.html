@@ -15,7 +15,7 @@
    <h1 style="text-align:center; font-size: 30px; margin: 50px">중고 매물 수정하기</h1>
    
    <!-- 업로드할 파일 사진 업로드 및 버튼(업로드버튼 및 추가버튼 구현)-->
-   <form action="update.ah" method="post" enctype="multipart/form-data">>
+   <form action="update.ah" method="post" enctype="multipart/form-data">
     <th:block th:each="s : ${list}">
         <input type="hidden" name="spNo" th:value="${s.spNo}"/>
          <div class="row">
@@ -24,16 +24,16 @@
                 <div class="photoNum" style="position: relative; margin: 10px">
                     <div class="photoUploads" style="background-image: url('image/yoonahrim/photo-icon.png'); width: 200px; height: 200px; background-size:50%; background-repeat: no-repeat; background-position:50% 50%;">
                         <img th:src="${a.photoPath}" th:id="'photoUpload/' + ${a.photoNo}" class="clickUpload" style="width:200px; height:200px; border-radius:20%; border: 1px solid black;"/>
-                    </div>
                     <br>
                     <div class="input-group mb-3">
-                        <label class="input-group-text" th:for="'inputGroupFile/' + ${a.photoNo}" Multiple style="display:none;">
-                            <input type="file" class="form-control" th:id="'inputGroupFile/' + ${a.photoNo}" name="inputGroupFile" style="display:none;" th:attr="onchange='previewImage(event, \'' + 'photoUpload/' + ${a.photoNo} + '\')'"/>
+                        <label class="input-group-text" th:for="'file/' + ${a.photoNo}" Multiple style="display:none;">
+                            <input type="file" class="form-control" th:id="'file/' + ${a.photoNo}" name="file" style="display:none;" th:attr="onchange='previewImage(event, \'' + 'photoUpload/' + ${a.photoNo} + '\')'"/>
                         </label>
                     </div>
                     <div class="deleteBtn">
-                        <button type="button" class="btn btn-outline-dark btn-sm deleteAttm" th:id="|delete-${ a.photoPath }~${ a.photoLevel }|">삭제 OFF</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm deleteAttm" th:id="|delete~${ a.photoRename }/${ a.photoLevel }|">삭제 OFF</button>
                     	<input type="hidden" name="deleteAttm" th:value="none">
+                    </div>
                     </div>
                 </div>
               </th:block> 
@@ -42,7 +42,7 @@
 			
 		    <div id="fileArea" style="position: absolute; left: 730px; top: 650px">
 		    	<div class="mb-1">
-		        	<input type="file" class="form-control form-control-lg" name="inputGroupFile" style="width:500px;">
+		        	<input type="file" class="form-control form-control-lg" name="file" style="width:500px;" />
 		    	</div>
 		    </div>
 						
@@ -54,12 +54,12 @@
                   </label><br><br>
                   <label>캠핑 카테고리
                         <select class="form-select" name="categoryNo">
-                       <option value="1" name="categoryNo" th:selected="${ s.categoryNo == 1 }">텐트</option>
-                       <option value="2" name="categoryNo" th:selected="${ s.categoryNo == 2 }">취침용품</option>
-                       <option value="3" name="categoryNo" th:selected="${ s.categoryNo == 3 }">조리도구</option>
-                       <option value="4" name="categoryNo" th:selected="${ s.categoryNo == 4 }">발화용품</option>
-                       <option value="5" name="categoryNo" th:selected="${ s.categoryNo == 5 }">배낭</option>
-                       <option value="6" name="categoryNo" th:selected="${ s.categoryNo == 6 }">기타</option>
+                       <option value="11" name="categoryNo" th:selected="${ s.categoryNo == 11 }">텐트</option>
+                       <option value="12" name="categoryNo" th:selected="${ s.categoryNo == 12 }">취침용품</option>
+                       <option value="13" name="categoryNo" th:selected="${ s.categoryNo == 13 }">조리도구</option>
+                       <option value="14" name="categoryNo" th:selected="${ s.categoryNo == 14 }">발화용품</option>
+                       <option value="15" name="categoryNo" th:selected="${ s.categoryNo == 15 }">배낭</option>
+                       <option value="16" name="categoryNo" th:selected="${ s.categoryNo == 16 }">기타</option>
                        </select>
                </label><br><br>
                <label>가격
@@ -87,7 +87,7 @@
          </div>
    </form>
    
-   <script th:line="javascript">
+   <script th:inline="javascript">
        function previewImage(event, photoId){
            const fReader1 = new FileReader();
            const output = document.getElementById(photoId);
@@ -112,7 +112,7 @@
 		document.getElementById('addFile').addEventListener('click', () =>{
 			const newDiv = document.createElement('div');
 			newDiv.classList.add('mb-3');
-			newDiv.innerHTML = '<input type="file" class="form-control form -control-lg" name="inputGroupFile" style="width:500px;">'
+			newDiv.innerHTML = '<input type="file" class="form-control form -control-lg" name="file" style="width:500px;">'
 			
 			fileArea.append(newDiv);
 		})
@@ -139,16 +139,9 @@
 			
 			console.log(isAllRemove);
 			
-			 if (isEmpty && isAllRemove) {
-			        $('#modalChoice').modal('show');
-			    } else {
-			        // form.submit();
-			        // 삭제 off를 클릭할 때도 기존의 submitAttm 동작을 수행하도록 수정
-			        deletePhotoOff('photoNo'); // 'photoNo'는 실제로 필요한 값을 넣어주어야 합니다.
-			    }
        })
        
-       const delBtns = document.getElementsByClassName('deleteAttm');
+      const delBtns = document.getElementsByClassName('deleteAttm');
 				for(const btn of delBtns){
 					btn.addEventListener('click',function(){
 						const nextHidden = this.nextElementSibling;
@@ -156,6 +149,7 @@
 							this.innerHTML = "삭제 ON";
 							this.style.background = 'black';
 							this.style.color = 'white';
+							nextHidden.value = this.id.split('~')[1];
 							
 						}else{
 							this.innerHTML = "삭제 OFF";
