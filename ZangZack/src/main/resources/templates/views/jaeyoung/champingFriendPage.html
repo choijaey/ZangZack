@@ -205,10 +205,10 @@
 					<p>[[${cf.cfContent}]]</p>
 					<img th:if="${cf.photoPath != null}" th:src="${cf.photoPath}" alt="Rocket Launch" class="rounded-lg mt-3">
 					<div class="post-like-comment">
-		               <img src="image/seongun/offheart.png" alt="좋아요" class="like-button" onclick="toggleLike(event)"> <span class="like-text">좋아요</span>
-		               <span class="like-count">0</span> 
+		               <th:block th:utext="${cf.likeStatus}"></th:block><span class="like-text">좋아요</span>
+		               <span class="like-count" th:id="|likeCount${cf.cfNo}|">[[${cf.likeCount}]]</span> 
 		               <span class="comment-text">댓글</span>
-		               <span class="comment-count">0</span>
+		               <span class="comment-count" th:id="|commentCount${cf.cfNo}|">[[${cf.replyCount}]]</span>
 		            </div>
 				</div>
 				<div class="flex justify-between items-center text-gray-500 text-sm">
@@ -230,12 +230,12 @@
 			 	            <div class="comment-content">
 			 	                <div class="comment-author">[[${re.memberName}]]</div>
 			 	                <div class="comment-message">[[${re.replyContent}]]</div><br>
-			 	                <div class="comment-info">[[${re.replyCreateDate}]]</div>
+			 	                <div class="comment-info">[[${re.formatDate}]]</div>
 			 	            </div>
 			 	            <input type="hidden" th:value ="${re.replyNo}" th:id="|${'reply'+re.replyNo}|">
 			 	            <th:block th:if="${session.loginUser != null}">
 				 	            <div class="edit" onclick="openEditModal(event)" th:if="${session.loginUser.memberId == re.memberId}">수정</div>
-	    						<div class="delete" onclick="deleteReply(event)" th:if="${session.loginUser.memberId == re.memberId}">삭제</div>
+	    						<div class="delete" onclick="openDeleteModal(event)" th:if="${session.loginUser.memberId == re.memberId}">삭제</div>
     						</th:block>
 			 	        </div>
 					</th:block>
@@ -243,7 +243,10 @@
 			</div>
 			<br>
 		</th:block>
-		
+
+	</div>
+	
+		<!-- Board EDit and delete-->
 		<div class="modal" id="modal">
 		      <div class="modal-content">
 		        <ul>
@@ -252,8 +255,7 @@
 		        </ul>
 		      </div>
 		 </div>
-
-	</div>
+	
 	
 	<!-- Reply Modal -->
 		<div id="replyModal" class="fixed inset-0 bg-black bg-opacity-25 flex justify-center items-center hidden">
@@ -292,6 +294,71 @@
 				</div>
 			</div>
 		</div>
+		
+		<!-- delete model -->
+		<div id="replyDeleteModal" class="fixed inset-0 bg-black bg-opacity-25 flex justify-center items-center hidden">
+		    <div class="bg-white p-4 rounded-lg shadow-lg w-full max-w-md text-center">
+		        <div class="font-semibold text-xl mb-4">정말 삭제 하시겠습니까?</div>
+		        <div class="flex justify-center">
+		            <input type="hidden" id="replyDeleteCfNo">
+		            <button class="bg-blue-500 text-white px-4 py-2 rounded-lg mr-2 hover:bg-blue-600 focus:outline-none" id="deleteConfrim">확인</button>
+		            <button class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 focus:outline-none" id="deleteCancle">취소</button>
+		        </div>
+		    </div>
+		</div>
+		
+	
+	<script>
+	const deleteConfrim = document.getElementById('deleteConfrim');
+    const deleteCancle = document.getElementById('deleteCancle');
+    const replyDeleteModal = document.getElementById('replyDeleteModal');
+    const replyDeleteCfNo = document.getElementById('replyDeleteCfNo');
+    
+    function openDeleteModal(event) {
+		 
+    	replyDeleteCfNo.value = event.target.previousElementSibling.previousElementSibling.value;
+    	replyDeleteModal.classList.remove('hidden');
+	 	
+    }
+    
+ // Close the modal
+    function closeDeleteModal() {
+    	replyDeleteModal.classList.add('hidden');
+    }
+    
+	 // Attach click event to open the modal
+    deleteCancle.addEventListener('click', closeDeleteModal);
+	 
+	 
+	 
+    deleteConfrim.addEventListener('click', function(){
+    	
+    	
+    	 $.ajax({
+              url: 'deleteReply.jy', // 서버의 댓글 목록 불러오기 URL
+              method: 'GET',
+              data: { 
+            	  replyNo : replyDeleteCfNo.value
+              },
+              success: function(data) {
+            	  closeDeleteModal();
+            	  document.getElementById('reply'+replyDeleteCfNo.value).parentNode.remove();
+                  
+              },
+              error: function(data) {
+                  console.log(data);
+              }
+          });
+    	
+    	
+    	
+    	 
+    });
+	 
+    
+	</script>
+		
+		
 	<!-- reply edit 모달 관련-->
 	<script th:inline="javascript">
 		const replyEditModal = document.getElementById('replyEditModal');
@@ -339,12 +406,18 @@
 	              url: 'updateReply.jy', // 서버의 댓글 목록 불러오기 URL
 	              method: 'GET',
 	              data: { 
-	            	  replyNo : replyEditCfNo.value, replyContent : replyEditContent.innerText
+	            	  replyNo : replyEditCfNo.value, replyContent : replyEditContent.value
 	              },
 	              success: function(data) {
-	                  
+	            	  closeEditModal1();
 	                  // 성공했으면 innerText 바꾸기
-	                  console.log(data);
+	                  
+	                  //내용 변경
+	                  document.getElementById(replyId).previousElementSibling.children[1].innerText=data.data.replyContent;
+	                  //날짜 변경
+	                  document.getElementById(replyId).previousElementSibling.children[3].innerText = data.data.formatDate;
+	                  
+	                  //날짜랑 내용 바꾸기
 	              },
 	              error: function(data) {
 	                  console.log(data);
@@ -467,17 +540,57 @@
 	    function toggleLike(event) {
 	        const likeButton = event.target;
 	        const currentImagePath = likeButton.getAttribute("src");
-	
-	        if (currentImagePath === emptyHeartPath) {
-	            likeButton.setAttribute("src", filledHeartPath);
-	            likeButton.classList.add("clicked");
-	            //아작스 넣을부분~ 얏호~
-	            
-	            
-	        } else {
-	            likeButton.setAttribute("src", emptyHeartPath);
-	            likeButton.classList.remove("clicked");
-	        }
+	        let changeLike = 3;
+	        // 누른 게시글의 아이디
+	        let id = event.target.parentNode.parentNode.parentNode.children[3].id;
+	        /*<![CDATA[*/
+	        let User = /*[[${session.loginUser}]]*/null;
+	        /*]]>*/
+	        const like = document.getElementById('likeCount'+id);
+	        
+			if(User != null){ // 로그인 유저만 가능하도록
+		        if (currentImagePath === emptyHeartPath) {
+		            likeButton.setAttribute("src", filledHeartPath);
+		            likeButton.classList.add("clicked");
+		            changeLike = 1; // 좋아요 하기 
+		            //좋아요 숫자 증가 시켜야함
+		            like.innerText = parseInt(like.innerText, 10)+1;
+		            
+		            
+		            
+		        } else {
+		            likeButton.setAttribute("src", emptyHeartPath);
+		            likeButton.classList.remove("clicked");
+		            changeLike = 2; //좋아요 취소
+		            //좋아요 숫자 감소 시켜야함 
+		            like.innerText = parseInt(like.innerText, 10)-1;
+		           
+		        }
+		        
+		        //좋아요 아직스 부분
+		        
+		        $.ajax({
+		             url: 'updateLike.jy', // 서버의 댓글 목록 불러오기 URL
+		             method: 'GET',
+		             dataType: 'json', // 서버에서 JSON 형식으로 응답하는 경우
+		             data: { 
+		            	 boardNo  : id,
+		           	  memberId : User.memberId,
+		           	changeLike : changeLike
+		             },
+		             success: function(data) {
+		            	 console.log(data);
+		                 
+		             },
+		             error: function(data) {
+		                 console.log(data);
+		             }
+		         });
+
+	        
+			}else{
+				alert('로그인 후 좋아요를 눌러주세요!');
+			}
 	    }
         
 	    function goToCampingFriendWrite() {
@@ -572,7 +685,7 @@
 				        	ButtonHTML+=`
 				        		<input type="hidden" value ="${reply.replyNo}" id="reply${reply.replyNo}">
 					 	        <div class="edit" onclick="openEditModal(event)" >수정</div>
-							    <div class="delete" onclick="deleteReply(event)" >삭제</div>
+							    <div class="delete" onclick="openDeleteModal(event)" >삭제</div>
 				        	`
 		        		}
 		        	}
@@ -585,7 +698,7 @@
 			 	            <div class="comment-content">
 			 	                <div class="comment-author">${reply.memberName}</div>
 			 	                <div class="comment-message">${reply.replyContent}</div><br>
-			 	                <div class="comment-info">${reply.replyCreateDate}</div>
+			 	                <div class="comment-info">${reply.formatDate}</div>
 			 	            </div>
 			 	           ${ButtonHTML}
 		 	        	</div>
@@ -608,11 +721,11 @@
 		                    <p>${itemData.cfContent}</p>
 		                    ${photoHTML}
 		                    <div class="post-like-comment">
-		                        <img src="image/seongun/offheart.png" alt="좋아요" class="like-button" onclick="toggleLike(event)"> 
+		                        ${itemData.likeStatus} 
 		                        <span class="like-text">좋아요</span>
-		                        <span class="like-count">0</span> 
+		                        <span class="like-count" id="likeCount${itemData.cfNo}">${itemData.likeCount}</span> 
 		                        <span class="comment-text">댓글</span>
-		                        <span class="comment-count">0</span>
+		                        <span class="comment-count" id="commentCount${itemData.cfNo}">${itemData.replyCount}</span>
 		                    </div>
 		                </div>
 		                <div class="flex justify-between items-center text-gray-500 text-sm">
@@ -666,7 +779,7 @@
 		        	ButtonHTML+=`
 		        		<input type="hidden" value ="${item.replyNo}" id="reply${item.replyNo}">
 			 	        <div class="edit" onclick="openEditModal(event)" >수정</div>
-					    <div class="delete" onclick="deleteReply(event)" >삭제</div>
+					    <div class="delete" onclick="openDeleteModal(event)" >삭제</div>
 		        	`
 	      		}
 	      	}
@@ -678,7 +791,7 @@
 	 	            <div class="comment-content">
 	 	                <div class="comment-author">${item.memberName}</div>
 	 	                <div class="comment-message">${item.replyContent}</div><br>
-	 	                <div class="comment-info">${item.replyCreateDate}</div>
+	 	                <div class="comment-info">${item.formatDate}</div>
 	 	            </div>
 	 	           ${ButtonHTML}
 	 	        </div>
