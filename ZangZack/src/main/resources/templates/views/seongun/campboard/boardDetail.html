@@ -61,7 +61,7 @@
 	<script th:inline="javascript">
 		/*<![CDATA[*/
 		let member = /*[[${session.loginUser}]]*/null;
-		/*]]>*/
+		
 		let heart = null;
 		
 		if(member != null){
@@ -72,11 +72,9 @@
 			if(member != null){
 				if(heart == null){
 					console.log(heart);
-					console.log("야 이거 이상하다 ㅅㅂ?");
 					deleteHeart();
 				}else{
 					console.log(heart);
-					console.log("너가 작동하는데 이유가 머야?");
 					insertHeart();
 				}
 			}else{
@@ -133,7 +131,6 @@
 		        error : data => console.log(data)
 			});
 		}
-		/*<![CDATA[*/
 		// 페이지 로드 시 댓글 목록 불러오기
 		window.onload = function() {
 			loadCommentList(/*[[${maxPage}]]*/);
@@ -141,12 +138,10 @@
 				selectHeart();
 			}
 		};
-		/*]]>*/
 	
 		// 댓글 목록 불러오는 함수
 		
 		
-		/*<![CDATA[*/
 		function loadCommentList(replyPage) {
 		    $.ajax({
 		        url: 'replyLimitList.rep', // 서버의 댓글 목록 불러오기 URL
@@ -167,10 +162,8 @@
 		        }
 		    });
 		}
-		/*]]>*/
 		
 		// 댓글 추가 함수
-		/*<![CDATA[*/
 		document.addEventListener('DOMContentLoaded', function() {
 		    var insertReplyButton = document.getElementById('insertReply');
 		    if (insertReplyButton) {
@@ -200,7 +193,6 @@
 		        });
 		    }
 		});
-		/*]]>*/
 
 		
 		//댓글 list
@@ -495,6 +487,7 @@
 				}
 			});
 		}
+		/*]]>*/
 	</script>
 </body>
 </html>

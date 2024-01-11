@@ -18,7 +18,6 @@ public class HeartController {
 	@ResponseBody
 	public Heart selectHeart(@ModelAttribute Heart h) {
 		Heart heart = hService.selectHeart(h);
-		System.out.println(heart);
 		return heart;
 	}
 	
