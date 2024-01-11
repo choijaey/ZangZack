@@ -83,6 +83,20 @@ public class FriendController {
 		      if(loginUser != null) {// 유저가 있을때만 셋팅
 		    	  // 하트리스트 가져와서 셋팅..?
 		    	  // 보드 번호도 같고 아이디도 같은경우에만 셋팅 해야함
+		    	  Heart h = new Heart();
+		    	  h.setBoardNo(cf.getCfNo());
+		    	  h.setBoardType(7);
+		    	  h.setMemberId(loginUser.getMemberId());
+		    	  // 좋아요 있나 없나 검사
+		    	  Heart heart = hService.selectHeart(h);
+		    	  
+		    	  if(heart == null) {// 좋아요가 없으면
+		    		  cf.setLikeStatus("<img src=\"image/seongun/offheart.png\" alt=\"좋아요\" class=\"like-button\" onclick=\"toggleLike(event)\">");
+		    	  }else { // 좋아요가 있으면
+		    		  cf.setLikeStatus("<img src=\"image/seongun/onheart.png\" alt=\"좋아요\" class=\"like-button clicked\" onclick=\"toggleLike(event)\">");
+		    	  }
+		      }else {
+		    	  cf.setLikeStatus("<img src=\"image/seongun/offheart.png\" alt=\"좋아요\" class=\"like-button\" onclick=\"toggleLike(event)\">");
 		      }
 		      
 		      
@@ -100,11 +114,14 @@ public class FriendController {
 	
    @GetMapping("cfList.jy")
    @ResponseBody
-   public Map<String, Object> replyLimitList(@RequestParam(value="currentPage", defaultValue="1") int page, HttpServletRequest request ) {
+   public Map<String, Object> replyLimitList(@RequestParam(value="currentPage", defaultValue="1") int page, HttpServletRequest request,HttpSession session) {
 	  // 전체 숫자
       int listCount = cService.listCount();
       PageInfo pi = Pagination.getPageInfo(page, listCount, 3);
       
+      //로그인 정보 가져오기
+       Member loginUser = (Member)session.getAttribute("loginUser");
+       
       //전체 리스트 가져오기
       ArrayList<CampingFriend> list = cService.cfLimitList(pi);
       
@@ -117,6 +134,27 @@ public class FriendController {
 	      ArrayList<Reply> replyList = rService.selectReply(sc); 
 	      cf.setReplys(replyList);
 	      cf.setReplyCount(replyList.size());
+	      
+	      //하트 세팅하기
+	      if(loginUser != null) {// 유저가 있을때만 셋팅
+	    	  // 하트리스트 가져와서 셋팅..?
+	    	  // 보드 번호도 같고 아이디도 같은경우에만 셋팅 해야함
+	    	  Heart h = new Heart();
+	    	  h.setBoardNo(cf.getCfNo());
+	    	  h.setBoardType(7);
+	    	  h.setMemberId(loginUser.getMemberId());
+	    	  // 좋아요 있나 없나 검사
+	    	  Heart heart = hService.selectHeart(h);
+	    	  
+	    	  if(heart == null) {// 좋아요가 없으면
+	    		  cf.setLikeStatus("<img src=\"image/seongun/offheart.png\" alt=\"좋아요\" class=\"like-button\" onclick=\"toggleLike(event)\">");
+	    	  }else { // 좋아요가 있으면
+	    		  cf.setLikeStatus("<img src=\"image/seongun/onheart.png\" alt=\"좋아요\" class=\"like-button clicked\" onclick=\"toggleLike(event)\">");
+	    	  }
+	      }else {
+	    	  cf.setLikeStatus("<img src=\"image/seongun/offheart.png\" alt=\"좋아요\" class=\"like-button\" onclick=\"toggleLike(event)\">");
+	      }
+	      
       }
       
       

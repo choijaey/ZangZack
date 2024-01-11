@@ -205,7 +205,7 @@
 					<p>[[${cf.cfContent}]]</p>
 					<img th:if="${cf.photoPath != null}" th:src="${cf.photoPath}" alt="Rocket Launch" class="rounded-lg mt-3">
 					<div class="post-like-comment">
-		               <img src="image/seongun/offheart.png" alt="좋아요" class="like-button" onclick="toggleLike(event)"> <span class="like-text">좋아요</span>
+		               <th:block th:utext="${cf.likeStatus}"></th:block><span class="like-text">좋아요</span>
 		               <span class="like-count" th:id="|likeCount${cf.cfNo}|">[[${cf.likeCount}]]</span> 
 		               <span class="comment-text">댓글</span>
 		               <span class="comment-count" th:id="|commentCount${cf.cfNo}|">[[${cf.replyCount}]]</span>
@@ -721,7 +721,7 @@
 		                    <p>${itemData.cfContent}</p>
 		                    ${photoHTML}
 		                    <div class="post-like-comment">
-		                        <img src="image/seongun/offheart.png" alt="좋아요" class="like-button" onclick="toggleLike(event)"> 
+		                        ${itemData.likeStatus} 
 		                        <span class="like-text">좋아요</span>
 		                        <span class="like-count" id="likeCount${itemData.cfNo}">${itemData.likeCount}</span> 
 		                        <span class="comment-text">댓글</span>
