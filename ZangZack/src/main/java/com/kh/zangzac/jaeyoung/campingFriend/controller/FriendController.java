@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,13 +19,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.common.model.vo.SelectCondition;
 import com.kh.zangzac.common.photo.model.service.PhotoService;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.common.reply.model.service.ReplyService;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.jaeyoung.campingFriend.model.service.CampingFriendService;
 import com.kh.zangzac.jaeyoung.campingFriend.model.vo.CampingFriend;
-import com.kh.zangzac.ming.member.model.vo.Member;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -57,6 +59,15 @@ public class FriendController {
 	      //전체 리스트 가져오기~~
 	      ArrayList<CampingFriend> list = cService.cfLimitList(pi);
 	      
+	      //전체 리스트의 댓글들 저장하기
+	      for(CampingFriend cf : list) {
+		      SelectCondition sc = new SelectCondition();
+		      sc.setBoardNo(cf.getCfNo());
+		      sc.setBoardType(7);
+		      cf.setReplys(rService.selectReply(sc)); 
+	      }
+	      
+	      
 	      model.addAttribute("list", list);
 	      model.addAttribute("maxPage", pi.getMaxPage());
 	      
@@ -71,9 +82,19 @@ public class FriendController {
       int listCount = cService.listCount();
       PageInfo pi = Pagination.getPageInfo(page, listCount, 3);
       
-      //전체 리스트 가져오기~~
+      //전체 리스트 가져오기
       ArrayList<CampingFriend> list = cService.cfLimitList(pi);
-       
+      
+      
+      //전체 리스트의 댓글들 저장하기
+      for(CampingFriend cf : list) {
+	      SelectCondition sc = new SelectCondition();
+	      sc.setBoardNo(cf.getCfNo());
+	      sc.setBoardType(7);
+	      cf.setReplys(rService.selectReply(sc)); 
+      }
+      
+      
       Map<String, Object> map = new HashMap<>();
       
       
@@ -126,24 +147,43 @@ public class FriendController {
 	}
 	
 	
-	   @GetMapping("insertReply.jy")
+	   @GetMapping(value = "/insertReply.jy", produces = "application/json")
 	   @ResponseBody
 	   public Map<String, Object> insertReply(@ModelAttribute Reply reply) {
 		  
 		  reply.setBoardType(7);
 		  int result = rService.insertReply(reply);
 		  
+		  Reply r = rService.selectReplyOne(reply);
+		  
 	      Map<String, Object> map = new HashMap<>();
 	      
 	      if(result >0) {
-	    	  map.put("data", reply);
+	    	  map.put("data", r);
 	      }else {
 	    	  map.put("data", "no");
 	      }
 	      
+	       return map;
+	   }
+	   
+	   @GetMapping(value = "/updateReply.jy")
+	   @ResponseBody
+	   public String updateReply(@ModelAttribute Reply reply) {
+		  
+		  int result = rService.updateReply(reply);
+		  
+		  String answer;
+	      
+	      if(result >0) {
+	    	  answer= "yes";
+	      }else {
+	    	  answer= "no";
+	      }
+	      
 	      
 	       
-	       return map;
+	       return answer;
 	   }
 	
 	

@@ -106,7 +106,69 @@
     }
   
  
-  	
+  	comment-item {
+	  display: flex;
+	  align-items: center;
+	  margin-bottom: 10px;
+	  padding-bottom: 10px;
+	  border-bottom: 1px solid #ececec;
+	  flex-wrap: wrap;
+	  display: inline-block;
+	}
+	
+	.comment-thumb {
+	  width: 40px;
+	  height: 50%;
+	  border-radius: 50%;
+	  margin-right: 10px;
+	  display: inline-block;
+	  margin-bottom: 25px;
+	  position: relative;
+	}
+	.comment-content {
+	  margin-bottom: 10px;
+	  padding-bottom: 10px;
+	  flex-grow: 1;
+	  width:500px;
+	  max-width: 500px;
+	  display: inline-block;
+	}
+	
+	.comment-author {
+	  font-weight: bold;
+	  color: #333;
+	  display: inline-block;
+	}
+	
+	.comment-message {
+	  color: #666;
+	  display: inline-block;
+	}
+	
+	.comment-info {
+	  font-size: 0.9em;
+	  color: #999;
+	  display: inline-block;
+	}
+	
+	.comment-list {
+	  margin-top: 20px;
+	  max-width: 100%;
+	  box-sizing: border-box;
+	  display: inline-block;
+	}
+	.edit, .delete{
+		display: inline-block;
+		border-bottom: 2px solid black;
+		cursor: pointer;
+		
+	}
+	.edit:hover, .delete:hover{
+		display: inline-block;
+		border-bottom: 2px solid red;
+		cursor: pointer;
+		
+	}
 </style>
 </head>
 <body class="bg-gray-50">
@@ -161,9 +223,22 @@
 	    			</div>
 	    			
 				</div>
-				<div class="comment-section" th:id="${cf.cfNo}">
-			        <div id="commentList"></div>
-            		<div>확인용</div>
+				<div class="comment-section comment-list" th:id="${cf.cfNo}">
+					<th:block th:each="re:${cf.replys}">
+						<div class="comment-item">
+			 	            <img class="comment-thumb" th:src="${re.memberProfilePath}" alt="프로필 사진">
+			 	            <div class="comment-content">
+			 	                <div class="comment-author">[[${re.memberName}]]</div>
+			 	                <div class="comment-message">[[${re.replyContent}]]</div><br>
+			 	                <div class="comment-info">[[${re.replyCreateDate}]]</div>
+			 	            </div>
+			 	            <input type="hidden" th:value ="${re.replyNo}" th:id="|${'reply'+re.replyNo}|">
+			 	            <th:block th:if="${session.loginUser != null}">
+				 	            <div class="edit" onclick="openEditModal(event)" th:if="${session.loginUser.memberId == re.memberId}">수정</div>
+	    						<div class="delete" onclick="deleteReply(event)" th:if="${session.loginUser.memberId == re.memberId}">삭제</div>
+    						</th:block>
+			 	        </div>
+					</th:block>
 			    </div>
 			</div>
 			<br>
@@ -199,8 +274,90 @@
 			</div>
 		</div>
 
+		<!-- Reply EDIT Modal -->
+		<div id="replyEditModal" class="fixed inset-0 bg-black bg-opacity-25 flex justify-center items-center hidden">
+			<div class="bg-white p-4 rounded-lg shadow-lg w-full max-w-md">
+				<div class="flex justify-between items-center">
+					<div class="font-semibold" id="editTitle">[아이디]의 댓글 수정</div>
+					<button id="closeEditModal_" class="text-gray-500">&times;</button>
+				</div>
+				<div class="mt-4">
+					<textarea
+						class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+						rows="4" placeholder="Post your reply" id="replyEditContent"></textarea>
+				</div>
+				<div class="flex justify-end mt-4">
+					<input type="hidden" id="replyEditCfNo">
+					<button class="bg-blue-500 text-white px-4 py-2 rounded-lg" id="edit">수정</button>
+				</div>
+			</div>
+		</div>
+	<!-- reply edit 모달 관련-->
+	<script th:inline="javascript">
+		const replyEditModal = document.getElementById('replyEditModal');
+	    const closeEditModal = document.getElementById('closeEditModal_');
+	    const edit = document.getElementById('edit');
+	    const replyEditCfNo = document.getElementById('replyEditCfNo');
+	    const replyEditContent = document.getElementById('replyEditContent');
+	    const editTitle = document.getElementById("editTitle");
+	    
+	 // Open the modal
+        function openEditModal(event) {
+		 
+		 
+        	/*<![CDATA[*/
+	        let User = /*[[${session.loginUser}]]*/null;
+	        /*]]>*/
+		 	if(User != null){
+			 	let name=event.target.previousElementSibling.previousElementSibling.children[0].innerText+"";
+			 	let editcontent=event.target.previousElementSibling.previousElementSibling.children[1].innerText+"";
+			 	
+			 	//모달 내부 수정
+			 	replyEditCfNo.value = event.target.previousElementSibling.value;
+			 	editTitle.innerText = "["+name+"]님의 댓글 수정";
+			 	replyEditContent.innerText = editcontent;
+	
+	        	replyEditModal.classList.remove('hidden');
+		 	}
+        }
 
+        // Close the modal
+        function closeEditModal1() {
+        	replyEditModal.classList.add('hidden');
+        }
 
+        // Attach click event to open the modal
+        closeEditModal.addEventListener('click', closeEditModal1);
+        
+        edit.addEventListener('click', function(){
+        	// 누른 댓글 아이디 가져와야함
+        	const replyId = 'reply'+replyEditCfNo.value;
+        	const editTitle = document.getElementById(replyId);
+        	
+        	//댓글 아이디를 가져왔으니 이걸 통해 수정해야함 아작스로 DB수정하고 그다음에 innerText 수정
+        	 $.ajax({
+	              url: 'updateReply.jy', // 서버의 댓글 목록 불러오기 URL
+	              method: 'GET',
+	              data: { 
+	            	  replyNo : replyEditCfNo.value, replyContent : replyEditContent.innerText
+	              },
+	              success: function(data) {
+	                  
+	                  // 성공했으면 innerText 바꾸기
+	                  console.log(data);
+	              },
+	              error: function(data) {
+	                  console.log(data);
+	              }
+	          });
+        	
+        	
+        	
+        	 
+        });
+	
+	</script>
+	<!-- reply, 글 수정 삭제 모달-->
 	<script th:inline="javascript">
         // Get the modal and close button
         const replyModal = document.getElementById('replyModal');
@@ -210,31 +367,33 @@
         const replyContent = document.getElementById('replyContent');
         
         reply.addEventListener('click', function(){
-        	console.log(replycfNo.value);
         	
         	/*<![CDATA[*/
-	        let User = /*[[${session.loginUser.memberId}]]*/null;
+	        let User = /*[[${session.loginUser}]]*/null;
 	        /*]]>*/
 	        
-        	
-	       	 $.ajax({
-	             url: 'insertReply.jy', // 서버의 댓글 목록 불러오기 URL
-	             method: 'GET',
-	             data: { 
-	              boardNo : replycfNo.value,
-	           	  replyContent : replyContent.value,
-	           	  memberId : User
-	             },
-	             success: function(data) {
-	                 console.log(data);
-	                 replyModal.classList.add('hidden');
-	                 updateCommentList(data);
-	                 
-	             },
-	             error: function(data) {
-	                 console.log(data);
-	             }
-	         });
+	        if(User != null){
+		       	 $.ajax({
+		             url: 'insertReply.jy', // 서버의 댓글 목록 불러오기 URL
+		             method: 'GET',
+		             dataType: 'json', // 서버에서 JSON 형식으로 응답하는 경우
+		             data: { 
+		              boardNo : replycfNo.value,
+		           	  replyContent : replyContent.value,
+		           	  memberId : User.memberId
+		             },
+		             success: function(data) {
+		                 updateCommentList(data);
+		                 replyModal.classList.add('hidden');
+		                 
+		             },
+		             error: function(data) {
+		                 console.log(data);
+		             }
+		         });
+	        }else{
+	        	alert("로그인 후 이용해주세요.");
+	        }
         	
         });
 
@@ -262,7 +421,7 @@
         
         
         
-     // 모달을 가져옵니다.
+        // 모달을 가져옵니다.
         let modal = document.getElementById("modal");
 
         // 모달을 여는 버튼을 가져옵니다.
@@ -338,6 +497,7 @@
 	    
     </script>
     
+    <!--무한 스크롤-->
     <script th:inline="javascript">
     
      // 무한 스크롤 부분
@@ -372,7 +532,6 @@
 		            	  currentPage : currentPage
 		              },
 		              success: function(data) {
-		                  console.log(data);
 		                  
 		                  // 리스트 가져와서 만들기
 		                  const newItems = createItems(data);
@@ -394,9 +553,44 @@
 	    // 가상의 데이터 생성 함수
 	    function createItems(data) {
    			 const newItems = [];
+   			 /*<![CDATA[*/
+		        let User = /*[[${session.loginUser}]]*/null;
+		        /*]]>*/
+   			 
 		    for (let itemData of data.list) {
 		        // 이 부분에서 각 캠핑 프렌드 아이템에 대한 HTML을 생성하고 데이터를 적용
 		        const photoHTML = itemData.photoPath ? `<img src="${itemData.photoPath}" alt="Rocket Launch" class="rounded-lg mt-3">` : '';
+		       
+		        let ButtonHTML="";
+		        let replyHTML="";
+		        
+		        for(let reply of itemData.replys){
+		        	ButtonHTML="";
+		        	
+		        	if(User){
+		        		if(User.memberId == reply.memberId){
+				        	ButtonHTML+=`
+				        		<input type="hidden" value ="${reply.replyNo}" id="reply${reply.replyNo}">
+					 	        <div class="edit" onclick="openEditModal(event)" >수정</div>
+							    <div class="delete" onclick="deleteReply(event)" >삭제</div>
+				        	`
+		        		}
+		        	}
+		        	
+		        	
+		        	
+		        	replyHTML+=`
+		        		<div class="comment-item">
+			 	            <img class="comment-thumb" src="${reply.memberProfilePath}" alt="프로필 사진">
+			 	            <div class="comment-content">
+			 	                <div class="comment-author">${reply.memberName}</div>
+			 	                <div class="comment-message">${reply.replyContent}</div><br>
+			 	                <div class="comment-info">${reply.replyCreateDate}</div>
+			 	            </div>
+			 	           ${ButtonHTML}
+		 	        	</div>
+		        	`
+		        }
 		        
 		        const newItemHTML = `
 		            <div class="bg-white rounded-lg shadow-md p-4">
@@ -433,10 +627,10 @@
 		                    </div>
 		                    
 		                </div>
-		                <div class="comment-section" id="${itemData.cfNo}">
-		                    <div id="commentList"></div>
-		                    <div class="comment-list"></div>
+		                <div class="comment-section comment-list" id="${itemData.cfNo}">
+		                	${replyHTML}
 		                </div>
+		                
 		            </div>
 		            <br>
 		        `;
@@ -452,7 +646,48 @@
 	    }
     </script>
     
- 
+ 	<script th:inline="javascript">
+	 	function updateCommentList(data) {
+	 	    // 가정: 서버에서 반환된 데이터에 profilePicture, name, timestamp, content 등의 속성이 있다고 가정
+	 	    let commentList = document.getElementById(replyCfNo.value);
+			
+	 	
+	 	   /*<![CDATA[*/
+	        let User = /*[[${session.loginUser}]]*/null;
+	        /*]]>*/
+	       let ButtonHTML;
+	 	   let item = data.data;
+	 	   
+	 	  ButtonHTML="";
+      		console.log(User);
+	      	if(User){
+	      		if(User.memberId == item.memberId){
+	      			console.log(item.memberId);		
+		        	ButtonHTML+=`
+		        		<input type="hidden" value ="${item.replyNo}" id="reply${item.replyNo}">
+			 	        <div class="edit" onclick="openEditModal(event)" >수정</div>
+					    <div class="delete" onclick="deleteReply(event)" >삭제</div>
+		        	`
+	      		}
+	      	}
+	 	
+	 	// 템플릿 문자열을 사용하여 새로운 댓글을 만들고 commentList에 추가
+	 	    const newComment = `
+	 	        <div class="comment-item">
+	 	            <img class="comment-thumb" src="${item.memberProfilePath}" alt="프로필 사진">
+	 	            <div class="comment-content">
+	 	                <div class="comment-author">${item.memberName}</div>
+	 	                <div class="comment-message">${item.replyContent}</div><br>
+	 	                <div class="comment-info">${item.replyCreateDate}</div>
+	 	            </div>
+	 	           ${ButtonHTML}
+	 	        </div>
+	 	    `;
+		
+	 	// commentList에 HTML을 추가
+	 	    commentList.insertAdjacentHTML('beforeend', newComment);
+	 	}
+ 	</script>
 </body>
 
 </html>
