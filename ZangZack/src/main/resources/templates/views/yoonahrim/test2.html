@@ -1,164 +1,312 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Insert title here</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <link href="css/yoonahrim/test.css?after" rel="stylesheet" type="text/css"/>
-    <script src="http://code.jquery.com/jquery-3.1.0.js"></script>
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+	.table td{cursor:pointer;}
+	.table td>div{border: 1px solid black; height: 80%; width: 45%; display: inline-block; padding-top: 3%; cursor: pointer;}
+	.selectState{background: lightgray; font-size: 15px}
+	.unselectState{background: none;}
+</style>
+<link href="css/yoonahrim/adminSecondHand.css?after" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-   <div th:replace="~{common/navbar :: navbar}"></div>
+   <div th:replace="~{common/admin :: admin}"></div>
    
-   <h1 style="text-align:center; font-size: 30px; margin: 50px">중고 매물 수정하기</h1>
-   
-   <!-- 업로드할 파일 사진 업로드 및 버튼(업로드버튼 및 추가버튼 구현)-->
-   <form action="update.ah" method="post" enctype="multipart/form-data">
-    <th:block th:each="s : ${list}">
-        <input type="hidden" name="spNo" th:value="${s.spNo}"/>
-         <div class="row">
-          <!-- 이미지 출력 -->
-              <th:block th:each="a : ${aList}">
-                <div class="photoNum" style="position: relative; margin: 10px">
-                    <div class="photoUploads" style="background-image: url('image/yoonahrim/photo-icon.png'); width: 200px; height: 200px; background-size:50%; background-repeat: no-repeat; background-position:50% 50%;">
-                        <img th:src="${a.photoPath}" th:id="'photoUpload/' + ${a.photoNo}" class="clickUpload" style="width:200px; height:200px; border-radius:20%; border: 1px solid black;"/>
-                    <br>
-                    <div class="input-group mb-3">
-                        <label class="input-group-text" th:for="'file/' + ${a.photoNo}" Multiple style="display:none;">
-                            <input type="file" class="form-control" th:id="'file/' + ${a.photoNo}" name="file" style="display:none;" th:attr="onchange='previewImage(event, \'' + 'photoUpload/' + ${a.photoNo} + '\')'"/>
-                        </label>
-                    </div>
-                    <div class="deleteBtn">
-                        <button type="button" class="btn btn-outline-dark btn-sm deleteAttm" th:id="|delete~${ a.photoRename }/${ a.photoLevel }|">삭제 OFF</button>
-                    	<input type="hidden" name="deleteAttm" th:value="none">
-                    </div>
-                    </div>
-                </div>
-              </th:block> 
-			
-			<button type="button" class="w-25 btn btn-outline-success" id="addFile" style="width:300px; position: absolute; left:750px; top: 600px;">+ 파일 추가</button>
-			
-		    <div id="fileArea" style="position: absolute; left: 730px; top: 650px">
-		    	<div class="mb-1">
-		        	<input type="file" class="form-control form-control-lg" name="file" style="width:500px;" />
-		    	</div>
-		    </div>
-						
-   			<br><br><br><br><br>
-      <!-- 업로드할 내용 -->
-         <div class="edit">
-               <label >제목
-                     <input class="form-control" type="text" name="spTitle" placeholder="Default input" aria-label="default input example" style="width: 800px;" th:value="${s.spTitle}">
-                  </label><br><br>
-                  <label>캠핑 카테고리
-                        <select class="form-select" name="categoryNo">
-                       <option value="11" name="categoryNo" th:selected="${ s.categoryNo == 11 }">텐트</option>
-                       <option value="12" name="categoryNo" th:selected="${ s.categoryNo == 12 }">취침용품</option>
-                       <option value="13" name="categoryNo" th:selected="${ s.categoryNo == 13 }">조리도구</option>
-                       <option value="14" name="categoryNo" th:selected="${ s.categoryNo == 14 }">발화용품</option>
-                       <option value="15" name="categoryNo" th:selected="${ s.categoryNo == 15 }">배낭</option>
-                       <option value="16" name="categoryNo" th:selected="${ s.categoryNo == 16 }">기타</option>
-                       </select>
-               </label><br><br>
-               <label>가격
-                     <input class="form-control" type="number" name="spPrice" placeholder="Default input" aria-label="default input example" style="width: 800px;" th:value="${s.spPrice}">
-                  </label><br><br>
-                  <label>자세한 설명
-                     <input class="form-control" type="text" name="spContent" placeholder="Default input" aria-label="default input example" style="width: 800px; height:500px;" th:value="${s.spContent}">
-                  </label><br><br>
-                  <label>주소
-                     <p>
-                     <input type="text" id="zip-code" placeholder="우편번호">
-                     <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기">
-                   </p>
-                   <p>
-                     <input type="text" id="address-1" name="spAddressStreet" placeholder="도로명주소" style="width: 500px" th:value="${ #strings.arraySplit(s.spAddress, ',')[0] }">
-                   </p>
-                   <p>
-                     <input type="text" id="address-2" name="spAddressDetail" placeholder="상세주소" style="width: 500px" th:value="${ #strings.arraySplit(s.spAddress, ',')[1] }">
-                   </p>
-                </label>
-         </div>
-         </th:block>
-         <div class="pointerBtn">
-              <button type="submit" id="submitAttm" class="btn-hover color-1">작성 완료</button>
-         </div>
-   </form>
-   
-   <script th:inline="javascript">
-       function previewImage(event, photoId){
-           const fReader1 = new FileReader();
-           const output = document.getElementById(photoId);
-           console.log(photoId)
-           fReader1.readAsDataURL(event.target.files[0]);
-           fReader1.onloadend = function(event){
-               output.src = event.target.result;
-           }
-       }
-       
-       
-       function execDaumPostcode() {
-           new daum.Postcode({
-             oncomplete: function( data ) {
-               document.getElementById( 'zip-code' ).value = data.zonecode;
-               document.getElementById( 'address-1' ).value = data.address;
-             }
-           }).open();
-         }
-       
-		const fileArea = document.querySelector('#fileArea');
-		document.getElementById('addFile').addEventListener('click', () =>{
-			const newDiv = document.createElement('div');
-			newDiv.classList.add('mb-3');
-			newDiv.innerHTML = '<input type="file" class="form-control form -control-lg" name="file" style="width:500px;">'
-			
-			fileArea.append(newDiv);
-		})
+   <div id="orderListWrapped">
+      <h1>중고물품 관리</h1>
       
-       	document.getElementById('submitAttm').addEventListener('click',() =>{
-    	   const files = document.getElementsByClassName('file');
-    	   const delBtns = document.getElementsByClassName('deleteAttm');
-    	   
-    	   console.log(files);
-    	   
-    	   let isEmpty = true;
-			for(const f of files) {
-				if(f.value != '') {
-					isEmpty = false;	
-				}
-			}
+      <div style="float:right;">
+         <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    물품번호 검색
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="#" onclick="showSearch('search1', '물품번호 검색')">물품번호 검색</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSearch('search2', '물품명 검색')">물품명 검색</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSearch('search3', '작성자 검색')">작성자 검색</a></li>
+                </ul>
+            </div>
+         
+         <div class="search" id="search1">
+            <input type="text" placeholder="물품번호 입력">
+              <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+         </div>
+         <div class="search" id="search2" style="display: none;">
+            <input type="text" placeholder="물품명 입력">
+              <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+         </div>
+         <div class="search" id="search3" style="display: none;">
+            <input type="text" placeholder="작성자 입력">
+              <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+         </div>
+      </div>
+      
+      <table id="allOrder" class="allOrder">
+         <tr>
+            <th class="td1"><input type="checkbox" id="allSelect" onclick="toggleAllCheckboxes('allOrder', 'allSelect')"></th>
+            <th class="td2">물품번호</th>
+            <th class="td3">아이디</th>
+            <th class="td4">물품명</th>
+            <th class="td5">물품가격</th>
+            <th class="td6">주소</th>
+            <th class="td7">카테고리</th>
+            <th class="td8">예약여부</th>
+            <th class="td9">판매여부</th>
+            <th class="td10">삭제여부</th>
+         </tr>
+         
+         <tr th:each="s : ${sList}">
+		    <td class="td1"><input type="checkbox"></td>
+		    <td class="td2" th:text="${s.spNo}"></td>
+		    <td class="td3" th:text="${s.memberId}"></td>
+		    <td class="td4" th:text="${s.spTitle}"></td>
+		    <td class="td5" th:text="${#numbers.formatInteger(s.spPrice, 0, 'COMMA') + '원'}"></td>
+		    <td class="td6" th:text="${s.spAddress}"></td>
+		    <td class="td7" th:text="${s.categoryName}"><</td>
+		    <td class="td8">
+		        <div th:class="${s.spIsSell == 'Y' ? 'selectState' : 'unselectState'}">Y</div>
+		        <div th:class="${s.spIsSell == 'N' ? 'selectState' : 'unselectState'}">N</div>
+		    </td>
+		    <td class="td9">
+		        <div th:class="${s.spIsBook == 'Y' ? 'selectState' : 'unselectState'}">Y</div>
+		        <div th:class="${s.spIsBook == 'N' ? 'selectState' : 'unselectState'}">N</div>
+		    </td>
+		    <td class="td10">
+		        <div th:class="${s.spStatus == 'Y' ? 'selectState' : 'unselectState'}">Y</div>
+		        <div th:class="${s.spStatus == 'N' ? 'selectState' : 'unselectState'}">N</div>
+		    </td>
+		</tr>
+         
+      </table>
+      
+      <nav class="Page" aria-label="Page navigation example" th:with="loc=${loc}">
+          <ul class="pagination">
+             <li class="page-item">
+               <a class="page-link" th:href="@{${loc}(page=${pi.currentPage-1})}" aria-label="Previous" th:if="${pi.currentPage>1}">
+                 <span aria-hidden="true">&laquo;</span>
+               </a>
+             </li>
+             <li class="page-item" th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+             	<a class="page-link" th:href="@{${loc}(page=${p})}">[[${ p }]]</a></li>
+             <li class="page-item">
+             	<a class="page-link" th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next" th:if="${pi.currentPage<pi.maxPage}">
+                 <span aria-hidden="true">&raquo;</span>
+             </a>
+             </li>
+          </ul>
+      </nav>
+   </div>
+
+
+   <script>
+      //체크박스 전체 선택/해제
+        function toggleAllCheckboxes(tableId, selectId) {
+         const checkboxes = document.querySelectorAll(`#${tableId} input[type="checkbox"]:not(#${selectId})`);
+         const selectAll = document.getElementById(selectId);
+         const allChecked = selectAll.checked;
+   
+         checkboxes.forEach(checkbox => {
+             checkbox.checked = allChecked;
+         });
+     	}
+      
+      //드롭다운 변경
+      function showSearch(searchId, dropdownText) {
+            document.querySelectorAll('.search').forEach(function(searchElement) {
+                searchElement.style.display = 'none';
+            });
+            document.getElementById(searchId).style.display = 'block';
+            document.getElementById('dropdownMenuButton').innerText = dropdownText;
+        }
+      
+      //모달창
+      const tds = document.getElementsByTagName('td');
+			let beforeData = null;
 			
-			let isAllRemove = true;
-			for(const btn of delBtns){
-				if(btn.innerText == '삭제 OFF'){
-					isAllRemove = false;
-				}
-			}
-			
-			console.log(isAllRemove);
-			
-       })
-       
-      const delBtns = document.getElementsByClassName('deleteAttm');
-				for(const btn of delBtns){
-					btn.addEventListener('click',function(){
-						const nextHidden = this.nextElementSibling;
-						if(this.innerText == "삭제 OFF"){
-							this.innerHTML = "삭제 ON";
-							this.style.background = 'black';
-							this.style.color = 'white';
-							nextHidden.value = this.id.split('~')[1];
-							
-						}else{
-							this.innerHTML = "삭제 OFF";
-							this.style.background = 'white';
-							this.style.color = 'black';
-							nextHidden.value = 'none';
+			document.querySelector('body').addEventListener('click', (event) => {
+				for(let i = 0; i < tds.length; i++){
+					if(tds[i].children[0] != undefined && tds[i].children[0].value != undefined){
+						if(event.target.value == undefined){
+							tds[i].innerHTML = '<td>'+ beforeData + '</td>';
 						}
-					});
+					}
 				}
-   </script>
+			})
+			
+			for(let i = 0; i < tds.length; i++){
+				const index = i % 11;
+				tds[i].addEventListener('dblclick', function(){
+					//console.log(this, i%11);
+					
+					for(let j = 0; j < tds.length; j++){
+						if(tds[j].children[0] != undefined && tds[j].children[0].value != undefined){
+							tds[j].innerHTML = '<td>'+ tds[j].children[0].value + '</td>';
+						}
+					}
+										
+					if(index != 0 && index != 8 && index != 9 && index != 10){
+						beforeData = this.innerText;
+						
+						if(index == 3){ //이메일 아이디 부분과 도메인 부분을 나누기 위해서 이렇게 작성해줌.
+							const domain = this.innerText.split('@')[1];
+							let selected = '<select class="updateData">\
+												<option>naver.com</option>\
+												<option>gamil.com</option>\
+												<option>nate.com</option>\
+												<option>hanmail.net</option>\
+											</select>';
+								if(domain == 'gmail.com'){
+									selected = '<select class="updateData">\
+										<option>naver.com</option>\
+										<option selected>gamil.com</option>\
+										<option>nate.com</option>\
+										<option>hanmail.net</option>\
+									</select>';
+								}	else if(domain == 'nate.com'){
+									selected = '<select class="updateData">\
+										<option>naver.com</option>\
+										<option>gamil.com</option>\
+										<option selected>nate.com</option>\
+										<option>hanmail.net</option>\
+									</select>';
+								}	else if(domain == 'hanmail.com'){
+									selected = '<select class="updateData">\
+										<option>naver.com</option>\
+										<option>gamil.com</option>\
+										<option>nate.com</option>\
+										<option selected>hanmail.net</option>\
+									</select>';
+								}	
+								this.innerHTML = '<input type="text" class="updateData" value="' + this.innerText.split('@')[0] + '" size="5">@' + selected;
+						} else if(index == 4){ //성별
+							let checked = null;
+							if(beforeData == 'M'){
+								checked = '<input type="radio" name="gender" value="M" class="updateData" checked> M\
+											<input type="radio" name="gender" value="F" class="updateData"> F';
+							} else{
+								checked = '<input type="radio" name="gender" value="M" class="updateData"> M\
+									 		<input type="radio" name="gender" value="F" class="updateData" checked> F';
+							}
+							this.innerHTML = checked;
+						} else if(index == 5){ //나이
+							this.innerHTML = '<input type="number" value="' + this.innerText + '" size="5" min="0" max="100" class="updateData">';
+						} else{
+							this.innerHTML = '<input type="text" value="' + this.innerText + '" size="12" class="updateData">';
+						}
+						
+						const updateDatas = document.getElementsByClassName('updateData');
+						let datas = '';
+						for(const update of updateDatas){
+							update.addEventListener('keyup', function(event){
+								if(event.key == 'Enter'){
+									if(updateDatas[0].type == 'radio'){
+										for(let i = 0; i < updateDatas.length; i++){
+											datas =updateDatas[i].value;
+											break;
+										}
+									} else{
+										for(let i = 0; i < updateDatas.length; i++){
+											if(i == 0){
+												datas = updateDatas[i].value;
+											} else {
+												datas += '@' + updateDatas[i].value;
+											}
+										}
+									}
+									if(index == 2){
+										$.ajax({
+											url: 'checkNickName.me',
+											data: {nickName:datas},
+											success: data => {
+												if(data == 0){
+													//수정 ajax
+													$.ajax({
+														url: 'updateInfo.adm',
+														data: {column:document.querySelectorAll('th')[index].innerText, 
+															data:datas, 
+															id:this.parentElement.parentElement.children[0].innerText},
+														success: data => {
+															console.log(data);
+															if(data == 'success'){
+																tds[i].innerHTML = '<td>' + datas + '</td>';
+															}else{
+																alert('수정 실패라능');
+																location.reload();
+															}
+														},
+														error:data => console.log(data)
+													})
+												}else{
+													this.classList.add('vibration');
+													setTimeout(()=>{
+														this.classList.remove('vibration');
+													}, 400);
+												}
+											},
+											error: data => console.log(data)
+										})
+									} else{
+										$.ajax({
+											url: 'updateInfo.adm',
+											data: {column:document.querySelectorAll('th')[index].innerText, 
+													data:datas, 
+													id:this.parentElement.parentElement.children[0].innerText},
+											success: data => {
+												console.log(data);
+												if(data == 'success'){
+													tds[i].innerHTML = '<td>' + datas + '</td>';
+												}else{
+													alert('수정 실패라능');
+													location.reload();
+												}
+											},
+											error:data => console.log(data)
+										})
+									}
+								}
+							});
+						}
+					} else {
+						alert('수정안된다능')
+					}
+					
+					
+				});
+				const stateButtons = tds[i].querySelectorAll('div');
+				for(const button of stateButtons){
+					button.addEventListener('click', function(){
+						if(this.className == 'unselectState'){
+							//console.log(123);
+							$.ajax({
+								url: 'updateInfo.adm',
+								data: {column:document.querySelectorAll('th')[index].innerText, data:this.innerText, id:this.parentElement.parentElement.children[0].innerText},
+								success: data => {
+									//console.log(data);
+									if(data == 'success'){
+										this.className = 'selectState';
+										for(const siblings of this.parentElement.children){
+											if(siblings != this){
+												siblings.className = 'unselectState';
+											}
+										}
+									}else{
+										alert('상태변경에 실패하여 페이지 새로고침됨둥');
+										location.reload();
+									}
+								},
+								error:data => console.log(data)
+							})
+						}
+						
+					})
+				}
+				
+			}
+		
+      
+    </script>
+   
 </body>
 </html>

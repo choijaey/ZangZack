@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.zangzac.common.ImageStorage;
+import com.kh.zangzac.common.Pagination;
+import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.ming.member.model.vo.Member;
@@ -73,7 +75,7 @@ public class SecondHandController {
 		model.addAttribute("aList", aList);
 		model.addAttribute("list", sList);
 		
-        return "views/yoonahrim/test2";
+        return "views/yoonahrim/editSecondHand";
     }
 	
 	
@@ -375,8 +377,25 @@ public class SecondHandController {
 	}
 	
 	@GetMapping("admin.ah")
-	public String adminSecondPage() {
-		return "views/yoonahrim/adminSecondHand";
+	public String adminSecondPage(@ModelAttribute secondHandProduct sp, Model model, @RequestParam(value="page", defaultValue="1")int page, HttpServletRequest request) {
+		
+		
+		int listCount = spService.getListCount(4);
+		int currentPage = page;
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
+		ArrayList<secondHandProduct> list = spService.selectBoardList(pi,1);
+		ArrayList<secondHandProduct> sList=  spService.selectAdminList(sp);
+		
+		if(list != null) {
+			model.addAttribute("pi", pi);
+			model.addAttribute("list", list);
+			model.addAttribute("loc", request.getRequestURI());
+			model.addAttribute("sList", sList);
+			return "views/yoonahrim/test2";
+		}else {
+			throw new secondHandException("없다");
+		}
 	}
 	
 }

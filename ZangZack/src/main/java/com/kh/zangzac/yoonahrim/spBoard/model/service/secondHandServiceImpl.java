@@ -3,10 +3,12 @@ package com.kh.zangzac.yoonahrim.spBoard.model.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.zangzac.common.model.vo.Attachment;
+import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.yoonahrim.spBoard.model.dao.secondHandDAO;
@@ -102,6 +104,23 @@ public class secondHandServiceImpl implements secondHandService{
 	@Override
 	public void updatePhotoLevel(int spNo) {
 		spDAO.updatePhotoLevel(spNo);
+	}
+
+	@Override
+	public ArrayList<secondHandProduct> selectAdminList(secondHandProduct sp) {
+		return spDAO.selectAdminList(sp);
+	}
+
+	@Override
+	public int getListCount(int i) {
+		return spDAO.getListCount(4);
+	}
+
+	@Override
+	public ArrayList<secondHandProduct> selectBoardList(PageInfo pi, int i) {
+		int offset = (pi.getCurrentPage()-1)*pi.getPageLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return spDAO.selectBoardList(i, rowBounds);
 	}
 
 	

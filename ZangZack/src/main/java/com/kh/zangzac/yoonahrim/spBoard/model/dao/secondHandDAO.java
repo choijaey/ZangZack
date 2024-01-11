@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.session.RowBounds;
 
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.common.reply.model.vo.Reply;
@@ -45,6 +46,12 @@ public interface secondHandDAO {
 	int deleteAttmForN(int spNo);
 
 	void updatePhotoLevel(int spNo);
+
+	ArrayList<secondHandProduct> selectAdminList(secondHandProduct sp);
+
+	int getListCount(int i);
+
+	ArrayList<secondHandProduct> selectBoardList(int i, RowBounds rowBounds);
 
 
 

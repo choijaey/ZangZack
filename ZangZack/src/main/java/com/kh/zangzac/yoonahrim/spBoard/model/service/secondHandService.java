@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.kh.zangzac.common.model.vo.Attachment;
+import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
@@ -43,6 +44,12 @@ public interface secondHandService {
 	int deleteAttmForN(int spNo);
 
 	void updatePhotoLevel(int spNo);
+
+	ArrayList<secondHandProduct> selectAdminList(secondHandProduct sp);
+
+	int getListCount(int i);
+
+	ArrayList<secondHandProduct> selectBoardList(PageInfo pi, int i);
 
 
 

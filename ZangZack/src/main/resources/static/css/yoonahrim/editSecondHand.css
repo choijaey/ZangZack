@@ -1,50 +1,48 @@
 @charset "UTF-8";
 
-.photoNum{
-	width: 200px; 
-	height: 200px; 
-	border-radius: 20%; 
-	border: 1px solid black;
-	margin: 10px;
-	position: flex;
-	left: 520px;
-	top: 60px;
+.col{
+	position: relative;
+	top: 100px;
+	left: 30px;
 	display: flex;
-	flex-direction: column;
-	margin: 10px;
+    flex-direction: column;
+	margin: -40px;
+	padding: 0px 0px;
 }
 
-#plus{
-	position:absolute; 
-	left: 765px;
-	top: 400px;
-	background-color: #5cb85c;
-	border:0px;
+
+.photoNum {
+    width: 200px;
+    height: 200px;
+    border-radius: 20%;
+    position: relative;
+    left: 550px;
 }
 
-.upfileAddArea {
-	position: absolute;
-    left: 300px;
-	top: 260px;
-	display: flex;
-    flex-wrap: wrap;
+/*
+.deleteBtn{
+   position:relative;
+   left: 15px;
 }
+*/
 
-#inputGroupFile01{
-	display:none;
-	cursor: pointer;
+.deleteAttm{
+	position:relative;
+    left: 70px;
 }
 
 .edit{
-	position: absolute;
-	left: 600px;
-	top: 650px;
+   position: absolute;
+   left: 600px;
+   top: 800px;
 }
+
 .pointerBtn{
 	position: absolute;
 	left: 900px;
 	top: 1650px;
 }
+
 .btn-hover {
     width: 200px;
     font-size: 16px;
@@ -80,4 +78,3 @@
     background-color: #5cb85c;
    	box-shadow: 0 4px 15px 0 rgb(128, 128, 128) !important;
 }
-
