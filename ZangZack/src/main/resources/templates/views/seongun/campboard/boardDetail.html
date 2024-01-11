@@ -38,8 +38,9 @@
 		<div class="comments-section">
 			<div class="post-details">
 				<div class="post-like-comment">
-					<img src="image/seongun/offheart.png" alt="좋아요" class="like-button" onclick="clickHeart()"> <span class="like-text">좋아요</span>
-					<span class="like-count">[[${bList.heartCount}]]</span> 
+					<img src="image/seongun/offheart.png" alt="좋아요" id="likeButton" class="like-button" onclick="clickHeart()">
+					<span class="like-text">좋아요</span>
+					<span class="like-count" id="like-count"></span> 
 					<span class="comment-text">댓글</span>
 					<span class="comment-count">[[${bList.replyCount}]]</span>
 				</div>
@@ -61,26 +62,24 @@
 	<script th:inline="javascript">
 		/*<![CDATA[*/
 		let member = /*[[${session.loginUser}]]*/null;
-		
 		let heart = null;
+		let heartCount = 0;
 		
 		if(member != null){
 			var memberId = member.memberId;
 		}
 		
-		clickHeart = () =>{
-			if(member != null){
-				if(heart == null){
-					console.log(heart);
-					deleteHeart();
-				}else{
-					console.log(heart);
-					insertHeart();
-				}
-			}else{
-				alert("로그인하고 누르삼");
-			}
-		}
+		clickHeart = () => {
+		    if (member != null) {
+		        if (heart == null) {
+		            insertHeart();
+		        } else {
+		            deleteHeart();
+		        }
+		    } else {
+		        alert("로그인하고 누르삼");
+		    }
+		};
 		
 		selectHeart = () =>{
 			$.ajax({
@@ -92,11 +91,26 @@
 		            memberId: memberId
 		        },
 		        success:(data) => {
-		        	heart = data
-		        	console.log(heart);
+		        	if(data != null){
+		        		heart = data;
+		        		setHeart(heart,countHeat());
+		        	}else{
+		        		heart = null;
+		        		setHeart(heart,countHeat());
+		        	}
 		        },
 		        error : data => console.log(data)
 			})
+		}
+		setHeart = (heart) =>{
+			countHeart();
+			if(heart != null){
+				document.getElementById("likeButton").src = "image/seongun/onheart.png";
+				document.getElementById("like-count").innerHTML = countHeart +"";
+			}else{
+				document.getElementById("likeButton").src = "image/seongun/offheart.png";
+				document.getElementById("like-count").innerHTML = countHeart +"";
+			}
 		}
 		
 		insertHeart = () =>{
@@ -109,12 +123,12 @@
 		            memberId: memberId
 		        },
 		        success: data => {
-					console.log("insert :" + heart);
 					selectHeart();
 		        },
 		        error : data => console.log(data)
 		    });
 		}
+		
 		deleteHeart = () =>{
 			$.ajax({
 				url: 'deleteHeart.like',
@@ -125,15 +139,33 @@
 					memberId: memberId
 				},
 				success: data => {
-					console.log("delete :" + heart);
 					selectHeart();
 		        },
 		        error : data => console.log(data)
 			});
 		}
+		countHeart = () =>{
+			$.ajax({
+				url: 'countHeart.like',
+				method: 'post',
+				data:{
+					boardNo: /*[[${bList.cbNo}]]*/1, 
+					boardType: 1
+				},
+				success: data => {
+					console.log("count :" + data);
+					heartCount = data;
+		        },
+		        error : data => console.log(data)
+			});
+		}
+		
+		
 		// 페이지 로드 시 댓글 목록 불러오기
 		window.onload = function() {
+			console.log(heart);
 			loadCommentList(/*[[${maxPage}]]*/);
+			countHeart();
 			if(member != null){
 				selectHeart();
 			}
@@ -153,7 +185,6 @@
 		        	
 		        },
 		        success: function(data) {
-		        	 console.log('Received data:', formatDate(data.list[0].replyCreateDate));
 		            updateCommentList(data.list);
 		            updatePagination(data.rPi);
 		        },
@@ -356,19 +387,6 @@
 		        commentList.appendChild(commentItem);
 		    });
 		}
-				
-		function formatDate(dateString) {
-		    const date = new Date(dateString);
-
-		    const formattedDate = date.getFullYear() + '-' +
-		                          (date.getMonth() + 1).toString().padStart(2, '0') + '-' +
-		                          date.getDate().toString().padStart(2, '0') + ' ' +
-		                          date.getHours().toString().padStart(2, '0') + ':' +
-		                          date.getMinutes().toString().padStart(2, '0');
-
-		    return formattedDate;
-		}
-
 		
 		//댓글 페이징 처리
 		function updatePagination(rPi) {

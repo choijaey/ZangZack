@@ -9,4 +9,6 @@ public interface HeartService {
 	int insertHeart(Heart h);
 
 	int deleteHeart(Heart h);
+
+	int countHeart(Heart h);
 }

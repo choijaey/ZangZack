@@ -17,8 +17,7 @@ public class HeartController {
 	@PostMapping("selectHeart.like")
 	@ResponseBody
 	public Heart selectHeart(@ModelAttribute Heart h) {
-		Heart heart = hService.selectHeart(h);
-		return heart;
+		return hService.selectHeart(h);
 	}
 	
 	@PostMapping("insertHeart.like")
@@ -31,5 +30,11 @@ public class HeartController {
 	@ResponseBody
 	public int deleteHeart(@ModelAttribute Heart h) {
 		return hService.deleteHeart(h);
+	}
+	
+	@PostMapping("countHeart.like")
+	@ResponseBody
+	public int countHeart(@ModelAttribute Heart h) {
+		return hService.countHeart(h);
 	}
 }
