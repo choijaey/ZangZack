@@ -10,14 +10,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.Pagination;
+import com.kh.zangzac.common.heart.model.service.HeartService;
+import com.kh.zangzac.common.heart.model.vo.Heart;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.model.vo.SelectCondition;
 import com.kh.zangzac.common.photo.model.service.PhotoService;
@@ -26,10 +27,12 @@ import com.kh.zangzac.common.reply.model.service.ReplyService;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.jaeyoung.campingFriend.model.service.CampingFriendService;
 import com.kh.zangzac.jaeyoung.campingFriend.model.vo.CampingFriend;
+import com.kh.zangzac.ming.member.model.vo.Member;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
-
+@SessionAttributes("loginUser")
 @Controller
 public class FriendController {
 	
@@ -43,6 +46,9 @@ public class FriendController {
 	
 	@Autowired
 	ReplyService rService;
+	
+	@Autowired
+	HeartService hService;
 
     @Autowired
     public FriendController(ImageStorage imageStorage) {
@@ -50,7 +56,10 @@ public class FriendController {
     }
 
 	@GetMapping("champingFriend.jy")
-    public String champingFriendPage(Model model) {
+    public String champingFriendPage(Model model,HttpSession session) {
+		
+		//로그인 정보 가져오기
+		Member loginUser = (Member)session.getAttribute("loginUser");
 		
 		 // 전체 숫자
 	      int listCount = cService.listCount();
@@ -59,13 +68,27 @@ public class FriendController {
 	      //전체 리스트 가져오기~~
 	      ArrayList<CampingFriend> list = cService.cfLimitList(pi);
 	      
-	      //전체 리스트의 댓글들 저장하기
+
 	      for(CampingFriend cf : list) {
+	    	  
+		      //전체 리스트의 댓글들 저장하기
 		      SelectCondition sc = new SelectCondition();
 		      sc.setBoardNo(cf.getCfNo());
 		      sc.setBoardType(7);
-		      cf.setReplys(rService.selectReply(sc)); 
+		      ArrayList<Reply> replyList = rService.selectReply(sc); 
+		      cf.setReplys(replyList);
+		      cf.setReplyCount(replyList.size());
+		      
+		      //하트 세팅하기
+		      if(loginUser != null) {// 유저가 있을때만 셋팅
+		    	  // 하트리스트 가져와서 셋팅..?
+		    	  // 보드 번호도 같고 아이디도 같은경우에만 셋팅 해야함
+		      }
+		      
+		      
 	      }
+	      
+
 	      
 	      
 	      model.addAttribute("list", list);
@@ -91,7 +114,9 @@ public class FriendController {
 	      SelectCondition sc = new SelectCondition();
 	      sc.setBoardNo(cf.getCfNo());
 	      sc.setBoardType(7);
-	      cf.setReplys(rService.selectReply(sc)); 
+	      ArrayList<Reply> replyList = rService.selectReply(sc); 
+	      cf.setReplys(replyList);
+	      cf.setReplyCount(replyList.size());
       }
       
       
@@ -202,7 +227,30 @@ public class FriendController {
 		  }
 	       return answer;
 	   }
-	
+	   
+	   @GetMapping(value = "/updateLike.jy")
+	   @ResponseBody
+	   public String updateLike(@ModelAttribute Heart heart,@RequestParam("changeLike") int changeLike) {
+		  
+		   System.out.println(heart);
+		   System.out.println(changeLike);
+		   
+		   int result = 1;
+		   heart.setBoardType(7);
+		   if(changeLike == 1) { //좋아요 등록
+			  result= hService.insertHeart(heart);
+		   }else if(changeLike==2){ //좋아요 취소
+			  result= hService.deleteHeart(heart);
+		   }
+		  String answer ="";
+		  
+		  if(result>0) {
+			  answer="yes";
+		  }else {
+			  answer="no";
+		  }
+	       return answer;
+	   }
 	
 	
 }
