@@ -44,6 +44,7 @@ public class CampController {
 	public String campSearch(@RequestParam(value="page", defaultValue="1") int page,
 			                  Model model, HttpServletRequest request) {
 		
+		
 		int listCount = cService.getListCount(3); //내 보드타입은 3 번이니까
 		int currentPage = page;
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 7); //7개씩 보이게 할거야

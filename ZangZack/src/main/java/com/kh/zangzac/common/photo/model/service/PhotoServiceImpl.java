@@ -1,4 +1,4 @@
-package com.kh.zangzac.common.photo.service;
+package com.kh.zangzac.common.photo.model.service;
 
 import java.util.ArrayList;
 
@@ -10,13 +10,22 @@ import com.kh.zangzac.common.photo.model.dao.PhotoDAO;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 
 @Service
-public class PhotoServiceImpl implements PhotoService {
-	@Autowired
-	private PhotoDAO pDAO;
+public class PhotoServiceImpl implements PhotoService{
 	
+	@Autowired
+	PhotoDAO pDAO;
+
 	@Override
 	public ArrayList<Photo> selectBoardPhoto(SelectCondition b) {
 		return pDAO.selectBoardPhoto(b);
 	}
+
+	@Override
+	public int insertPhotoCampBoard(ArrayList<Photo> fileList) {
+		
+		return pDAO.insertPhotoCampBoard(fileList);
+	}
+	
+	
 
 }

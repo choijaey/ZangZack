@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+	.table td{cursor:pointer;}
+	.table td>div{border: 1px solid black; height: 80%; width: 45%; display: inline-block; padding-top: 3%; cursor: pointer;}
+	.selectState{background: lightgray; font-size: 15px}
+	.unselectState{background: none;}
+</style>
+<link href="css/yoonahrim/adminSecondHand.css?after" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+   <div th:replace="~{common/admin :: admin}"></div>
+   
+   <div id="orderListWrapped">
+      <h1>중고물품 관리</h1>
+      
+      <div style="float:right;">
+         <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    물품번호 검색
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="#" onclick="showSearch('search1', '물품번호 검색')">물품번호 검색</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSearch('search2', '물품명 검색')">물품명 검색</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="showSearch('search3', '작성자 검색')">작성자 검색</a></li>
+                </ul>
+            </div>
+         
+         <div class="search" id="search1">
+            <input type="text" placeholder="물품번호 입력">
+              <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+         </div>
+         <div class="search" id="search2" style="display: none;">
+            <input type="text" placeholder="물품명 입력">
+              <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+         </div>
+         <div class="search" id="search3" style="display: none;">
+            <input type="text" placeholder="작성자 입력">
+              <a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+         </div>
+      </div>
+      
+      <table id="allOrder" class="allOrder">
+         <tr>
+            <th class="td1"><input type="checkbox" id="allSelect" onclick="toggleAllCheckboxes('allOrder', 'allSelect')"></th>
+            <th class="td2">물품번호</th>
+            <th class="td3">아이디</th>
+            <th class="td4">물품명</th>
+            <th class="td5">물품가격</th>
+            <th class="td6">주소</th>
+            <th class="td7">카테고리</th>
+            <th class="td8">예약여부</th>
+            <th class="td9">판매여부</th>
+            <th class="td10">삭제여부</th>
+         </tr>
+         
+         <tr th:each="s : ${sList}">
+		    <td class="td1"><input type="checkbox"></td>
+		    <td class="td2" th:text="${s.spNo}"></td>
+		    <td class="td3" th:text="${s.memberId}"></td>
+		    <td class="td4" th:text="${s.spTitle}"></td>
+		    <td class="td5" th:text="${#numbers.formatInteger(s.spPrice, 0, 'COMMA') + '원'}"></td>
+		    <td class="td6" th:text="${s.spAddress}"></td>
+		    <td class="td7" th:text="${s.categoryName}"><</td>
+		    <td class="td8">
+		        <div th:class="${s.spIsSell == 'Y' ? 'selectState' : 'unselectState'}">Y</div>
+		        <div th:class="${s.spIsSell == 'N' ? 'selectState' : 'unselectState'}">N</div>
+		    </td>
+		    <td class="td9">
+		        <div th:class="${s.spIsBook == 'Y' ? 'selectState' : 'unselectState'}">Y</div>
+		        <div th:class="${s.spIsBook == 'N' ? 'selectState' : 'unselectState'}">N</div>
+		    </td>
+		    <td class="td10">
+		        <div th:class="${s.spStatus == 'Y' ? 'selectState' : 'unselectState'}">Y</div>
+		        <div th:class="${s.spStatus == 'N' ? 'selectState' : 'unselectState'}">N</div>
+		    </td>
+		</tr>
+         
+      </table>
+      
+      <nav class="Page" aria-label="Page navigation example" th:with="loc=${loc}">
+          <ul class="pagination">
+             <li class="page-item">
+               <a class="page-link" th:href="@{${loc}(page=${pi.currentPage-1})}" aria-label="Previous" th:if="${pi.currentPage>1}">
+                 <span aria-hidden="true">&laquo;</span>
+               </a>
+             </li>
+             <li class="page-item" th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+             	<a class="page-link" th:href="@{${loc}(page=${p})}">[[${ p }]]</a></li>
+             <li class="page-item">
+             	<a class="page-link" th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next" th:if="${pi.currentPage<pi.maxPage}">
+                 <span aria-hidden="true">&raquo;</span>
+             </a>
+             </li>
+          </ul>
+      </nav>
+   </div>
+
+
+   <script>
+      //체크박스 전체 선택/해제
+        function toggleAllCheckboxes(tableId, selectId) {
+         const checkboxes = document.querySelectorAll(`#${tableId} input[type="checkbox"]:not(#${selectId})`);
+         const selectAll = document.getElementById(selectId);
+         const allChecked = selectAll.checked;
+   
+         checkboxes.forEach(checkbox => {
+             checkbox.checked = allChecked;
+         });
+     	}
+      
+      //드롭다운 변경
+      function showSearch(searchId, dropdownText) {
+            document.querySelectorAll('.search').forEach(function(searchElement) {
+                searchElement.style.display = 'none';
+            });
+            document.getElementById(searchId).style.display = 'block';
+            document.getElementById('dropdownMenuButton').innerText = dropdownText;
+        }
+      
+      //모달창
+      const tds = document.getElementsByTagName('td');
+			let beforeData = null;
+			
+			document.querySelector('body').addEventListener('click', (event) => {
+				for(let i = 0; i < tds.length; i++){
+					if(tds[i].children[0] != undefined && tds[i].children[0].value != undefined){
+						if(event.target.value == undefined){
+							tds[i].innerHTML = '<td>'+ beforeData + '</td>';
+						}
+					}
+				}
+			})
+			
+			for(let i = 0; i < tds.length; i++){
+				const index = i % 11;
+				tds[i].addEventListener('dblclick', function(){
+					//console.log(this, i%11);
+					
+					for(let j = 0; j < tds.length; j++){
+						if(tds[j].children[0] != undefined && tds[j].children[0].value != undefined){
+							tds[j].innerHTML = '<td>'+ tds[j].children[0].value + '</td>';
+						}
+					}
+										
+					if(index != 0 && index != 2 && index != 8 && index != 9 && index != 10){
+						beforeData = this.innerText;
+						if(index == 4){ //가격
+							this.innerHTML = '<input type="text" value="' + this.innerText + '" size="12" class="updateData">';;
+						} else{
+							this.innerHTML = '<input type="text" value="' + this.innerText + '" size="12" class="updateData">';
+						}
+						
+						const updateDatas = document.getElementsByClassName('updateData');
+						let datas = '';
+						for(const update of updateDatas){
+							update.addEventListener('keyup', function(event){
+								if(event.key == 'Enter'){
+									if(index == 2){
+										$.ajax({
+											url: 'checkNickName.me',
+											data: {nickName:datas},
+											success: data => {
+												if(data == 0){
+													//수정 ajax
+													$.ajax({
+														url: 'updateInfo.adm',
+														data: {column:document.querySelectorAll('th')[index].innerText, 
+															data:datas, 
+															id:this.parentElement.parentElement.children[0].innerText},
+														success: data => {
+															console.log(data);
+															if(data == 'success'){
+																tds[i].innerHTML = '<td>' + datas + '</td>';
+															}else{
+																alert('수정 실패라능');
+																location.reload();
+															}
+														},
+														error:data => console.log(data)
+													})
+												}else{
+													this.classList.add('vibration');
+													setTimeout(()=>{
+														this.classList.remove('vibration');
+													}, 400);
+												}
+											},
+											error: data => console.log(data)
+										})
+									} else{
+										$.ajax({
+											url: 'updateInfo.adm',
+											data: {column:document.querySelectorAll('td')[index].innerText, 
+													data:datas, 
+													id:this.parentElement.parentElement.children[0].innerText},
+											success: data => {
+												console.log(data);
+												if(data == 'success'){
+													tds[i].innerHTML = '<td>' + datas + '</td>';
+												}else{
+													alert('수정 실패라능');
+													location.reload();
+												}
+											},
+											error:data => console.log(data)
+										})
+									}
+								}
+							});
+						}
+					} else {
+						alert('수정안된다능')
+					}
+					
+					
+				});
+				const stateButtons = tds[i].querySelectorAll('div');
+				for(const button of stateButtons){
+					button.addEventListener('click', function(){
+						if(this.className == 'unselectState'){
+							//console.log(123);
+							$.ajax({
+								url: 'updateInfo.adm',
+								data: {column:document.querySelectorAll('th')[index].innerText, data:this.innerText, id:this.parentElement.parentElement.children[0].innerText},
+								success: data => {
+									//console.log(data);
+									if(data == 'success'){
+										this.className = 'selectState';
+										for(const siblings of this.parentElement.children){
+											if(siblings != this){
+												siblings.className = 'unselectState';
+											}
+										}
+									}else{
+										alert('상태변경에 실패하여 페이지 새로고침됨둥');
+										location.reload();
+									}
+								},
+								error:data => console.log(data)
+							})
+						}
+						
+					})
+				}
+				
+			}
+		
+      
+    </script>
+   
+</body>
+</html>

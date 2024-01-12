@@ -27,9 +27,10 @@
             <li><a href="signUp.me">로그인</a></li>
          </ul>
          <ul th:if="${session.loginUser != null}">
-            <li><a href="logout.me">로그아웃</a></li>
-            <li><span>/</span></li>
-            <li><a href="myPage.me">마이페이지</a></li>
+	         
+	            <li><a href="logout.me">로그아웃</a></li>
+	            <li><span>/</span></li>
+	            <li><a href="myPage.me">마이페이지</a></li>
          </ul>
       </div>
    </div>
@@ -54,7 +55,7 @@
             <li class="main-menu"><a href="#" class="main-menu-name">커뮤니티</a>
                <ul>
                   <li class="sub-menu-1">
-                     <a href="chatRoom.jy" class="sub-menu-name">채팅방<span class="gt"></span> 
+                     <a href="chatListView.jy" class="sub-menu-name">채팅방<span class="gt"></span> 
                         <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
                      </a>
                   </li>
@@ -64,7 +65,7 @@
                      </a>
                   </li>
                   <li class="sub-menu-1">
-                     <a href="#" class="sub-menu-name">캠핑친구모집<span class="gt"></span> 
+                     <a href="champingFriend.jy" class="sub-menu-name">캠핑친구모집<span class="gt"></span> 
                         <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
                      </a>
                   </li>
@@ -131,17 +132,17 @@
             <li class="main-menu"><a href="#" class="main-menu-name">게시판</a>
                <ul>
                   <li class="sub-menu-1">
-                     <a href="secondHand.ah" class="sub-menu-name">중고물품<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
-                     </a>
-                  </li>
-                  <li class="sub-menu-1">
                      <a href="campBoard.su" class="sub-menu-name">캠핑게시판<span class="gt"></span> 
                         <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
                      </a>
                   </li>
                   <li class="sub-menu-1">
                      <a href="recipe.su" class="sub-menu-name">레시피<span class="gt"></span> 
+                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
+                     </a>
+                  </li>
+                  <li class="sub-menu-1">
+                     <a href="secondHand.ah" class="sub-menu-name">중고물품<span class="gt"></span> 
                         <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
                      </a>
                   </li>
