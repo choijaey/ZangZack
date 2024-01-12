@@ -24,9 +24,6 @@ public class CampBoardServiceImpl implements CampBoardService{
 	@Autowired
 	private ReplyDAO rDAO;
 	
-	@Autowired
-	private PhotoDAO pDAO;
-	
 	@Override
 	public int getListCount(int i) {
 		return cDAO.getListCount(i);
