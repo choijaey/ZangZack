@@ -20,16 +20,19 @@
          <img src="image/yoonahrim/zangzack_logo.png" width="165px" />
       </p>
       <!-- height="111~120px" -->
-      <div id="my_menu">
+      <div id="my_menu" >
          <ul th:if="${session.loginUser == null}">
             <li><a href="signIn.me">아이디찾기</a></li>
             <li><span>/</span></li>
             <li><a href="signUp.me">로그인</a></li>
          </ul>
-         <ul th:if="${session.loginUser != null}">
+         <ul th:if="${session.loginUser != null}" style="display:flex; justify-content: center; align-items: center;">
+         	<li><a href="cartView.so"><img style="width:25px; height:25px; display:inline-block;" src="image/sohwa/icons8-cart-64.png"></a></li>
+         	<li><a href="centerView.so">고객센터</a></li>
             <li><a href="logout.me">로그아웃</a></li>
             <li><span>/</span></li>
-            <li><a href="myPage.me">마이페이지</a></li>
+            <th:block th:if="${session.loginUser.memberIsAdmin == 'N'}"><li><a href="myPage.me">마이페이지</a></li></th:block>
+            <th:block th:unless="${session.loginUser.memberIsAdmin == 'N'}"><li><a href="myPage.me">관리자페이지</a></li></th:block>
          </ul>
       </div>
    </div>

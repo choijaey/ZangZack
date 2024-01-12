@@ -86,7 +86,7 @@
 		insert all
 		<foreach collection="list" item="item">
 			into product_option
-			values(option_aid, #{item.productOptionColor}, #{item.productOptionEno}, #{item.productNo})
+			values(option_aid, #{item.productOptionColor}, #{item.productOptionEno}, #{item.productNo}, default)
 		</foreach>
 		select * from dual
 		
@@ -272,6 +272,11 @@
 		where product_status = 'N'
 	</select>
 	
+	<select id="selectAllNProduct" resultType="Product">
+		select *
+		from product
+	</select>
+	
 	
 	<select id="selectAllPhoto" resultType="Attachment">
 		select *
@@ -312,7 +317,7 @@
       from cart 
           join product using (product_no)
           join photo on (board_no=product_no)
-      where member_id=#{id} and photo_level=0 and photo_status='N'
+      where member_id=#{id} and photo_level= 0 and photo_status='N' and board_type=5
    </select>
    
    <select id="selectAllOption">
@@ -347,6 +352,11 @@
 		values(question_seq.nextval, #{questionContent}, sysdate, null, null, default, #{memberId} ,#{productNo})
 	</insert>
 	
+	<update id="deleteQuestion">
+		update qna
+		set qna_status = 'Y'
+		where question_no = #{questionNo}
+	</update>
 	
 	<select id="selectMyQna" resultType="Qna">
 		select *
@@ -420,7 +430,7 @@
 	<update id="updateAnswer">
 		update qna
 		set answer_content=#{answerContent}, answer_date = sysdate
-		where question_no = #{questionNo} and question_status ='N'
+		where question_no = #{questionNo} and qna_status ='N'
 	</update>
 	
 	<select id="selectProductQna" resultType="Qna">
@@ -432,7 +442,7 @@
 	
 	<update id="deleteQna">
 		update qna
-		set qna_status = 'Y'
+		set answer_content = null
 		where question_no = #{questionNo}
 	</update>
 	
@@ -505,6 +515,41 @@
 		</foreach>
 	</update>
 	
+	<update id="updateYOption">
+		update product_option
+		set option_status='Y'
+		where product_no in
+		<foreach item="productNo" collection="list" open="(" separator="," close=")">
+			#{productNo}
+		</foreach>
+	</update>
+	
+	<delete id="updateYCart">
+		delete from cart
+		where product_no in
+		<foreach item="productNo" collection="list" open="(" separator="," close=")">
+			#{productNo}
+		</foreach>
+	</delete>
+	
+	<update id="updateYQna">
+		update qna
+		set qna_status='Y'
+		where product_no in
+		<foreach item="productNo" collection="list" open="(" separator="," close=")">
+			#{productNo}
+		</foreach>
+	</update>
+	
+	<delete id="updateYReview">
+		delete from review
+		where product_no in
+		<foreach item="productNo" collection="list" open="(" separator="," close=")">
+			#{productNo}
+		</foreach>
+	</delete>
+	
+	
 	<select id="selectYPhoto" resultType="string">
 		select photo_rename
 		from photo
@@ -523,19 +568,20 @@
 		</foreach>
 	</update>
 	
-	<delete id="deleteOption">
-		delete from product_option
+	<update id="deleteOption">
+		update product_option
+		set option_status = 'Y'
 		where product_no = #{productNo}
-	</delete>
+	</update>
 	
 	
-	<update id="deleteProductPhoto">
+	<delete id="deleteProductPhoto">
 		delete from photo
 		where photo_rename in
 		<foreach item="rename" collection="list" open="(" separator="," close=")">
 			#{rename}
 		</foreach>
-	</update>
+	</delete>
 	
 	<update id="updateProductPhotoY">
 		update photo

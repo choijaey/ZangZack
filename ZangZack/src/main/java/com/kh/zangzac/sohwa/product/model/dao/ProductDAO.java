@@ -134,6 +134,18 @@ public interface ProductDAO {
 
 	void updatePhotoLevel(int productNo);
 
+	ArrayList<Product> selectAllNProduct();
+
+	int deleteQuestion(int questionNo);
+
+	int updateYOption(ArrayList<String> checkBoxArr);
+
+	int updateYCart(ArrayList<String> checkBoxArr);
+
+	int updateYQna(ArrayList<String> checkBoxArr);
+
+	int updateYReview(ArrayList<String> checkBoxArr);
+
 
 
 

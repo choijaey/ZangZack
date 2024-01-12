@@ -56,7 +56,7 @@
 			</tr>
 			
 			<th:block th:each="p:${pList}">
-				<tr th:each="a:${aList}" th:if="${ p.productNo eq a.boardNo && a.photoLevel==0 }">
+				<tr th:each="a:${aList}" th:if="${ p.productNo eq a.boardNo && a.photoLevel==0 && a.boardType==5}">
 					<td>
 						<input type="checkbox" name="dc">
 						<input type="hidden" name="productNo" th:value="${p.productNo}">

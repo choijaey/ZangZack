@@ -322,6 +322,36 @@ public class ProductServiceImpl implements ProductService{
 		
 	}
 
+	@Override
+	public ArrayList<Product> selectAllNProduct() {
+		return pDAO.selectAllNProduct();
+	}
+
+	@Override
+	public int deleteQuestion(int questionNo) {
+		return pDAO.deleteQuestion(questionNo);
+	}
+
+	@Override
+	public int updateYOption(ArrayList<String> checkBoxArr) {
+		return pDAO.updateYOption(checkBoxArr);
+	}
+
+	@Override
+	public int updateYCart(ArrayList<String> checkBoxArr) {
+		return pDAO.updateYCart(checkBoxArr);
+	}
+
+	@Override
+	public int updateYQna(ArrayList<String> checkBoxArr) {
+		return pDAO.updateYQna(checkBoxArr);
+	}
+
+	@Override
+	public int updateYReview(ArrayList<String> checkBoxArr) {
+		return pDAO.updateYReview(checkBoxArr);
+	}
+
 
 
 

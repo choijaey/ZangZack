@@ -447,7 +447,7 @@ public class ProductController {
 	public String qnaView(Model model) {
 		Member loginUser = (Member)model.getAttribute("loginUser");
 		
-		ArrayList<Product> pList = pService.selectAllProduct();
+		ArrayList<Product> pList = pService.selectAllNProduct();
 		ArrayList<Attachment> aList = pService.selectAllPhoto();
 		
 		
@@ -567,23 +567,24 @@ public class ProductController {
 	@GetMapping("deleteQna.so")
 	public String deleteQna(@RequestParam("questionNo") int questionNo, Model model) {
 		int result = pService.deleteQna(questionNo);
-		Member loginUser = (Member)model.getAttribute("loginUser");
-		if(loginUser.getMemberIsAdmin() == "Y") {
-			if(result > 0) {
-				return "redirect:adminQnaListView.so";
-			}else {
-				throw new ProductException("문의 삭제 실패");
-			}
+		
+		if(result > 0) {
+			return "redirect:adminQnaListView.so?status=2";
 		}else {
-			if(result > 0) {
-				return "redirect:centerView.so";
-			}else {
-				throw new ProductException("문의 삭제 실패");
-			}
+			throw new ProductException("문의 삭제 실패");
 		}
 		
 		
-		
+	}
+	
+	@GetMapping("deleteQuestion.so")
+	public String deleteQuestion(@RequestParam("questionNo") int questionNo, Model model){
+		int result = pService.deleteQuestion(questionNo);
+		if(result > 0) {
+			return "redirect:centerView.so";
+		}else {
+			throw new ProductException("문의 삭제 실패");
+		}
 	}
 	
 	
@@ -765,6 +766,10 @@ public class ProductController {
 	   String name="sohwa";
        
        int result = pService.updateYProduct(checkBoxArr);
+       int result2 = pService.updateYOption(checkBoxArr);
+       int result3 = pService.updateYCart(checkBoxArr);
+       int result4 = pService.updateYQna(checkBoxArr);
+       int result5 = pService.updateYReview(checkBoxArr);
        ArrayList<String> delRenames = pService.selectYPhoto(checkBoxArr);
        
        for(String delRename:delRenames) {

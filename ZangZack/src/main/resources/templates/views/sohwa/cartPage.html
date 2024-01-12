@@ -41,7 +41,6 @@
          
          <!--장바구니에 상품이 있는 것만큼 반복-->
          <th:block th:each="l:${list}">
-         	
             <tr class="cart-row" th:each="p:${pList}" th:if="${l.productNo eq p.productNo}">
                <td class="td1">
                	  <input class="cartKeyNo" type="hidden" th:value="${l.cartKeyNo}">
@@ -73,7 +72,7 @@
                   <th:block th:unless="${ p.deliveryPrice == 0}" th:text="|${#numbers.formatDecimal(p.deliveryPrice, 0, 'COMMA', 0, 'POINT')}원|"></th:block>
                </td>
                <td class="td5">
-                  <a th:href="@{'/deleteCart.so?cartKeyNo=' + ${l.cartKeyNo}}"><button class="close-btn" >X</button></a>
+                  <a th:href="@{'/deleteCart.so?cartKeyNo=' + ${l.cartKeyNo}}"><button class="close-btn" style="border:none;">X</button></a>
                   
                   
                </td>
