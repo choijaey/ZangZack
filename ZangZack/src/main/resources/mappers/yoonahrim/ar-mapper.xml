@@ -16,7 +16,7 @@
 	<update id="updateSecondHand">
 		UPDATE SECONDHAND_PRODUCT
 		SET SP_TITLE = #{spTitle}, SP_PRICE = #{spPrice}, SP_CONTENT = #{spContent}, SP_ADDRESS = #{spAddress}, CATEGORY_NO = #{categoryNo}
-		where member_id = #{memberId} and SP_STATUS = 'N'
+		where member_id = #{memberId} and SP_STATUS = 'N' and sp_no = #{spNo}
 	</update>
 	
 	<insert id="insertAttmSecondHand">

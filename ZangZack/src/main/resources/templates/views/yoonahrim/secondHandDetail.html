@@ -12,9 +12,10 @@
 	<div th:replace="~{common/navbar :: navbar}"></div>
 	<br><br>
 	<h1 style="text-align:center; font-size: 30px; margin: 50px">중고 거래 매물 상세페이지</h1>
-	<form id="showDetail" name="showDetail" method="get">
 	<th:block th:each="s : ${slist}" th:if="${true}">
-
+	<form id="showDetail" name="showDetail" method="get">
+	
+		<input type="hidden" th:value="${s.spNo}" th:id="${s.spNo}"/>
 		<div class="d-grid gap-2 d-md-block">
 		    <div class="container text-end mt-n2">
 		        <button type="button" class="btn btn-outline-success" th:onclick="|location.href='edit.ah?spNo=' + ${s.spNo}|" th:if="${session.loginUser != null && session.loginUser.memberId == s.memberId}">수정하기</button>&nbsp;&nbsp;
@@ -69,7 +70,7 @@
 			    		<!-- 프로필 창 -->
 						<span class="container_profile">
 							<span id="profile">
-								<img alt="img" src="image/yoonahrim/user.png">
+								<img alt="img" src="image/yoonahrim/user.png"> <!-- 프로필 가져오기 -->
 									<p><b>윤아림</b></p>
 									<p>[[${#strings.arraySplit(s.spAddress, ',')[0]}]]</p>
 								<div class="container2 text-end">
@@ -88,7 +89,7 @@
 							</div>
 						</div>
 				</div>
-				
+		</form>
 				<hr id="hr_line">
 				
 			<!-- 댓글 창 -->
@@ -102,7 +103,7 @@
 						<!-- 작성한 댓글이 보이는 부분 -->
 						<div class="reply_content" id="reply_content" style="width:820px; height:245px; overflow: auto; overflow-x: hidden">
 							<div class="media fs-7"  th:each="r : ${rList}">
-								<img class="d-flex rounded-circle" alt="reply_profile" src="image/yoonahrim/user.png" style="position:absolute; width:50px; height:50px">
+								<img class="d-flex rounded-circle" alt="reply_profile" th:src="${r.memberProfilePath}" style="position:absolute; width:50px; height:50px">
 								<div class="media-body" style="position:relative; left:60px">
 									<input type="hidden" th:value="${r.replyNo}"/>
 										<h6 class="mt-0">[[${r.memberId}]]</h6>
@@ -138,8 +139,9 @@
 			</div>
 		</div>
 		</th:block>
-		</form>
-		<script th:line="javascript">
+		
+		<script th:inline="javascript">
+		
 			function booking() {
 				
 	            var button = document.getElementById('bookButton');
@@ -151,8 +153,7 @@
 	                if (button.innerText === '예약 중') {
 	                    alert("예약 중으로 상태가 변경되었습니다.");
 	                    button.innerText = '예약 취소';
-	                    window.location.href = "booking.ah?spNo=${s.spNo}"; //예약중일때
-	                    
+	                    location.href = 'booking.ah?spNo=' //예약중일때
 	                    if (reservationElement) {
 	                        reservationElement.style.display = 'block';
 	                    }
@@ -167,7 +168,7 @@
 				
 				 var button = document.getElementById('bookButton');
 		         var confirmBooking = confirm("예약 상태를 변경하시겠습니까?");
-				
+		         
 		         
 		         if (confirmBooking) {
 		                var reservationElement = document.getElementsByClassName('reservation')[0];
@@ -175,8 +176,7 @@
 			         if (button.innerText === '예약 취소'){
 			        	 	alert("예약 취소로 상태가 변경되었습니다.");
 		                    button.innerText = '예약 중';
-		                    window.location.href = "bookingUndo.ah?spNo=${s.spNo}"; //예약취소일때
-		                    
+		                    location.href = 'bookingUndo.ah?spNo='; //예약취소일때
 		                    if (reservationElement) {
 		                        reservationElement.style.display = 'none';
 		                    }
@@ -196,7 +196,7 @@
 			        if (confirmSold) {
 			            alert("판매완료로 상태가 변경되었습니다.");
 			            outButton.innerText = '삭제';
-			            window.location.href = "soldout.ah?spNo=${s.spNo}"; //판매완료일때
+			            location.href = 'soldout.ah?spNo='; //판매완료일때
 			        } else {
 			            alert("취소되었습니다.");
 			        }
@@ -210,7 +210,7 @@
 					var confirmDelete = confirm("정말 삭제하시겠습니까?");
 					
 					if (confirmDelete) {
-			            window.location.href = "delete.ah?spNo=${s.spNo}"; //삭제일때
+			            location.href = 'delete.ah?spNo='; //삭제일때
 			        } else {
 			            alert("삭제가 취소되었습니다.");
 			        }

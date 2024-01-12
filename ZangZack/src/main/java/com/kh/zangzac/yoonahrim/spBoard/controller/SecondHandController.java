@@ -116,6 +116,7 @@ public class SecondHandController {
 	            
 	            if(returnArr != null) {
 	               Photo a = new Photo();
+	               a.setBoardNo(sp.getSpNo());
 	               a.setBoardType(4);
 	               a.setPhotoRename(returnArr[0]);
 	               a.setPhotoPath(returnArr[1]);
@@ -182,10 +183,6 @@ public class SecondHandController {
 			if(!list.isEmpty()) {
 		    	 result2 = spService.insertAttmSecondHand(list);
 		    }
-			
-		System.out.println(result1);
-		System.out.println(result2);
-		System.out.println(list.size() + 1);
 		
 	    if (result1 >= 0 && result2 >= 0) {
 	        return "redirect:secondHand.ah";
@@ -289,7 +286,7 @@ public class SecondHandController {
 	//예약 중 -> 예약완료
 	//booking.ah
 	@GetMapping("booking.ah")
-	public String booking(@RequestParam("spNo") int spNo, Model model) {
+	public String booking(@RequestParam("spNo") int spNo) {
 		
 		 int result = spService.updateBooking(spNo);
 		
