@@ -8,6 +8,21 @@
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/ming/psychologicalTest/testMain.css">
+<style>
+	.kakao{
+		position: relative;
+		left: -10px;
+		width: 50px;
+	}
+	.kakaoText{
+		position: relative;
+		left: 970px;
+		top:-150px;
+		width: 50px;
+		text-decoration: none;
+		color: black;
+	}
+</style>
 </head>
 <body>
 	<div th:insert="~{common/navbar :: navbar}"></div>
@@ -15,7 +30,7 @@
 	    <section id="main" class="mx-auto my-5 py-5 px-3">
 	      <h1>테스트로 알아보는 나의 캠핑 취향</h1><br><br><br><br>
 	      <div class="col-lg-6 col-md-8 col-sm-10 col-12 mx-auto">
-	        <img src="image/ming/autumn-season-5580628_1280.png" alt="mainImage" class="img-fluid">
+	        <img src="image/ming/psychologicalTest/autumn-season-5580628_1280.png" alt="mainImage" class="img-fluid">
 	      </div>
 	      <p class="test_p">
 	        <br>캠핑 취향 알아보고<br><br>
@@ -69,9 +84,9 @@
 		  Kakao.init('27f35515f4482390b9bfc7632ab7663f'); // 사용하려는 앱의 JavaScript 키 입력
 		</script>
 		
-		<a id="kakaotalk-sharing-btn" href="javascript:;">
+		<a id="kakaotalk-sharing-btn" href="javascript:;" class="kakaoText"> 
 		  <img src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png"
-		    alt="카카오톡 공유 보내기 버튼" />
+		    alt="카카오톡 공유 보내기 버튼" class="kakao" />친구와 함께하기
 		</a>
 		
 		<script>
@@ -82,7 +97,7 @@
 		      title: '캠핑 유형 테스트',
 		      description: '#캠핑 #Zangzac #여행 #장작 #백팩킹 #장박',
 		      imageUrl:
-		        'http://k.kakaocdn.net/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png',
+		        'https://gongu.copyright.or.kr/gongu/wrt/cmmn/wrtFileImageView.do?wrtSn=13286043&filePath=L2Rpc2sxL25ld2RhdGEvMjAyMS8yMS9DTFMxMDAwNi8xMzI4NjA0M19XUlRfMjFfQ0xTMTAwMDZfMjAyMTA2MTVfMQ==&thumbAt=Y&thumbSe=b_tbumb&wrtTy=10006',
 		      link: {
 		        // [내 애플리케이션] > [플랫폼] 에서 등록한 사이트 도메인과 일치해야 함
 		        webUrl: 'http://localhost:8080',
@@ -95,9 +110,9 @@
 		    },
 		    buttons: [
 		      {
-		        title: '웹으로 보기',
+		        title: '테스트 하러가기!',
 		        link: {
-		          webUrl: 'http://localhost:8080',
+		          webUrl: 'http://localhost:8080/psychologicalTestMain.me',
 		        },
 		      },
 		    ],
