@@ -195,7 +195,7 @@
 				        <div class="font-semibold text-lg">[[${cf.cfTitle}]]</div>
 				        <div class="text-gray-500 text-md" style="display:inline-block">[[|@${cf.categoryName} @${cf.memberId}|]]</div>
 				    </div>
-				    <button type="button" class="review-options-btn l-4">...</button>
+				    <button type="button" class="review-options-btn l-4" onclick="boardEditModalOpen(event)">...</button>
 				</div>
 				
 				
@@ -248,10 +248,10 @@
 	
 		<!-- Board EDit and delete-->
 		<div class="modal" id="modal">
-		      <div class="modal-content">
+		      <div class="modal-content bg-opacity-25 justify-center items-center w-48 flex justify-center">
 		        <ul>
-		          <li><a href="#" class="edit-review">수정</a></li>
-		          <li><a href="#" class="delete-review">삭제</a></li>
+		          <li class=""><button class="edit-review w-24 text-center hover:bg-gray-100" id="boardEditBtn">수정</button></li>
+		          <li><button class="delete-review w-24 text-center hover:bg-gray-100"  id="boardDeleteBtn">삭제</button></li>
 		        </ul>
 		      </div>
 		 </div>
@@ -334,6 +334,9 @@
     deleteConfrim.addEventListener('click', function(){
     	
     	
+    	let boardNo = document.getElementById('reply'+replyDeleteCfNo.value).parentNode.parentNode.id;
+    	let replyCount =document.getElementById('commentCount'+boardNo)
+    	
     	 $.ajax({
               url: 'deleteReply.jy', // 서버의 댓글 목록 불러오기 URL
               method: 'GET',
@@ -343,6 +346,9 @@
               success: function(data) {
             	  closeDeleteModal();
             	  document.getElementById('reply'+replyDeleteCfNo.value).parentNode.remove();
+            	  //댓글 카운트 다운
+            	  replyCount.innerText = parseInt(replyCount.innerText, 10)-1; 
+            		  
                   
               },
               error: function(data) {
@@ -425,8 +431,6 @@
 	          });
         	
         	
-        	
-        	 
         });
 	
 	</script>
@@ -445,6 +449,9 @@
 	        let User = /*[[${session.loginUser}]]*/null;
 	        /*]]>*/
 	        
+	        let replyCount = document.getElementById("commentCount"+replycfNo.value);
+	        
+	        
 	        if(User != null){
 		       	 $.ajax({
 		             url: 'insertReply.jy', // 서버의 댓글 목록 불러오기 URL
@@ -458,7 +465,8 @@
 		             success: function(data) {
 		                 updateCommentList(data);
 		                 replyModal.classList.add('hidden');
-		                 
+		                 //댓글 카운트 올리기
+		                replyCount.innerText = parseInt(replyCount.innerText, 10)+1; 
 		             },
 		             error: function(data) {
 		                 console.log(data);
@@ -481,6 +489,7 @@
             
             replycfNo.value = cfNo;
         	forwho.innerText = loginUser+"에게 답글";
+        	replyContent.value="";
             replyModal.classList.remove('hidden');
         }
 
@@ -494,19 +503,51 @@
         
         
         
-        // 모달을 가져옵니다.
+        // 모달을 가져옵니다.///////////////////////////////////////////////
         let modal = document.getElementById("modal");
-
+		let boardEditBtn = document.getElementById("boardEditBtn");
+		let boardDeleteBtn = document.getElementById("boardDeleteBtn");
+		let boardMemberId;
+		//수정 버튼
+		boardEditBtn.addEventListener('click', function(){
+			
+			window.location.href="campingFriendEditView.jy?boardNo="+boardId;
+		});
+		
+		//삭제 버튼
+		boardDeleteBtn.addEventListener('click', function(){
+			//바로 삭제 때려버리기
+		});
+		
+		
+		
         // 모달을 여는 버튼을 가져옵니다.
         let btn = document.querySelector(".review-options-btn");
 
         // 모달을 닫는 <span> 요소를 가져옵니다. (여기서는 사용하지 않았습니다. 필요하다면 추가하세요.)
-
-        // 사용자가 버튼을 클릭하면 모달을 엽니다.
-        btn.onclick = function() {
-          modal.style.display = "block";
+        let boardId;
+        let boardDiv;
+        function boardEditModalOpen(event){
+        	/*<![CDATA[*/
+	        let User = /*[[${session.loginUser}]]*/null;
+	        /*]]>*/
+        	boardId = event.target.parentNode.parentNode.children[3].id;
+        	boardDiv = event.target.parentNode.parentNode;
+        	let formatString=event.target.parentNode.parentNode.children[0].children[1].children[1].innerText;
+        	boardMemberId = formatString.split(' ')[1].split('@')[1];
+			
+        	if(User != null){
+				if(User.memberId == boardMemberId){
+        			modal.style.display = "block";
+				}        		
+        	}
+        	
+        	
         }
 
+        
+        //수정 버튼 
+        
         // 사용자가 모달 외부를 클릭하면 모달을 닫습니다.
         window.onclick = function(event) {
           if (event.target == modal) {
@@ -713,7 +754,7 @@
 		                        <div class="font-semibold text-lg">${itemData.cfTitle}</div>
 		                        <div class="text-gray-500 text-md" style="display:inline-block">@${itemData.categoryName} @${itemData.memberId}</div>
 		                    </div>
-		                    <button type="button" class="review-options-btn l-4">...</button>
+		                    <button type="button" class="review-options-btn l-4" onclick="boardEditModalOpen(event)">...</button>
 		                </div>
 		                
 		                <div class="mb-4">
