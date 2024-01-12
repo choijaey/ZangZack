@@ -15,6 +15,10 @@
 	margin-right:18%;
 }
 
+button:hover{
+	opacity:0.6;
+}
+
 td>img{
 	width:70px;
 	height:70px;
@@ -235,5 +239,13 @@ a:hover{
 .addOption{
 	background-color:black;
 	color:white;
+}
+
+#trash img{
+	width:50px;
+}
+
+#trash img:hover{
+	transform:scale(1.1);
 }
 

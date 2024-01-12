@@ -1,7 +1,7 @@
 package com.kh.zangzac.common.reply.model.vo;
 
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,8 +17,9 @@ import lombok.ToString;
 public class Reply {
    private int replyNo;
    private String replyContent;
-   private Date replyCreateDate;
-   private Date replyModifyDate;
+   private LocalDateTime replyCreateDate;
+   private String formatDate;
+   private LocalDateTime replyModifyDate;
    private int boardType;
    private int boardNo;
    private String replyStatus;

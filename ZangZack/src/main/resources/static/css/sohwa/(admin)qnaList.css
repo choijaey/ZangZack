@@ -107,7 +107,7 @@ table{
 
 
 
-nav{
+#nav{
 	float:right;
 }
 .pagination .page-link {
@@ -147,6 +147,54 @@ nav{
 
 .dropdown{
 	display: inline-block;
+}
+
+#answerY{
+	color:#F9612B;
+}
+
+#answerY:hover{
+	opacity:0.6;
+}
+
+
+.modal {
+     border:1px solid black;
+     margin-left:600px;
+     margin-top:50px;
+     display: none;
+     width: 600px;
+     height: 650px;
+     background-color:white;
+ }
+
+
+.modal img{
+	width:150px;
+	height:150px;
+}
+.close {
+    font-size: 40px; /* 원하는 크기로 조절하세요 */
+    cursor: pointer;
+    margin-left: 550px;
+    margin-bottom: 10px;
+}
+
+.close:hover {
+    color: red; /* 원하는 색상으로 변경 */
+}
+
+.enrollQna{
+	width:100px;
+	height:30px;
+	background-color:black;
+	color:white;
+	border-radius:3px;
+	
+}
+
+button:hover{
+	opacity:0.6;
 }
 
 

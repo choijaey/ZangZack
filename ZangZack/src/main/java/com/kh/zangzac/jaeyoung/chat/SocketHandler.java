@@ -170,7 +170,42 @@ public class SocketHandler extends TextWebSocketHandler {
     	  int count = cService.checkCount(checkChatter);
     	  
     	  if(count>0) {
+    		  // 채팅방에 이미 있는 상태라면
     		  cFileManager.updateUnreadChatter(roomName,myId);
+    		  
+    		  //입장한 채팅방에 메시지를 보내 갱신시키게 만들거.
+    		  
+    	      JSONObject obj = new JSONObject();
+    	      
+    	      HashMap<String, Object> temp = new HashMap<String, Object>();
+    	      if(rls.size() > 0) {
+    	         for(int i=0; i<rls.size(); i++) {
+    	        	  String roomNumber = (String) rls.get(i).get("roomName"); //세션리스트의 저장된 방번호를 가져와서
+    	        	 if(roomNumber.equals(roomName)) { //같은값의 방이 존재한다면
+    	               temp = rls.get(i); //해당 방번호의 세션리스트의 존재하는 모든 object값을 가져온다.
+    	               break;
+    	            }
+    	         }
+    	         
+    	         //해당 방의 세션들만 찾아서 메시지를 발송해준다.
+    	         for(String k : temp.keySet()) { 
+    	            if(k.equals("roomName")) { //다만 방번호일 경우에는 건너뛴다.
+    	               continue;
+    	            }
+    	            
+    	            obj.put("type", "reset");
+    	            //각 세션에 보내기
+    	            WebSocketSession wss = (WebSocketSession)((ChatSession)(temp.get(k))).getSession();
+    	            if(wss != null) {
+    	               try {
+    	                  wss.sendMessage(new TextMessage(obj.toJSONString()));
+    	               } catch (IOException e) {
+    	                  e.printStackTrace();
+    	               }
+    	            }
+    	         }
+    	      }
+    		  
     	  }else {
     		 //DB에 정보 정보 추가하기
     		  int result = cService.insertChatRoom(checkChatter);

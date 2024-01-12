@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kh.zangzac.jaeyoung.campingFriend.model.dao.CampingFriendDAO">
+	
+	
+	<insert id="insertCf">
+		<selectKey order="BEFORE" resultType="_int" keyProperty="cfNo">
+         	select CF_SEQ.nextval 
+         	from dual
+     	 </selectKey>
+		<!-- 이미 시퀀스로 하나 올려진 글번호를 prodcutNo필드에 대입을 했으므로 시퀀스 돌려주는게(product_seq.nextval) 아니라 productNo 넣어주면 된다. -->
+		insert into camping_friends
+		values (#{cfNo}, #{cfContent}, default, #{memberId}, #{categoryNo}, #{cfTitle}) 
+	</insert>
+	
+	<select id="listCount" resultType="_int">
+		select count(*)
+		from camping_friends
+	</select>
+	
+	<select id="cfLimitList">
+		SELECT *
+		FROM camping_friends CF
+		LEFT JOIN camping_category CC ON CF.CATEGORY_NO = CC.CATEGORY_NO
+		LEFT JOIN photo P ON CF.CF_NO = P.BOARD_NO
+		ORDER BY CF.CF_NO DESC
+		
+	</select>
+
+</mapper>
