@@ -265,7 +265,7 @@
 												            		<input type="hidden" th:value="${r.reviewNo}" name="reviewNo">
 													            	<input type="hidden" th:value="${p.productNo}" name="productNo">
 													            	<input type="file" class="fileUpload2" name="updateFile" style="display: none;">
-													            	<input type="hidden" name="reviewScore" value="0">
+													            	<input type="hidden" name="updateReviewScore" value="0" >
 													                <div class="p-4">
 													                    <h3 class="text-lg font-semibold mb-2">별점수정</h3>
 													                    <div class="flex items-center mb-4">
@@ -294,7 +294,7 @@
 													                        <label for="review" class="text-sm font-semibold">리뷰를 수정해주세요.</label>
 													                        <textarea name="reviewContent" rows="3" class="mt-1 p-2 w-full border rounded-md" style="height:250px; overflow: scroll; resize: none;">[[${r.reviewContent}]]</textarea>
 													                    </div>
-													                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" style="float:right; margin-bottom:30px;">
+													                    <button class="bg-orange-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" style="float:right; margin-bottom:30px;">
 													                        리뷰수정
 													                    </button>
 												                    </form>
@@ -354,7 +354,7 @@
 						        </div>
 						  </div>
 						  
-						  
+						  <input type="hidden" id="loginUser" th:value="${loginUser}">
 						  
 					</div>
 			   </div>
@@ -550,7 +550,7 @@
 
 	<script>
 		
-	
+	//리뷰수정모달 미리보기
 	 function openFileUploadModal(btn) {
 	        var fileInput = btn.closest('form').querySelector('.fileUpload2');
 	        if (fileInput) {
@@ -674,48 +674,47 @@
 		
 		
 		//모달 별점 수정
-		window.onload=()=>{
-			var stars = document.querySelectorAll('.updateModal .fa');
-			var stars = 
-
-			stars.forEach(function(star, index) {
-				var checkedStarsCount = 0;
-				star.addEventListener('mouseover', function(){
-					for (var i = 0; i <= index; i++) {
-					      stars[i].style.color = 'yellow';
-				    }
-				})
-				
-				star.addEventListener('mouseout', function(){
-					for (var i = 0; i <= index; i++) {
-					      stars[i].style.color = 'gray';
-				    }
-				})
-				
-			  star.addEventListener('click', function() {
-			    // 클릭된 별을 포함하여 그 앞의 별들을 노란색으로 변경하고, 나머지는 회색으로 유지합니다.
-			    
-			    for (var i = 0; i <= index; i++) {
-			      stars[i].classList.add('checked');
-			      if (stars[i].classList.contains('checked')) {
-				        checkedStarsCount++; // checked 클래스가 있으면 checkedStarsCount를 증가시킵니다
-				    }
-			    }
-			    for (var i = index + 1; i < stars.length; i++) {
-			      stars[i].classList.remove('checked');
-			    }
-			    var starCountInput = document.querySelector('input[name="updateReviewScore"]');
-			    starCountInput.value = checkedStarsCount;
-			  });
-			});
-
-			//모달 별점 등록 갯수 추출
-			for (var i = 0; i < stars.length; i++) {
-			    if (stars[i].classList.contains('checked')) {
-			        checkedStarsCount++; // checked 클래스가 있으면 checkedStarsCount를 증가시킵니다
-			    }
-			}
-		}
+		window.onload = () => {
+		    var updateModals = document.querySelectorAll('.updateModal');
+		
+		    updateModals.forEach(function (modal) {
+		        var stars = modal.querySelectorAll('.updateModal .fa');
+		        var checkedStarsCount = 0;
+		
+		        stars.forEach(function (star, index) {
+		            star.addEventListener('mouseover', function () {
+		                for (var i = 0; i <= index; i++) {
+		                    if (!stars[i].classList.contains('checked')) {
+		                        stars[i].style.color = 'yellow';
+		                    }
+		                }
+		            });
+		
+		            star.addEventListener('mouseout', function () {
+		                for (var i = 0; i <= index; i++) {
+		                    if (!stars[i].classList.contains('checked')) {
+		                        stars[i].style.color = 'gray';
+		                    }
+		                }
+		            });
+		
+		            star.addEventListener('click', function () {
+		                checkedStarsCount = index + 1;
+		                for (var i = 0; i < stars.length; i++) {
+		                    if (i <= index) {
+		                        stars[i].classList.add('checked');
+		                        stars[i].style.color = 'yellow';
+		                    } else {
+		                        stars[i].classList.remove('checked');
+		                        stars[i].style.color = 'gray';
+		                    }
+		                }
+		                var starCountInput = modal.querySelector('input[name="updateReviewScore"]');
+		                starCountInput.value = checkedStarsCount;
+		            });
+		        });
+		    });
+		};
 		
 		
 		
@@ -972,7 +971,7 @@
 		
 	    //장바구니
 	    function goCart() {
-	    	
+	    	var loginUser = document.getElementById('loginUser').value;
 	        var option = document.getElementById('colorSelect').value;
 	        var eno = document.querySelector('.quantity').value;
 			var productNo = document.getElementById('productNo').value;
@@ -982,6 +981,8 @@
 
 		    if (selectElement.value === "컬러 선택") {
 		        alert('옵션을 선택해주세요!'); // 알림 메시지 출력
+		    }else if(loginUser==""){
+		    	alert('로그인 후 이용하실 수 있습니다.');
 		    }else{
 		    	alert('해당 상품이 장바구니에 추가되었습니다.');
 		        location.href='insertCart.so?productNo='+productNo + '&option=' + option + '&eno=' + eno +"&price=" + price;
