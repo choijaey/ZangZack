@@ -71,7 +71,7 @@
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="text" placeholder="nickName" style="height: 45px;" name="existingNickname">
+	              <input type="text" id="memberNickName"placeholder="nickName" style="height: 45px;" name="existingNickname">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
@@ -286,7 +286,21 @@
 				}
 			});
 		
-		
+		//닉네임 정규식
+		document.getElementById('memberNickName').addEventListener('change',function(){
+			let nickNameval = $('#memberNickName').val();
+			let nickNamevalcheck = /^[ㄱ-ㅎㅏ-ㅣ가-힣가-힣A-Za-z0-9]+$/;
+			//let prohibitedWords = ['~', '`', 'word3']; 욕설 추가!
+			
+			if(this.value.trim()==''){
+				alert('닉네임은 영어,한글,숫자로 구성된 6글자 이상으로 조합하시오.');
+				id.style.borderColor = 'red';
+	            $('#memberNickName').focus();
+			}else if(!nickNamevalcheck.test(nickNameval)){
+				alert('아이디는 영소문자,숫자로 구성된 6글자 이상으로 조합하시오.');
+				id.style.borderColor = 'red';
+			}
+		});
 		
 		//이메일 중복체크
 		document.getElementById('memberEmail').addEventListener('change', function(){

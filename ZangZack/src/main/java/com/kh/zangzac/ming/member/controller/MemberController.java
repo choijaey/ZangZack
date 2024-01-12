@@ -148,7 +148,7 @@ public class MemberController {
 			if(bcrypt.matches(m.getMemberPwd(), loginUser.getMemberPwd())) {
 				model.addAttribute("loginUser",loginUser);
 				
-				if(!beforeURL.equals("http://localhost:8080/logout.me"))
+				if(!beforeURL.equals("http://localhost:8080/logout.me") && !beforeURL.equals("http://localhost:8080/signUp.me"))
 				{
 					return "redirect:" + beforeURL;
 				}else {
