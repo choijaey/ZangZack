@@ -27,8 +27,8 @@ public class WorkController {
 	    model.addAttribute("loc", loc);
 	}
 
-	public Attachment setAttachment(String[] returnArr, int i) {
-		Attachment a = new Attachment();
+	public Photo setAttachment(String[] returnArr, int i) {
+		Photo a = new Photo();
 		if(i==0) {
 			a.setPhotoRename(returnArr[0]);
 			a.setPhotoPath(returnArr[1]);

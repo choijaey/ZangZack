@@ -2,7 +2,6 @@ package com.kh.zangzac.seongun.campboard.model.service;
 
 import java.util.ArrayList;
 
-import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.model.vo.SelectCondition;
 import com.kh.zangzac.common.photo.model.vo.Photo;
@@ -17,7 +16,7 @@ public interface CampBoardService {
 
 	int insertCampBoard(CampBoard board);
 
-	int insertAttmCampBoard(ArrayList<Attachment> fileList);
+	int insertAttmCampBoard(ArrayList<Photo> fileList);
 
 	CampBoard selectBoard(int cbNo, String id);
 

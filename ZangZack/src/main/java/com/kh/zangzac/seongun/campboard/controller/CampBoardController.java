@@ -62,7 +62,7 @@ public class CampBoardController {
 		int listCount = cService.getListCount(0);
 		
 		int currentPage = page;
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 15);
 		ArrayList<CampBoard> list = cService.selectBoardList(pi,0);
 		
 		String msg = list.isEmpty() ? "작성된 게시판이 없습니다!" : null;
@@ -75,7 +75,7 @@ public class CampBoardController {
 		int listCount = cService.getListCount(0);
 		
 		int currentPage = page;
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 15);
 		ArrayList<CampBoard> list = cService.selectBoardList(pi,0);
 		
 		String msg = list.isEmpty() ? "작성된 게시판이 없습니다!" : null;
@@ -89,7 +89,7 @@ public class CampBoardController {
 		int listCount = cService.getListCount(0);
 		
 		int currentPage = page;
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 30);
 		ArrayList<CampBoard> list = cService.selectBoardList(pi,0);
 		
 		String msg = list.isEmpty() ? "작성된 게시판이 없습니다!" : null;
@@ -135,15 +135,14 @@ public class CampBoardController {
 		board.setMemberId(((Member)request.getSession().getAttribute("loginUser")).getMemberId());
 		int resultB = 0;
 		int resultA = 0;
-		
-		ArrayList<Attachment> fileList = new ArrayList<>();
+		ArrayList<Photo> fileList = new ArrayList<>();
 		
 		for(int i=0; i<files.size(); i++) {
 			MultipartFile upload = files.get(i); //파일 하나씩 뽑아오기.
 			String[] returnArr = imageStorage.saveImage(upload, "seongun");
 			
 			if(returnArr != null) {
-				Attachment a = sWork.setAttachment(returnArr, i);
+				Photo a = sWork.setAttachment(returnArr, i);
 				
 				fileList.add(a);
 			}
@@ -153,7 +152,7 @@ public class CampBoardController {
 			resultB = cService.insertCampBoard(board);
 		}else {
 			resultB = cService.insertCampBoard(board);
-			for(Attachment a : fileList) {
+			for(Photo a : fileList) {
 				a.setBoardNo(board.getCbNo());
 			}
 			resultA = cService.insertAttmCampBoard(fileList);
@@ -179,4 +178,8 @@ public class CampBoardController {
 		}
 	}
 	
+	@GetMapping("writeCampBoard.su")
+	public String writeCampBoard() {
+		return "views/seongun/campboard/writeBoard";
+	}
 }

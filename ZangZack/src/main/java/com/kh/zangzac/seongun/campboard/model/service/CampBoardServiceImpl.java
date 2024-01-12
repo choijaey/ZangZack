@@ -6,10 +6,8 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.model.vo.SelectCondition;
-import com.kh.zangzac.common.photo.model.dao.PhotoDAO;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.common.reply.model.dao.ReplyDAO;
 import com.kh.zangzac.common.reply.model.vo.Reply;
@@ -42,7 +40,7 @@ public class CampBoardServiceImpl implements CampBoardService{
 	}
 
 	@Override
-	public int insertAttmCampBoard(ArrayList<Attachment> fileList) {
+	public int insertAttmCampBoard(ArrayList<Photo> fileList) {
 		return cDAO.insertAttmCampBoard(fileList);
 	}
 
