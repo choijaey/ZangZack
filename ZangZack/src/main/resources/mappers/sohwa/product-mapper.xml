@@ -530,8 +530,7 @@
 	
 	
 	<update id="deleteProductPhoto">
-		update photo
-		set photo_status = 'Y'
+		delete from photo
 		where photo_rename in
 		<foreach item="rename" collection="list" open="(" separator="," close=")">
 			#{rename}
@@ -552,5 +551,15 @@
 		set product_name = #{productName} , product_price= #{productPrice}, category_no = #{categoryNo}, product_company=#{productCompany}, delivery_price = #{deliveryPrice}
 		where product_no = #{productNo} and product_status = 'Y'
 	</update>
+	
+	
+	<update id="updatePhotoLevel">
+		update photo
+		set photo_level = 0
+		where photo_no = (select min(photo_no)
+						 from photo
+						 where board_no = #{productNo} and board_type=5)
+	</update>
+	
 	
 </mapper>

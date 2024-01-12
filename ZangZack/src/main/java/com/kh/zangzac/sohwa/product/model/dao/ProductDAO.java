@@ -132,6 +132,9 @@ public interface ProductDAO {
 
 	int updateProduct(Product p);
 
+	void updatePhotoLevel(int productNo);
+
+
 
 
 	

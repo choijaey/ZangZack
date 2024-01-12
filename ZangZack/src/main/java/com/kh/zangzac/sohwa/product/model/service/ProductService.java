@@ -127,8 +127,10 @@ public interface ProductService {
 
 	int updateProductPhotoY(ArrayList<Attachment> coreList);
 
-
 	int updateProduct(Product p);
+
+	void updatePhotoLevel(int productNo);
+
 
 
 

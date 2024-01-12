@@ -316,6 +316,12 @@ public class ProductServiceImpl implements ProductService{
 		return pDAO.updateProduct(p);
 	}
 
+	@Override
+	public void updatePhotoLevel(int productNo) {
+		pDAO.updatePhotoLevel(productNo);
+		
+	}
+
 
 
 

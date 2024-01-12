@@ -17,8 +17,8 @@
 			<input type="hidden" th:value="${productNo}" name="productNo">
 			<h3>▸▸상품 대표 사진 (최대 4개): </h3>
 				<div class="thumbnails" th:each="l:${list}" style="display:inline-block;margin-top:20px;">
-			        <div th:if="${l.photoLevel==0}" style="display:inline-block;"><img th:src="${l.photoPath}" alt="Thumbnail 1" class="thumbnail">&nbsp;<button type="button" class="btn btn-outline-dark btn-sm deleteAttm" th:id="|delete~${ l.photoRename }~${l.photoLevel}|">삭제 OFF</button><input type="hidden" name="deleteAttm" value="none"></div>
-			        <div th:if="${l.photoLevel==1}" style="display:inline-block;"><img th:src="${l.photoPath}" alt="Thumbnail 1" class="thumbnail">&nbsp;<button type="button" class="btn btn-outline-dark btn-sm deleteAttm" th:id="|delete~${ l.photoRename }~${l.photoLevel}|">삭제 OFF</button><input type="hidden" name="deleteAttm" value="none"></div>
+			        <div th:if="${l.photoLevel==0}" style="display:inline-block;"><img th:src="${l.photoPath}" alt="Thumbnail 1" class="thumbnail">&nbsp;<button type="button" class="btn btn-outline-dark btn-sm deleteAttm" th:id="|delete~${ l.photoRename }/${l.photoLevel}|">삭제 OFF</button><input type="hidden" name="deleteAttm" value="none"></div>
+			        <div th:if="${l.photoLevel==1}" style="display:inline-block;"><img th:src="${l.photoPath}" alt="Thumbnail 1" class="thumbnail">&nbsp;<button type="button" class="btn btn-outline-dark btn-sm deleteAttm" th:id="|delete~${ l.photoRename }/${l.photoLevel}|">삭제 OFF</button><input type="hidden" name="deleteAttm" value="none"></div>
 			        
 			    </div>
 				<br><br><br>
@@ -111,7 +111,7 @@
 		  
 		    <h3>▸▸상품 상세 사진 (최대 4개): </h3>
 		    <div class="details" th:each="l:${list}" style="display:inline-block;margin-top:20px;">
-		        <div th:if="${l.photoLevel==2}" style="display:inline-block;"><img th:src="${l.photoPath}" alt="Detail 1" class="detail1l" style="width:200px; height:200px;">&nbsp;<button type="button" class="btn btn-outline-dark btn-sm deleteAttm2" th:id="|delete~${ l.photoRename }~${l.photoLevel}|">삭제 OFF</button><input type="hidden" name="deleteAttm" value="none"></div>
+		        <div th:if="${l.photoLevel==2}" style="display:inline-block;"><img th:src="${l.photoPath}" alt="Detail 1" class="detail1l" style="width:200px; height:200px;">&nbsp;<button type="button" class="btn btn-outline-dark btn-sm deleteAttm2" th:id="|delete~${ l.photoRename }/${l.photoLevel}|">삭제 OFF</button><input type="hidden" name="deleteAttm" value="none"></div>
 		    </div>
 		    <br><br>
 			<div id="detailDiv1" class="detailDiv">

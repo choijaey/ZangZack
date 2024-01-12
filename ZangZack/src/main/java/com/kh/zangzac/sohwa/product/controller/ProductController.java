@@ -197,6 +197,7 @@ public class ProductController {
 	
 	@GetMapping("productDetail.so")
 	public String productDetailView(@RequestParam(value="reviewStatus", defaultValue="1") int reviewStatus, @RequestParam("productNo") int productNo, Model model) {
+		Member loginUser = (Member)model.getAttribute("loginUser");
 		Product p = pService.selectProductDetail(productNo);
 		//상품사진
 		ArrayList<Attachment> list = pService.selectPhotoDetail(productNo);
@@ -222,6 +223,7 @@ public class ProductController {
 		
 		int roundScore = (int) Math.round(p.getProductScore());
 		
+		model.addAttribute("loginUser", loginUser);
 		model.addAttribute("roundScore", roundScore);
 		model.addAttribute("reviewStatus", reviewStatus);
 		model.addAttribute("mList", mList);
@@ -790,8 +792,8 @@ public class ProductController {
 		
 		//product 정보
 		System.out.println(p);
-		pService.updateProduct(p);
-		
+		int result = pService.updateProduct(p);
+		System.out.println(result);
 		//옵션 삭제하고 다시 insert처리
 		ArrayList<Attachment> coreList = new ArrayList<>();
 		ArrayList<Attachment> detailList = new ArrayList<>();
@@ -832,27 +834,6 @@ public class ProductController {
 		//deleteAttm이 채워져있고, coreFiles는 존재하고, detailFiles는 비워져있을 때
 		//deleteAttm이 채워져있고, coreFiles와 detailFiles 둘 다 존재
 				
-				
-		
-		ArrayList<String> delRename = new ArrayList<>();
-		//deleteAttm이 비워져있고, coreFiles와 detailFiles도 비워져있을 때
-		for(int i=0; i<deleteAttm.length; i++) {
-			String deleteRename = deleteAttm[i];
-			if(!deleteRename.equals("none")) {
-				 delRename.add(deleteRename);
-			 }
-		 }
-		
-		if(!delRename.isEmpty()) {
-			deleteResult = pService.deleteProductPhoto(delRename);
-			if(deleteResult > 0) {
-				for(String rename : delRename) {
-					imageStorage.deleteImage(rename, name);
-				}
-			}
-		}
-		
-		
 		
 		for(int i=0; i<coreFiles.size(); i++) {
 			MultipartFile coreUpload = coreFiles.get(i);
@@ -864,7 +845,6 @@ public class ProductController {
 					Attachment a = new Attachment();
 					a.setPhotoRename(returnArr1[0]);
 					a.setPhotoPath(returnArr1[1]);
-					a.setPhotoLevel(1);
 					a.setBoardType(5);
 					a.setBoardNo(p.getProductNo());
 					
@@ -873,6 +853,86 @@ public class ProductController {
 			}
 			
 		}
+				
+		
+		ArrayList<String> delRename = new ArrayList<>();
+		ArrayList<Integer> delLevel = new ArrayList<>();
+		//deleteAttm이 비워져있고, coreFiles와 detailFiles도 비워져있을 때
+		for(int i=0; i<deleteAttm.length; i++) {
+			String rename = deleteAttm[i];
+			if(!rename.equals("none")) {
+				String[] split = rename.split("/");
+				delLevel.add(Integer.parseInt(split[1]));
+				delRename.add(split[0]);
+			 }
+		 }
+		
+//		if(!delRename.isEmpty()) {
+//			deleteResult = pService.deleteProductPhoto(delRename);
+//			if(deleteResult > 0) {
+//				for(String rename : delRename) {
+//					imageStorage.deleteImage(rename, name);
+//				}
+//			}
+//		}
+		
+		//이전의 첨부파일이 존재했는지에 대한 boolean값
+		boolean existBeforeAttm = true;
+		int deleteAttmResult = 0;
+		int updateBoardResult = 0;
+		
+		//하나라도 삭제하기로 했다.
+		if(!delRename.isEmpty()) {
+			deleteAttmResult = pService.deleteProductPhoto(delRename);
+			if(deleteAttmResult > 0) {
+				for(String rename : delRename) {
+					//resources에 있는 uploadFiles에서도 삭제하겠다는 코드
+					imageStorage.deleteImage(rename, name);
+				}
+			}
+			
+			//기존 파일 다 삭제했을 때
+			if(delRename.size() == deleteAttm.length) {
+				existBeforeAttm = false;
+			}else {
+				//기존 파일이 하나라도 남아있을 때
+				for(int level : delLevel) {
+					if(level == 0) {
+						//삭제할 객체의 레벨들 중에서 level이 0인 것이 하나라도 있다면 썸네일 없어진 것..다시 설정해줘야함.
+						//남아있는 사진들 중에서 가장 boardId가 빠른 것 썸네일로 지정해줄 것(level 0)
+						//return 해줄게 없음.
+						pService.updatePhotoLevel(p.getProductNo());
+						break;
+					}
+				}
+			}
+			
+		}
+		
+		for(int i=0; i<coreList.size(); i++) {
+			Attachment a = coreList.get(i);
+			a.setBoardNo(p.getProductNo());
+			
+			if(existBeforeAttm) {
+				//'원래 파일들이 하나라도 남아있다면'이라는 if 문
+				//따라서 잔존하던 파일들 사이에서 어차피 썸네일 정해질 것이므로
+				//어차피 추가하는 파일들은 썸네일이 될 가능성이 없다. 따라서, 다 1로 설정 가능
+				a.setPhotoLevel(1);
+			}else{
+				if(i == 0) {
+					a.setPhotoLevel(0);
+				}else {
+					a.setPhotoLevel(1);
+				}
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		
@@ -897,6 +957,8 @@ public class ProductController {
 				}
 			}
 		}
+		
+		
 		
 		
 		if(!coreList.isEmpty()) {
