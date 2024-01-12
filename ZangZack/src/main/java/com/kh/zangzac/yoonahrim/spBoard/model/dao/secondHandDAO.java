@@ -17,7 +17,7 @@ public interface secondHandDAO {
 
 	int updateSecondHand(secondHandProduct sp);
 
-	int insertAttmSecondHand(ArrayList<Photo> detailList);
+	int insertAttmSecondHand(ArrayList<Photo> list);
 
 	ArrayList<secondHandProduct> selectMyList(secondHandProduct sp);
 

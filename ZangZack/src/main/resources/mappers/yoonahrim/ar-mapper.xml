@@ -17,7 +17,6 @@
 		UPDATE SECONDHAND_PRODUCT
 		SET SP_TITLE = #{spTitle}, SP_PRICE = #{spPrice}, SP_CONTENT = #{spContent}, SP_ADDRESS = #{spAddress}, CATEGORY_NO = #{categoryNo}
 		where member_id = #{memberId} and SP_STATUS = 'N'
-		<!-- member_id = #{memberId}로 후에 바꿔주기 -->
 	</update>
 	
 	<insert id="insertAttmSecondHand">
@@ -147,6 +146,5 @@
 		from SECONDHAND_PRODUCT
 			join member using (MEMBER_ID)
 		where SP_STATUS = 'N'
-		order by member_id desc
 	</select>
 </mapper>

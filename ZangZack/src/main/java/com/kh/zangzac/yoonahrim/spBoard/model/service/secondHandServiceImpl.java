@@ -67,8 +67,8 @@ public class secondHandServiceImpl implements secondHandService{
 	}
 
 	@Override
-	public int insertAttmSecondHand(ArrayList<Photo> detailList) {
-		return spDAO.insertAttmSecondHand(detailList);
+	public int insertAttmSecondHand(ArrayList<Photo> list) {
+		return spDAO.insertAttmSecondHand(list);
 	}
 
 	@Override

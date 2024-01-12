@@ -37,7 +37,7 @@ public interface secondHandService {
 
 	ArrayList<Photo> selectPhotoSeconHand(secondHandProduct sp);
 
-	int updateAttmSecondHand(ArrayList<Photo> detailList);
+	int updateAttmSecondHand(ArrayList<Photo> list);
 
 	int deleteAttm(ArrayList<String> delRename);
 

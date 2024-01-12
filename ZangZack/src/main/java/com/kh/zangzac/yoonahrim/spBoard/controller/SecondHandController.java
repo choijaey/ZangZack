@@ -144,7 +144,7 @@ public class SecondHandController {
 		
 		if(!delRename.isEmpty()) {
 			deleteAttmResult = spService.deleteAttm(delRename);
-			System.out.println(deleteAttmResult);
+			
 			if(deleteAttmResult > 0) {
 				for(String rename : delRename) {
 					imageStorage.deleteImage(rename,name);
@@ -185,7 +185,7 @@ public class SecondHandController {
 			
 		System.out.println(result1);
 		System.out.println(result2);
-		System.out.println(list);
+		System.out.println(list.size() + 1);
 		
 	    if (result1 + result2 == list.size() + 1) {
 	    	redirectAttributes.addAttribute("no", sp.getSpNo());
@@ -271,6 +271,14 @@ public class SecondHandController {
 	    // 상세사진 저장
 	    for (Photo a : detailList) {
 	        a.setBoardNo(sp.getSpNo());
+	        
+	        
+	        
+	        
+	        
+	        
+	        
+	        
 	    }
 	    
 	    if(!detailList.isEmpty()) {
@@ -278,13 +286,11 @@ public class SecondHandController {
 	    }
 	    
 	    if (result1 + result2 == detailList.size() + 1) {
-	        return "views/yoonahrim/secondHandList";
+	        return "redirect:secondHand.ah";
 	    } else {
 	        throw new secondHandException("게시판 등록 실패");
 	    }
 	}
-	
-	
 	
 	
 	//예약
