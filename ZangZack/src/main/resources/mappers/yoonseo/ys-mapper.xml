@@ -145,6 +145,18 @@
                        where board_no = #{cgNo}) 
    </update>
    
-   
+   <select id="searchCampCount" resultType="_int">
+      select*
+      from camping_ground
+      where cg_status = 'N' and
+           (
+            cg_region like '%' || #{keyword} ||'%' or
+            cg_address like  '%' || #{keyword} ||'%' or
+            cg_name like  '%' || #{keyword} ||'%' or
+            cg_type like  '%' || #{keyword} ||'%' or
+            cg_area like   '%' || #{keyword} ||'%' 
+            )
+     
+   </select>
 
 </mapper>

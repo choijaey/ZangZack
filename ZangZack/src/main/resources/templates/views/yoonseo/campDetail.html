@@ -34,7 +34,7 @@
 	           <h3 style="display:inline-block;  margin-top:30px;">[[${camp.cgName}]]</h3>
 	        </div>
 		    <div style="margin-top: 10px;">
-			    <div id="carouselExampleFade" class="carousel slide carousel-fade carousel-dark w-50" data-bs-ride="carousel" style=" float: left; margin-bottom: 60px;">
+			    <div id="carouselExampleFade" class="carousel slide carousel-fade carousel-dark w-50" data-bs-ride="carousel" style=" float: left; margin-bottom: 60px; z-index: 0;">
 				     <div class="carousel-inner" >
 				       <div class="carousel-item active"  th:each="list : ${list}" >
 				        <th:block th:if="${#strings.containsIgnoreCase(list.photoRename, 'jpg') 
@@ -142,7 +142,7 @@
 				   	 	 <img src="https://storage.googleapis.com/zangzac/image/yoonseo/%EB%86%80%EC%9D%B4%ED%84%B0.png">  
 				    	 <div style="text-align: center;" th:text="${info}"></div>
 				   </th:block>
-				   <th:block th:if="${info == '마트,편의점'}" >
+				   <th:block th:if="${info == '마트.편의점'}" >
 				   	 	 <img src="https://storage.googleapis.com/zangzac/image/yoonseo/%EB%A7%88%ED%8A%B8.%ED%8E%B8%EC%9D%98%EC%A0%90.png">  
 				    	 <div style="text-align: center;" th:text="${info}"></div>
 				   </th:block>
