@@ -187,8 +187,7 @@ public class SecondHandController {
 		System.out.println(result2);
 		System.out.println(list.size() + 1);
 		
-	    if (result1 + result2 == list.size() + 1) {
-	    	redirectAttributes.addAttribute("no", sp.getSpNo());
+	    if (result1 >= 0 && result2 >= 0) {
 	        return "redirect:secondHand.ah";
 	    } else {
 	        throw new secondHandException("게시판 등록 실패");
@@ -271,13 +270,6 @@ public class SecondHandController {
 	    // 상세사진 저장
 	    for (Photo a : detailList) {
 	        a.setBoardNo(sp.getSpNo());
-	        
-	        
-	        
-	        
-	        
-	        
-	        
 	        
 	    }
 	    
@@ -374,7 +366,6 @@ public class SecondHandController {
 		return "views/yoonahrim/chatingRoom";
 	}
 	
-	
 	public String deleteAttm(@RequestParam("spNo") int spNo, Model model) {
 		
 		int result = spService.deleteAttmForN(spNo);
@@ -388,7 +379,6 @@ public class SecondHandController {
 	
 	@GetMapping("admin.ah")
 	public String adminSecondPage(@ModelAttribute secondHandProduct sp, Model model, @RequestParam(value="page", defaultValue="1")int page, HttpServletRequest request) {
-		
 		
 		int listCount = spService.getListCount(4);
 		int currentPage = page;
