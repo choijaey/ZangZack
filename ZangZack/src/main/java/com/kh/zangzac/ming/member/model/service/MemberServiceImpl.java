@@ -2,10 +2,14 @@ package com.kh.zangzac.ming.member.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.ming.member.model.dao.MemberDAO;
 import com.kh.zangzac.ming.member.model.vo.Member;
 
@@ -53,8 +57,94 @@ public class MemberServiceImpl implements MemberService{
 		return mDAO.checkEmail(memberEmail);
 	}
 
-	
+	@Override
+	public int deleteMember(String memberId) {
+		return mDAO.deleteMember(memberId);
 	}
 
+	@Override
+	public int changePwd(HashMap<String, String> map) {
+		return mDAO.changePwd(map);
+	}
 	
+	//마이페이지 수정
+	@Override
+	public int updateMemberName(HashMap<String, String> map) {
+		return mDAO.updateMemberName(map);
+	}
 
+	@Override
+	public int updateMemberNickname(HashMap<String, String> map) {
+		return mDAO.updateMemberNickname(map);
+	}
+
+	@Override
+	public int updatememberPhone(HashMap<String, String> map) {
+		return mDAO.updatememberPhone(map);
+	}
+
+	@Override
+	public int updatememberEmail(HashMap<String, String> map) {
+		return mDAO.updatememberEmail(map);
+	}
+
+	@Override
+	public int updatememberAddress(HashMap<String, String> map) {
+		return mDAO.updatememberAddress(map);
+	}
+
+	@Override
+	public int updateMemberProfile(Member m) {
+		return mDAO.updateMemberProfile(m);
+	}
+	
+	//관리자페이지
+	@Override
+	public ArrayList<Member> selectMembers(int i, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return mDAO.selectMembers(i, rowBounds);
+	}
+
+	@Override
+	public int updateInfo(Properties prop) {
+		return mDAO.updateInfo(prop);
+	}
+
+	@Override
+	public int adminUpdateNickName(Member m) {
+		return mDAO.adminUpdateNickName(m);
+	}
+
+	@Override
+	public int adminUpdateName(Member m) {
+		return mDAO.adminUpdateName(m);
+	}
+
+	@Override
+	public int getListCount() {
+		return mDAO.getListCount();
+	}
+
+	@Override
+	public int searchList(HashMap<String, String> map) {
+		return mDAO.searchList(map);
+	}
+
+	@Override
+	public ArrayList<Member> searchtNoticeList(PageInfo pi, HashMap<String, String> map) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return mDAO.searchtNoticeList(map,rowBounds);
+	}
+
+
+
+	
+}
+
+	

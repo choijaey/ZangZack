@@ -18,7 +18,10 @@
 			<div id="resultDiv1" class="resultDiv">
 				<div style="display: inline-block;width:250px;height:200px;">
 					1.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview1')" name="coreFile"><br>
-					<img id="preview1" src="image/sohwa/icons8-camera-80.png">
+					<div class="image-container" style="display:inline-block; position: relative; text-align: center;">
+						<img id="preview1" src="image/sohwa/icons8-camera-80.png">
+						<p class="centered-text" style="position: absolute;top: 50%;left: 50%; transform: translate(-50%, -50%); font-size:20px; font-weight:bolder; color:gray;">[썸네일]</p>
+					</div>
 					<button style="margin-left:65px;">취소</button>
 				</div>
 			</div>
@@ -229,6 +232,7 @@
 				//첨부파일 비어있으면 일반게시글로 옮겨진다는 모달 뜨게함.
 				if(isEmpty){
 					alert('대표사진이 등록되지 않았습니다.\n다시 확인해주세요');
+					event.preventDefault();
 				}else{
 					//첨부파일 안 비워져있으면 form태그로 제출
 					// 대표 사진이 입력된 경우 옵션 값을 가져옴
@@ -243,8 +247,28 @@
 			            hiddenOptionInput.value = optionValue;
 			            document.getElementById('enrollForm').appendChild(hiddenOptionInput);
 			        }
-					form.submit();
+					
+					const files2 = document.getElementsByName('detailFile');
+					let detailIsEmpty = true;
+					for(const f of files2){
+						if(f.value != ''){
+							detailIsEmpty = false;
+						}
+					}
+					console.log(isEmpty);
+					console.log(detailIsEmpty);
+					if(detailIsEmpty){
+						event.preventDefault();
+						alert('상세사진이 등록되지 않았습니다. \n다시 확인해주세요.');
+						event.preventDefault();
+					}else{
+						form.submit();
+					}
 				}
+				
+				
+				
+				
 				
 			});
 		  

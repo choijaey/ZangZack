@@ -1,5 +1,9 @@
 package com.kh.zangzac.jaeyoung.campingFriend.model.vo;
 
+import java.util.ArrayList;
+
+import com.kh.zangzac.common.reply.model.vo.Reply;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,5 +25,7 @@ public class CampingFriend {
 	private int replyCount;
 	private int likeCount;
 	private String photoPath;
+	private ArrayList<Reply> replys;
+	private String likeStatus;
 
 }

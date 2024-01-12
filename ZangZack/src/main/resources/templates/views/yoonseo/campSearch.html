@@ -6,32 +6,29 @@
 <title>Insert title here</title>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-
 <style>
-   
+  .selected{
+     color:red;  
+  }
 </style>
-
+ 
 </head>
 <body>
        <div th:replace="~{common/navbar :: navbar}"></div>
-       
-       <button onclick="location.href='detailWrite.ys'"></button><br>
-       <button onclick="location.href='recommendWrite.ys'"></button>
-       
+        
 		 <div class="container">
-		  <form action="campList.go" method="Post">
+		  <form action="campSearchList.ys" method="Post">
 		     <div class="mb-4 rounded-3 " style="height:200px; margin-top: 100px; background-color: #F3F4F6;">
-		       <img src="image/yoonseo/img/icons8-country-100.png" style="float: left;">
-		       <div class="container-fluid py-4">
+		       <img src="image/yoonseo/img/icons8-camping-94.png" style="float: left; margin: 15px;">
+		       <div class="container-fluid " style="margin-top: 30px; padding-top: 50px;">
 		       	  <h2 class="display-8 fw-bold">캠핑장 검색</h2>
 		       </div>
-		          <h6>총 개 캠핑장이 검색되었습니다</h6>
 		       <hr style="width:90%">
 		       <div>
-		         <input type="text" placeholder="키워드 검색" style="margin-left: 20px; width:250px; height:30px; float: left; margin-right: 20px; ">
+		         <input type="text" name="keyword" placeholder="키워드 검색" style="margin-left: 20px; width:250px; height:40px; float: left; margin-right: 20px; ">
 		         <div class="search_boxes">
 		          <div class="search_box">
-		            <select name="city" id="" onchange="categoryChange(this)" style="float: left; margin-right: 10px; height:30px;">
+		            <select name="city" id="" onchange="categoryChange(this)" style="float: left; margin-right: 10px; height:40px;">
 		              <option value=>시/도 선택</option>
 		              <option value="general01">강원도</option>
 		              <option value="general02">경기도</option>
@@ -53,97 +50,63 @@
 		          </div>
 		          
 		          <div class="search_box">
-		            <select name="country" id="state"  style="height:30px; float: left; margin-right: 10px; ">
+		            <select name="country" id="state"  style="height:40px; float: left; margin-right: 10px; ">
 		              <option>군/구 선택</option>
 		            </select>
 		          </div>
 		          <div>
-		            <select style="height:30px; float: left;">
-		               <option >선택</option>
+		            <select style="height:40px; float: left;" name ="type">
+		               <option>선택</option>
 		               <option value="오토캠핑장">오토캠핑장</option>
-		               <option value="차박">차박</option>
-		               <option value="야영장">야영장</option>
+		               <option value="일반야영장">일반야영장</option>
 		               <option value="장박">장박</option>
 		               <option value="글램핑">글램핑</option>
 		               <option value="카라반">카라반</option>
 		            </select>   
 		          </div>
-		          <button class="btn btn-primary" type="button" style="background-color: #F9612B; border-color: #F9612B; margin-left: 10px; height:30px;">검색</button>
+		          <button class="btn btn-primary" type="submit" style="background-color: #F9612B; border-color: #F9612B; margin-left: 10px; height:40px;">검색</button>
 		       </div>
 		     </div>
 		  </div>
 		</form>
 		 <button onclick="firstMarkers()" style="border-radius: 5px; border: 1px solid #F3F4F6;background-color: #F3F4F6;">전체 보기</button>
+		 <button onclick="location.href='detailWrite.ys'" style="margin-left: 100px;"></button>
 		  <div class="container" style="border:1px solid #F3F4F6; width:100%; height:850px; border-radius: 10px;"> 
 		     
             <div id="map" style="width:900px; height: 800px; margin-left:5px; float:left; margin-top: 10px;position:relative;"></div>
                 
 		        <div style="float:right; width:350px; font-size: 15px;">
 			        <table class="table table-hover" id="campingTable" style="margin-right: 10px; margin-top: 20px;">
-					  <tr>
-					     <th class="table-th">
-					         <h5>[강원도]충주 카누 캠핑장캠핑장ㅁㅁㅁㅁㅁㅇㅇㅇ</h5>
-					         <h6>강원 정선군 신동읍 동강로 916-212</h6>
-					         <h6>02)123-123</h6>
-					     </th>
-					  </tr>
-					  <tr>
-					     <th class="table-th">
-					         <h5>[강원도]zzz</h5>
-					         <h6>인천 서구 정서진로 500 (오류동)</h6>
-					         <h6>02)123-123</h6>
-					     </th>
-					  </tr>
-					  <tr>
-					     <th class="table-th">
-					         <h5>[강원도]fdhdf</h5>
-					         <h6>강원 정선군 신동읍 동강로 916-212</h6>
-					         <h6>02)123-123</h6>
-					     </th>
-					  </tr>
-					   <tr>
-					     <th class="table-th">
-					         <h5>[강원도]tttttttt</h5>
-					         <h6>경기 용인시 처인구 원삼면 원양로591번길 93-34</h6>
-					          <h6>02)123-123</h6>
-					     </th>
-					  </tr>
-					   <tr>
-					     <th class="table-th">
-					         <h5>[강원도]yyyyyyyyyyyyy</h5>
-					         <h6>강원 정선군 신동읍 동강로 916-212</h6>
-					         <h6>02)123-123</h6>
-					     </th>
-					  </tr>
-					  <tr>
-					     <th class="table-th">
-					         <h5>[강원도]hhhhhhhh</h5>
-					         <h6>강원 정선군 신동읍 동강로 916-212</h6>
-					         <h6>02)123-123</h6>
-					     </th>
-					  </tr>
-					  <tr>
-					     <th class="table-th">
-					         <h5>[강원도]hhhhhhhh</h5>
-					         <h6>강원 정선군 신동읍 동강로 916-212</h6>
-					         <h6>02)123-123</h6>
-					     </th>
-					  </tr>
-					   
+					  <tbody> 
+						  <tr th:each = "list : ${cList}">
+						     <th class="table-th" style="cursor:pointer;">
+						         <h5 style="display: inline;" th:text="|[${list.cgRegion}]|"></h5>
+						         <h5 style="display: inline;">[[${list.cgName}]]</h5>
+						         <h6>[[${list.cgAddress}]]</h6>
+						         <h6>[[${list.cgPhone}]]</h6>
+						         <input type="hidden" th:value="${list.cgNo}" name ="cgNo">
+						     </th>
+						  </tr>
+					  </tbody>  
 			       </table>
-			        <nav aria-label="Page navigation example">
-					  <ul class="pagination pagination justify-content-center">
+			        <nav aria-label="Page navigation example" th:with="loc=${loc}">
+					  <ul class="pagination justify-content-center">
 					    <li class="page-item">
-					      <a class="page-link" href="#" aria-label="Previous">
-					        <span aria-hidden="true" style="color:#F9612B;">&laquo;</span>
+					      <a class="page-link"  th:href="@{${loc}(page=${pi.currentPage-1})}" aria-label="Previous">
+					        <span aria-hidden="true" style="color:#F9612B;">< 이전 </span>
 					      </a>
 					    </li>
-					    <li class="page-item" ><a class="page-link" href="#" style="color:#F9612B;">1</a></li>
-					    <li class="page-item"><a class="page-link" href="#" style="color:#F9612B;">2</a></li>
-					    <li class="page-item" ><a class="page-link" href="#" style="color:#F9612B;">3</a></li>
+					    <li class="page-item"  th:each ="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+					      <th:block th:if="${pi.currentPage == p}">
+					         <a class="page-link" th:href="@{${loc}(page=${p})}" style="color:#F9612B;">[[${p}]]</a>
+					      </th:block>
+					      <th:block th:if="${pi.currentPage != p}">
+					         <a class="page-link" th:href="@{${loc}(page=${p})}" style="color:#F9612B;">[[${p}]]</a>
+					      </th:block>
+					    </li>
 					    <li class="page-item">
-					      <a class="page-link" href="#" aria-label="Next">
-					        <span aria-hidden="true" style="color:#F9612B;">&raquo;</span>
+					      <a class="page-link" th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next">
+					        <span aria-hidden="true" style="color:#F9612B;">다음 ></span>
 					      </a>
 					    </li>
 					  </ul>
@@ -234,34 +197,57 @@ function categoryChange(e) {
 		// 주소-좌표 변환 객체를 생성합니다
 		const geocoder = new kakao.maps.services.Geocoder();
 		
-		const positions = [
+		/*<![CDATA[*/
+		const mapList = /*[[${mapList}]]*/1;
+		  /*]]>*/ 
+		console.log(mapList);
+		
+		const positions = [];
+		for(let i = 0; i < mapList.length; i++){
+			positions.push({
+				name:mapList[i].cgName,
+				address:mapList[i].cgAddress,
+				phone : mapList[i].cgPhone,
+				no: mapList[i].cgNo,
+				region: mapList[i].cgRegion
+				
+			});
+		}
+		console.log(positions);
+		
+		
+		/* const positions = [
 			{	title: '카카오',
 				address: '제주특별자치도 제주시 첨단로 242',
+				phone:'010-1111-1111',
+				region:'ddd'
 				
 			},
 			{
 				title: '생태연못',
-				address: '경기 남양주시 조안면 능내리 50'
+				address: '경기 남양주시 조안면 능내리 50',
+				phone:'010-1111-1111'
 			},
 			{
 				title: '근린공원',
-				address: '경기 남양주시 별내면 청학로68번길 40'
+				address: '경기 남양주시 별내면 청학로68번길 40',
+				phone:'010-1111-1111'
 			}
-	    ];
+	    ]; */
 		
 		
 		
 		
 		// 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
 		  const bounds = new kakao.maps.LatLngBounds(); //추가한 코드
-		  
+		  let testPage = /*[[${pi.currentPage}]]*/1;
 		
 		  // 마커를 담을 배열입니다
 		  const markers = [];
 
 		 function firstMarkers(){
 			 
-			  positions.forEach(function (position,phone) {
+			  positions.forEach(function (position) {
 			    // 주소로 좌표를 검색합니다
 			    geocoder.addressSearch(position.address, function(result, status) {
 	
@@ -281,9 +267,15 @@ function categoryChange(e) {
 			        // LatLngBounds 객체에 좌표를 추가합니다
 			        bounds.extend(coords); //추가한 코드, 현재 코드에서 좌표정보는 point[i]가 아닌 coords이다.
 			        
+			        
 			     // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-			        const iwContent = '<div style="width:150px; text-align:center; padding:2px 0;">' + position.title + '<br>010-0000-0000 <a href="selectCamp.ys" style="color:blue" target="blank">상세보기</a></div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-	
+			        const iwContent = '<div style="width:200px; text-align:center; padding:2px 0;">[' 
+			                            + position.region+']' + position.name + '<br>'+ position.phone 
+			                            +'<br> <a href="campDetail.ys?no=' 
+			                            + position.no + '&page=' 
+			                            + testPage + '" style="color:blue" target="blank">상세보기</a></div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+					
+	              
 			        // 인포윈도우로 장소에 대한 설명을 표시합니다
 			        const infowindow = new kakao.maps.InfoWindow({
 			          content: iwContent
@@ -346,13 +338,15 @@ function categoryChange(e) {
 		      
 		        for(th of ths){
 			        th.addEventListener('click',function(){
-		        	    const campName = this.children[0].textContent;
-		        		const location = this.children[1].textContent;
-		        		const phone = this.children[2].textContent;
+		        	    const region = this.children[0].textContent;
+			        	const campName = this.children[1].textContent;
+		        		const location = this.children[2].textContent;
+		        		const phone = this.children[3].textContent;
+		        		const no = this.children[4].value;
 		        		clearMarkers();
 		        		
 		        		// 클릭한 div에 대응되는 새로운 마커 생성
-		        	    createMarker(location, campName, phone);
+		        	    createMarker(no, region, location, campName, phone);
 		        		
 		        		
 	
@@ -360,7 +354,7 @@ function categoryChange(e) {
 			        
 		        }
 		        let currentInfowindow  = null;
-		        function createMarker(location, campName ,phone) {
+		        function createMarker(no, region, location, campName, phone) {
 		        	
 		        	console.log('test');
 		            // divId에 대응되는 새로운 마커를 생성하고 지도에 표시
@@ -386,8 +380,12 @@ function categoryChange(e) {
 		                    
 
 		                    // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-		                    const iwContent = '<div style="width:200px; height:100px; text-align:center; padding:2px 0;">' + campName + '<br>'+ phone +'<br><a href="selectCamp.ys" style="color:blue" target="blank">상세보기</a></div>'; 
-		                    const infowindow = new kakao.maps.InfoWindow({
+		                    const iwContent = '<div style="width:200px; height:100px; text-align:center; padding:2px 0;">' 
+		                                      +region +campName + '<br>'+ phone +'<br><a href="campDetail.ys?no=' 
+                                              + no + '&page=' 
+                                              + testPage + '" style="color:blue" target="blank">상세보기</a></div>'; 
+		                    
+                            const infowindow = new kakao.maps.InfoWindow({
 		                        content: iwContent
 		                    });
 							
@@ -439,11 +437,9 @@ function categoryChange(e) {
 		        	firstMarkers();
 		        }
 		     
-		     
-		    
-		        
-		    
-		        
+		       
+		       
+		       
 		   
 </script>
 

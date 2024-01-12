@@ -54,24 +54,19 @@ table{
 }
 
 .td4{
-	width: 16%;
+	width: 20%;
 }
 .td5{
 	width: 7%;
 }
-.td8,.td9,.td10,.td11{
-	width: 6%;
+
+.td6{
+	width: 10%;
 }
 
-td.td6 {
-    max-width: 500px; /* 최대 너비를 지정 (원하는 값으로 조절) */
-    white-space: normal; /* 기본 줄 바꿈 허용 */
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* 표시할 최대 줄 수 */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.td7,.td8,.td9,.td10{
+	width: 6%;
+}
 
 tr{
    height:40px;

@@ -55,6 +55,10 @@
 		where review_no = #{reviewNo}
 	</update>
 	
+	<delete id="deleteReviewPhoto">
+		delete from photo
+		where board_type = 6 and board_no = #{reviewNo}
+	</delete>
 	
 	<select id="deleteSelectReview" resultType="string">
 		select photo_rename
@@ -151,6 +155,25 @@
 		</if>
 	</select>
 	
+	<select id="searchPhototh" resultType="Attachment">
+		select *
+		from photo
+			 join product on (board_no = product_no)
+		where photo_status = 'N' and product_name like '%${keyword}%' and photo_level in (0,1)
+		<if test="standard==1">
+			order by product_no desc
+		</if>
+		<if test="standard==2">
+			order by product_price
+		</if>
+		<if test="standard==3">
+			order by product_price desc
+		</if>
+		<if test="standard==4">
+			order by product_score desc
+		</if>
+	</select>
+	
 	
 	
 	<select id="selectProductList" resultType="Product">
@@ -190,12 +213,22 @@
 		order by board_no
 	</select>
 	
+	<select id="selectPhotothList" resultType="Attachment">
+		select *
+		from photo
+			 join product on (product_no = board_no)
+		where photo_status = 'N' and photo_level in (0,1)
+		<if test="categoryNo != 0">
+			and category_no = #{categoryNo}
+		</if>
+		order by board_no
+	</select>
 	
 	
 	<select id="selectProductDetail" resultType="Product">
 		select *
 		from product
-		where product_status='N' and product_no = #{productNo}
+		where product_no = #{productNo}
 	</select>
 	
 	
@@ -203,14 +236,14 @@
 		select *
 		from photo
 			  join product on (product_no = board_no)
-		where product_no = #{productNo}
+		where product_no = #{productNo} and photo_status='N'
 	</select>
 	
 	<select id="selectPhotoReview" resultType="Attachment">
 		select *
 		from photo 
 			 join review on (review_no = board_no)
-		where product_No = #{productNo}
+		where product_No = #{productNo} and photo_status='N'
 	</select>
 	
 	<select id="optionDetail" resultType="Option">
@@ -279,7 +312,7 @@
       from cart 
           join product using (product_no)
           join photo on (board_no=product_no)
-      where member_id=#{id} and photo_level=0
+      where member_id=#{id} and photo_level=0 and photo_status='N'
    </select>
    
    <select id="selectAllOption">
@@ -387,7 +420,7 @@
 	<update id="updateAnswer">
 		update qna
 		set answer_content=#{answerContent}, answer_date = sysdate
-		where question_no = #{questionNo}
+		where question_no = #{questionNo} and question_status ='N'
 	</update>
 	
 	<select id="selectProductQna" resultType="Qna">
@@ -463,6 +496,70 @@
 		where review_no = #{reviewNo}
 	</update>
 	
+	<update id="updateYProduct">
+		update product
+		set product_status='Y'
+		where product_no in
+		<foreach item="productNo" collection="list" open="(" separator="," close=")">
+			#{productNo}
+		</foreach>
+	</update>
+	
+	<select id="selectYPhoto" resultType="string">
+		select photo_rename
+		from photo
+		where board_type = 5 and board_no in
+		<foreach collection="list" item="productNo"  open="(" separator="," close=")">
+			#{productNo}
+		</foreach>
+	</select>
+	
+	<update id="updateYPhoto">
+		update photo
+		set photo_status='Y'
+		where board_type=5 and board_no in
+		<foreach collection="list" item="productNo"  open="(" separator="," close=")">
+			#{productNo}
+		</foreach>
+	</update>
+	
+	<delete id="deleteOption">
+		delete from product_option
+		where product_no = #{productNo}
+	</delete>
+	
+	
+	<update id="deleteProductPhoto">
+		delete from photo
+		where photo_rename in
+		<foreach item="rename" collection="list" open="(" separator="," close=")">
+			#{rename}
+		</foreach>
+	</update>
+	
+	<update id="updateProductPhotoY">
+		update photo
+		set photo_status = 'N'
+		where photo_rename in
+		<foreach item="item" collection="list" open="(" separator="," close=")">
+			#{item.photoRename}
+		</foreach>
+	</update>
+	
+	<update id="updateProduct">
+		update product
+		set product_name = #{productName} , product_price= #{productPrice}, category_no = #{categoryNo}, product_company=#{productCompany}, delivery_price = #{deliveryPrice}
+		where product_no = #{productNo} and product_status = 'Y'
+	</update>
+	
+	
+	<update id="updatePhotoLevel">
+		update photo
+		set photo_level = 0
+		where photo_no = (select min(photo_no)
+						 from photo
+						 where board_no = #{productNo} and board_type=5)
+	</update>
 	
 	
 </mapper>

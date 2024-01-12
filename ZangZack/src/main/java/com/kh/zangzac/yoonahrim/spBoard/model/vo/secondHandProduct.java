@@ -1,4 +1,4 @@
-package com.kh.zangzac.yoonahrim.model.vo;
+package com.kh.zangzac.yoonahrim.spBoard.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,4 +22,6 @@ public class secondHandProduct {
 	private String memberId;
 	private int categoryNo;
 	private String spIsBook;
+	
+	private String categoryName;
 }

@@ -2,9 +2,13 @@ package com.kh.zangzac.ming.member.model.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.ming.member.model.vo.Member;
 
 
@@ -28,5 +32,37 @@ public interface MemberDAO {
 	
 	//이메일 중복체크
 	int checkEmail(String memberEmail);
+
+	//회원탈퇴
+	int deleteMember(String memberId);
+
+	int changePwd(HashMap<String, String> map);
+
+	//마이페이지
+	int updateMemberName(HashMap<String, String> map);
+
+	int updateMemberNickname(HashMap<String, String> map);
+
+	int updatememberPhone(HashMap<String, String> map);
+
+	int updatememberEmail(HashMap<String, String> map);
+
+	int updatememberAddress(HashMap<String, String> map);
+
+	int updateMemberProfile(Member m);
+
+	ArrayList<Member> selectMembers(int i, RowBounds rowBounds);
+
+	int updateInfo(Properties prop);
+
+	int adminUpdateNickName(Member m);
+
+	int adminUpdateName(Member m);
+
+	int getListCount();
+
+	int searchList(HashMap<String, String> map);
+
+	ArrayList<Member> searchtNoticeList(HashMap<String, String> map, RowBounds rowBounds);
 
 }

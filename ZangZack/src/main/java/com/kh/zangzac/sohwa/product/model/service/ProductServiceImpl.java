@@ -265,6 +265,64 @@ public class ProductServiceImpl implements ProductService{
 		return pDAO.updateReviewPhoto(a);
 	}
 
+	@Override
+	public void deleteReviewPhoto(int reviewNo) {
+		pDAO.deleteReviewPhoto(reviewNo);
+	}
+
+	@Override
+	public ArrayList<Attachment> selectPhotothList(String categoryNo) {
+		return pDAO.selectPhotothList(categoryNo);
+	}
+
+	@Override
+	public ArrayList<Attachment> searchPhototh(HashMap<String, String> searchMap) {
+		return pDAO.searchPhototh(searchMap);
+	}
+
+	@Override
+	public int updateYProduct(ArrayList<String> checkBoxArr) {
+		return pDAO.updateYProduct(checkBoxArr);
+	}
+
+	@Override
+	public ArrayList<String> selectYPhoto(ArrayList<String> checkBoxArr) {
+		return pDAO.selectYPhoto(checkBoxArr);
+	}
+
+	@Override
+	public void updateYPhoto(ArrayList<String> checkBoxArr) {
+		pDAO.updateYPhoto(checkBoxArr);
+	}
+
+	@Override
+	public void deleteOption(int productNo) {
+		pDAO.deleteOption(productNo);
+		
+	}
+
+	@Override
+	public int deleteProductPhoto(ArrayList<String> delRename) {
+		return pDAO.deleteProductPhoto(delRename);
+	}
+
+	@Override
+	public int updateProductPhotoY(ArrayList<Attachment> coreList) {
+		return pDAO.updateProductPhotoY(coreList);
+	}
+
+	@Override
+	public int updateProduct(Product p) {
+		return pDAO.updateProduct(p);
+	}
+
+	@Override
+	public void updatePhotoLevel(int productNo) {
+		pDAO.updatePhotoLevel(productNo);
+		
+	}
+
+
 
 
 

@@ -109,6 +109,29 @@ public interface ProductService {
 
 	int updateReviewPhoto(Attachment a);
 
+	void deleteReviewPhoto(int reviewNo);
+
+	ArrayList<Attachment> selectPhotothList(String categoryNo);
+
+	ArrayList<Attachment> searchPhototh(HashMap<String, String> searchMap);
+
+	int updateYProduct(ArrayList<String> checkBoxArr);
+
+	ArrayList<String> selectYPhoto(ArrayList<String> checkBoxArr);
+
+	void updateYPhoto(ArrayList<String> checkBoxArr);
+
+	void deleteOption(int productNo);
+
+	int deleteProductPhoto(ArrayList<String> delRename);
+
+	int updateProductPhotoY(ArrayList<Attachment> coreList);
+
+	int updateProduct(Product p);
+
+	void updatePhotoLevel(int productNo);
+
+
 
 
 	

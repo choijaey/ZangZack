@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link href="css/sohwa/(admin)productList.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
 
@@ -13,12 +14,12 @@
 	
 	<div id="productListWrapped">
 		<h1>상품 관리</h1>
+		<p>상품삭제를 하게되면, 상품의 정보는 보관되지만 사진은 영구삭제됩니다.</p>
 		<br>
 		<div style="float:right;">
-			<a href="productListN.so" style="margin-right:460px; text-decoration:none; color:gray;" id="trash"><img src="image/sohwa/icons8-trash-64.png" >휴지통</a>
+			<a href="productListN.so" style="text-decoration:none; color:gray;" id="trash">휴지통<img src="image/sohwa/icons8-trash-64.png" ></a>
 			<button class="custom-btn btn-4" onclick="enrollPage();">상품등록</button>
-			<th:block th:if="${pageStatus=='Y'}"><button class="custom-btn btn-5" onclick="updateStatus();">선택삭제</button></th:block>
-			<th:block th:if="${pageStatus=='N'}"><button class="custom-btn btn-5" onclick="updateStatus();">선택복구</button></th:block>
+			<th:block th:if="${pageStatus=='Y'}"><button class="custom-btn btn-5" id="checkDelete">선택삭제</button></th:block>
 			<div class="dropdown">
 	             <button class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-expanded="false">
 	                 주문번호 검색
@@ -56,7 +57,10 @@
 			
 			<th:block th:each="p:${pList}">
 				<tr th:each="a:${aList}" th:if="${ p.productNo eq a.boardNo && a.photoLevel==0 }">
-					<td><input type="checkbox"><input type="hidden" name="productNo" th:value="${p.productNo}"></td>
+					<td>
+						<input type="checkbox" name="dc">
+						<input type="hidden" name="productNo" th:value="${p.productNo}">
+					</td>
 					<td>[[${p.productNo}]]</td>
 					<td><img th:src="${a.photoPath}"></td>
 					<td>[[${p.productName}]]</td>
@@ -108,7 +112,7 @@
 	
 	
 	
-	<script>
+	<script th:inline="javascript">
 		//체크박스 전체선택
         document.addEventListener('DOMContentLoaded', function () {
             const allSelectCheckbox = document.getElementById('allSelect');
@@ -157,15 +161,57 @@
         	location.href='productDetail.so?productNo=' + productNo;
         }
         
+        
         //상품수정페이지 이동
         function productUpdate(productNo){
         	location.href='adminProductUpdate.so?productNo=' + productNo;
         }
         
+        
+        
         //상품삭제 및 복구
-        function updateStatus(){
+        document.getElementById('checkDelete').addEventListener('click',function(){
+
+			let selectedProducts = [];
+
+            $('input[type="checkbox"]:checked').each(function() {
+                let productNo = $(this).closest('tr').find('input[name="productNo"]').val();
+                selectedProducts.push(productNo);
+            });
+            
+			let real = confirm('정말 삭제하시겠습니까?');
+			
+			if(real){
+				$.ajax({
+	            	url:'updateStatus.so',
+	            	data:{checked:selectedProducts}, //숫자배열
+	            	success:(data)=>{
+	            		if(data=='성공'){
+	            			location.reload();
+	            		}else{
+	            			alert('상품삭제에 실패');
+	            		}
+	            		
+	            	},error:data=>console.log(data)
+	            })
+			}
+			
+			
+            
+            
+            
+            
+            
+        })
+            
+            
+            
+            
         	
-        }
+        
+        
+        
+        
     </script>
 
 </body>
