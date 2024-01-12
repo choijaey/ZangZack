@@ -9,11 +9,11 @@
 <link href="css/yoonahrim/secondHandList.css?after" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-	<div th:replace="~{common/navbar :: navbar}"></div>
+	<div th:replace="~{common/navbar :: navbar}" th:each="s : ${sList}"></div>
 	
 	<!-- 게시판 navbar -->
 	<a id="back-to-top"><img src='image/seongun/topBtn.png' style='width:38px; height:38px;'></a>
-    
+    <button type="button" th:onclick="location.href='admin.ah'"></button>
     <div id="content">
         <div id="space_zone">
             <p>
@@ -69,335 +69,38 @@
       <!-- CARD-->
       <div class="container text-center">
          <div class="row g-3">
-               <div class="col">
-               <a class="card-link " th:onclick="location.href='detail.ah'">
-                   <div class="card-photo">
-                       <img src="image/yoonahrim/예시_등불.PNG" alt="캠핑사진" style="cursor: pointer">
-                   </div>
-                      <div class="card-desc">
-                        <div class="card-title">SK매직 전자렌지
-                              <div class="selectCategory">백패킹</div>
-                        </div>
-                        <div class="card-price"><b>
-                          30,000원
-                        </b></div>
-                        <div class="card-region-name">
-                          서울 중랑구 면목제2동
-                        </div>
-                        <div class="card-counts">
-                            <span>
-                              관심 6
-                            </span>
-                          ∙
-                            <span>
-                              채팅 10
-                            </span>
-                        </div>
-                   </div>
-               </a>
-            </div>
-            <div class="col">
-               <a class="card-link " th:onclick="location.href='detail.ah'">
-                   <div class="card-photo">
-                       <img src="image/yoonahrim/예시_등불.PNG" alt="캠핑사진" style="cursor: pointer">
-                   </div>
-                      <div class="card-desc">
-                        <div class="card-title">SK매직 전자렌지
-                              <div class="selectCategory">백패킹</div>
-                        </div>
-                        <div class="card-price"><b>
-                          30,000원
-                        </b></div>
-                        <div class="card-region-name">
-                          서울 중랑구 면목제2동
-                        </div>
-                        <div class="card-counts">
-                            <span>
-                              관심 6
-                            </span>
-                          ∙
-                            <span>
-                              채팅 10
-                            </span>
-                        </div>
-                   </div>
-               </a>
-            </div>
-            <div class="col">
-               <a class="card-link " th:onclick="location.href='detail.ah'">
-                   <div class="card-photo">
-                       <img src="image/yoonahrim/예시_등불.PNG" alt="캠핑사진" style="cursor: pointer">
-                   </div>
-                      <div class="card-desc">
-                        <div class="card-title">SK매직 전자렌지
-                              <div class="selectCategory">백패킹</div>
-                        </div>
-                        <div class="card-price"><b>
-                          30,000원
-                        </b></div>
-                        <div class="card-region-name">
-                          서울 중랑구 면목제2동
-                        </div>
-                        <div class="card-counts">
-                            <span>
-                              관심 6
-                            </span>
-                          ∙
-                            <span>
-                              채팅 10
-                            </span>
-                        </div>
-                   </div>
-               </a>
-            </div>
-            <div class="col">
-               <a class="card-link " href="#">
-                   <div class="card-photo">
-                       <img src="image/yoonahrim/임시_배경이미지.jpg" alt="캠핑사진">
-                   </div>
-                      <div class="card-desc">
-                        <div class="card-title">SK매직 전자렌지
-                              <div class="selectCategory">백패킹</div>
-                        </div>
-                        <div class="card-price"><b>
-                          30,000원
-                        </b></div>
-                        <div class="card-region-name">
-                          서울 중랑구 면목제2동
-                        </div>
-                        <div class="card-counts">
-                            <span>
-                              관심 6
-                            </span>
-                          ∙
-                            <span>
-                              채팅 10
-                            </span>
-                        </div>
-                   </div>
-               </a>
-            </div>
-            </div>
-            <div class="row g-3">
-               <div class="col">
-               <a class="card-link " href="#">
-                   <div class="card-photo">
-                       <img src="image/yoonahrim/임시_배경이미지.jpg" alt="캠핑사진">
-                   </div>
-                      <div class="card-desc">
-                        <div class="card-title">SK매직 전자렌지
-                              <div class="selectCategory">백패킹</div>
-                        </div>
-                        <div class="card-price"><b>
-                          30,000원
-                        </b></div>
-                        <div class="card-region-name">
-                          서울 중랑구 면목제2동
-                        </div>
-                        <div class="card-counts">
-                            <span>
-                              관심 6
-                            </span>
-                          ∙
-                            <span>
-                              채팅 10
-                            </span>
-                        </div>
-                   </div>
-               </a>
-            </div>
-            <div class="col">
-               <a class="card-link " href="#">
-                   <div class="card-photo">
-                       <img src="image/yoonahrim/임시_배경이미지.jpg" alt="캠핑사진">
-                   </div>
-                      <div class="card-desc">
-                        <div class="card-title">SK매직 전자렌지
-                              <div class="selectCategory">백패킹</div>
-                        </div>
-                        <div class="card-price"><b>
-                          30,000원
-                        </b></div>
-                        <div class="card-region-name">
-                          서울 중랑구 면목제2동
-                        </div>
-                        <div class="card-counts">
-                            <span>
-                              관심 6
-                            </span>
-                          ∙
-                            <span>
-                              채팅 10
-                            </span>
-                        </div>
-                   </div>
-               </a>
-            </div>
-            <div class="col">
-               <a class="card-link " href="#">
-                   <div class="card-photo">
-                       <img src="image/yoonahrim/임시_배경이미지.jpg" alt="캠핑사진">
-                   </div>
-                      <div class="card-desc">
-                        <div class="card-title">SK매직 전자렌지
-                              <div class="selectCategory">백패킹</div>
-                        </div>
-                        <div class="card-price"><b>
-                          30,000원
-                        </b></div>
-                        <div class="card-region-name">
-                          서울 중랑구 면목제2동
-                        </div>
-                        <div class="card-counts">
-                            <span>
-                              관심 6
-                            </span>
-                          ∙
-                            <span>
-                              채팅 10
-                            </span>
-                        </div>
-                   </div>
-               </a>
-            </div>
-            <div class="col">
-               <a class="card-link " href="#">
-                   <div class="card-photo">
-                       <img src="image/yoonahrim/임시_배경이미지.jpg" alt="캠핑사진">
-                   </div>
-                      <div class="card-desc">
-                        <div class="card-title">SK매직 전자렌지
-                              <div class="selectCategory">백패킹</div>
-                        </div>
-                        <div class="card-price"><b>
-                          30,000원
-                        </b></div>
-                        <div class="card-region-name">
-                          서울 중랑구 면목제2동
-                        </div>
-                        <div class="card-counts">
-                            <span>
-                              관심 6
-                            </span>
-                          ∙
-                            <span>
-                              채팅 10
-                            </span>
-                        </div>
-                   </div>
-               </a>
-            </div>
-            </div>
-            <div class="row g-3">
-               <div class="col">
-               <a class="card-link " href="#">
-                   <div class="card-photo">
-                       <img src="image/yoonahrim/임시_배경이미지.jpg" alt="캠핑사진">
-                   </div>
-                      <div class="card-desc">
-                        <div class="card-title">SK매직 전자렌지
-                              <div class="selectCategory">백패킹</div>
-                        </div>
-                        <div class="card-price"><b>
-                          30,000원
-                        </b></div>
-                        <div class="card-region-name">
-                          서울 중랑구 면목제2동
-                        </div>
-                        <div class="card-counts">
-                            <span>
-                              관심 6
-                            </span>
-                          ∙
-                            <span>
-                              채팅 10
-                            </span>
-                        </div>
-                   </div>
-               </a>
-            </div>
-            <div class="col">
-               <a class="card-link " href="#">
-                   <div class="card-photo">
-                       <img src="image/yoonahrim/임시_배경이미지.jpg" alt="캠핑사진">
-                   </div>
-                      <div class="card-desc">
-                        <div class="card-title">SK매직 전자렌지
-                              <div class="selectCategory">백패킹</div>
-                        </div>
-                        <div class="card-price"><b>
-                          30,000원
-                        </b></div>
-                        <div class="card-region-name">
-                          서울 중랑구 면목제2동
-                        </div>
-                        <div class="card-counts">
-                            <span>
-                              관심 6
-                            </span>
-                          ∙
-                            <span>
-                              채팅 10
-                            </span>
-                        </div>
-                   </div>
-               </a>
-            </div>
-            <div class="col">
-               <a class="card-link " href="#">
-                   <div class="card-photo">
-                       <img src="image/yoonahrim/임시_배경이미지.jpg" alt="캠핑사진">
-                   </div>
-                      <div class="card-desc">
-                        <div class="card-title">SK매직 전자렌지
-                              <div class="selectCategory">백패킹</div>
-                        </div>
-                        <div class="card-price"><b>
-                          30,000원
-                        </b></div>
-                        <div class="card-region-name">
-                          서울 중랑구 면목제2동
-                        </div>
-                        <div class="card-counts">
-                            <span>
-                              관심 6
-                            </span>
-                          ∙
-                            <span>
-                              채팅 10
-                            </span>
-                        </div>
-                   </div>
-               </a>
-            </div>
-            <div class="col">
-               <a class="card-link " href="#">
-                   <div class="card-photo">
-                       <img src="image/yoonahrim/임시_배경이미지.jpg" alt="캠핑사진">
-                   </div>
-                      <div class="card-desc">
-                        <div class="card-title">SK매직 전자렌지
-                              <div class="selectCategory">백패킹</div>
-                        </div>
-                        <div class="card-price"><b>
-                          30,000원
-                        </b></div>
-                        <div class="card-region-name">
-                          서울 중랑구 면목제2동
-                        </div>
-                        <div class="card-counts">
-                            <span>
-                              관심 6
-                            </span>
-                          ∙
-                            <span>
-                              채팅 10
-                            </span>
-                        </div>
-                   </div>
-               </a>
-            </div>
-         </div>   
+               <div class="col-md-3" th:each="s: ${sList}" style="margin-bottom:100px;">
+	               <a class="card-link " th:onclick="|location.href='detail.ah?spNo=${s.spNo}'|">
+	                   <th:block th:each="a : ${aList}" th:if="${a.boardNo eq s.spNo}">
+		                   <div class="card-photo" th:if="${a.photoLevel == 0}">
+			                       <img th:src="${a.photoPath}" alt="캠핑사진" style="cursor: pointer">
+		                   </div>
+	                   </th:block>
+	                   <div class="card-desc">
+	                     <div class="card-title">[[${#strings.length(s.spTitle) > 6 ? #strings.substring(s.spTitle, 0, 6) + '...' : s.spTitle}]]
+	                           <div class="selectCategory">[[${s.categoryName}]]</div>
+	                     </div>
+	                     <div class="card-price">
+	                     	<b>
+	                       		[[${#numbers.formatInteger(s.spPrice, 0, 'COMMA')}]]원
+	                     	</b>
+	                     </div>
+	                     <div class="card-region-name">
+	                       	[[${#strings.length(s.spAddress) > 12 ? #strings.substring(s.spAddress, 0, 12) + '...' : s.spAddress}]]
+	                     </div>
+	                     <div class="card-counts">
+	                         <span>
+	                           관심 6
+	                         </span>
+	                       ∙
+	                         <span>
+	                           채팅 10
+	                         </span>
+	                     </div>
+	                </div>
+	               </a>
+            	</div>
+         	</div>   
          </div>
      </div>
    
@@ -429,6 +132,13 @@
                 document.getElementById('back-to-top').classList.remove('show');
             });
         });
-    </script>
+        
+        
+        
+        
+    
+
+    
+</script>
 </body>
 </html>

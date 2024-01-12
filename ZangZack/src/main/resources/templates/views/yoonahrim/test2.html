@@ -99,24 +99,6 @@
       </nav>
    </div>
 
-	<div class="modal fade" id="exampleModalCenteredScrollable" tabindex="-1" aria-labelledby="exampleModalCenteredScrollableTitle" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="exampleModalCenteredScrollableTitle"></h1>
-					<div class="modal-body" style="text-align: right; font-size: 14px;"></div>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body"></div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" data-bs-dismiss="modal">게시글 올리기</button>
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
 
    <script>
       //체크박스 전체 선택/해제
@@ -140,93 +122,131 @@
         }
       
       //모달창
-      window.onload = () => {
-				const contents = document.querySelectorAll('.allOrder');
-				const statusBtn = document.querySelector('.modal-footer').querySelector('button');
-				
-				let thisContent = null;
-				for(const content of contents){
-					content.addEventListener('click', function(){
-						thisContent = this;
-						const boardNo = content.querySelector('.td3').value;
-						const boardTitle = content.querySelector('td4').innerText;
-						const boardContent = content.querySelector('td4').nextElementSibling.innerText;
-						const boardWriter = content.querySelector('.td3').innerText;
-						const boardStatus = content.nextElementSibling.innerText;
-						/*<![CDATA[*/
-						const aList = /*[[${aList}]]*/null;
-						/*]]>*/
-						
-						document.getElementById('exampleModalCenteredScrollableTitle').innerText = spTitle;
-						const modalBody = document.querySelectorAll('.modal-body');
-						modalBody[0].innerText = '작성자 : ' + memberId;
-						modalBody[1].innerHTML = spContent + "<br><br>";
-						
-						for(const a of aList){
-							if(boardNo == a.memberId){
-								if(a.renameName.toLowerCase().includes('jpg') || a.renameName.toLowerCase().includes('png')){
-									modalBody[1].innerHTML += '<img src="' + a.renameName + '"width="100%" height="200"><br><br>';
-								}else{
-									modalBody[1].innerHTML += '<div style="text-align: center; color: white; background: lightgrey; width: 100%; height: 200px; line-height: 200px;"> no image(' + attm.originalName + ")</div><br>";
-								}
-							}
+      const tds = document.getElementsByTagName('td');
+			let beforeData = null;
+			
+			document.querySelector('body').addEventListener('click', (event) => {
+				for(let i = 0; i < tds.length; i++){
+					if(tds[i].children[0] != undefined && tds[i].children[0].value != undefined){
+						if(event.target.value == undefined){
+							tds[i].innerHTML = '<td>'+ beforeData + '</td>';
 						}
-						
-						if(boardStatus == '게시 중'){
-							statusBtn.innerText = '게시 중';
-							statusBtn.className = 'btn btn-primary';
-						}else{
-							statusBtn.innerText = '게시 중단';
-							statusBtn.className = 'btn btn-dark';
-						}
-					});
+					}
 				}
-			}
+			})
 			
-			statusBtn.addEventListener('click', function(){
-				$.ajax({
-					url: 'updateBoardStatus.adm',
-					data: {bId:thisContent.querySelector('input').value, value: this.innerText == '게시 중' ? 'N' : 'Y', type:4},
-					success: data => {
-						console.log(data);
-						if(data == 'success'){
-							const btn = thisContent.nextElementSibling;
-							if(this.innerText == '게시 중'){
-								btn.className = 'btn btn-dark changeState';
-								btn.innerText = '게시 중단';
-							}else{
-								btn.className = 'btn btn-primary changeState';
-								btn.innerText = '게시 중';
-							}
+			for(let i = 0; i < tds.length; i++){
+				const index = i % 11;
+				tds[i].addEventListener('dblclick', function(){
+					//console.log(this, i%11);
+					
+					for(let j = 0; j < tds.length; j++){
+						if(tds[j].children[0] != undefined && tds[j].children[0].value != undefined){
+							tds[j].innerHTML = '<td>'+ tds[j].children[0].value + '</td>';
 						}
-					},
-					error: data => console.log(data)
-				});
-			});
-			
-			const stateButton = document.querySelectorAll('.changeState');
-			for(const button of stateButton){
-				button.addEventListener('click', function(){
-					$.ajax({
-						url: 'updateBoardStatus.adm',
-						data: {bId:this.previousElementSibling.querySelector('input').value, value:this.innerText == '게시 중' ? 'N' : 'Y', type:4},
-						success: data => {
-							if(data == 'success'){
-								if(this.innerText == '게시 중'){
-									this.className = 'btn btn-dark changeState';
-									this.innerText = '게시 중단';
-								}else{
-									this.className = 'btn btn-primary changeState';
-									this.innerText = '게시 중';
+					}
+										
+					if(index != 0 && index != 2 && index != 8 && index != 9 && index != 10){
+						beforeData = this.innerText;
+						if(index == 4){ //가격
+							this.innerHTML = '<input type="text" value="' + this.innerText + '" size="12" class="updateData">';;
+						} else{
+							this.innerHTML = '<input type="text" value="' + this.innerText + '" size="12" class="updateData">';
+						}
+						
+						const updateDatas = document.getElementsByClassName('updateData');
+						let datas = '';
+						for(const update of updateDatas){
+							update.addEventListener('keyup', function(event){
+								if(event.key == 'Enter'){
+									if(index == 2){
+										$.ajax({
+											url: 'checkNickName.me',
+											data: {nickName:datas},
+											success: data => {
+												if(data == 0){
+													//수정 ajax
+													$.ajax({
+														url: 'updateInfo.adm',
+														data: {column:document.querySelectorAll('th')[index].innerText, 
+															data:datas, 
+															id:this.parentElement.parentElement.children[0].innerText},
+														success: data => {
+															console.log(data);
+															if(data == 'success'){
+																tds[i].innerHTML = '<td>' + datas + '</td>';
+															}else{
+																alert('수정 실패라능');
+																location.reload();
+															}
+														},
+														error:data => console.log(data)
+													})
+												}else{
+													this.classList.add('vibration');
+													setTimeout(()=>{
+														this.classList.remove('vibration');
+													}, 400);
+												}
+											},
+											error: data => console.log(data)
+										})
+									} else{
+										$.ajax({
+											url: 'updateInfo.adm',
+											data: {column:document.querySelectorAll('td')[index].innerText, 
+													data:datas, 
+													id:this.parentElement.parentElement.children[0].innerText},
+											success: data => {
+												console.log(data);
+												if(data == 'success'){
+													tds[i].innerHTML = '<td>' + datas + '</td>';
+												}else{
+													alert('수정 실패라능');
+													location.reload();
+												}
+											},
+											error:data => console.log(data)
+										})
+									}
 								}
-							}else{
-								alert('상태 변경 실패했슴둥');
-								location.reload();
-							}
+							});
 						}
-					})
+					} else {
+						alert('수정안된다능')
+					}
+					
 					
 				});
+				const stateButtons = tds[i].querySelectorAll('div');
+				for(const button of stateButtons){
+					button.addEventListener('click', function(){
+						if(this.className == 'unselectState'){
+							//console.log(123);
+							$.ajax({
+								url: 'updateInfo.adm',
+								data: {column:document.querySelectorAll('th')[index].innerText, data:this.innerText, id:this.parentElement.parentElement.children[0].innerText},
+								success: data => {
+									//console.log(data);
+									if(data == 'success'){
+										this.className = 'selectState';
+										for(const siblings of this.parentElement.children){
+											if(siblings != this){
+												siblings.className = 'unselectState';
+											}
+										}
+									}else{
+										alert('상태변경에 실패하여 페이지 새로고침됨둥');
+										location.reload();
+									}
+								},
+								error:data => console.log(data)
+							})
+						}
+						
+					})
+				}
+				
 			}
 		
       
