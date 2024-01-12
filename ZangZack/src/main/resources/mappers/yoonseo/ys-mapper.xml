@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kh.zangzac.yoonseo.model.dao.CampDAO">
+<mapper namespace="com.kh.zangzac.yoonseo.camp.model.dao.CampDAO">
    <insert id="insertCamp">
       <selectKey order="BEFORE" resultType="_int" keyProperty="cgNo">
         select cg_seq.nextval from dual
@@ -9,7 +9,7 @@
       values(#{cgNo},#{cgName}, #{cgRegion},#{cgAddress},#{cgPhone},#{cgType},
             default, sysdate, #{cgArea}, #{cgSeason},#{cgManageDate},
             #{cgBooking}, #{cgPage},#{cgStarPoint},#{cgAmenity},#{cgInfo},
-            #{cgRecomendation},default,5)
+            #{cgRecomendation},default,3,#{cgImgInfo})
    
    </insert>
 
@@ -39,8 +39,112 @@
    <select id="getListCount" resultType="_int">
      select count(*)
      from camping_ground
-     where cg_status = 'Y' 
+     where cg_status = 'N' 
    </select>
-
+   
+   <select id="selectCampList" resultType="CampingGround">
+     select *
+     from camping_ground
+     where cg_status = 'N' 
+     order by cg_no desc
+   </select>
+   
+   <select id="selectMapList" resultType="CampingGround">
+     select *
+     from camping_ground
+     where cg_status = 'N'
+   </select>
+   
+   <select id="selectCampingDetail" resultType="CampingGround">
+     select *
+     from camping_ground
+     where cg_status = 'N' and cg_no = #{no}
+   </select>
+   
+   <select id="selectPhoto" resultType="Photo">
+     select *
+     from photo
+     where photo_status = 'N' 
+            and board_no = #{no} and board_type = 3 and photo_level = 1
+     order by photo_no
+   </select>
+   
+   <select id="selectInfoPhoto" resultType="Photo">
+      select *
+     from photo
+     where photo_status = 'N' 
+            and board_no = #{no} and board_type = 3 and photo_level = 2
+     order by photo_no
+   </select>
+   
+   <select id="getRecomendationCount" resultType="_int">
+     select count(*)
+     from camping_ground
+     where cg_status = 'N'and cg_recomendation = #{recomendation}
+   </select>
+   
+   <select id="selectRecomendationList" resultType="CampingGround">
+     select *
+     from camping_ground
+     where cg_status = 'N' and cg_recomendation = #{recomendation}
+   </select>
+   
+   <select id="selectOnePhoto" resultType="Photo">
+     select *
+     from photo
+     where photo_status = 'N' and photo_level = #{i} and board_type=3
+     order by photo_no
+   </select>
+   
+   <select id="getAllCount" resultType="_int">
+     select count(*)
+     from camping_ground
+   </select>
+   
+   <select id="selectAllList" resultType="CampingGround">
+     select *
+     from camping_ground
+   </select>
+   
+   <update id="stateUpdate">
+     update camping_ground
+     set ${column} = #{state}
+     where cg_no = #{no}
+   </update>
+   
+   <delete id="deleteFile">
+     delete from photo
+     where photo_rename in
+     <foreach collection="list" item="item" open="(" close=")" separator=",">
+       #{item}
+     </foreach>
+   </delete>
+   
+   <select id="selectAllCamping" resultType="CampingGround">
+     select *
+     from camping_ground
+     where cg_no = #{no}
+   </select>
+   
+   <update id="updateCamp">
+     update camping_ground
+     set cg_name = #{cgName}, cg_region = #{cgRegion}, cg_address = #{cgAddress},
+         cg_phone = #{cgPhone}, cg_type = #{cgType}, cg_date = sysdate,
+         cg_area = #{cgArea}, cg_season = #{cgSeason}, cg_manage_date = #{cgManageDate},
+         cg_booking = #{cgBooking}, cg_page = #{cgPage}, cg_star_point = #{cgStarPoint},
+         cg_amenity = #{cgAmenity}, cg_info = #{cgInfo}, cg_recomendation = #{cgRecomendation},
+         cg_imginfo = #{cgImgInfo}
+     where cg_no = #{cgNo}
+   </update>
+   
+   <update id="updatePhotoLevel">
+     update Photo
+     set photo_level = 0
+     where board_no = (select min(photo_no)
+                       from photo
+                       where board_no = #{cgNo}) 
+   </update>
+   
+   
 
 </mapper>

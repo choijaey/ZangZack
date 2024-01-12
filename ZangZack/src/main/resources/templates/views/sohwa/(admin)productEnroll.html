@@ -10,7 +10,7 @@
 	
 	<br><br><br><br>
 	<div id="enrollProduct">
-		<h1>상품 수정</h1>
+		<h1>상품 등록</h1>
 		<hr style="border:1px solid black;">
 		<br>
 		<form action="productEnroll.so" method="POST" id="enrollForm" enctype="multipart/form-data">
@@ -18,7 +18,10 @@
 			<div id="resultDiv1" class="resultDiv">
 				<div style="display: inline-block;width:250px;height:200px;">
 					1.<input type="file" class="corePhoto" onchange="previewImage(event, 'preview1')" name="coreFile"><br>
-					<img id="preview1" src="image/sohwa/icons8-camera-80.png">
+					<div class="image-container" style="display:inline-block; position: relative; text-align: center;">
+						<img id="preview1" src="image/sohwa/icons8-camera-80.png">
+						<p class="centered-text" style="position: absolute;top: 50%;left: 50%; transform: translate(-50%, -50%); font-size:20px; font-weight:bolder; color:gray;">[썸네일]</p>
+					</div>
 					<button style="margin-left:65px;">취소</button>
 				</div>
 			</div>
@@ -81,14 +84,10 @@
 		    
 		    
 		    <label style="font-size: 20px;">▸▸컬러 옵션 : </label>
-		    <input type="radio" id="option1" name="colorOption" checked>&nbsp;<label for="option1">단일 옵션</label>&nbsp;&nbsp;&nbsp;
-		    <input type="radio" id="option2" name="colorOption">&nbsp;<label for="option2">추가 옵션</label>
-		    
 		  	<br><br>
-		  	
-		  	<div id="optionDiv" style="display:none;">
+		  	<div id="optionDiv">
 		  		<div class="optionDiv-content">
-			  		옵션1: &nbsp;<input type="text" name="option"><button type="button" class="addOption">옵션 추가</button>
+			  		옵션 : &nbsp;<input type="text" name="option"><button type="button" class="addOption">옵션 추가</button>
 			  		<label for="productEno" style="font-size: 20px;">▸▸상품수량 : </label>
 			    	<input type="number" name="productEno"> 개
 			  		<br>
@@ -233,10 +232,43 @@
 				//첨부파일 비어있으면 일반게시글로 옮겨진다는 모달 뜨게함.
 				if(isEmpty){
 					alert('대표사진이 등록되지 않았습니다.\n다시 확인해주세요');
+					event.preventDefault();
 				}else{
 					//첨부파일 안 비워져있으면 form태그로 제출
-					form.submit();
+					// 대표 사진이 입력된 경우 옵션 값을 가져옴
+			        const option1 = document.getElementById('option1');
+			        const optionValue = option1.checked ? null : document.querySelector('input[name="option"]').value;
+			        
+			        // 선택된 옵션 값을 input 태그로 추가
+			        if (optionValue !== null) {
+			            const hiddenOptionInput = document.createElement('input');
+			            hiddenOptionInput.type = 'hidden';
+			            hiddenOptionInput.name = 'option';
+			            hiddenOptionInput.value = optionValue;
+			            document.getElementById('enrollForm').appendChild(hiddenOptionInput);
+			        }
+					
+					const files2 = document.getElementsByName('detailFile');
+					let detailIsEmpty = true;
+					for(const f of files2){
+						if(f.value != ''){
+							detailIsEmpty = false;
+						}
+					}
+					console.log(isEmpty);
+					console.log(detailIsEmpty);
+					if(detailIsEmpty){
+						event.preventDefault();
+						alert('상세사진이 등록되지 않았습니다. \n다시 확인해주세요.');
+						event.preventDefault();
+					}else{
+						form.submit();
+					}
 				}
+				
+				
+				
+				
 				
 			});
 		  
@@ -258,51 +290,35 @@
 // 		    });
 			
 			
+			document.addEventListener('DOMContentLoaded', function() {
+			    var optionDiv = document.getElementById('optionDiv');
+			    var addOptionButton = document.querySelector('.addOption');
+			    var maxOptions = 6;
 			
-    document.addEventListener('DOMContentLoaded', function() {
-        var option1 = document.getElementById('option1');
-        var option2 = document.getElementById('option2');
-        var optionDiv = document.getElementById('optionDiv');
-        var addOptionButtons = document.querySelectorAll('.addOption');
-        var optionDivContent = document.querySelector('.optionDiv-content');
-        var maxOptions = 5;
-
-        option1.addEventListener('change', function() {
-            optionDiv.style.display = 'none';
-        });
-
-        option2.addEventListener('change', function() {
-            optionDiv.style.display = 'block';
-        });
-
-        function addOption(event) {
-            var optionCount = document.querySelectorAll('.optionDiv-content').length;
-
-            if (optionCount < maxOptions) {
-                var cloneDiv = optionDivContent.cloneNode(true);
-                var newProductEno = cloneDiv.querySelector('input[name="productEno"]');
-                var newOption = cloneDiv.querySelector('input[name="option"]');
-
-                if (newProductEno) {
-                    newProductEno.setAttribute('name', 'productEno');
-                }
-                if (newOption) {
-                    newOption.setAttribute('name', 'option');
-                }
-
-                var addButton = cloneDiv.querySelector('.addOption');
-                addButton.addEventListener('click', addOption);
-
-                optionDiv.appendChild(cloneDiv);
-            } else {
-                alert('옵션은 최대 5개까지 추가 가능합니다.');
-            }
-        }
-
-        addOptionButtons.forEach(function(button) {
-            button.addEventListener('click', addOption);
-        });
-    });
+			    function addOption(event) {
+			        var optionCount = document.querySelectorAll('.optionDiv-content').length;
+			
+			        if (optionCount < maxOptions) {
+			            var cloneDiv = optionDiv.firstElementChild.cloneNode(true);
+			            var addOptionButtons = cloneDiv.querySelectorAll('.addOption');
+			            var inputElements = cloneDiv.querySelectorAll('input');
+			
+			            inputElements.forEach(function(input) {
+			                input.value = ''; // 입력 값 초기화
+			            });
+			
+			            addOptionButtons.forEach(function(button) {
+			                button.addEventListener('click', addOption);
+			            });
+			
+			            optionDiv.appendChild(cloneDiv);
+			        } else {
+			            alert('옵션은 최대 6개까지 추가 가능합니다.');
+			        }
+			    }
+			
+			    addOptionButton.addEventListener('click', addOption);
+			});
 			
 			
 			

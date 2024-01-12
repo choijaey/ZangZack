@@ -20,11 +20,11 @@ public class Product {
 	private int productPrice;
 	private Date productUploadDate;
 	private String productStatus;
-	private int productScore;
+	private double productScore;
 	private int categoryNo;
 	private String productCompany;
-	private int productEno;
 	private int deliveryPrice;
 	private int eno;
+	
 
 }

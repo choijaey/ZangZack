@@ -10,9 +10,11 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Chatter {
 	private int chatterNo;
 	private int clNo;
 	private String memberId;
+	private String memberNickName;
 
 }
