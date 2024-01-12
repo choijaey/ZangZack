@@ -220,13 +220,18 @@
 		                alert('댓글을 입력해주세요!');
 		                return;
 		            }
+		            
+		            if (getByteSize(replyContent) > 500) {
+		                alert('댓글을 200자 이내로 입력해주세요!'); 
+		                return; 
+		            }
 		
 		            $.ajax({
 		                url: 'insertReply.rep',
 		                method: 'POST',
 		                data: {
 		                    replyContent: replyContent,
-		                    boardNo: /*[[${bList.cbNo}]]*/1, // 예시로 1을 사용, 실제로는 동적으로 설정해야 함
+		                    boardNo: /*[[${bList.cbNo}]]*/1, 
 		                    boardType: 1 
 		                },
 		                success: function(data) {
@@ -235,7 +240,7 @@
 		                    replyCount.innerText = bReplyCount += 1;
 		                },
 		                error: function(error) {
-		                	alert("댓글을 500자 이내로 입력해주세요!");
+		                	alert("댓글을 200자 이내로 입력해주세요!");
 		                }
 		            });
 		        });
@@ -325,9 +330,14 @@
 
 				    		let text = textarea.value;
 							if (text === '') {
-								alert('수정 내용을 입력해주세요.'); // 사용자에게 알림 표시
+								alert('수정 내용을 입력해주세요.'); 
 								return; // 함수 실행 중단
 							}
+							
+							if (getByteSize(text) > 500) {
+						        alert('댓글을 200자 이내로 작성해주세요.'); // 사용자에게 알림 표시
+						        return; // 함수 실행 중단
+						    }
 				    	    updateReply(text, comment);
 
 				    	    messageDiv.textContent = textarea.value;
@@ -492,7 +502,7 @@
 					}
 				},
 				error: function(error) {
-					alert("댓글을 500자 이내로 입력해주세요!");
+					alert("댓글을 200자 이내로 입력해주세요!");
 				}
 			});
 		}
@@ -547,6 +557,15 @@
 		        editDropDown.style.display = "none";
 		    });
 		});
+		
+		//byte 단위 계산
+	    function getByteSize(str) {
+	        let size = 0;
+	        for (let i = 0; i < str.length; i++) {
+	            size += (str.charCodeAt(i) > 127) ? 2 : 1;
+	        }
+	        return size;
+	    }
 		/*]]>*/
 	</script>
 </body>
