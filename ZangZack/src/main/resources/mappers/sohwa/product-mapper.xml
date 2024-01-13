@@ -236,7 +236,7 @@
 		select *
 		from photo
 			  join product on (product_no = board_no)
-		where product_no = #{productNo} and photo_status='N'
+		where product_no = #{productNo} and photo_status='N' and board_type=5
 	</select>
 	
 	<select id="selectPhotoReview" resultType="Attachment">
@@ -249,7 +249,7 @@
 	<select id="optionDetail" resultType="Option">
 		select *
 		from product_option
-		where product_no = #{productNo}
+		where product_no = #{productNo} AND OPTION_STATUS = 'N'
 	</select>
 	
 	
@@ -595,7 +595,7 @@
 	<update id="updateProduct">
 		update product
 		set product_name = #{productName} , product_price= #{productPrice}, category_no = #{categoryNo}, product_company=#{productCompany}, delivery_price = #{deliveryPrice}
-		where product_no = #{productNo} and product_status = 'Y'
+		where product_no = #{productNo} and product_status = 'N'
 	</update>
 	
 	
@@ -604,7 +604,7 @@
 		set photo_level = 0
 		where photo_no = (select min(photo_no)
 						 from photo
-						 where board_no = #{productNo} and board_type=5)
+						 where board_no = #{productNo} and board_type=5 and photo_level = 1)
 	</update>
 	
 	

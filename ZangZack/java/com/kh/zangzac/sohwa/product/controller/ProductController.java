@@ -799,6 +799,7 @@ public class ProductController {
 		System.out.println(p);
 		int result = pService.updateProduct(p);
 		System.out.println(result);
+		
 		//옵션 삭제하고 다시 insert처리
 		ArrayList<Attachment> coreList = new ArrayList<>();
 		ArrayList<Attachment> detailList = new ArrayList<>();
@@ -808,7 +809,8 @@ public class ProductController {
 		int deleteResult = 0;
 		
 		System.out.println("deleteAttm:" +deleteAttm);
-		pService.deleteOption(p.getProductNo());
+		int deleteOptionResult = pService.deleteOption(p.getProductNo());
+		
 		
 		ArrayList<Option> oList = new ArrayList<>();
 				

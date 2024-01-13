@@ -66,8 +66,8 @@
 					<td>[[${p.productName}]]</td>
 					<td th:text="|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|"></td>
 					<td>
-						<th:block th:if="${pageStatus=='Y'}"><button style="margin-bottom:5px;" th:onclick="productDetail([[${p.productNo}]])">상품페이지로 이동</button><br></th:block>
-						<button th:onclick="productUpdate([[${p.productNo}]])">상품 수정</button>
+						<th:block th:if="${pageStatus=='Y'}"><button style="margin-bottom:5px;" th:onclick="productDetail([[${p.productNo}]])">상품페이지로 이동</button><br><button th:onclick="productUpdate([[${p.productNo}]])">상품 수정</button></th:block>
+						
 					</td>
 				</tr>
 			</th:block>

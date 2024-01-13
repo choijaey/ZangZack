@@ -124,7 +124,7 @@ public interface ProductDAO {
 
 	void updateYPhoto(ArrayList<String> checkBoxArr);
 
-	void deleteOption(int productNo);
+	int deleteOption(int productNo);
 
 	int deleteProductPhoto(ArrayList<String> delRename);
 

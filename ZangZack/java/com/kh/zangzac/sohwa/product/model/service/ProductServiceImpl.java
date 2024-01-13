@@ -296,8 +296,8 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public void deleteOption(int productNo) {
-		pDAO.deleteOption(productNo);
+	public int deleteOption(int productNo) {
+		return pDAO.deleteOption(productNo);
 		
 	}
 
