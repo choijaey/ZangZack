@@ -35,4 +35,19 @@ public class CampingFriendServiceImpl  implements CampingFriendService{
 		return cDAO.cfLimitList(rowBounds);
 	}
 
+	@Override
+	public CampingFriend selectCampingFriend(int boardNo) {
+		return cDAO.selectCampingFriend(boardNo);
+	}
+
+	@Override
+	public int updateCampingFriend(CampingFriend cf) {
+		return cDAO.updateCampingFriend(cf);
+	}
+
+	@Override
+	public int deleteCampingFriend(CampingFriend cf) {
+		return cDAO.deleteCampingFriend(cf);
+	}
+
 }
