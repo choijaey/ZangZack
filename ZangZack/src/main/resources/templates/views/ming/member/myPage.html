@@ -337,6 +337,40 @@
 	 	    const modal = document.getElementById('myModal');
 	 	    modal.style.display = 'none';
 	 	};
+	 	
+	 	//닉네임 정규식
+		document.getElementById('memberNickName').addEventListener('change', function() {
+		    let nickNameval = $('#memberNickName').val();
+		    let nickNamevalcheck = /^[ㄱ-ㅎㅏ-ㅣ가-힣가-힣A-Za-z0-9]+$/;
+		    let prohibitedWords = ['ㅅㅂ', '염병', '옘병','시발', '시바', 'ㅂㅅ','미친','ㅂ1ㅅ',,'수1발'];
+		
+		    if (this.value.trim() === '') {
+		        alert('닉네임은 영어, 한글, 숫자로 구성된 6글자 이상으로 조합하시오.');
+		        memberNickName.style.borderColor = 'red';
+		        checkNickName = false;
+		        $('#memberNickName').focus();
+		    } else if (!nickNamevalcheck.test(nickNameval)) {
+		        alert('아이디는 영소문자, 숫자로 구성된 6글자 이상으로 조합하시오.');
+		        memberNickName.style.borderColor = 'red';
+		        checkNickName = false;
+		    } else if (containsProhibitedWord(nickNameval, prohibitedWords)) {
+		        alert('금지어를 포함하고 있습니다. 다른 닉네임을 선택해주세요.');
+		        memberNickName.style.borderColor = 'red';
+		        checkNickName = false;
+		    } else {
+		        memberNickName.style.borderColor = 'green';
+		        checkNickName = true;
+		    }
+		});
+		
+		function containsProhibitedWord(input, prohibitedWords) {
+		    for (let i = 0; i < prohibitedWords.length; i++) {
+		        if (input.includes(prohibitedWords[i])) {
+		            return true;
+		        }
+		    }
+		    return false;
+		}
 	</script>
 	
 	<script type="text/javascript">

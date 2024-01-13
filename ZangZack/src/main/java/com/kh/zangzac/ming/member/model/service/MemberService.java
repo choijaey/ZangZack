@@ -55,6 +55,8 @@ public interface MemberService {
 
 	ArrayList<Member> searchtNoticeList(PageInfo pi, HashMap<String, String> map);
 
+	String getAccessToken(String code);
+
 
 	
 	

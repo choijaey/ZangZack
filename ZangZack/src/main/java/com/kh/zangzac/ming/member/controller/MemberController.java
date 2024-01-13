@@ -35,6 +35,7 @@ import com.kh.zangzac.ming.member.model.vo.Member;
 
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @SessionAttributes("loginUser")
 @Controller
@@ -165,8 +166,6 @@ public class MemberController {
 			model.addAttribute("searchUrl","views/ming/member/sign");
 			return "redirect:signUp.me";
 		}
-		
-		
 	}
 	
 	//로그아웃
@@ -606,4 +605,15 @@ public class MemberController {
 			throw new MemberException("게시글 목록 조회에 실패하였습니다.");
 		}
 	}
+	@GetMapping("kakaoLogin")
+	public String kakaoLogin(
+	    @RequestParam(value = "code", required = false) String code,
+	    HttpSession session,
+	    Model model,
+	    @RequestParam(value = "beforeURL", required = false) String beforeURL) throws Exception {
+	    // 카카오에서 받은 코드를 이용하여 access token을 얻어옴
+	    String access_Token = mService.getAccessToken(code);
+	    return "member/kakaoLogin";
+	}
+	
 }
