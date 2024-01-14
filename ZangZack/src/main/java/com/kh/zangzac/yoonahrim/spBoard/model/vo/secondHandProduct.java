@@ -24,4 +24,7 @@ public class secondHandProduct {
 	private String spIsBook;
 	
 	private String categoryName;
+	private String memberName;
+	private String memberNickName;
+	private String memberProfilePath;
 }

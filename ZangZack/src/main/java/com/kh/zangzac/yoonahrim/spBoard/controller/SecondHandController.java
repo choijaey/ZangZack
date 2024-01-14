@@ -292,7 +292,7 @@ public class SecondHandController {
 		
 		 if (result > 0) {
 		        // 예약 성공
-		        return "views/yoonahrim/secondHandList";
+		        return "redirect:secondHand.ah";
 		    } else {
 		        // 예약 실패
 		        throw new secondHandException("예약 실패");
@@ -308,7 +308,7 @@ public class SecondHandController {
 		
 		 if (result > 0) {
 		        // 예약 취소
-		        return "views/yoonahrim/secondHandList";
+		        return "redirect:secondHand.ah";
 		    } else {
 		        // 예약 실패
 		        throw new secondHandException("예약 실패");
@@ -326,7 +326,7 @@ public class SecondHandController {
 		
 		 if (result > 0) {
 		        // 판매 완료
-		        return "views/yoonahrim/secondHandList";
+		        return "redirect:secondHand.ah";
 		    } else {
 		        // 판매 완료 실패
 		        throw new secondHandException("판매완료 실패");
@@ -342,7 +342,7 @@ public class SecondHandController {
 		
 		 if (result > 0) {
 		        // 삭제
-		        return "views/yoonahrim/secondHandList";
+		        return "redirect:secondHand.ah";
 		    } else {
 		        // 삭제 실패
 		        throw new secondHandException("삭제 실패");
@@ -375,7 +375,7 @@ public class SecondHandController {
 	}
 	
 	@GetMapping("admin.ah")
-	public String adminSecondPage(@ModelAttribute secondHandProduct sp, Model model, @RequestParam(value="page", defaultValue="1")int page, HttpServletRequest request) {
+	public String adminSecondPage(@ModelAttribute secondHandProduct sp, Model model ,@RequestParam(value="page", defaultValue="1")int page, HttpServletRequest request) {
 		
 		int listCount = spService.getListCount(4);
 		int currentPage = page;
@@ -383,17 +383,33 @@ public class SecondHandController {
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
 		ArrayList<secondHandProduct> list = spService.selectBoardList(pi,1);
 		ArrayList<secondHandProduct> sList=  spService.selectAdminList(sp);
+		ArrayList<Photo> aList = spService.selectAttachmentList(sp.getSpNo());
 		
 		if(list != null) {
 			model.addAttribute("pi", pi);
 			model.addAttribute("list", list);
 			model.addAttribute("loc", request.getRequestURI());
 			model.addAttribute("sList", sList);
+			model.addAttribute("aList", aList);
 			return "views/yoonahrim/test2";
 		}else {
 			throw new secondHandException("없다");
 		}
 	}
+	
+	@PostMapping("editAdmin.ah")
+	public String editAdmin(@ModelAttribute secondHandProduct sp) {
+		int result = spService.updateAdminInfo(sp);
+		
+		System.out.println(sp);
+		if(result > 0) {
+			return "redirect:admin.ah";
+		}else {
+			throw new secondHandException("업데이트 실패함.");
+		}
+		
+	}
+	
 	
 }
 	

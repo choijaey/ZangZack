@@ -51,6 +51,8 @@ public interface secondHandService {
 
 	ArrayList<secondHandProduct> selectBoardList(PageInfo pi, int i);
 
+	int updateAdminInfo(secondHandProduct sp);
+
 
 
 

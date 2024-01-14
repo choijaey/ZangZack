@@ -50,7 +50,6 @@
             <th class="td3">아이디</th>
             <th class="td4">물품명</th>
             <th class="td5">물품가격</th>
-            <th class="td6">주소</th>
             <th class="td7">카테고리</th>
             <th class="td8">예약여부</th>
             <th class="td9">판매여부</th>
@@ -63,17 +62,16 @@
 		    <td class="td3" th:text="${s.memberId}"></td>
 		    <td class="td4" th:text="${s.spTitle}"></td>
 		    <td class="td5" th:text="${#numbers.formatInteger(s.spPrice, 0, 'COMMA') + '원'}"></td>
-		    <td class="td6" th:text="${s.spAddress}"></td>
-		    <td class="td7" th:text="${s.categoryName}"><</td>
-		    <td class="td8">
+		    <td class="td6" th:text="${s.categoryName}"><</td>
+		    <td class="td7">
 		        <div th:class="${s.spIsSell == 'Y' ? 'selectState' : 'unselectState'}">Y</div>
 		        <div th:class="${s.spIsSell == 'N' ? 'selectState' : 'unselectState'}">N</div>
 		    </td>
-		    <td class="td9">
+		    <td class="td8">
 		        <div th:class="${s.spIsBook == 'Y' ? 'selectState' : 'unselectState'}">Y</div>
 		        <div th:class="${s.spIsBook == 'N' ? 'selectState' : 'unselectState'}">N</div>
 		    </td>
-		    <td class="td10">
+		    <td class="td9">
 		        <div th:class="${s.spStatus == 'Y' ? 'selectState' : 'unselectState'}">Y</div>
 		        <div th:class="${s.spStatus == 'N' ? 'selectState' : 'unselectState'}">N</div>
 		    </td>
@@ -99,23 +97,19 @@
       </nav>
    </div>
 
-	<div class="modal fade" id="exampleModalCenteredScrollable" tabindex="-1" aria-labelledby="exampleModalCenteredScrollableTitle" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="exampleModalCenteredScrollableTitle"></h1>
-					<div class="modal-body" style="text-align: right; font-size: 14px;"></div>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body"></div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" data-bs-dismiss="modal">게시글 올리기</button>
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
+	<div class="modal">
+		<div class="modal_body">
+			<p class="modal_title">회원정보</p>
+			<p id="memberId">ID:</p>
+			<p id="memberName">NAME</p>
+			<p id="memberNickName">NICKNAME</p>
+			<p id="memberEmail">EMAIL</p>
+			<p id="memberBirth">생일</p>
+			<p id="memberPhone">PHONE</p>
+			<p id="memberAddress">ADDRESS</p>
+			<p id="memberEnrollDate">가입일</p>
+		 </div>
 	</div>
-
 
 
    <script>
@@ -139,96 +133,120 @@
             document.getElementById('dropdownMenuButton').innerText = dropdownText;
         }
       
-      //모달창
-      window.onload = () => {
-				const contents = document.querySelectorAll('.allOrder');
-				const statusBtn = document.querySelector('.modal-footer').querySelector('button');
-				
-				let thisContent = null;
-				for(const content of contents){
-					content.addEventListener('click', function(){
-						thisContent = this;
-						const boardNo = content.querySelector('.td3').value;
-						const boardTitle = content.querySelector('td4').innerText;
-						const boardContent = content.querySelector('td4').nextElementSibling.innerText;
-						const boardWriter = content.querySelector('.td3').innerText;
-						const boardStatus = content.nextElementSibling.innerText;
-						/*<![CDATA[*/
-						const aList = /*[[${aList}]]*/null;
-						/*]]>*/
-						
-						document.getElementById('exampleModalCenteredScrollableTitle').innerText = spTitle;
-						const modalBody = document.querySelectorAll('.modal-body');
-						modalBody[0].innerText = '작성자 : ' + memberId;
-						modalBody[1].innerHTML = spContent + "<br><br>";
-						
-						for(const a of aList){
-							if(boardNo == a.memberId){
-								if(a.renameName.toLowerCase().includes('jpg') || a.renameName.toLowerCase().includes('png')){
-									modalBody[1].innerHTML += '<img src="' + a.renameName + '"width="100%" height="200"><br><br>';
-								}else{
-									modalBody[1].innerHTML += '<div style="text-align: center; color: white; background: lightgrey; width: 100%; height: 200px; line-height: 200px;"> no image(' + attm.originalName + ")</div><br>";
-								}
-							}
-						}
-						
-						if(boardStatus == '게시 중'){
-							statusBtn.innerText = '게시 중';
-							statusBtn.className = 'btn btn-primary';
-						}else{
-							statusBtn.innerText = '게시 중단';
-							statusBtn.className = 'btn btn-dark';
-						}
-					});
-				}
-			}
-			
-			statusBtn.addEventListener('click', function(){
-				$.ajax({
-					url: 'updateBoardStatus.adm',
-					data: {bId:thisContent.querySelector('input').value, value: this.innerText == '게시 중' ? 'N' : 'Y', type:4},
-					success: data => {
-						console.log(data);
-						if(data == 'success'){
-							const btn = thisContent.nextElementSibling;
-							if(this.innerText == '게시 중'){
-								btn.className = 'btn btn-dark changeState';
-								btn.innerText = '게시 중단';
-							}else{
-								btn.className = 'btn btn-primary changeState';
-								btn.innerText = '게시 중';
-							}
-						}
-					},
-					error: data => console.log(data)
-				});
-			});
-			
-			const stateButton = document.querySelectorAll('.changeState');
-			for(const button of stateButton){
-				button.addEventListener('click', function(){
-					$.ajax({
-						url: 'updateBoardStatus.adm',
-						data: {bId:this.previousElementSibling.querySelector('input').value, value:this.innerText == '게시 중' ? 'N' : 'Y', type:4},
-						success: data => {
-							if(data == 'success'){
-								if(this.innerText == '게시 중'){
-									this.className = 'btn btn-dark changeState';
-									this.innerText = '게시 중단';
-								}else{
-									this.className = 'btn btn-primary changeState';
-									this.innerText = '게시 중';
-								}
-							}else{
-								alert('상태 변경 실패했슴둥');
-								location.reload();
-							}
-						}
-					})
-					
-				});
-			}
+    //모달창 열기
+      const body = document.querySelector('body');
+      const modal = document.querySelector('.modal');
+      const tds = document.getElementsByTagName('td');
+	  let changeId;
+      for(let i = 0; i <tds.length; i++ ){
+    	  const index = i % 8;
+    	  if(index != 0 && index != 6 && index != 7){
+		      tds[i].addEventListener('dblclick', function(){
+		    	  //console.log(this.parentNode.children[1].innerText); 아이디로 접근!
+		    	  //ajax 해서 
+		    	  
+		    	  //memberId 보내서 정보가져오기
+		    	  	//모달에 아이디들로 다 가져와서 member 정보 넣기
+		    	  	let m = this.parentNode.children[1].innerText;
+		    	  	changeId = this.parentNode;
+		    	  	console.log(m);
+		    		$.ajax({
+		    			url:'selectMemberList.me',
+		    			data : {memberId:m},
+		    			success : function(data){
+		    				const memberData = data.m;
+		    				
+		    				const memberId = memberData.memberId;
+		    				const memberName = memberData.memberName;
+		    				const memberNickName = memberData.memberNickName;
+		    				const memberEmail = memberData.memberEmail;
+		    				const memberBirth = memberData.memberBirth;
+		    				const memberPhone = memberData.memberPhone;
+		    				const memberAddress = memberData.memberAddress;
+		    				const formattedAddress = memberAddress.replace(/@/g, ' ');
+		    				const memberEnrollDate = memberData.memberEnrollDate;
+		    				const memberProfilePath = memberData.memberProfilePath;
+		    				
+		    				document.getElementById('memberId').innerText = '아이디 : ' + memberId;
+		    				document.getElementById('memberName').innerText = '이름 : ' + memberName;
+		    				document.getElementById('memberNickName').innerText = '닉네임 : ' + memberNickName;
+		    				document.getElementById('memberEmail').innerText = '이메일 : ' + memberEmail;
+		    				document.getElementById('memberBirth').innerText = '생년월일 : ' + memberBirth;
+		    				document.getElementById('memberPhone').innerText = '전화번호 : ' + memberPhone;
+		    				document.getElementById('memberAddress').innerText = '주소 : ' + formattedAddress;
+		    				document.getElementById('memberEnrollDate').innerText = '가입일 : ' + memberEnrollDate;
+		    				document.getElementById('memberProfilePath').src = memberProfilePath;
+		    				
+		    			},
+		    			error:data => console.log("error:" + data)
+		    			
+		    		})
+		    		  
+		          	modal.classList.toggle('show');
+		    	  
+		    	  
 		
+		        if (modal.classList.contains('show')) {
+		          body.style.overflow = 'hidden';
+		        }
+		        
+		      })
+		      
+		      
+		      
+    	  };
+    	  
+    	  if (index == 6 || index == 7) {
+    		  const stateButtons = tds[i].querySelectorAll('div');
+    		  let column;
+		    	if(index == 6){
+		    		column ='member_status';
+		    	}else if(index == 7){
+		    		column = 'member_is_admin';
+		    	}
+    		  for(const button of stateButtons){
+    			  button.addEventListener('click', function() {
+    				  /* console.log("column: "+column);
+    				  console.log("id: "+ this.parentElement.parentElement.children[1].innerText);
+    				  console.log("data: "+this.innerText); */
+    				  if(this.className == 'unselectState'){
+    					  $.ajax({
+    						  url:'updateInfo.me',
+    						  data:{column:column, data:this.innerText, id:this.parentElement.parentElement.children[1].innerText},
+    						  success:data=>{
+    							  console.log(data);
+    							  if(data == 'success'){
+    								  this.className = 'selectState';
+    								  for(const siblings of this.parentElement.children){
+    									  if(siblings != this){
+    										  siblings.className = 'unselectState';
+    									  }
+    								  }
+    							  }else{
+    								  alert('상태 변경에 실패하여 페이지가 새로고침 됩니다.');
+										location.reload();
+    							  }
+    						  },
+    						  error: data => console.log(data)
+    					  });
+    				  }
+    		      });
+    		  	}
+    		}
+      };
+      
+       // 모달창 외부를 클릭했을때 창 닫기
+      modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+          modal.classList.toggle('show');
+
+          if (!modal.classList.contains('show')) {
+            body.style.overflow = 'auto';
+            isEditing =false;
+          }
+        }
+     })
+
       
     </script>
    
