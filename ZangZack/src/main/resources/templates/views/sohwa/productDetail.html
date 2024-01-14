@@ -75,7 +75,7 @@
 			
 			<div class="btns" style="margin-left:80px;">
 				<button class="btn-hover color-1" style="color:gray;" id="cartBtn" onclick="goCart()">장바구니</button>
-				<button class="btn-hover color-2">바로구매</button>
+				<button class="btn-hover color-2" onclick="goPurchase()">바로구매</button>
 			</div>
 			
 			<input type="hidden" id="productNo" th:value="${p.productNo}">
@@ -92,7 +92,7 @@
 		<span>주문금액</span><span id="resultPrice2"></span>
 		<div class="btns">
 			<button onclick="goCart()" class="btn-hover color-1" style="color:gray;">장바구니</button>
-			<button class="btn-hover color-2">바로구매</button>
+			<button class="btn-hover color-2" onclick="goPurchase()">바로구매</button>
 		</div>
 		
 	</div>
@@ -1002,6 +1002,29 @@
 	            alert("로그인 후 이용해주세요.");
 	        }
     });
+	    
+	    
+	    
+	   //바로 결제
+	   function goPurchase(){
+		   var loginUser = document.getElementById('loginUser').value;
+	        var option = document.getElementById('colorSelect').value;
+	        var eno = document.querySelector('.quantity').value;
+			var productNo = document.getElementById('productNo').value;
+			var priceString = document.getElementById('resultPrice2').innerText;
+			var price = parseInt(priceString.replace(/\D/g, ''), 10); // 숫자가 아닌 문자를 모두 제거
+			var selectElement = document.getElementById("colorSelect");
+			
+			if (selectElement.value === "컬러 선택") {
+		        alert('옵션을 선택해주세요!'); // 알림 메시지 출력
+		    }else if(loginUser==""){
+		    	alert('로그인 후 이용하실 수 있습니다.');
+		    }else{
+		        location.href='orderPage.so?productNo='+productNo + '&option=' + option + '&eno=' + eno +"&price=" + price;
+		    }
+			
+			
+	   }
 	    
 	    
 	    

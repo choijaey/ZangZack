@@ -129,7 +129,7 @@ public interface ProductService {
 
 	int updateProduct(Product p);
 
-	void updatePhotoLevel(int productNo);
+	int updatePhotoLevel(int productNo);
 
 	ArrayList<Product> selectAllNProduct();
 

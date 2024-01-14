@@ -531,14 +531,29 @@
 					}
 				}
 				
-				if(isEmpty){
+				const deleteAttmButtons = document.querySelectorAll('.deleteAttm');
+			    let isDeleteOffSelected = false;
+
+			    deleteAttmButtons.forEach((deleteButton) => {
+			        if (deleteButton.innerText.trim() === '삭제 OFF') {
+			            isDeleteOffSelected = true;
+			        }
+			    });
+			    
+			    const deleteAttmButtons2 = document.querySelectorAll('.deleteAttm2');
+			    let isDeleteOffSelected2 = false;
+
+			    deleteAttmButtons2.forEach((deleteButton2) => {
+			        if (deleteButton2.innerText.trim() === '삭제 OFF') {
+			            isDeleteOffSelected2 = true;
+			        }
+			    });
+			    
+				if(isEmpty && !isDeleteOffSelected){
 					event.preventDefault();
 					alert('대표사진이 등록되지 않았습니다.\n다시 확인해주세요');
 					event.preventDefault();
 				}else{
-						
-					
-					
 					const files2 = document.getElementsByName('detailFile');
 					let detailIsEmpty = true;
 					for(const f2 of files2){
@@ -548,7 +563,7 @@
 					}
 					console.log(isEmpty);
 					console.log(detailIsEmpty);
-					if(detailIsEmpty){
+					if(detailIsEmpty && !isDeleteOffSelected2){
 						event.preventDefault();
 						alert('상세사진이 등록되지 않았습니다. \n다시 확인해주세요.');
 						event.preventDefault();

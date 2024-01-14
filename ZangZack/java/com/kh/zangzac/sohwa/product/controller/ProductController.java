@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -26,12 +25,12 @@ import com.kh.zangzac.sohwa.product.model.service.ProductService;
 import com.kh.zangzac.sohwa.product.model.vo.Attachment;
 import com.kh.zangzac.sohwa.product.model.vo.Cart;
 import com.kh.zangzac.sohwa.product.model.vo.Option;
+import com.kh.zangzac.sohwa.product.model.vo.Payment;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
 import com.kh.zangzac.sohwa.product.model.vo.Qna;
 import com.kh.zangzac.sohwa.product.model.vo.Review;
 
 import jakarta.servlet.http.HttpServletRequest;
-import kotlin.reflect.jvm.internal.impl.types.model.TypeSystemOptimizationContext;
 
 @SessionAttributes("loginUser")
 @Controller
@@ -380,6 +379,18 @@ public class ProductController {
 	      }
 	      
 	 }
+	
+	@GetMapping("orderPage.so")
+	public String insertOrder(@RequestParam("price") int price, @RequestParam("option") String option, @RequestParam("productNo") int productNo, @RequestParam("eno") int eno, Model model) {
+		
+		String id = ((Member)model.getAttribute("loginUser")).getMemberId();
+		Payment pa = new Payment();
+		pa.setOrderPrice(price);
+		pa.setProductNo(productNo);
+		pa.setOrderProductEno(eno);
+		return "views/sohwa/orderPage";
+	}
+	
 	
 	
 	
@@ -887,7 +898,7 @@ public class ProductController {
 		boolean existBeforeAttm = true;
 		int deleteAttmResult = 0;
 		int updateBoardResult = 0;
-		
+		int levelResult = 0;
 		//하나라도 삭제하기로 했다.
 		if(!delRename.isEmpty()) {
 			deleteAttmResult = pService.deleteProductPhoto(delRename);
@@ -897,6 +908,7 @@ public class ProductController {
 					imageStorage.deleteImage(rename, name);
 				}
 			}
+			
 			
 			//기존 파일 다 삭제했을 때
 			if(delRename.size() == deleteAttm.length) {
@@ -908,7 +920,7 @@ public class ProductController {
 						//삭제할 객체의 레벨들 중에서 level이 0인 것이 하나라도 있다면 썸네일 없어진 것..다시 설정해줘야함.
 						//남아있는 사진들 중에서 가장 boardId가 빠른 것 썸네일로 지정해줄 것(level 0)
 						//return 해줄게 없음.
-						pService.updatePhotoLevel(p.getProductNo());
+						levelResult = pService.updatePhotoLevel(p.getProductNo());
 						break;
 					}
 				}
@@ -920,7 +932,7 @@ public class ProductController {
 			Attachment a = coreList.get(i);
 			a.setBoardNo(p.getProductNo());
 			
-			if(existBeforeAttm) {
+			if(levelResult != 0) {
 				//'원래 파일들이 하나라도 남아있다면'이라는 if 문
 				//따라서 잔존하던 파일들 사이에서 어차피 썸네일 정해질 것이므로
 				//어차피 추가하는 파일들은 썸네일이 될 가능성이 없다. 따라서, 다 1로 설정 가능
