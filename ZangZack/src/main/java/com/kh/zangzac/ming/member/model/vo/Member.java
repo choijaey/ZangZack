@@ -28,4 +28,5 @@ public class Member {
 	private String memberStatus;
 	private String memberProfileRename;
 	private String memberProfilePath;
+	private int memberLoginType; 
 }

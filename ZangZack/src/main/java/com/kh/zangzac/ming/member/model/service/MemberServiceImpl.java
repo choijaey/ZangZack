@@ -7,6 +7,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
@@ -15,7 +18,9 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.ming.member.model.dao.MemberDAO;
@@ -181,6 +186,7 @@ public class MemberServiceImpl implements MemberService{
 	            
 	         // 결과 코드가 200이라면 성공
 	         int responseCode = conn.getResponseCode();
+	         System.out.println("responseCode:"+responseCode);
 	         
 	         // 요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
 	         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -204,6 +210,114 @@ public class MemberServiceImpl implements MemberService{
 	      }
 	      return access_Token;
 	   }
+
+	@Override
+    public HashMap<String, Object> getUserInfo(String access_Token) {
+        HashMap<String, Object> userInfo = new HashMap<String, Object>();
+        String reqURL = "https://kapi.kakao.com/v2/user/me";
+        String addressURL = "https://kapi.kakao.com/v1/user/shipping_address";
+        try {
+           
+         //배송지
+            URL url = new URL(addressURL);
+             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+             conn.setRequestMethod("GET");
+
+             conn.setRequestProperty("Authorization", "Bearer " + access_Token);
+
+             int responseCode = conn.getResponseCode();
+
+             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+             String line;
+             StringBuilder result = new StringBuilder();
+
+             while ((line = br.readLine()) != null) {
+                 result.append(line);
+             }
+             br.close(); // BufferedReader 닫기
+             
+             
+             JsonElement element = JsonParser.parseString(result.toString());
+             JsonElement objElement = element.getAsJsonObject().get("shipping_addresses");
+             JsonArray addresses = objElement.getAsJsonArray();
+             String baseAddress="";
+             String detailAddress="";
+
+             if (addresses.size() > 0) {
+                 JsonObject firstAddress = addresses.get(0).getAsJsonObject();
+
+                 baseAddress = firstAddress.get("base_address").getAsString();
+                 detailAddress = firstAddress.get("detail_address").getAsString();
+                
+             }
+           
+           
+            url = new URL(reqURL);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+
+            conn.setRequestProperty("Authorization", "Bearer " + access_Token);
+
+            responseCode = conn.getResponseCode();
+
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+           String line2 ="";
+           result = new StringBuilder();
+
+            while ((line2 = br.readLine()) != null) {
+                result.append(line2);
+            }
+            br.close(); // BufferedReader 닫기
+            
+            
+            
+           element = JsonParser.parseString(result.toString());
+            
+            JsonObject kakaoAccount = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
+            JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
+            
+            String nickname = properties.getAsJsonObject().get("nickname").getAsString();
+            String profileImg = properties.getAsJsonObject().get("profile_image").getAsString();
+            String name = kakaoAccount.getAsJsonObject().get("name").getAsString();
+            String email = kakaoAccount.getAsJsonObject().get("email").getAsString();
+            String phone = kakaoAccount.getAsJsonObject().get("phone_number").getAsString();
+            String birthyear = kakaoAccount.getAsJsonObject().get("birthyear").getAsString();
+            String birth = kakaoAccount.getAsJsonObject().get("birthday").getAsString();
+            
+            detailAddress = baseAddress + detailAddress;
+            phone = phone.replace(phone.substring(0, 4), "0").replaceAll("-", "");
+            String formattedBirthday = birth.substring(0, 2) + "-" + birth.substring(2);
+            birth = birthyear + "-" + formattedBirthday;
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate localDate = LocalDate.parse(birth, formatter);
+            java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
+            
+            System.out.println("detailAddress"+detailAddress);
+            System.out.println("element:"+element);
+            System.out.println(properties);
+            //정보 저장 구간
+            // nickname profile 등등 필요한거
+            // Member 객체에 저장하고 올리기 나머진 알아서..
+            
+            Member m = new Member();
+            m.setMemberName(name);
+            m.setMemberNickName(nickname);
+            m.setMemberProfilePath(profileImg);
+            m.setMemberEmail(email);
+            m.setMemberId(email);
+            m.setMemberPhone(phone);
+            m.setMemberBirth(sqlDate);
+            m.setMemberLoginType(2);
+            
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return userInfo;
+    }
 
 
 

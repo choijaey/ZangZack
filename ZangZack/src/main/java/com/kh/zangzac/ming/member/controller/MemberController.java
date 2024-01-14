@@ -93,7 +93,9 @@ public class MemberController {
 		
 		m.setMemberNickName(existingNickname + "#" + generateRandomNumbers()); // 랜덤닉네임
 		m.setMemberPwd(bcrypt.encode(m.getMemberPwd()));
+		m.setMemberLoginType(1); // 일반 회원가입
 		m.getMemberId();
+		
 		
 		int result = mService.insertMember(m);
 		if(result > 0) {
@@ -605,6 +607,7 @@ public class MemberController {
 			throw new MemberException("게시글 목록 조회에 실패하였습니다.");
 		}
 	}
+	//카카오로그인
 	@GetMapping("kakaoLogin")
 	public String kakaoLogin(
 	    @RequestParam(value = "code", required = false) String code,
@@ -613,7 +616,10 @@ public class MemberController {
 	    @RequestParam(value = "beforeURL", required = false) String beforeURL) throws Exception {
 	    // 카카오에서 받은 코드를 이용하여 access token을 얻어옴
 	    String access_Token = mService.getAccessToken(code);
-	    return "member/kakaoLogin";
+	    
+	    HashMap<String, Object> userInfo = mService.getUserInfo(access_Token);
+	    return "views/ming/member/sign";
 	}
+	
 	
 }
