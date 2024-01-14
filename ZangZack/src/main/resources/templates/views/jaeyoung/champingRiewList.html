@@ -87,7 +87,7 @@
     <div class="max-w-7xl mx-auto my-10">
         <header class="flex justify-between items-center mb-6 ">
             <h1 class="text-2xl font-bold ml-12">캠핑장 후기</h1>
-            <button class="btn-hover color-2 text-white px-4 py-2 rounded">글쓰기</button>
+            <button class="btn-hover color-2 text-white px-4 py-2 rounded" onclick="campingReviewRightView()">글쓰기</button>
         </header>
 	      <div class="bg-gray-50 shadow rounded-lg p-6 w-100">
 		    <div class="mb-4"> 
@@ -138,11 +138,25 @@
 					    <div class="foreground" style="float: left;">
 					        <span class="background" style="width:70%;"></span><!-- 4.8 x 100 / 5 = 96 퍼센트 계산 식.-->
 					   </div>
-					   
 				    </div>
 				</div>
 		    </div>
 		</div>
     </div>
+    
+ 	<script th:inline="javascript">
+ 		function campingReviewRightView(){
+ 			/*<![CDATA[*/
+	        let User = /*[[${session.loginUser}]]*/null;
+	        /*]]>*/
+		 	if(User != null){ //로그인된 유저만 넘어가게
+		 		
+		 		window.location.href="campingReviewRightView.jy";
+		 	}else{
+		 		alert("로그인 후 이용해주세요!")
+		 	}
+		 	
+ 		}
+ 	</script>
 </body>
 </html>

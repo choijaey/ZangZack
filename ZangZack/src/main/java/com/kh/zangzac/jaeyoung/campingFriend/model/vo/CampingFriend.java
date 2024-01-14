@@ -25,6 +25,7 @@ public class CampingFriend {
 	private int replyCount;
 	private int likeCount;
 	private String photoPath;
+	private String PhotoRename;
 	private ArrayList<Reply> replys;
 	private String likeStatus;
 

@@ -16,4 +16,10 @@ public interface CampingFriendDAO {
 
 	public ArrayList<CampingFriend> cfLimitList(RowBounds rowBounds);
 
+	public CampingFriend selectCampingFriend(int boardNo);
+
+	public int updateCampingFriend(CampingFriend cf);
+
+	public int deleteCampingFriend(CampingFriend cf);
+
 }
