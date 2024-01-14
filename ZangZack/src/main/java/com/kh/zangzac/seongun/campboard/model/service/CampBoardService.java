@@ -7,6 +7,7 @@ import com.kh.zangzac.common.model.vo.SelectCondition;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
+import com.kh.zangzac.seongun.common.model.vo.SearchBoard;
 
 public interface CampBoardService {
 
@@ -22,4 +23,7 @@ public interface CampBoardService {
 
 	ArrayList<Reply> selectReply(SelectCondition b);
 
+	int searchListCount(SearchBoard search);
+
+	ArrayList<CampBoard> searchBoardList(PageInfo pi, SearchBoard search);
 }

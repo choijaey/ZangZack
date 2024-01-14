@@ -199,20 +199,25 @@ p {
 
 #pagenation ul li a {
 	text-decoration: none;
-	color: #464D0F;
-	font-size: 14px;
-	padding: 5px 10px;
-	border-radius: 5px; /* 모서리를 둥글게 */
-	transition: background-color 0.3s, color 0.3s;
+    text-align: center;
+    color: #333;
+    font-size: 14px;
+    width: 30px; /* 정사각형의 너비 */
+    height: 30px; /* 정사각형의 높이 */
+    line-height: 30px; /* 텍스트를 수직 중앙에 위치시킴 */
+    padding: 0; /* 패딩을 제거하거나 조정 */
+    border-radius: 5px; /* 모서리를 둥글게 */
+    display: inline-block; /* 블록 레벨 요소처럼 너비와 높이를 적용 */
+    transition: background-color 0.3s, color 0.3s;
 }
 
 #pagenation ul li a:hover {
-	background-color: #464D0F;
+	background-color: #5cb85c;
 	color: #e6e6e6;
 }
 
 #pagenation ul li a#check_page {
-	background-color: #464D0F;
+	background-color: #5cb85c;
 	color: #e6e6e6;
 }
 
@@ -241,12 +246,12 @@ p {
 .search_button {
 	padding: 5px 15px;
 	border: none;
-	background-color: #464D0F;
+	background-color: #5cb85c;
 	color: white;
 	border-radius: 5px;
 	cursor: pointer;
 }
 
 .search_button:hover {
-	background-color: #363D0F;
+	background-color: #5cb85c;
 }

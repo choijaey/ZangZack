@@ -13,6 +13,7 @@ import com.kh.zangzac.common.reply.model.dao.ReplyDAO;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.seongun.campboard.model.dao.CampBoardDAO;
 import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
+import com.kh.zangzac.seongun.common.model.vo.SearchBoard;
 
 @Service
 public class CampBoardServiceImpl implements CampBoardService{
@@ -29,8 +30,7 @@ public class CampBoardServiceImpl implements CampBoardService{
 
 	@Override
 	public ArrayList<CampBoard> selectBoardList(PageInfo pi, int i) {
-		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), 
-		pi.getBoardLimit());
+		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
 		return cDAO.selectBoardList(i, rowBounds);
 	}
 
@@ -63,4 +63,14 @@ public class CampBoardServiceImpl implements CampBoardService{
 		return rDAO.selectReply(b);
 	}
 
+	@Override
+	public int searchListCount(SearchBoard search) {
+		return cDAO.searchListCount(search);
+	}
+
+	@Override
+	public ArrayList<CampBoard> searchBoardList(PageInfo pi, SearchBoard search) {
+		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
+		return cDAO.searchBoardList(search, rowBounds);
+	}
 }

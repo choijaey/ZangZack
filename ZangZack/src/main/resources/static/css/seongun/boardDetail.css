@@ -98,11 +98,65 @@ body {
 }
 
 /* 보드 수정 버튼 */
+#boardEditContainer{
+	position: absolute;
+	top: 30%;
+	right: 20%;
+}
 #board_edit_btn{
-	background-color: none;
-	background-image: url("../../image/seongun/boardAdd.png");
-	width: 15px;
-	height: 15px;
+	background: none;
+	border:none;
+	width : 35px;
+	height: auto;
+	float:right;
+	display: flex;
+}
+
+#board_edit_btn img#settingBtn{
+	width: 30px;
+	position: relative;
+}
+
+#editDropDown{
+	position: absolute;
+	top: -20px;
+	right: 29.7%;
+}
+
+#board_edit_btn :hover{
+	cursor: pointer;
+}
+
+#editDropDown{
+	position: absolute;
+	left: -10px;
+	top: -12px;
+	background-color: #f9f9f9;
+	min-width: 50px;
+	height: 30px;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+	border-radius: 4px;
+	padding: 0;
+	align-content: center;
+	align-items: center;
+	background: #5cb85c;
+}
+
+#editDropDown li{
+	list-style: none;
+}
+
+#editDropDown .editDropMenu{
+	margin: auto;
+	padding: 10px;
+	cursor: pointer;
+	display: block;
+	color: #fff;
+	background: #5cb85c;
+	border: none;
+	text-align: center;
+	width: 100%;
 }
 /* 좋아요 버튼과 댓글 카운트 스타일링 */
 .post-like-comment {

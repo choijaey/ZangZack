@@ -7,6 +7,7 @@ import org.apache.ibatis.session.RowBounds;
 
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
+import com.kh.zangzac.seongun.common.model.vo.SearchBoard;
 
 @Mapper
 public interface CampBoardDAO {
@@ -23,4 +24,7 @@ public interface CampBoardDAO {
 
 	int updateCount(int cbNo);
 
+	int searchListCount(SearchBoard search);
+	
+	ArrayList<CampBoard> searchBoardList(SearchBoard search, RowBounds rowBounds);
 }

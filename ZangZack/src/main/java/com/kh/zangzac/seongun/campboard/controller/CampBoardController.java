@@ -1,6 +1,7 @@
 package com.kh.zangzac.seongun.campboard.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,6 @@ import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.controller.BoardCondition;
 import com.kh.zangzac.common.heart.model.service.HeartService;
 import com.kh.zangzac.common.heart.model.vo.Heart;
-import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.model.vo.SelectCondition;
 import com.kh.zangzac.common.photo.model.service.PhotoService;
@@ -26,6 +26,7 @@ import com.kh.zangzac.ming.member.model.vo.Member;
 import com.kh.zangzac.seongun.campboard.model.service.CampBoardService;
 import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
 import com.kh.zangzac.seongun.common.WorkController;
+import com.kh.zangzac.seongun.common.model.vo.SearchBoard;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -57,43 +58,42 @@ public class CampBoardController {
 	private HeartService hService;
 	
 	@GetMapping("campBoard.su")
-	public String campBoardListView(@RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
-		
-		int listCount = cService.getListCount(0);
+	public String campBoardListView(@RequestParam(value="page", defaultValue="1") int page,@RequestParam(value="category", defaultValue="0") int category, Model model, HttpServletRequest request) {
+		int listCount = cService.getListCount(category);
 		
 		int currentPage = page;
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 15);
-		ArrayList<CampBoard> list = cService.selectBoardList(pi,0);
+		ArrayList<CampBoard> list = cService.selectBoardList(pi,category);
 		
-		String msg = list.isEmpty() ? "작성된 게시판이 없습니다!" : null;
-		sWork.addListModel(model, pi, list, msg, request.getRequestURI());
+		String msg = null;
+		sWork.addListModel(model, pi, list, msg, category, request.getRequestURI());
 		return "views/seongun/campboard/listBoard";
 	}
 	
 	@GetMapping("cardBoard.su")
-	public String campBoardCardView(@RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
-		int listCount = cService.getListCount(0);
+	public String campBoardCardView(@RequestParam(value="page", defaultValue="1") int page,@RequestParam(value="category", defaultValue="0") int category, Model model, HttpServletRequest request) {
+		int listCount = cService.getListCount(category);
 		
 		int currentPage = page;
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 15);
-		ArrayList<CampBoard> list = cService.selectBoardList(pi,0);
+		ArrayList<CampBoard> list = cService.selectBoardList(pi,category);
 		
 		String msg = list.isEmpty() ? "작성된 게시판이 없습니다!" : null;
-		sWork.addListModel(model, pi, list, msg, request.getRequestURI());
+		sWork.addListModel(model, pi, list, msg, category, request.getRequestURI());
 	    
 		return "views/seongun/campboard/cardBoard";
 	}
 	
 	@GetMapping("albumBoard.su")
-	public String campBoardAlbumView(@RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
-		int listCount = cService.getListCount(0);
+	public String campBoardAlbumView(@RequestParam(value="page", defaultValue="1") int page,@RequestParam(value="category", defaultValue="0") int category, Model model, HttpServletRequest request) {
+		int listCount = cService.getListCount(category);
 		
 		int currentPage = page;
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 30);
-		ArrayList<CampBoard> list = cService.selectBoardList(pi,0);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 40);
+		ArrayList<CampBoard> list = cService.selectBoardList(pi,category);
 		
-		String msg = list.isEmpty() ? "작성된 게시판이 없습니다!" : null;
-		sWork.addListModel(model, pi, list, msg, request.getRequestURI());
+		String msg = null;
+		sWork.addListModel(model, pi, list, msg, category, request.getRequestURI());
 	    return "views/seongun/campboard/albumBoard";
 	}
 	
@@ -132,7 +132,6 @@ public class CampBoardController {
 	
 	@PostMapping("insertCampBoard.su")
 	public String insertCampBoard(@ModelAttribute CampBoard board, @RequestParam("file") ArrayList<MultipartFile> files,HttpServletRequest request, Model model) {
-		board.setMemberId(((Member)request.getSession().getAttribute("loginUser")).getMemberId());
 		int resultB = 0;
 		int resultA = 0;
 		ArrayList<Photo> fileList = new ArrayList<>();
@@ -143,7 +142,6 @@ public class CampBoardController {
 			
 			if(returnArr != null) {
 				Photo a = sWork.setAttachment(returnArr, i);
-				
 				fileList.add(a);
 			}
 			
@@ -181,5 +179,23 @@ public class CampBoardController {
 	@GetMapping("writeCampBoard.su")
 	public String writeCampBoard() {
 		return "views/seongun/campboard/writeBoard";
+	}
+	
+	//검색기능
+	@GetMapping("searchCampBoard.su")
+	public String searchCampBoard(@RequestParam(value="page", defaultValue="1") int page,@RequestParam(value="category", defaultValue="0") int category,@ModelAttribute SearchBoard search, Model model,HttpServletRequest request) {
+		search.setSearchText("%" +search.getSearchText() + "%");
+		search.setCategoryNo(category);
+		
+		int listCount = cService.searchListCount(search);
+		
+		int currentPage = page;
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 15);
+		ArrayList<CampBoard> list = cService.searchBoardList(pi, search);
+		
+		String msg = list.isEmpty() ? "검색된 게시판이 없습니다!" : null;
+		sWork.searchModel(model, pi, list, msg, category, search,request.getRequestURI());
+	    
+		return "views/seongun/campboard/listBoard";
 	}
 }

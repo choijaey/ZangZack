@@ -1,6 +1,7 @@
 package com.kh.zangzac.seongun.common;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,23 +9,33 @@ import org.springframework.ui.Model;
 
 import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.heart.model.vo.Heart;
-import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.model.vo.SelectCondition;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.common.reply.controller.ReplyController;
 import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
+import com.kh.zangzac.seongun.common.model.vo.SearchBoard;
 
 @Controller
 public class WorkController {
 	@Autowired
 	private ReplyController rController;
 	
-	public void addListModel(Model model, PageInfo pi, ArrayList<CampBoard> list, String msg, String loc) {
+	public void addListModel(Model model, PageInfo pi, ArrayList<CampBoard> list, String msg,int category, String loc) {
 		model.addAttribute("pi", pi);
 		model.addAttribute("list", list);
 		model.addAttribute("msg", msg);
+		model.addAttribute("category", category);
 	    model.addAttribute("loc", loc);
+	}
+	
+	public void searchModel(Model model, PageInfo pi, ArrayList<CampBoard> list, String msg,int category, SearchBoard search, String loc) {
+		model.addAttribute("pi", pi);
+		model.addAttribute("list", list);
+		model.addAttribute("msg", msg);
+		model.addAttribute("category", category);
+		model.addAttribute("search", search);
+		model.addAttribute("loc", loc);
 	}
 
 	public Photo setAttachment(String[] returnArr, int i) {
@@ -76,5 +87,5 @@ public class WorkController {
 		h.setBoardType(i);
 		return h;
 	}
-	
+
 }

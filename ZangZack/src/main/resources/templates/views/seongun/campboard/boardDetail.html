@@ -14,7 +14,19 @@
 	<div class="container">
 		<div class="article_header">
 			<span class="boardCategory">[[${bList.categoryName}]]</span>
-			<button id="board_edit_btn"><img src="image/seongun/boardAdd.png" alt="게시판 설정 버튼"></button>
+			<div id="boardEditContainer">
+				<button id="board_edit_btn">
+					<img id="settingBtn" src="image/seongun/boardAdd.png" alt="게시판 설정 버튼">
+				</button>
+				<ul id="editDropDown">
+					<li>
+						<button class="editDropMenu">수정</button>
+					</li>
+					<li>
+						<button class="editDropMenu">삭제</button>
+					</li>
+				</ul>
+			</div>
 			<div class="post-header">
 				<h2>[[${bList.cbTitle}]]</h2>
 				<div class="post-details">
@@ -144,7 +156,7 @@
 		        },
 		        success: function(data) {
 		            updateCommentList(data.list);
-		            updatePagination(data.rPi);
+		            updatePagination(data.rPi, data.list.length);
 		        },
 		        error: function(error) {
 		            console.error('Error loading comments:', error);
@@ -188,7 +200,12 @@
 		function updateCommentList(comments) {
 		    const commentList = document.getElementById('commentList');
 		    commentList.innerHTML = '';
-		
+		    
+		    if (comments.length === 0) {
+		        commentList.innerHTML = '<h3 style="text-align: center;">작성된 댓글이 없습니다.</h3>';
+		        return;
+		    }
+		    
 		    comments.forEach(function(comment) {
 		        const commentItem = document.createElement('div');
 		        commentItem.classList.add('comment-item');
@@ -347,9 +364,16 @@
 		}
 		
 		//댓글 페이징 처리
-		function updatePagination(rPi) {
+		function updatePagination(rPi, commentListLength) {
 		    const paginationDiv = document.getElementById('pagenation');
 		    paginationDiv.innerHTML = '';
+		    
+		    if (commentListLength === 0) {
+		        paginationDiv.style.display = 'none';
+		        return;
+		    } else {
+		        paginationDiv.style.display = 'block';
+		    }
 		
 		    // 이전 페이지 그룹 버튼 컨테이너
 		    const prevGroupDiv = document.createElement('div');
