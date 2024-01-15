@@ -106,7 +106,7 @@
          <tr id="tr2">
             <td id="td1"></td>
             <td><img src="image/sohwa/icons8-plus-64.png"></td>
-            <td id="td2">0원</td>
+            <td id="td2"></td>
             <td><img src="image/sohwa/icons8-equal-24.png"></td>
             <td id="td3"></td>
          </tr>
@@ -114,7 +114,7 @@
       </table>
       
       <button class="btn-hover color-1" style="color:gray; margin-left:280px;">쇼핑하기</button>
-      <button class="btn-hover color-2">주문하기</button>
+      <button class="btn-hover color-2" onclick="goCartOrder()">주문하기</button>
       
    </div>   
    
@@ -141,7 +141,53 @@
 //     수량 가격 연동
       document.addEventListener('DOMContentLoaded', function () {
           const cartRows = document.querySelectorAll('.cart-row');
-      
+          
+          
+          updateTotalOrderPrice();
+
+          function updateTotalOrderPrice() {
+              const td2Element = document.getElementById('td2');
+              const deliveryPrice = calculateDeliveryPrice();
+
+              if (deliveryPrice === 0 || deliveryPrice === '0') {
+                  td2Element.textContent = '0원';
+              } else {
+                  td2Element.textContent = formatCurrency(deliveryPrice) + '원';
+              }
+
+              // 나머지 계산 로직은 유지
+              const resultPriceElements = document.querySelectorAll('.resultPrice');
+              let totalOrderPrice = 0;
+
+              resultPriceElements.forEach(function(element) {
+                  const price = parseInt(element.textContent.replace(/[^0-9]/g, ''), 10);
+                  if (!isNaN(price)) {
+                      totalOrderPrice += price;
+                  }
+              });
+
+              document.getElementById('td1').textContent = formatCurrency(totalOrderPrice) + '원';
+              document.getElementById('td3').textContent = formatCurrency(totalOrderPrice) + '원';
+          }
+
+          function calculateDeliveryPrice() {
+              let hasFreeDelivery = false;
+
+              cartRows.forEach(function(row) {
+                  const td4Element = row.querySelector('.td4');
+                  const deliveryText = td4Element.textContent.trim();
+
+                  if (deliveryText === '무료배송') {
+                      hasFreeDelivery = true;
+                  }
+              });
+
+              return hasFreeDelivery ? 0 : 2500;
+          }
+          
+          
+          
+          
           
           cartRows.forEach(function (row) {
               const quantityInput = row.querySelector('.quantity');
@@ -149,7 +195,7 @@
               const resultPriceElement = row.querySelector('.resultPrice');
               const decrementButton = row.querySelector('.decrementBtn');
               const incrementButton = row.querySelector('.incrementBtn');
-      
+      		  
               updateTotalPrice();
       
               if (quantityInput) {
@@ -354,9 +400,9 @@
 	                totalOrderPrice += price;
 	            }
 	        });
-	
+	        const deliveryPrice = parseInt(document.getElementById('td2').innerText.replace('원', '').replace(',', ''));
 	        document.getElementById('td1').textContent = formatCurrency(totalOrderPrice) + '원';
-	        document.getElementById('td3').textContent = formatCurrency(totalOrderPrice) + '원';
+	        document.getElementById('td3').textContent = formatCurrency(totalOrderPrice + deliveryPrice) + '원';
 	    }
 	
 	    function formatCurrency(value) {
@@ -373,7 +419,11 @@
 	});
       	
       	
-      	
+      	function goCartOrder(){
+      		
+      		const deliveryPrice = parseInt(document.getElementById('td2').innerText.replace('원', '').replace(',', ''));
+      		location.href='goCartOrder.so?deliveryPrice=' +deliveryPrice;
+      	}
       	
       	
    </script>

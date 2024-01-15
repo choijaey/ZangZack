@@ -607,5 +607,11 @@
 						 where board_no = #{productNo} and board_type=5 and photo_level = 1)
 	</update>
 	
+	<select id="selectCart" resultType="Cart">
+		select *
+		from cart
+		where member_id = #{id}
+	</select>
+	
 	
 </mapper>

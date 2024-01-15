@@ -93,110 +93,46 @@
                         <input type="checkbox">
 						<img src="image/sohwa/tent1core1.png">
 						<div>
-							<div>모비가든</div>
-							캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br>
-							410,000원
+							<div>[[${p.productCompany}]]</div>
+							[[${p.productName}]]<br>
+							[[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]
 						</div>
                     </td>
                     <td class="td2">
                         <div class="quantity-input">&nbsp;&nbsp;&nbsp;
                             <button class="quantity-btn decrementBtn">-</button>
-                            <input type="text" class="quantity" value="1" min="1">
+                            <input type="text" class="quantity" th:value="${eno}" min="1">
                             <button class="quantity-btn incrementBtn">+</button>
                         </div>
                     </td>
                     <td class="td3">
-                        410,000원
+                        [[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]
                     </td>
                 </tr>
                 
-                <tr class="cart-row">
-                    <td class="td1">
-                        <input type="checkbox">
-						<img src="image/sohwa/tent1core1.png">
-						<div>
-							<div>모비가든</div>
-							캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br>
-							410,000원
-						</div>
-                    </td>
-                    <td class="td2">
-                        <div class="quantity-input">&nbsp;&nbsp;&nbsp;
-                            <button class="quantity-btn decrementBtn">-</button>
-                            <input type="text" class="quantity" value="1" min="1">
-                            <button class="quantity-btn incrementBtn">+</button>
-                        </div>
-                    </td>
-                    <td class="td3">
-                        410,000원
-                    </td>
-                </tr>
                 
-                <tr class="cart-row">
-                    <td class="td1">
-                        <input type="checkbox">
-						<img src="image/sohwa/tent1core1.png">
-						<div>
-							<div>모비가든</div>
-							캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br>
-							410,000원
-						</div>
-                    </td>
-                    <td class="td2">
-                        <div class="quantity-input">&nbsp;&nbsp;&nbsp;
-                            <button class="quantity-btn decrementBtn">-</button>
-                            <input type="text" class="quantity" value="1" min="1">
-                            <button class="quantity-btn incrementBtn">+</button>
-                        </div>
-                    </td>
-                    <td class="td3">
-                        410,000원
-                    </td>
-                </tr>
+<!--                 <tr class="cart-row"> -->
+<!--                     <td class="td1"> -->
+<!--                         <input type="checkbox"> -->
+<!-- 						<img src="image/sohwa/tent1core1.png"> -->
+<!-- 						<div> -->
+<!-- 							<div>모비가든</div> -->
+<!-- 							캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br> -->
+<!-- 							410,000원 -->
+<!-- 						</div> -->
+<!--                     </td> -->
+<!--                     <td class="td2"> -->
+<!--                         <div class="quantity-input">&nbsp;&nbsp;&nbsp; -->
+<!--                             <button class="quantity-btn decrementBtn">-</button> -->
+<!--                             <input type="text" class="quantity" value="1" min="1"> -->
+<!--                             <button class="quantity-btn incrementBtn">+</button> -->
+<!--                         </div> -->
+<!--                     </td> -->
+<!--                     <td class="td3"> -->
+<!--                         410,000원 -->
+<!--                     </td> -->
+<!--                 </tr> -->
                 
-                <tr class="cart-row">
-                    <td class="td1">
-                        <input type="checkbox">
-						<img src="image/sohwa/tent1core1.png">
-						<div>
-							<div>모비가든</div>
-							캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br>
-							410,000원
-						</div>
-                    </td>
-                    <td class="td2">
-                        <div class="quantity-input">&nbsp;&nbsp;&nbsp;
-                            <button class="quantity-btn decrementBtn">-</button>
-                            <input type="text" class="quantity" value="1" min="1">
-                            <button class="quantity-btn incrementBtn">+</button>
-                        </div>
-                    </td>
-                    <td class="td3">
-                        410,000원
-                    </td>
-                </tr>
-                
-                <tr class="cart-row">
-                    <td class="td1">
-                        <input type="checkbox">
-						<img src="image/sohwa/tent1core1.png">
-						<div>
-							<div>모비가든</div>
-							캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br>
-							410,000원
-						</div>
-                    </td>
-                    <td class="td2">
-                        <div class="quantity-input">&nbsp;&nbsp;&nbsp;
-                            <button class="quantity-btn decrementBtn">-</button>
-                            <input type="text" class="quantity" value="1" min="1">
-                            <button class="quantity-btn incrementBtn">+</button>
-                        </div>
-                    </td>
-                    <td class="td3">
-                        410,000원
-                    </td>
-                </tr>
 			
 			</table>
 			
@@ -324,7 +260,7 @@
 
             // 초기에 각 행의 총 가격 계산
             for (let i = 0; i < td3Elements.length; i++) {
-                const unitPrice = 410000; // 초기 가격 설정
+            	const unitPrice = parseInt(td3Elements[i].innerText.replace('원', '').replace(/,/g, '')) || 0;
                 const quantity = parseInt(quantityInputs[i].value);
                 td3Elements[i].innerText = (unitPrice * quantity).toLocaleString() + '원';
             }
@@ -348,7 +284,7 @@
 
             // 총 가격 업데이트 함수
             function updateTotalPrice(index) {
-                const unitPrice = 410000; // 초기 가격 설정
+            	const unitPrice = parseInt(td3Elements[index].innerText.replace('원', '').replace(/,/g, '')) || 0;
                 const quantity = parseInt(quantityInputs[index].value);
                 td3Elements[index].innerText = (unitPrice * quantity).toLocaleString() + '원';
             }

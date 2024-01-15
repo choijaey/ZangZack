@@ -187,7 +187,7 @@
 			        <p>[[${p.productName}]]</p>
 			        <p class="price" th:text="|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|"></p>
 			        <span class="starImage" th:each="r : ${rList}" th:if="${p.productNo == r.productNo }">
-						<img src="image/sohwa/icons8-star.gif" style="height: 10px;">[[${p.productScore}]] <span style="color:gray;">평점</span></img>
+						<img src="image/sohwa/icons8-star.gif" style="height: 10px;">[[${p.productScore}]]<span style="color:gray;">평점</span></img>
 					</span><br>
 			        <th:block th:if="${p.eno == 0}"><span class="badge rounded-pill text-bg-dark">일시품절</span></th:block>
 			        <th:block th:if="${p.deliveryPrice == 0}"><span class="badge text-bg-secondary">무료배송</span></th:block>

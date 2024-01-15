@@ -1,5 +1,10 @@
 package com.kh.zangzac.sohwa.product.controller;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -120,6 +125,7 @@ public class ProductController {
 		ArrayList<Product> pList = new ArrayList<>();
 		ArrayList<Attachment> aList = new ArrayList<>();
 		ArrayList<Attachment> thList = new ArrayList<>();
+		ArrayList<Option> oList = new ArrayList<>();
 		PageInfo pi = new PageInfo();
 		
 		//categoryNo가 0일때는 keyword가져가기
@@ -388,9 +394,33 @@ public class ProductController {
 		pa.setOrderPrice(price);
 		pa.setProductNo(productNo);
 		pa.setOrderProductEno(eno);
+		
+		Product p = pService.selectProductDetail(productNo);
+		
+		model.addAttribute("p", p);
+		model.addAttribute("eno", eno);
 		return "views/sohwa/orderPage";
 	}
 	
+	
+	
+	
+	
+	@GetMapping("goCartOrder.so")
+	public String goCartOrder(Model model, @RequestParam("deliveryPrice") int deliveryPrice) {
+		Member loginUser = (Member)model.getAttribute("loginUser");
+		String id = loginUser.getMemberId();
+		ArrayList<Cart> cList = pService.selectCart(id);
+		ArrayList<Product> pList = pService.selectAllProduct();
+		ArrayList<Attachment> aList = pService.selectAllPhoto();
+		
+		model.addAttribute("deliveryPrice", deliveryPrice);
+		model.addAttribute("aList", aList);
+		model.addAttribute("pList", pList);
+		model.addAttribute("cList", cList);
+		model.addAttribute("loginUser", loginUser);
+		return "views/sohwa/orderPage2";
+	}
 	
 	
 	
@@ -797,6 +827,101 @@ public class ProductController {
        }
        
 	}
+	
+//	@GetMapping("insertPayment.so")
+//	public ResponseEntity<Object> insertPayment(@RequestParam("orderId") String orderId, @RequestParam("paymentKey") String paymentKey, @RequestParam("amount") int amount) {
+//		
+//		
+//		// 토스페이먼츠 API는 시크릿 키를 사용자 ID로 사용하고, 비밀번호는 사용하지 않습니다.
+//	    // 비밀번호가 없다는 것을 알리기 위해 시크릿 키 뒤에 콜론을 추가합니다.
+//	    JSONParser parser = new JSONParser();
+//	    byte[] encodedBytes;
+//	    String authorizations;
+//		
+//		JSONObject obj = new JSONObject();
+//		obj.put("orderId", orderId);
+//		obj.put("amount", amount);
+//		obj.put("paymentKey", paymentKey);
+//		
+//		String widgetSecretKey = "test_sk_24xLea5zVAjM2olw4v70rQAMYNwW";
+//		Base64.Encoder encoder = Base64.getEncoder();
+//		int code = 0;
+//		JSONObject jsonObject = null;
+//		try {
+//			encodedBytes = encoder.encode((widgetSecretKey + ":").getBytes("UTF-8"));
+//			
+//			authorizations = "Basic " + new String(encodedBytes, 0, encodedBytes.length);
+//			// 결제를 승인하면 결제수단에서 금액이 차감돼요.
+//			URL url = new URL("https://api.tosspayments.com/v1/payments/confirm");
+//			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//			connection.setRequestProperty("Authorization", authorizations);
+//			connection.setRequestProperty("Content-Type", "application/json");
+//			connection.setRequestMethod("POST");
+//			connection.setDoOutput(true);
+//			
+//			OutputStream outputStream = connection.getOutputStream();
+//			outputStream.write(obj.toString().getBytes("UTF-8"));
+//			
+//			code = connection.getResponseCode();
+//			boolean isSuccess = code == 200 ? true : false;
+//			
+//			InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
+//			
+//			// 결제 성공 및 실패 비즈니스 로직을 구현하세요.
+//			Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
+//			jsonObject = (JSONObject) parser.parse(reader);
+//			responseStream.close();
+//		} catch (UnsupportedEncodingException e) {
+//			e.printStackTrace();
+//		} catch (MalformedURLException e) {
+//			e.printStackTrace();
+//		} catch (ProtocolException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		return ResponseEntity.status(code).body(jsonObject);
+//	}
+	
+	
+	@GetMapping("insertPayment.so")
+    public String success(@RequestParam("orderId") String orderId, @RequestParam("paymentKey") String paymentKey, @RequestParam("amount") String amount, @RequestParam("productNos") String productNos, @RequestParam("enos") String enos, @RequestParam("address") String address) {
+    	System.out.println(orderId);
+    	System.out.println(paymentKey);
+    	System.out.println(amount); //100
+    	//{"mId":"tvivarepublica","lastTransactionKey":"B648AB26AC000718EB50E755086D240A","paymentKey":"jPblkGKaEWd46qopOB89O6JmlGN7mEVZmM75y0v1YenRLQD2","orderId":"1W_pCfO4rzG9szJEcThKerr","orderName":"토스 티셔츠 외 2건","taxExemptionAmount":0,"status":"DONE","requestedAt":"2024-01-15T17:05:59+09:00","approvedAt":"2024-01-15T17:06:13+09:00","useEscrow":false,"cultureExpense":false,"card":null,"virtualAccount":null,"transfer":null,"mobilePhone":null,"giftCertificate":null,"cashReceipt":null,"cashReceipts":null,"discount":null,"cancels":null,"secret":"ps_yZqmkKeP8gy6eJqEOD2OVbQRxB9l","type":"NORMAL","easyPay":{"provider":"토스페이","amount":100,"discountAmount":0},"country":"KR","failure":null,"isPartialCancelable":true,"receipt":{"url":"https://dashboard.tosspayments.com/receipt/redirection?transactionId=tviva20240115170559mESY4&ref=PX"},"checkout":{"url":"https://api.tosspayments.com/v1/payments/jPblkGKaEWd46qopOB89O6JmlGN7mEVZmM75y0v1YenRLQD2/checkout"},"currency":"KRW","totalAmount":100,"balanceAmount":100,"suppliedAmount":91,"vat":9,"taxFreeAmount":0,"method":"간편결제","version":"2022-11-16"}
+    	System.out.println(productNos);
+    	HttpRequest request = HttpRequest.newBuilder()
+			    .uri(URI.create("https://api.tosspayments.com/v1/payments/confirm"))
+			    .header("Authorization", "Basic dGVzdF9za18yNHhMZWE1elZBak0yb2x3NHY3MHJRQU1ZTndXOg==")
+			    .header("Content-Type", "application/json")
+			    .method("POST", HttpRequest.BodyPublishers.ofString("{\"paymentKey\":\"" + paymentKey + 
+			    													"\",\"orderId\":\"" + orderId + 
+			    													"\",\"amount\":" + amount + "}"))
+			    .build();
+		HttpResponse<String> response = null;
+		
+		
+		
+		
+		
+		
+		try {
+			response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+			System.out.println(response.body());
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return "views/sohwa/myOrderPage";
+    }
+    
+	  
+	
 	
 	
 	
