@@ -16,7 +16,7 @@
 </head>
 <body >
    <div th:insert="~{common/navbar :: navbar}"></div>
-   <form action="campingFriendEdit.jy" method="post" enctype="multipart/form-data">
+   <form action="campingFriendEdit.jy" method="post" enctype="multipart/form-data" onsubmit="">
 	    <div class=" max-w-2xl mx-auto my-10">
 	    	<input type="hidden" name="PhotoRename" th:value="${cf.PhotoRename}">
 	    	<header class="flex justify-between items-center mb-6 ">
@@ -133,6 +133,8 @@
 	 }
 	 
  }
+ 
+ 
  
  
 

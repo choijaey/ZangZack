@@ -235,5 +235,7 @@ public class CampingReviewController {
 	      
 		return "views/jaeyoung/champingReviewEdit";
 	}
+	
+	//campingReviewEdit.jy
 
 }
