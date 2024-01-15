@@ -208,20 +208,15 @@ public class SecondHandController {
 		ArrayList<Reply> rList = spService.selectReply(spNo);
 		//댓글 개수를 가져오는 로직
 	    //int replyCount = replyService.getReplyCountByPostId(postId);
-
-	    
 		
 		 // aList를 spNo의 순서로 정렬
 	    Collections.sort(aList, Comparator.comparingInt(Photo::getPhotoNo));
-		
-	    
-		
 		
 		model.addAttribute("aList", aList);
 		model.addAttribute("slist", sList);
 		model.addAttribute("rList", rList);
 		//model.addAttribute("replyCount", replyCount); // 댓글 개수
-		return "views/yoonahrim/secondHandDetail";
+		return "views/yoonahrim/test2";
 	}
 	
 	//중고 게시글 등록
