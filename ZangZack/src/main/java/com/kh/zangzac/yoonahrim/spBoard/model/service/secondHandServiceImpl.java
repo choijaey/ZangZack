@@ -123,6 +123,11 @@ public class secondHandServiceImpl implements secondHandService{
 		return spDAO.selectBoardList(i, rowBounds);
 	}
 
+	@Override
+	public int updateAdminInfo(secondHandProduct sp) {
+		return spDAO.updateAdminInfo(sp);
+	}
+
 	
 
 

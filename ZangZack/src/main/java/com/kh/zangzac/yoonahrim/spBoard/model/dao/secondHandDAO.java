@@ -53,6 +53,8 @@ public interface secondHandDAO {
 
 	ArrayList<secondHandProduct> selectBoardList(int i, RowBounds rowBounds);
 
+	int updateAdminInfo(secondHandProduct sp);
+
 
 
 

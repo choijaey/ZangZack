@@ -15,16 +15,16 @@
 	<th:block th:each="s : ${slist}" th:if="${true}">
 	<form id="showDetail" name="showDetail" method="get">
 	
-		<input type="hidden" th:value="${s.spNo}" th:id="${s.spNo}"/>
+		<input type="hidden" th:value="${s.spNo}" name="spNo" id="spNo"/>
 		<div class="d-grid gap-2 d-md-block">
 		    <div class="container text-end mt-n2">
 		        <button type="button" class="btn btn-outline-success" th:onclick="|location.href='edit.ah?spNo=' + ${s.spNo}|" th:if="${session.loginUser != null && session.loginUser.memberId == s.memberId}">수정하기</button>&nbsp;&nbsp;
 		        <!-- 예약 여부 -->
-		            <button type="button" id="bookButton" class="btn btn-outline-success" th:onclick="booking();" th:if="${s.spIsBook == 'N' && session.loginUser != null && session.loginUser.memberId == s.memberId}">예약 중</button>&nbsp;&nbsp;
-		            <button type="button" id="bookButton" class="btn btn-outline-success" th:onclick="bookingUndo();" th:if="${s.spIsBook == 'Y' && session.loginUser != null && session.loginUser.memberId == s.memberId}">예약 취소</button>&nbsp;&nbsp;
+		            <button type="button" id="bookButton" th:value="${s.spNo}" class="btn btn-outline-success" th:onclick="booking();" th:if="${s.spIsBook == 'N' && session.loginUser != null && session.loginUser.memberId == s.memberId}">예약 중</button>&nbsp;&nbsp;
+		            <button type="button" id="bookButton" th:value="${s.spNo}" class="btn btn-outline-success" th:onclick="bookingUndo();" th:if="${s.spIsBook == 'Y' && session.loginUser != null && session.loginUser.memberId == s.memberId}">예약 취소</button>&nbsp;&nbsp;
 		        <!-- 판매 및 삭제 여부 -->
-		            <button type="button" id="soldoutButton" class="btn btn-outline-success" th:onclick="markSold();" th:if="${s.spIsSell == 'N' && session.loginUser != null && session.loginUser.memberId == s.memberId}">판매완료</button>
-		            <button type="button" id="soldoutButton" class="btn btn-outline-success" th:onclick="markDelete();" th:if="${s.spIsSell == 'Y' && session.loginUser != null && session.loginUser.memberId == s.memberId}">삭제</button>
+		            <button type="button" id="soldoutButton" th:value="${s.spNo}" class="btn btn-outline-success" th:onclick="markSold();" th:if="${s.spIsSell == 'N' && session.loginUser != null && session.loginUser.memberId == s.memberId}">판매완료</button>
+		            <button type="button" id="soldoutButton" th:value="${s.spNo}" class="btn btn-outline-success" th:onclick="markDelete();" th:if="${s.spIsSell == 'Y' && session.loginUser != null && session.loginUser.memberId == s.memberId}">삭제</button>
 		    </div>
 		    <th:block th:if="${s.spIsBook == 'Y'}">
 		        <h2 class="reservation" style="text-align:center; margin: 50px;">현재 이 페이지는 예약 중입니다.</h2>
@@ -105,14 +105,28 @@
 							<div class="media fs-7"  th:each="r : ${rList}">
 								<img class="d-flex rounded-circle" alt="reply_profile" th:src="${r.memberProfilePath}" style="position:absolute; width:50px; height:50px">
 								<div class="media-body" style="position:relative; left:60px">
-									<input type="hidden" th:value="${r.replyNo}"/>
+									<input type="hidden" id="replyNo" th:value="${r.replyNo}"/>
 										<h6 class="mt-0">[[${r.memberId}]]</h6>
 										<p>[[${r.replyContent}]]</p>
 									<!-- 수정 input type="text" 창 -->
-										<div class="inputReply" style="display:none;">
-											<input type="text" id="replyupdateContent" placeholder="수정할 내용을 입력해주세요"/><button type="submit" id="button-addon3">확인</button>
+										<div class="modal" tabindex="-1" th:id="'modal-' + ${r.replyNo}">
+										  <div class="modal-dialog modal-dialog-centered">
+										    <div class="modal-content">
+										      <div class="modal-header">
+										        <h5 class="modal-title">댓글 수정</h5>
+										        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										      </div>
+										      <div class="modal-body">
+										        <input type="text" id="replyupdateContent" th:value="${r.replyContent}"/>
+										      </div>
+										      <div class="modal-footer">
+										        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-target="#myModal">Close</button>
+										        <button type="submit" id="editReply" class="btn btn-primary">수정</button>
+										      </div>
+										    </div>
+										  </div>
 										</div>
-									<span id="insert_reply" class="insert_reply" style="cursor: pointer;" onclick="updateReply()">수정</span>&nbsp;&nbsp;
+									<span id="insert_reply" class="insert_reply" style="cursor: pointer;" th:onclick="'showUpdateModal(' + ${r.replyNo} + ')'" >수정</span>&nbsp;&nbsp;
 									<span class="delete_reply" style="cursor: pointer;">삭제</span>
 								</div>
 								<br>
@@ -120,7 +134,7 @@
 						</div>	
 					<hr id="hr_content" style="width:820px">
 					<!-- 댓글 입력창 -->
-					<div id="reply_write">
+					<div id="reply_write" th:if="${session.loginUser != null}">
 						<div class="input-group mb-3">
 							 <div class="col-xs-4">
 								<label for="replyContent">
@@ -146,6 +160,7 @@
 				
 	            var button = document.getElementById('bookButton');
 	            var confirmBooking = confirm("예약 상태를 변경하시겠습니까?");
+	            var spNo = document.getElementById('bookButton').value;
 	            
 	            if (confirmBooking) {
 	                var reservationElement = document.getElementsByClassName('reservation')[0];
@@ -153,7 +168,7 @@
 	                if (button.innerText === '예약 중') {
 	                    alert("예약 중으로 상태가 변경되었습니다.");
 	                    button.innerText = '예약 취소';
-	                    location.href = 'booking.ah?spNo=' //예약중일때
+	                    location.href = 'booking.ah?spNo=' + spNo; //예약중일때
 	                    if (reservationElement) {
 	                        reservationElement.style.display = 'block';
 	                    }
@@ -168,7 +183,7 @@
 				
 				 var button = document.getElementById('bookButton');
 		         var confirmBooking = confirm("예약 상태를 변경하시겠습니까?");
-		         
+		         var spNo = document.getElementById('bookButton').value;
 		         
 		         if (confirmBooking) {
 		                var reservationElement = document.getElementsByClassName('reservation')[0];
@@ -176,7 +191,7 @@
 			         if (button.innerText === '예약 취소'){
 			        	 	alert("예약 취소로 상태가 변경되었습니다.");
 		                    button.innerText = '예약 중';
-		                    location.href = 'bookingUndo.ah?spNo='; //예약취소일때
+		                    location.href = 'bookingUndo.ah?spNo=' + spNo; //예약취소일때
 		                    if (reservationElement) {
 		                        reservationElement.style.display = 'none';
 		                    }
@@ -189,6 +204,7 @@
 			
 			function markSold() {
 			    var outButton = document.getElementById('soldoutButton');
+			    var spNo = document.getElementById('soldoutButton').value;
 			    
 			    if (outButton.innerText == '판매완료') {
 			        var confirmSold = confirm("판매완료로 상태를 변경하시면 상태를 되돌릴 수 없습니다. \n그래도 변경하시겠습니까?");
@@ -196,7 +212,7 @@
 			        if (confirmSold) {
 			            alert("판매완료로 상태가 변경되었습니다.");
 			            outButton.innerText = '삭제';
-			            location.href = 'soldout.ah?spNo='; //판매완료일때
+			            location.href = 'soldout.ah?spNo=' + spNo; //판매완료일때
 			        } else {
 			            alert("취소되었습니다.");
 			        }
@@ -205,12 +221,13 @@
 				
 			function markDelete() {
 				var outButton = document.getElementById('soldoutButton');
+				var spNo = document.getElementById('soldoutButton').value;
 				
 				if(outButton.innerText == '삭제'){
 					var confirmDelete = confirm("정말 삭제하시겠습니까?");
 					
 					if (confirmDelete) {
-			            location.href = 'delete.ah?spNo='; //삭제일때
+			            location.href = 'delete.ah?spNo=' + spNo; //삭제일때
 			        } else {
 			            alert("삭제가 취소되었습니다.");
 			        }
@@ -229,6 +246,7 @@
 			            data: { replyContent: content, boardType: '4', boardNo: boardNo },
 			            success: (data) => {
 			                console.log(data);  // 전송에 성공했을 때
+			                location.reload();
 			            },
 			            error: data => console.log(data)  // 전송에 실패했을 때
 			        });
@@ -237,17 +255,39 @@
 			    }
 			});
 			
-			function updateReply() {
-			    const updateReplyBtns = document.querySelectorAll('.insert_reply');
+			function showUpdateModal(replyNo) {
+			    const modal = document.getElementById('modal-' + replyNo);
+			    modal.style.display = 'block';
 
-			    updateReplyBtns.forEach(function(updateReplyBtn) {
-			        updateReplyBtn.addEventListener('click', function() {
-			            const inputReply = this.closest('.media').querySelector('.inputReply');
-			            inputReply.style.display = 'block';
-			        });
-			    });
+			    // 추가된 부분: 모달 창이 열릴 때 replyNo를 전역 변수로 설정
+			    window.currentReplyNo = replyNo;
 			}
 			
-		</script>
+			document.getElementById('editReply').addEventListener('click', () => {
+			    const replyNo = window.currentReplyNo;
+			    
+			    function editReply(replyNo) {
+			        const content = document.getElementById("replyupdateContent").value;
+			        const boardNo = document.getElementById("boardNo").value;
+			        
+			        if (content !== '') {
+			            $.ajax({
+			                url: 'updateReply.rep',
+			                method: 'POST',
+			                data: { replyContent: content, boardType: '4', boardNo: boardNo, replyNo: replyNo },
+			                success: (data) => {
+			                    console.log(data);  // 전송에 성공했을 때
+			                    location.reload();
+			                },
+			                error: data => console.log(data)  // 전송에 실패했을 때
+			            });
+			        } else {
+			            alert("댓글 내용을 입력해주세요");
+			        }
+			    }
+
+			});
+			//모달창은 열리나 수정이 안됨.
+</script>
 </body>
 </html>
