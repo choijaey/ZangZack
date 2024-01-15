@@ -10,6 +10,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'GmarketSansMedium';
+    text-decoration: none;
 }
 /*사이드바*/
 .sidebar {
@@ -42,7 +43,7 @@
 	width: 250px;
 	position: relative;
 	top: 50px;
-	left: 845px;
+	left: 900px;
 	margin-bottom: -100px;
 }
 
@@ -154,6 +155,7 @@ h1 {
 	position: relative;
 	top: 150px;
   	list-style: none;
+  	padding-bottom: 15px;
 }
 
 .review-item {
@@ -257,3 +259,46 @@ h1 {
 	  right:606px;
 	  top: 50px;
   }
+  
+#pagenation {
+	position:relative;
+    text-align: center;
+    top:230px;
+    left: 80px;
+}
+
+#pagenation ul {
+   list-style: none;
+   padding: 0;
+   display: inline-block; /* 중앙 정렬을 위해 inline-block으로 변경 */
+   margin: 0; /* 기본 마진 제거 */
+}
+
+#pagenation ul li {
+   display: inline;
+   margin: 0 5px;
+}
+
+#pagenation ul li a {
+   text-decoration: none;
+    text-align: center;
+    color: #333;
+    font-size: 14px;
+    width: 30px; /* 정사각형의 너비 */
+    height: 30px; /* 정사각형의 높이 */
+    line-height: 30px; /* 텍스트를 수직 중앙에 위치시킴 */
+    padding: 0; /* 패딩을 제거하거나 조정 */
+    border-radius: 5px; /* 모서리를 둥글게 */
+    display: inline-block; /* 블록 레벨 요소처럼 너비와 높이를 적용 */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#pagenation ul li a:hover {
+   background-color: #5cb85c;
+   color: #e6e6e6;
+}
+
+#pagenation ul li a#check_page {
+   background-color: #5cb85c;
+   color: #e6e6e6;
+}

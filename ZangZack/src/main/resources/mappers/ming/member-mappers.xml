@@ -5,7 +5,7 @@
 	<insert id="insertMember">
 		insert into member
 		values (#{memberId}, #{memberPwd}, #{memberName}, #{memberEmail}, #{memberNickName}, #{memberBirth}, #{memberAddress},
-				#{memberPhone},sysdate, default,default,default,default ) 
+				#{memberPhone},sysdate, default,default,default,default,1 ) 
 	</insert>
 	
 	<select id="login" resultType="Member">
@@ -143,5 +143,41 @@
 	         MEMBER_NICKNAME LIKE '%'|| #{keyword} ||'%'
 	    </if>
 	    ORDER BY MEMBER_NAME DESC
+	</select>
+	
+	<insert id="kakaoLogin">
+		insert into member
+		values (#{memberId}, #{memberPwd}, #{memberName}, #{memberEmail}, #{memberNickName}, #{memberBirth}, #{memberAddress},
+				#{memberPhone},sysdate, default,default,default, #{memberProfilePath},2) 
+	</insert>
+	
+	<select id="isEmailDuplicate" resultType="boolean">
+		select count(*)
+		from member
+		where member_email = #{memberEmail} and member_status = 'N'
+	</select>
+	
+	<select id="getReviewListCount" resultType="_int">
+		select count(*)
+		from REVIEW
+	</select>
+	
+	<select id="selectReview" resultType="review">
+	    SELECT *
+	    FROM review
+	    JOIN photo ON (board_no = review_no)
+	    join PRODUCT using (PRODUCT_NO)
+	    WHERE review_status = 'N' AND board_type = '6'
+	    ORDER BY review_no DESC
+	</select>
+	<select id="selectAllProduct" resultType="Product">
+		select *
+		from Product
+		where PRODUCT_STATUS ='N'
+	</select>
+	<select id="selectAllPotoProduct" resultType="Photo">
+		select *
+		from Photo
+		where PHOTO_STATUS ='N'
 	</select>
 </mapper>

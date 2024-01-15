@@ -42,7 +42,7 @@
 	width: 250px;
 	position: relative;
 	top: 50px;
-	left: 920px;
+	left: 905px;
 	margin-bottom: -100px;
 }
 
@@ -122,7 +122,7 @@
 #border{
 	position: relative;
     top: 200px;
-    left: 25%;
+    left: 27%;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.2),
@@ -150,7 +150,10 @@
     object-fit:cover;
 }
 
-
+.deleteMemberBtn{
+	position: relative;
+	top:100px;
+}
 /*프로필 사진 수정 버튼*/
 .input-file-button{
   z-index:0;

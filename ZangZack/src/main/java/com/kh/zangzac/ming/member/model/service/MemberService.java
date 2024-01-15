@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.ming.member.model.vo.Member;
+import com.kh.zangzac.sohwa.product.model.vo.Product;
+import com.kh.zangzac.sohwa.product.model.vo.Review;
 
 public interface MemberService {
 
@@ -58,6 +59,19 @@ public interface MemberService {
 	String getAccessToken(String code);
 
 	HashMap<String, Object> getUserInfo(String access_Token);
+
+	int kakaoLogin(Member kakaoMemberInfo);
+
+	boolean isEmailDuplicate(String memberEmail);
+
+	int getReviewListCount(int i);
+
+	ArrayList<Review> selectReview(PageInfo pi, int i);
+
+	ArrayList<Product> selectAllProduct();
+
+	ArrayList<Photo> selectAllPotoProduct();
+
 	
 
 	
