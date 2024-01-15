@@ -49,7 +49,9 @@ public interface CampService {
 
 	int insertPhoto(ArrayList<Photo> list);
 
-	int searchCampCount(String keyword, String city, String country, String type);
+	int searchCampCount(String keyword, String city, String type);
+
+	ArrayList<CampingGround> searchCampList(String keyword, String city, String type);
 
 	
 }

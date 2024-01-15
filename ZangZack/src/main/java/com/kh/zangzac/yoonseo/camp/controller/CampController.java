@@ -52,12 +52,12 @@ public class CampController {
 		ArrayList<CampingGround> mapList = cService.selectMapList(3);
 		
 		
-		
 		if(cList != null) {
 			model.addAttribute("loc", request.getRequestURI());
 			model.addAttribute("cList", cList);
 			model.addAttribute("pi", pi);
 			model.addAttribute("mapList", mapList);
+			model.addAttribute("listCount", listCount);
 			
 			return "views/yoonseo/campSearch";
 		}else {
@@ -332,30 +332,42 @@ public class CampController {
 			//추가한 사진 길이에 +1 한 것이 같으면.
 			redirectAttributes.addAttribute("no", camp.getCgNo());
 			redirectAttributes.addAttribute("page", page);
-			return "redirect:campDetail.ys";
+			return "redirect:campUpdate.ys";
 		}else {
 			throw new CampException("캠핑장 수정에 실패");
 		}
 		
 	}
 	
-	@PostMapping("campSearchList.ys")
+	@GetMapping("campSearchList.ys")
 	public String campSerchList(@RequestParam("keyword") String keyword,
 			                    @RequestParam("city") String city,
-			                    @RequestParam("country") String country,
 			                    @RequestParam("type") String type,
 			                    @RequestParam(value="page", defaultValue="1") int page,
 			                    Model model) {
 		
-		int result = cService.searchCampCount(keyword,city,country,type);
+		
+		int result = cService.searchCampCount(keyword,city,type);
+		ArrayList<CampingGround> campList = cService.searchCampList(keyword,city,type);
 		
 		int currentPage = page;
-		PageInfo pi = Pagination.getPageInfo(currentPage, page,6);
+		PageInfo pi = Pagination.getPageInfo(currentPage,result,6);
 		
-		return "views/yoonseo/campSearchList";
+		if(campList != null) {
+			model.addAttribute("result", result);
+			model.addAttribute("campList", campList);
+			model.addAttribute("type", type);
+			model.addAttribute("keyword", keyword);
+			model.addAttribute("city", city);
+			model.addAttribute("pi", pi);
+			
+			return "views/yoonseo/campSearchList";
+		}else {
+			throw new CampException("캠핑장 검색에 실패하였습니다");
+		}
+		
 	}
-
-
+	
 	
 
 	

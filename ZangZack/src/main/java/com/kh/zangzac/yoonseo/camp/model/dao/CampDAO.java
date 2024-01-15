@@ -55,4 +55,6 @@ public interface CampDAO {
 	void updatePhotoLevel(int cgNo);
 
 	int searchCampCount(HashMap<String, String> map);
+
+	ArrayList<CampingGround> searchCampList(HashMap<String, String> map);
 }

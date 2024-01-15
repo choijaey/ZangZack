@@ -145,18 +145,42 @@
                        where board_no = #{cgNo}) 
    </update>
    
-   <select id="searchCampCount" resultType="_int">
-      select*
-      from camping_ground
-      where cg_status = 'N' and
-           (
-            cg_region like '%' || #{keyword} ||'%' or
-            cg_address like  '%' || #{keyword} ||'%' or
-            cg_name like  '%' || #{keyword} ||'%' or
-            cg_type like  '%' || #{keyword} ||'%' or
-            cg_area like   '%' || #{keyword} ||'%' 
-            )
-     
+   <select id="searchCampCount" parameterType="hashMap" resultType="_int">
+    SELECT count(*)
+    FROM camping_ground
+    WHERE cg_status = 'N'
+	    <if test="keyword != null and keyword !=''">
+	        AND (cg_region LIKE '%' || #{keyword} || '%' OR
+	             cg_address LIKE '%' || #{keyword} || '%' OR
+	             cg_name LIKE '%' || #{keyword} || '%' OR
+	             cg_type LIKE '%' || #{keyword} || '%' OR
+	             cg_area LIKE '%' || #{keyword} || '%')
+	    </if>
+	    <if test="city != null and city != ''">
+	        AND cg_region LIKE '%' || #{city} || '%'
+	    </if>
+	    <if test="type != null and type != ''">
+	        AND cg_type LIKE '%' || #{type} || '%'
+	    </if>
+   </select>
+   
+   <select id="searchCampList" parameterType="hashMap" resultType="CampingGround">
+     SELECT *
+    FROM camping_ground
+    WHERE cg_status = 'N'
+	    <if test="keyword != null and keyword !=''">
+	        AND (cg_region LIKE '%' || #{keyword} || '%' OR
+	             cg_address LIKE '%' || #{keyword} || '%' OR
+	             cg_name LIKE '%' || #{keyword} || '%' OR
+	             cg_type LIKE '%' || #{keyword} || '%' OR
+	             cg_area LIKE '%' || #{keyword} || '%')
+	    </if>
+	    <if test="city != null and city != ''">
+	        AND cg_region LIKE '%' || #{city} || '%'
+	    </if>
+	    <if test="type != null and type != ''">
+	        AND cg_type LIKE '%' || #{type} || '%'
+	    </if>
    </select>
 
 </mapper>

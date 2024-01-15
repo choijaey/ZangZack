@@ -22,6 +22,57 @@
      height: 20px;
 
   }
+  
+  .image-slider {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.image-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    transition: transform 0.5s ease;
+}
+
+.image-container img {
+    max-width: 100%;
+    flex: 0 0 100%;
+    display: block;
+}
+
+.slide-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 50px; /* 버튼 크기 설정 */
+    height: 50px; /* 버튼 크기 설정 */
+    background-size: cover; /* 이미지 크기 조정 */
+    z-index: 10;
+}
+
+.prev-btn {
+    left: 10px;
+    background-image: url('../../image/back.png'); /* 이전 버튼 이미지 */
+}
+
+.next-btn {
+    right: 10px;
+    background-image: url('../../image/next.png'); /* 다음 버튼 이미지 */
+}
+
+.slider-pagination {
+    text-align: center;
+    padding: 10px 0;
+    position: absolute;
+    bottom: 10px; /* 이미지 하단에 위치 */
+    left: 0;
+    width: 100%;
+}
  
 </style>
 </head>
@@ -52,7 +103,8 @@
 				      <span class="carousel-control-next-icon" aria-hidden="true" ></span>
 				      <span class="visually-hidden" style="margin-left: -1200px;">Next</span>
 				   </button>
-			   </div>
+			   </div> 
+				
 			   <div style="width:550px; height:433px; float: left;  margin-left: 10px;">
 		         <table class="table">
 				   <tr>
@@ -174,7 +226,22 @@
 		     </div>
 	      </div>
     </div>
-    
+    <script>
+ // 페이지 로딩 후 자동 슬라이딩을 중지
+    $(document).ready(function () {
+        $('#carouselExampleFade').carousel({ interval: 3000 });
+    });
+
+    // 수동으로 다음 슬라이드로 이동
+    $('.carousel-control-next').click(function () {
+        $('#carouselExampleFade').carousel('next');
+    });
+
+    // 수동으로 이전 슬라이드로 이동
+    $('.carousel-control-prev').click(function () {
+        $('#carouselExampleFade').carousel('prev');
+    });
+</script>
 	     
 	
 	

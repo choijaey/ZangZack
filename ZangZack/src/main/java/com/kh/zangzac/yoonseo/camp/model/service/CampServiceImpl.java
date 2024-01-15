@@ -130,15 +130,24 @@ public class CampServiceImpl implements CampService {
 	}
 
 	@Override
-	public int searchCampCount(String keyword, String city, String country, String type) {
+	public int searchCampCount(String keyword, String city, String type) {
 		
 		HashMap<String,String> map = new HashMap<>();
 		map.put("keyword", keyword);
 		map.put("city", city);
-		map.put("country",country);
 		map.put("type", type);
 		
 		return cDAO.searchCampCount(map);
+	}
+
+	@Override
+	public ArrayList<CampingGround> searchCampList(String keyword, String city, String type) {
+		
+		HashMap<String,String> map = new HashMap<>();
+		map.put("keyword", keyword);
+		map.put("city", city);
+		map.put("type", type);
+		return cDAO.searchCampList(map);
 	}
 
 
