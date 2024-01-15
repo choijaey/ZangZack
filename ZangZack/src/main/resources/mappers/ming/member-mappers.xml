@@ -166,10 +166,11 @@
 	    SELECT *
 	    FROM review
 	    JOIN photo ON (board_no = review_no)
-	    join PRODUCT using (PRODUCT_NO)
-	    WHERE review_status = 'N' AND board_type = '6'
+	    JOIN PRODUCT USING (PRODUCT_NO)
+	    WHERE review_status = 'N' AND board_type = '6' AND member_id=#{memberId}
 	    ORDER BY review_no DESC
 	</select>
+	
 	<select id="selectAllProduct" resultType="Product">
 		select *
 		from Product

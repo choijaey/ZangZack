@@ -665,21 +665,24 @@ public class MemberController {
 	//리뷰 불러오기
 	@GetMapping("review.me")
 	public String review(@RequestParam(value = "page", defaultValue = "1") int page, Model model,
-										@ModelAttribute Review r,@ModelAttribute Product p ,HttpServletRequest request) {
-		String id = ((Member)model.getAttribute("loginUser")).getMemberId();
-		r.setMemberId(id);
+										@ModelAttribute Review r,@ModelAttribute Product p, HttpServletRequest request) {
+		Member loginUser = (Member) model.getAttribute("loginUser");
+		String memberId = loginUser.getMemberId();
+		System.out.println(memberId);
 		int listCount = mService.getReviewListCount(6);
 		PageInfo pi = Pagination.getPageInfo(page, listCount, 3);
 		ArrayList<Review>rList = mService.selectReview(pi,6);
 		ArrayList<Product>pList = mService.selectAllProduct();
 		ArrayList<Photo>phList = mService.selectAllPotoProduct();
+		r.setMemberId(memberId);
+		
 		
 		if(rList != null) {
 			model.addAttribute("pList",pList);
 			model.addAttribute("rList",rList);
 			model.addAttribute("phList",phList);
 			model.addAttribute("pi",pi);
-			model.addAttribute("id", id);
+			model.addAttribute("memberId", memberId);
 			model.addAttribute("loc", request.getRequestURI());
 			return "views/ming/member/review";
 		}else {
