@@ -98,36 +98,42 @@ body {
 }
 
 /* 보드 수정 버튼 */
-#boardEditContainer{
+#boardEditContainer {
 	position: absolute;
 	top: 30%;
 	right: 20%;
 }
-#board_edit_btn{
+
+#board_edit_btn {
+	background-color: none;
+	background-image: url("../../image/seongun/boardAdd.png");
+	width: 15px;
+	height: 15px;
 	background: none;
-	border:none;
-	width : 35px;
+	border: none;
+	width: 35px;
 	height: auto;
-	float:right;
+	float: right;
 	display: flex;
+	position: relative;
 }
 
-#board_edit_btn img#settingBtn{
+#board_edit_btn img#settingBtn {
 	width: 30px;
 	position: relative;
 }
 
-#editDropDown{
+#editDropDown {
 	position: absolute;
 	top: -20px;
 	right: 29.7%;
 }
 
-#board_edit_btn :hover{
+#board_edit_btn :hover {
 	cursor: pointer;
 }
 
-#editDropDown{
+#editDropDown {
 	position: absolute;
 	left: -10px;
 	top: -12px;
@@ -143,11 +149,11 @@ body {
 	background: #5cb85c;
 }
 
-#editDropDown li{
+#editDropDown li {
 	list-style: none;
 }
 
-#editDropDown .editDropMenu{
+#editDropDown .editDropMenu {
 	margin: auto;
 	padding: 10px;
 	cursor: pointer;
@@ -158,6 +164,7 @@ body {
 	text-align: center;
 	width: 100%;
 }
+
 /* 좋아요 버튼과 댓글 카운트 스타일링 */
 .post-like-comment {
 	display: flex;
@@ -432,28 +439,28 @@ body {
 /*댓글 수정*/
 .comment-edit-form {
 	display: flex;
-	align-items: center; 
+	align-items: center;
 	width: 95%;
 }
 
 .comment-input {
-	flex: 1; 
-	min-height: 60px; 
+	flex: 1;
+	min-height: 60px;
 	padding: 10px;
 	border: 1px solid #ddd;
 	border-radius: 4px;
-	margin-right: 10px; 
+	margin-right: 10px;
 }
 
 .buttons-container {
-	display: flex; 
-	flex-direction: column; 
-	align-items: center; 
-	margin-left: 10px; 
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-left: 10px;
 }
 
 .update-submit, .comment-cancel {
-	width: 80px; 
+	width: 80px;
 	padding: 10px;
 	border: none;
 	border-radius: 4px;
@@ -461,13 +468,13 @@ body {
 }
 
 .update-submit {
-	background-color: #5cb85c; 
-	color: white; 
+	background-color: #5cb85c;
+	color: white;
 }
 
 .comment-cancel {
-	background-color: #f44336; 
-	color: white; 
+	background-color: #f44336;
+	color: white;
 	margin-top: 5px;
 }
 

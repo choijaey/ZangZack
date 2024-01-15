@@ -88,4 +88,15 @@ public class WorkController {
 		return h;
 	}
 
+	public Photo setPhoto(int num, int i) {
+		Photo p = new Photo();
+		p.setBoardNo(num);
+		p.setBoardType(i);
+		return p;
+	}
+
+	public void deleteModel(Model model, String msg) {
+		model.addAttribute("msg", msg);
+	}
+
 }

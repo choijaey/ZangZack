@@ -26,4 +26,6 @@ public interface CampBoardService {
 	int searchListCount(SearchBoard search);
 
 	ArrayList<CampBoard> searchBoardList(PageInfo pi, SearchBoard search);
+
+	int deleteCampBoard(int cbNo);
 }

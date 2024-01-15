@@ -48,11 +48,11 @@ public class CampBoardServiceImpl implements CampBoardService{
 	public CampBoard selectBoard(int cbNo, String id) {
 		CampBoard b = cDAO.selectBoard(cbNo);
 	      if(b != null) {
-	         if(id != null && !b.getMemberId().equals(id)) {
-	            int result = cDAO.updateCount(cbNo);
-	            if(result > 0) {
-	               b.setCbCount(b.getCbCount() + 1);
-	            }
+	    	  if(id != null && !b.getMemberId().equals(id)) {
+	    		  int result = cDAO.updateCount(cbNo);
+	    		  if(result > 0) {
+	    			  b.setCbCount(b.getCbCount() + 1);
+	    		  }
 	         }
 	      } 
 		return b;
@@ -72,5 +72,10 @@ public class CampBoardServiceImpl implements CampBoardService{
 	public ArrayList<CampBoard> searchBoardList(PageInfo pi, SearchBoard search) {
 		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
 		return cDAO.searchBoardList(search, rowBounds);
+	}
+
+	@Override
+	public int deleteCampBoard(int cbNo) {
+		return cDAO.deleteCampBoard(cbNo);
 	}
 }

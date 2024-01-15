@@ -4,29 +4,31 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>게시글 상세보기</title>
+	<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/seongun/b9045bb4-dad6-4ab1-b9fa-4841e6716aed">
 	<link rel="stylesheet" href="css/seongun/boardDetail.css">
 	<link rel="stylesheet" href="css/seongun/common/paging.css">
 	<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 </head>
-<link rel="shortcut icon" href="#">
+<link rel="shortcut icon">
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
 	<div class="container">
 		<div class="article_header">
 			<span class="boardCategory">[[${bList.categoryName}]]</span>
-			<div id="boardEditContainer">
-				<button id="board_edit_btn">
-					<img id="settingBtn" src="image/seongun/boardAdd.png" alt="게시판 설정 버튼">
-				</button>
-				<ul id="editDropDown">
-					<li>
-						<button class="editDropMenu">수정</button>
-					</li>
-					<li>
-						<button class="editDropMenu">삭제</button>
-					</li>
-				</ul>
+			<div id="boardEditContainer" th:style="${session.loginUser != null && session.loginUser.memberId == bList.memberId ? '' : 'display:none;'}">
+			    <button id="boardEditBtn">
+			        <img id="settingBtn" src="image/seongun/boardAdd.png" alt="게시판 설정 버튼">
+			    </button>
+			    <ul id="editDropDown">
+			        <li>
+			            <button class="editDropMenu" id="boardEditBtn" onclick="boardEditBtn()">수정</button>
+			        </li>
+			        <li>
+			            <button class="editDropMenu" id="boardEditBtn" onclick="baordDeleteBtn()">삭제</button>
+			        </li>
+			    </ul>
 			</div>
+
 			<div class="post-header">
 				<h2>[[${bList.cbTitle}]]</h2>
 				<div class="post-details">
@@ -77,8 +79,10 @@
 		let member = /*[[${session.loginUser}]]*/null;
 		let heart = /*[[${bList.heartCheck}]]*/true;
 		let heartCountNum = /*[[${bList.heartCount}]]*/1;
-		let memberId = null;
+		let boardId = /*[[${bList.cbNo}]]*/1;
 		
+		let memberId = null;
+
 		const heartCount = document.getElementById("like-count");
 		const heartImg = document.getElementById("likeButton");
 		
@@ -97,6 +101,27 @@
 		        alert("로그인하고 누르삼");
 		    }
 		};
+		
+		boardEditBtn = () =>{
+			location.href = 'updateCampBoard.su?cbNo=' + boardId;
+		}
+		
+		baordDeleteBtn = () =>{
+			if(confirm("정말 삭제 하시겠습니까?")){
+				$.ajax({
+					url: 'deleteCampBoard.su',
+					method: 'post',
+					data:{
+						cbNo : boardId
+					},
+					success: data =>{
+						alert(mag);
+						location.href = 'campBoard.su';
+					},
+					error: data => console.log(data)
+				})
+			}
+		}
 		
 		insertHeart = () => {
 		    $.ajax({
@@ -135,15 +160,12 @@
 		        error: data => console.log(data)
 		    });
 		};
-		
 		// 페이지 로드 시 댓글 목록 및 좋아요 상태 불러오기
 		window.onload = function() {
 		    loadCommentList(/*[[${maxPage}]]*/);
 		};
 	
 		// 댓글 목록 불러오는 함수
-		
-		
 		function loadCommentList(replyPage) {
 		    $.ajax({
 		        url: 'replyLimitList.rep', // 서버의 댓글 목록 불러오기 URL
@@ -166,7 +188,23 @@
 		
 		// 댓글 추가 함수
 		document.addEventListener('DOMContentLoaded', function() {
+			var commentInput = document.getElementById('replyContent');
 		    var insertReplyButton = document.getElementById('insertReply');
+		    
+		    commentInput.addEventListener('keypress', function(event) {
+		        if (event.key === 'Enter') {
+		            event.preventDefault(); // 텍스트 영역에서 엔터를 누를 때의 기본 동작을 방지합니다.
+		            const replyContent = commentInput.value.trim();
+
+		            if (replyContent === '') {
+		                alert('댓글을 입력해주세요!');
+		                return;
+		            }
+
+		            insertReplyButton.click(); // 'insertReply' 버튼의 클릭 이벤트를 실행합니다.
+		        }
+		    });
+		    
 		    if (insertReplyButton) {
 		        insertReplyButton.addEventListener('click', function() {
 		            const replyContent = document.getElementById('replyContent').value.trim();
@@ -219,10 +257,8 @@
 		        img.src = comment.memberProfilePath;
 		        img.alt = '프로필 사진';
 		
-		        // 이미지 요소를 이미지 컨테이너 div에 추가
 		        imgContainer.appendChild(img);
 		
-		        // 이제 이미지 컨테이너를 commentItem에 추가
 		        commentItem.appendChild(imgContainer);
 		
 		        const contentDiv = document.createElement('div');
@@ -244,57 +280,48 @@
 		        contentDiv.appendChild(infoDiv);
 		
 				if (memberId && memberId === comment.memberId) {
-				    // 드롭다운 컨테이너 div
 				    const dropdownContainer = document.createElement('div');
 				    dropdownContainer.classList.add('comment-dropdown-container');
 				
-				    // 드롭다운을 표시하는 버튼
 				    const commentButton = document.createElement('button');
 				    commentButton.classList.add('comment-action-button');
 				    commentButton.style.backgroundImage = 'url("image/seongun/replyButton.svg")'; // 가정한 경로입니다.
 				
-				    // 드롭다운 메뉴
 				    const dropdownMenu = document.createElement('ul');
 				    dropdownMenu.classList.add('dropdown-menu');
 				
-				    // 수정 옵션
 				    const editItem = document.createElement('li');
 				    const editButton = document.createElement('button');
 				    editButton.textContent = '수정';
 				    editButton.classList.add('dropdown-item');
 				    editButton.classList.add('reply-update');
 				    editButton.onclick = function() {
-				    	// 기존 댓글 내용을 저장합니다.
 				    	const originalContent = messageDiv.textContent;
 				
-				    	// 댓글 수정 폼을 생성합니다.
 				    	const editForm = document.createElement('div');
 				    	editForm.classList.add('comment-edit-form');
 				
-				    	// 텍스트 입력 영역 생성
 				    	const textarea = document.createElement('textarea');
 				    	textarea.classList.add('comment-input');
-				    	textarea.value = originalContent; // 기존 댓글 내용으로 초기화합니다.
+				    	textarea.value = originalContent; 
 				
-				    	// 버튼들을 감쌀 컨테이너 생성
 				    	const buttonsContainer = document.createElement('div');
 				    	buttonsContainer.classList.add('buttons-container');
 				
-				    	// '등록' 버튼 생성
+				    	// '수정' 버튼 생성
 				    	const submitButton = document.createElement('button');
 				    	submitButton.type = 'button';
 				    	submitButton.classList.add('update-submit');
-				    	submitButton.textContent = '등록';
+				    	submitButton.textContent = '수정';
 				    	submitButton.onclick = function() {
-				    	    // 서버에 수정 내용을 전송하는 코드를 여기에 추가합니다.
-				    	    let text = textarea.value
+
+				    		let text = textarea.value
 				    	    updateReply(text, comment);
-				    	    // 수정된 내용으로 댓글을 업데이트합니다.
+
 				    	    messageDiv.textContent = textarea.value;
 				    	    contentDiv.replaceChild(messageDiv, editForm);
 				    	};
 				
-				    	// '취소' 버튼 생성
 				    	const cancelButton = document.createElement('button');
 				    	cancelButton.type = 'button';
 				    	cancelButton.classList.add('comment-cancel');
@@ -303,21 +330,24 @@
 				    	    contentDiv.replaceChild(messageDiv, editForm);
 				    	    
 				    	};
-				
-				    	// 버튼들을 컨테이너에 추가
+				    	
+				    	textarea.addEventListener('keypress', function(event) {
+				            if (event.key === 'Enter') {
+				                event.preventDefault(); // 기본 동작 방지 (텍스트 영역에서 새 줄 추가 방지)
+				                submitButton.click(); // '수정' 버튼의 클릭 이벤트 실행
+				            }
+				        });
+						
 				    	buttonsContainer.appendChild(submitButton);
 				    	buttonsContainer.appendChild(cancelButton);
 				
-				    	// 수정 폼에 텍스트 영역과 버튼 컨테이너를 추가합니다.
 				    	editForm.appendChild(textarea);
 				    	editForm.appendChild(buttonsContainer);
 				
-				    	// 기존 댓글 내용을 수정 폼으로 대체합니다.
 				    	contentDiv.replaceChild(editForm, messageDiv);
 				
 				    };
 				
-				    // 삭제 옵션
 				    const deleteItem = document.createElement('li');
 				    const deleteButton = document.createElement('button');
 				    deleteButton.textContent = '삭제';
@@ -329,31 +359,26 @@
 				        }
 				    };
 				
-				    // 옵션을 드롭다운 메뉴에 추가
 				    editItem.appendChild(editButton);
 				    deleteItem.appendChild(deleteButton);
 				    dropdownMenu.appendChild(editItem);
 				    dropdownMenu.appendChild(deleteItem);
 				
-				    // 드롭다운 메뉴를 표시하고 숨기는 로직
 				    commentButton.onclick = function(event) {
 				        const isDisplayed = dropdownMenu.style.display === 'block';
 				        dropdownMenu.style.display = isDisplayed ? 'none' : 'block';
 				        event.stopPropagation();
 				    };
 				
-				    // 클릭 이벤트가 버블링되지 않도록 합니다.
 				    document.addEventListener('click', function(event) {
 				        if (!dropdownContainer.contains(event.target)) {
 				            dropdownMenu.style.display = 'none';
 				        }
 				    });
 				
-				    // 드롭다운 컨테이너에 버튼과 메뉴를 추가
 				    dropdownContainer.appendChild(commentButton);
 				    dropdownContainer.appendChild(dropdownMenu);
 				
-				    // 컨테이너를 contentDiv에 추가
 				    contentDiv.appendChild(dropdownContainer);
 				}
 		
@@ -375,17 +400,14 @@
 		        paginationDiv.style.display = 'block';
 		    }
 		
-		    // 이전 페이지 그룹 버튼 컨테이너
 		    const prevGroupDiv = document.createElement('div');
 		    prevGroupDiv.className = 'page-nav-buttons';
 		    paginationDiv.appendChild(prevGroupDiv);
 		
-		    // 페이지 번호를 담을 ul 요소
 		    const ul = document.createElement('ul');
 		    ul.className = 'page-numbers';
 		    paginationDiv.appendChild(ul);
 		
-		    // 다음 페이지 그룹 버튼 컨테이너
 		    const nextGroupDiv = document.createElement('div');
 		    nextGroupDiv.className = 'page-nav-buttons';
 		    paginationDiv.appendChild(nextGroupDiv);
@@ -394,7 +416,6 @@
 		    const totalPageGroups = Math.ceil(rPi.maxPage / pageLimit);
 		    const currentPageGroup = Math.ceil(rPi.currentPage / pageLimit);
 		
-		    // 이전 페이지 그룹으로 이동
 		    if (currentPageGroup > 1) {
 		        const prevGroupLink = document.createElement('a');
 		        prevGroupLink.href = '#';
@@ -428,7 +449,6 @@
 		        ul.appendChild(pageLi);
 		    }
 		
-		    // 다음 페이지 그룹으로 이동
 		    if (currentPageGroup < totalPageGroups) {
 		        const nextGroupLink = document.createElement('a');
 		        nextGroupLink.href = '#';
@@ -487,6 +507,33 @@
 				}
 			});
 		}
+		
+		document.addEventListener("DOMContentLoaded", function() {
+		    var boardEditBtn = document.getElementById("boardEditBtn");
+		    var editDropDown = document.getElementById("editDropDown");
+
+		    editDropDown.style.display = "none";
+
+		    boardEditBtn.addEventListener("click", function(event) {
+		        event.stopPropagation(); 
+		        if (editDropDown.style.display === "block") {
+		            editDropDown.style.display = "none";
+		        } else {
+		            editDropDown.style.display = "block";
+		        }
+		    });
+
+		    var editDropMenus = document.querySelectorAll(".editDropMenu");
+		    editDropMenus.forEach(function(menu) {
+		        menu.addEventListener("click", function() {
+		            editDropDown.style.display = "none";
+		        });
+		    });
+
+		    document.addEventListener("click", function() {
+		        editDropDown.style.display = "none";
+		    });
+		});
 		/*]]>*/
 	</script>
 </body>

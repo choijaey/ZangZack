@@ -27,4 +27,6 @@ public interface CampBoardDAO {
 	int searchListCount(SearchBoard search);
 	
 	ArrayList<CampBoard> searchBoardList(SearchBoard search, RowBounds rowBounds);
+
+	int deleteCampBoard(int cbNo);
 }

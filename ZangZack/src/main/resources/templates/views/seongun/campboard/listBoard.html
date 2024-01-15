@@ -101,12 +101,12 @@
 					</li>
 	                <!-- 페이지 번호 -->
 	                <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
-	                	<th:block th:if="${search == null}">
+	                	<th:block th:if="${search.searchText == null}">
 							<a th:href="@{${loc}(page=${p})}" th:id="${p == pi.currentPage} ? 'check_page'">
 						        [[${p}]] 
 						    </a>
 					    </th:block>
-					    <th:block th:if="${search != null}">
+					    <th:block th:if="${search.searchText != null}">
 						    <a th:href="@{${loc}(page=${p}, searchCategory=${search.searchCategory}, searchText=${search.searchText})}" th:id="${p == pi.currentPage} ? 'check_page'">
 							    [[${p}]]
 							</a>
@@ -119,9 +119,16 @@
               	</ul>
 			</div>
             <hr/>
-              <!-- 검색 필터 영역 -->
+              <!-- 검색 필터 영역 -->	
             <div class="search_area">
-	            <form action="searchCampBoard.su">
+	            <form action="campBoard.su">
+		            <select name="searchCategoryNo" class="search_select">
+			            <option value="0">전체보기</option>
+			            <option value="1">백패킹</option>
+			            <option value="2">오토캠핑</option>
+			            <option value="3">장박</option>
+			            <option value="4">글램핑</option>
+			        </select>
 	                <select name="searchCategory" class="search_select">
 	                    <option value="0">전체</option>
 	                    <option value="1">제목</option>
@@ -140,6 +147,7 @@
 		let member = /*[[${session.loginUser}]]*/[];
 		let categoryNo= /*[[${selectedCategory}]]*/ 0;
 		let list = /*[[${list}]]*/null;
+		
 		
         document.addEventListener('DOMContentLoaded', function() {
             // 스크롤이 끝으로 이동 시 이벤트 발생
@@ -221,7 +229,6 @@
                 case '4':
                     document.querySelector('a[onclick="setCategory(\'4\')"]').id = 'select-category';
                     break;
-                    
             }
             
         };

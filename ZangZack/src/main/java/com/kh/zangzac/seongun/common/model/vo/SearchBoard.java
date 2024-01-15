@@ -14,5 +14,5 @@ import lombok.ToString;
 public class SearchBoard {
 	private int searchCategory;
 	private String searchText;
-	private int categoryNo;
+	private int searchCategoryNo;
 }

@@ -56,48 +56,60 @@
 		select count(*)
 		FROM camp_board_view
 		<where>
-	        cb_status = 'N'
-	        <if test="searchCategory == 0">
-	            and (cb_title like #{searchText} or cb_content like #{searchText} or member_Name like #{searchText})
+		    cb_status = 'N'
+		    <if test="searchText != null and searchText != ''">
+		        <choose>
+		            <when test="searchCategory == 0">
+		                and (cb_title like #{searchText} or cb_content like #{searchText} or member_Name like #{searchText})
+		            </when>
+		            <when test="searchCategory == 1">
+		                and cb_title like #{searchText}
+		            </when>
+		            <when test="searchCategory == 2">
+		                and cb_content like #{searchText}
+		            </when>
+		            <when test="searchCategory == 3">
+		                and member_Name like #{searchText}
+		            </when>
+		        </choose>
+	    	</if>
+	    	<if test="searchCategoryNo != 0">
+	            and category_no = #{searchCategoryNo}
 	        </if>
-	        <if test="searchCategory == 1">
-	            and cb_title like #{searchText}
-	        </if>
-	        <if test="searchCategory == 2">
-	            and cb_content like #{searchText}
-	        </if>
-	        <if test="searchCategory == 3">
-	            and member_Name like #{searchText}
-	        </if>
-	        
-	        <if test="categoryNo != 0">
-	            and category_no like #{categoryNo}
-	        </if>
-	    </where>
+    	</where>
 	</select>
 	
 	<select id="searchBoardList" resultType="CampBoard">
 		select *
 		FROM camp_board_view
 		<where>
-	        cb_status = 'N'
-	        <if test="searchCategory == 0">
-	            and (cb_title like #{searchText} or cb_content like #{searchText} or member_Name like #{searchText})
+		    cb_status = 'N'
+		    <if test="searchText != null and searchText != ''">
+		        <choose>
+		            <when test="searchCategory == 0">
+		                and (cb_title like #{searchText} or cb_content like #{searchText} or member_Name like #{searchText})
+		            </when>
+		            <when test="searchCategory == 1">
+		                and cb_title like #{searchText}
+		            </when>
+		            <when test="searchCategory == 2">
+		                and cb_content like #{searchText}
+		            </when>
+		            <when test="searchCategory == 3">
+		                and member_Name like #{searchText}
+		            </when>
+		        </choose>
+	    	</if>
+	    	<if test="searchCategoryNo != 0">
+	            and category_no = #{searchCategoryNo}
 	        </if>
-	        <if test="searchCategory == 1">
-	            and cb_title like #{searchText}
-	        </if>
-	        <if test="searchCategory == 2">
-	            and cb_content like #{searchText}
-	        </if>
-	        <if test="searchCategory == 3">
-	            and member_Name like #{searchText}
-	        </if>
-	        
-	        <if test="categoryNo != 0">
-	            and category_no like #{categoryNo}
-	        </if>
-	    </where>
+    	</where>
 	    order by cb_no desc
 	</select>
+	
+	<update id="deleteCampBoard">
+		update camp_board 
+		set cb_status = 'Y'
+		where cb_no = #{cbNo}
+	</update>
 </mapper>

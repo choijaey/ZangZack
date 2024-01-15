@@ -188,8 +188,8 @@ p {
 #pagenation ul {
 	list-style: none;
 	padding: 0;
-	display: inline-block; /* 중앙 정렬을 위해 inline-block으로 변경 */
-	margin: 0; /* 기본 마진 제거 */
+	display: inline-block;
+	margin: 0;
 }
 
 #pagenation ul li {
@@ -202,12 +202,12 @@ p {
     text-align: center;
     color: #333;
     font-size: 14px;
-    width: 30px; /* 정사각형의 너비 */
-    height: 30px; /* 정사각형의 높이 */
-    line-height: 30px; /* 텍스트를 수직 중앙에 위치시킴 */
-    padding: 0; /* 패딩을 제거하거나 조정 */
-    border-radius: 5px; /* 모서리를 둥글게 */
-    display: inline-block; /* 블록 레벨 요소처럼 너비와 높이를 적용 */
+    width: 30px; 
+    height: 30px;
+    line-height: 30px;
+    padding: 0;
+    border-radius: 5px;
+    display: inline-block;
     transition: background-color 0.3s, color 0.3s;
 }
 

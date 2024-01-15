@@ -53,44 +53,44 @@
     let paginationContainer = document.querySelector('.slider-pagination');
 
     // 페이징 버튼 생성
-    sliderImages.forEach((_, idx) => {
-        let btn = document.createElement('span');
-        btn.classList.add('pagination-btn');
-        btn.addEventListener('click', () => {
-            currentImageIdx = idx;
-            updateSliderPosition();
-            updatePaginationButtons();
-        });
-        paginationContainer.appendChild(btn);
-    });
-
-    function updateSliderPosition() {
-        let sliderWidth = document.querySelector('.image-slider').clientWidth;
-        imageContainer.style.transform = `translateX(${-currentImageIdx * sliderWidth}px)`;
-    }
-
-    function updatePaginationButtons() {
-        let buttons = document.querySelectorAll('.pagination-btn');
-        buttons.forEach((btn, idx) => {
-            btn.classList.toggle('active', idx === currentImageIdx);
-        });
-    }
-
-    document.querySelector('.prev-btn').addEventListener('click', () => {
-        currentImageIdx = currentImageIdx > 0 ? currentImageIdx - 1 : sliderImages.length - 1;
-        updateSliderPosition();
-        updatePaginationButtons();
-    });
-
-    document.querySelector('.next-btn').addEventListener('click', () => {
-        currentImageIdx = (currentImageIdx + 1) % sliderImages.length;
-        updateSliderPosition();
-        updatePaginationButtons();
-    });
-
-    updateSliderPosition();
-    updatePaginationButtons(); // 초기 페이징 버튼 설정
-});
+		    sliderImages.forEach((_, idx) => {
+		        let btn = document.createElement('span');
+		        btn.classList.add('pagination-btn');
+		        btn.addEventListener('click', () => {
+		            currentImageIdx = idx;
+		            updateSliderPosition();
+		            updatePaginationButtons();
+		        });
+		        paginationContainer.appendChild(btn);
+		    });
+		
+		    function updateSliderPosition() {
+		        let sliderWidth = document.querySelector('.image-slider').clientWidth;
+		        imageContainer.style.transform = `translateX(${-currentImageIdx * sliderWidth}px)`;
+		    }
+		
+		    function updatePaginationButtons() {
+		        let buttons = document.querySelectorAll('.pagination-btn');
+		        buttons.forEach((btn, idx) => {
+		            btn.classList.toggle('active', idx === currentImageIdx);
+		        });
+		    }
+		
+		    document.querySelector('.prev-btn').addEventListener('click', () => {
+		        currentImageIdx = currentImageIdx > 0 ? currentImageIdx - 1 : sliderImages.length - 1;
+		        updateSliderPosition();
+		        updatePaginationButtons();
+		    });
+		
+		    document.querySelector('.next-btn').addEventListener('click', () => {
+		        currentImageIdx = (currentImageIdx + 1) % sliderImages.length;
+		        updateSliderPosition();
+		        updatePaginationButtons();
+		    });
+		
+		    updateSliderPosition();
+		    updatePaginationButtons(); // 초기 페이징 버튼 설정
+		});
 
     </script> <!-- JavaScript 파일 링크 -->
 </body>
