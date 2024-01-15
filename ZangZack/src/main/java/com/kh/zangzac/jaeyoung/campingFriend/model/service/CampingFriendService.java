@@ -13,4 +13,10 @@ public interface CampingFriendService {
 
 	ArrayList<CampingFriend> cfLimitList(PageInfo pi);
 
+	CampingFriend selectCampingFriend(int boardNo);
+
+	int updateCampingFriend(CampingFriend cf);
+
+	int deleteCampingFriend(CampingFriend cf);
+
 }

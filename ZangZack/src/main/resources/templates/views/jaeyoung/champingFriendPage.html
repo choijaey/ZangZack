@@ -510,13 +510,13 @@
 		let boardMemberId;
 		//수정 버튼
 		boardEditBtn.addEventListener('click', function(){
-			
 			window.location.href="campingFriendEditView.jy?boardNo="+boardId;
 		});
 		
 		//삭제 버튼
 		boardDeleteBtn.addEventListener('click', function(){
 			//바로 삭제 때려버리기
+			window.location.href="campingFriendDelete.jy?cfNo="+boardId;
 		});
 		
 		
