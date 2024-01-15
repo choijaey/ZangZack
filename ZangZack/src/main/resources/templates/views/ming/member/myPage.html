@@ -127,13 +127,13 @@
 					<img src="../image/ming/member/프로필수정.png" style="width: 60px;"></img>
 					<a href="myPage.me">정보 수정</a>
 				</li>
-				<li>
+				<li th:if="${session.loginUser.memberLoginType == 1}">
 					<img src="../image/ming/member/icons8-비밀번호-50.png" style="width: 60px;"></img>
 					<a href="updatePwd.me">비밀번호 수정</a>
 				</li>
 				<li>
 					<img src="../image/ming/member/리뷰.png" style="width: 60px;"></img>
-					<a href="#">리뷰</a>
+					<a href="review.me">리뷰</a>
 				</li>
 				<li>
 					<img src="../image/ming/member/택배.png" style="width: 60px;"></img>
@@ -152,7 +152,7 @@
 					<img src="../image/ming/member/logout.png" style="width: 60px;"></img>
 					<a href="logout.me">로그아웃</a>
 				</li>
-				<li style=" position:relative; top:150px;">
+				<li id="deleteMemberBtn">
 					<img src="../image/ming/member/icons8-취소-100 (1).png" style="width: 60px;"></img>
 					<a id="deleteMember">회원탈퇴</a>
 				</li>
@@ -184,8 +184,8 @@
 			    <input type="submit" value="수정" class="updateBtn">
 			</form>
 			<form action="updateMemberNickName.me" method="post">
-			    <input type="text" th:value="${loginUser.memberNickName}" class="updateInput" name="existingNickname" placeholder="닉네임">
-			    <input type="submit" value="수정" class="updateBtn">
+			    <input type="text" th:value="${loginUser.memberNickName}" class="updateInput" id="memberNickName" name="existingNickname" placeholder="닉네임">
+			    <input type="submit" value="수정" id="memberNickNameBtn" class="updateBtn">
 			</form>
 		    <input type="text" th:value="${loginUser.memberId}" class="updateInput" name="memberId" placeholder="Id" readonly>
 			<form action="updateMemberPhone.me" method="post" id="updateForm">
@@ -199,7 +199,7 @@
 			<form action="updateMemberEmail.me" method="post" id="updateEmailForm">
 			    <input type="email" id="memberEmail" name="memberEmail" class="updateInput" placeholder="이메일" th:value="${loginUser.memberEmail}"  required>
 			    <input type="button" id="mail-Check-Btn" value="코드전송" class="updateBtn" >
-			    <div class="comment-section">
+			    <div th:if="${loginUser.memberLoginType == 1}" class="comment-section">
 				    <input type="text" id="EmailCheckNo" class="updateInput" name="emailCode" placeholder="인증코드">
 				    <input type="submit" value="인증확인" class="updateBtn" id="enterEBtn" >
 				</div>
@@ -339,27 +339,36 @@
 	 	};
 	 	
 	 	//닉네임 정규식
-		document.getElementById('memberNickName').addEventListener('change', function() {
+		let checkNickName = false; // 전역 변수로 선언
+
+		document.getElementById('memberNickName').addEventListener('input', function () {
 		    let nickNameval = $('#memberNickName').val();
 		    let nickNamevalcheck = /^[ㄱ-ㅎㅏ-ㅣ가-힣가-힣A-Za-z0-9]+$/;
-		    let prohibitedWords = ['ㅅㅂ', '염병', '옘병','시발', '시바', 'ㅂㅅ','미친','ㅂ1ㅅ',,'수1발'];
+		    let prohibitedWords = ['ㅅㅂ', '염병', '옘병', '시발', '시바', 'ㅂㅅ', '미친', 'ㅂ1ㅅ', '수1발'];
 		
 		    if (this.value.trim() === '') {
-		        alert('닉네임은 영어, 한글, 숫자로 구성된 6글자 이상으로 조합하시오.');
 		        memberNickName.style.borderColor = 'red';
 		        checkNickName = false;
-		        $('#memberNickName').focus();
+		        $('#memberNickNameBtn').prop('disabled', true);
 		    } else if (!nickNamevalcheck.test(nickNameval)) {
-		        alert('아이디는 영소문자, 숫자로 구성된 6글자 이상으로 조합하시오.');
 		        memberNickName.style.borderColor = 'red';
 		        checkNickName = false;
+		        $('#memberNickNameBtn').prop('disabled', true);
 		    } else if (containsProhibitedWord(nickNameval, prohibitedWords)) {
-		        alert('금지어를 포함하고 있습니다. 다른 닉네임을 선택해주세요.');
 		        memberNickName.style.borderColor = 'red';
 		        checkNickName = false;
+		        $('#memberNickNameBtn').prop('disabled', true);
 		    } else {
 		        memberNickName.style.borderColor = 'green';
 		        checkNickName = true;
+		        $('#memberNickNameBtn').prop('disabled', false);
+		    }
+		});
+		
+		$('#updateNickNameForm').submit(function (event) {
+		    if (!checkNickName) {
+		        event.preventDefault(); // 폼 제출을 막음
+		        alert('올바른 닉네임을 입력하세요.'); // 또는 다른 메시지 출력
 		    }
 		});
 		
@@ -373,7 +382,7 @@
 		}
 	</script>
 	
-	<script type="text/javascript">
+	<script th:inline="javascript">
 		 
 		$('#send').click(function() {
 			
@@ -451,18 +460,29 @@
 			    const checkInput = $('.EmailCheckNo'); // 인증번호 입력하는 곳 
 			    let btn=this;
 			    check_button = true;
-			    $.ajax({
-			        type: 'get',
-			        url: 'mailCheck.me',
-			        data: { memberEmail: document.getElementById('memberEmail').value },
-			        success: function (data) {
-			            console.log("data : " + data);
-			            checkInput.attr('disabled', false);
-			            code = data;
-			            toggleCo(btn);
-			            alert('인증번호를 발송했습니다. 인증번호가 오지 않으면 입력하신 정보가 회원정보와 일치하는지 확인해 주세요.');
-			        }
-			    });
+			    const memberLoginType = /*[[${session.loginUser.memberLoginType}]]*/3;
+			    //memberLoginType 이거 먼저 3으로 뜨는지 찍어보고
+			    console.log(memberLoginType);
+			    // 만약 memberLoginType이 2라면, 카카오 연동 회원은 이메일 변경이 불가능하다고 창을 띄웁니다.
+			    if (memberLoginType === 2) {
+			        alert('카카오 연동 회원은 이메일 변경이 불가능합니다.');
+			        return;
+			    }// 조건문 추가해서 1일때는 에이작스 작동되게
+			    else if(memberLoginType === 1){
+				    $.ajax({
+				        type: 'get',
+				        url: 'mailCheck.me',
+				        data: { memberEmail: document.getElementById('memberEmail').value },
+				        success: function (data) {
+				            console.log("data : " + data);
+				            checkInput.attr('disabled', false);
+				            code = data;
+				            toggleCo(btn);
+				            alert('인증번호를 발송했습니다. 인증번호가 오지 않으면 입력하신 정보가 회원정보와 일치하는지 확인해 주세요.');
+				        }
+				    });
+			    }
+			    
 			});
 
 			$('#EmailCheckNo').click(function () {
@@ -577,11 +597,13 @@
 		    if (check_code) {
 		        check_code = true;
 		        checkE = true;
+		        checkNickName = true;
 		        return true;
 		    } else {
 		        alert("정보가 올바르게 작성되었는지 확인해주세요.");
 		        check_code = false;
 		        checkE = false;
+		        checkNickName = false;
 		        // 실패 시 이벤트 중지
 		        event.preventDefault();
 		        return false;

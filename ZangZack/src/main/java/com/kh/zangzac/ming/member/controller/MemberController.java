@@ -29,9 +29,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.ming.member.model.exception.MemberException;
 import com.kh.zangzac.ming.member.model.service.MemberService;
 import com.kh.zangzac.ming.member.model.vo.Member;
+import com.kh.zangzac.sohwa.product.model.vo.Product;
+import com.kh.zangzac.sohwa.product.model.vo.Review;
 
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
@@ -513,6 +516,7 @@ public class MemberController {
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
 		ArrayList<Member> list = mService.selectMembers(1, pi);
 		
+		System.out.println(list);
 		if(list != null) {
 			model.addAttribute("pi", pi);
 			model.addAttribute("list", list);
@@ -610,18 +614,77 @@ public class MemberController {
 	//카카오로그인
 	@GetMapping("kakaoLogin")
 	public String kakaoLogin(
-	    @RequestParam(value = "code", required = false) String code,
-	    HttpSession session,
-	    Model model,
-	    @RequestParam(value = "beforeURL", required = false) String beforeURL) throws Exception {
+	        @RequestParam(value = "code", required = false) String code,
+	        HttpSession session,
+	        Model model,
+	        @RequestParam(value = "beforeURL", required = false) String beforeURL) throws Exception {
 	    // 카카오에서 받은 코드를 이용하여 access token을 얻어옴
 	    String access_Token = mService.getAccessToken(code);
-	    
 	    HashMap<String, Object> userInfo = mService.getUserInfo(access_Token);
-	    kakaoMinfo = (Member)userInfo.get("m");
-	    ArrayList<Member> mList = mService.kakaoLogin(kakaoMinfo);
+	    Member kakaoMemberInfo = (Member) userInfo.get("userInfo");
+	    // System.out.println("kakaoMemberInfo: " + kakaoMemberInfo);
+	    
+	    // 이메일 중복 체크
+	    boolean isEmailDuplicate = mService.isEmailDuplicate(kakaoMemberInfo.getMemberEmail());
+	    Member loginUser = mService.login(kakaoMemberInfo);
+	    
+	    if (isEmailDuplicate) {
+	        // 중복된 이메일이 있는 경우
+	    	session.setAttribute("loginUser", loginUser);
+	    	
+	        if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me"))) {
+	            return "redirect:" + beforeURL;
+	        } else {
+	            return "redirect:home.me";
+	        }
+	        // 여기서 로그인 처리 등을 수행
+	        // 로그인만 가능하게끔 수정
+	    } else {
+	        // 중복된 이메일이 없는 경우
+	        int result = mService.kakaoLogin(kakaoMemberInfo);
+	        if (result > 0) {
+	            // 로그인 성공
+	        	System.out.println("로그인성공: " + kakaoMemberInfo);
+	            session.setAttribute("loginUser", kakaoMemberInfo);
+	            if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me"))) {
+	                return "redirect:" + beforeURL;
+	            } else {
+	                return "redirect:home.me";
+	            }
+	        } else {
+	        	System.out.println("로그인 실패");
+	            // 회원가입에 실패한 경우에 대한 처리
+	            session.setAttribute("msg", "회원가입에 실패했습니다.");
+	        }
+	    }
+
 	    return "views/ming/member/sign";
 	}
 	
 	
+	//리뷰 불러오기
+	@GetMapping("review.me")
+	public String review(@RequestParam(value = "page", defaultValue = "1") int page, Model model,
+										@ModelAttribute Review r,@ModelAttribute Product p ,HttpServletRequest request) {
+		String id = ((Member)model.getAttribute("loginUser")).getMemberId();
+		r.setMemberId(id);
+		int listCount = mService.getReviewListCount(6);
+		PageInfo pi = Pagination.getPageInfo(page, listCount, 3);
+		ArrayList<Review>rList = mService.selectReview(pi,6);
+		ArrayList<Product>pList = mService.selectAllProduct();
+		ArrayList<Photo>phList = mService.selectAllPotoProduct();
+		
+		if(rList != null) {
+			model.addAttribute("pList",pList);
+			model.addAttribute("rList",rList);
+			model.addAttribute("phList",phList);
+			model.addAttribute("pi",pi);
+			model.addAttribute("id", id);
+			model.addAttribute("loc", request.getRequestURI());
+			return "views/ming/member/review";
+		}else {
+			throw new MemberException("게시글 목록 조회에 실패하였습니다.");
+		}
+		
+	}
 }

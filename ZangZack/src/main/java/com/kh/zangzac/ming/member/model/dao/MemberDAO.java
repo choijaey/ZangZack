@@ -9,7 +9,10 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.ming.member.model.vo.Member;
+import com.kh.zangzac.sohwa.product.model.vo.Product;
+import com.kh.zangzac.sohwa.product.model.vo.Review;
 
 
 @Mapper
@@ -64,5 +67,17 @@ public interface MemberDAO {
 	int searchList(HashMap<String, String> map);
 
 	ArrayList<Member> searchtNoticeList(HashMap<String, String> map, RowBounds rowBounds);
+
+	int kakaoLogin(Member kakaoMemberInfo);
+
+	boolean isEmailDuplicate(String memberEmail);
+
+	int getReviewListCount(int i);
+
+	ArrayList<Review> selectReview(int i, RowBounds rowBounds);
+
+	ArrayList<Product> selectAllProduct();
+
+	ArrayList<Photo> selectAllPotoProduct();
 
 }

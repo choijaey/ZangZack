@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.Random;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.ming.member.model.dao.MemberDAO;
 import com.kh.zangzac.ming.member.model.vo.Member;
+import com.kh.zangzac.sohwa.product.model.vo.Product;
+import com.kh.zangzac.sohwa.product.model.vo.Review;
 
 
 @Service
@@ -273,7 +277,7 @@ public class MemberServiceImpl implements MemberService{
             
             
             
-           element = JsonParser.parseString(result.toString());
+            element = JsonParser.parseString(result.toString());
             
             JsonObject kakaoAccount = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
             JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
@@ -285,6 +289,13 @@ public class MemberServiceImpl implements MemberService{
             String phone = kakaoAccount.getAsJsonObject().get("phone_number").getAsString();
             String birthyear = kakaoAccount.getAsJsonObject().get("birthyear").getAsString();
             String birth = kakaoAccount.getAsJsonObject().get("birthday").getAsString();
+            String id = element.getAsJsonObject().get("id").getAsString();
+           
+            
+//            System.out.println("kakaoAccount: " + kakaoAccount);
+//            System.out.println("element: " + element);
+//            System.out.println("properties: " + properties);
+            
             
             detailAddress = baseAddress + detailAddress;
             phone = phone.replace(phone.substring(0, 4), "0").replaceAll("-", "");
@@ -295,29 +306,70 @@ public class MemberServiceImpl implements MemberService{
             LocalDate localDate = LocalDate.parse(birth, formatter);
             java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
             
-            System.out.println("detailAddress"+detailAddress);
-            System.out.println("element:"+element);
-            System.out.println(properties);
+//            System.out.println("element: "+element);
+//            System.out.println("properties: "+properties);
             //정보 저장 구간
             // nickname profile 등등 필요한거
             // Member 객체에 저장하고 올리기 나머진 알아서..
             
+            Random random = new Random();
+    	    int randomNum = random.nextInt(9000) + 1000;
+    	    
             Member m = new Member();
             m.setMemberName(name);
-            m.setMemberNickName(nickname);
+            m.setMemberNickName(nickname + "#" + randomNum);
             m.setMemberProfilePath(profileImg);
             m.setMemberEmail(email);
-            m.setMemberId(email);
             m.setMemberPhone(phone);
             m.setMemberBirth(sqlDate);
+            m.setMemberId(id);
             m.setMemberLoginType(2);
+            m.setMemberAddress(baseAddress);
+            m.setMemberPwd("kakao");
             
-            userInfo.put("m", m);
+            
+            userInfo.put("userInfo", m);
+            
+            System.out.println("userInfo:" + userInfo);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return userInfo;
     }
+
+	@Override
+	public int kakaoLogin(Member kakaoMemberInfo) {
+		return mDAO.kakaoLogin(kakaoMemberInfo);
+	}
+
+	@Override
+	public boolean isEmailDuplicate(String memberEmail) {
+		return mDAO.isEmailDuplicate(memberEmail);
+	}
+
+	@Override
+	public int getReviewListCount(int i) {
+		return mDAO.getReviewListCount(i);
+	}
+
+	@Override
+	public ArrayList<Review> selectReview(PageInfo pi, int i) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return mDAO.selectReview(i, rowBounds);
+	}
+
+	@Override
+	public ArrayList<Product> selectAllProduct() {
+		return mDAO.selectAllProduct();
+	}
+
+	@Override
+	public ArrayList<Photo> selectAllPotoProduct() {
+		return mDAO.selectAllPotoProduct();
+	}
 
 
 
