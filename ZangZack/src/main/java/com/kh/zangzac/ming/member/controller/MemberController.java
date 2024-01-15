@@ -618,6 +618,8 @@ public class MemberController {
 	    String access_Token = mService.getAccessToken(code);
 	    
 	    HashMap<String, Object> userInfo = mService.getUserInfo(access_Token);
+	    kakaoMinfo = (Member)userInfo.get("m");
+	    ArrayList<Member> mList = mService.kakaoLogin(kakaoMinfo);
 	    return "views/ming/member/sign";
 	}
 	

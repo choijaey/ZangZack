@@ -312,7 +312,7 @@ public class MemberServiceImpl implements MemberService{
             m.setMemberBirth(sqlDate);
             m.setMemberLoginType(2);
             
-            
+            userInfo.put("m", m);
         } catch (IOException e) {
             e.printStackTrace();
         }
