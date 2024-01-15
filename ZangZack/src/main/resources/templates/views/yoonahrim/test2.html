@@ -129,7 +129,7 @@
 	                              </div>
                               <input type="hidden" id="replyNo" th:value="${r.replyNo}"/>
                            <span id="insert_reply" class="insert_reply" style="cursor: pointer;" th:onclick="'showUpdateModal(' + ${r.replyNo} + ')'" >수정</span>&nbsp;&nbsp;
-                           <span th:id="'deleteReply-' + ${r.replyNo}" class="delete_reply" style="cursor: pointer;">삭제</span>
+                           <span th:id="deleteReply" class="delete_reply" style="cursor: pointer;">삭제</span>
                         </div>
                         <br>
                      </div>
@@ -306,34 +306,40 @@
               }
           }
 		
-         //댓글 delete
-        document.querySelectorAll('.delete_reply').addEventListener('click', () => {
-		        const replyNo = deleteButton.closest('.reply_content').querySelector('#replyNo').value;
-		        console.log(replyNo);
-		        
-		        deleteReply(replyNo);
+        //댓글 delete
+        document.addEventListener('DOMContentLoaded', function () {
+		    document.body.addEventListener('click', function (event) {
+		        if (event.target.classList.contains('delete_reply')) {
+		            handleDeleteReply(event);
+		        }
 		    });
 		
-         
-		  function deleteReply(replyNo) {
-			  
-              if (replyNo !== 0) {
-                  $.ajax({
-                      url: 'deleteReply.rep',
-                      method: 'POST',
-                      data: { replyNo: replyNo },
-                      success: (data) => {
-                          console.log(data);  //전송에 성공했을 때
-                          location.reload();
-                      },
-                      error: data => console.log(data)  //전송에 실패했을 때
-                  });
-              } else {
-                  alert("댓글 내용을 입력해주세요");
-              }
-          }
-         
-		  
+		    function handleDeleteReply(event) {
+		        const mediaElement = event.target.closest('.media');
+		        const replyNo = mediaElement.querySelector('#replyNo').value;
+				console.log(replyNo)
+		        if (replyNo !== 0) {
+		            const confirmDelete = confirm("정말 삭제하시겠습니까?");
+		            if (confirmDelete) {
+		                $.ajax({
+		                    url: 'deleteReply.rep',
+		                    method: 'POST',
+		                    data: { replyNo: replyNo },
+		                    success: (data) => {
+		                        console.log(data);
+		                        location.reload();
+		                    },
+		                    error: data => console.log(data)
+		                });
+		            } else {
+		                alert("삭제가 취소되었습니다.");
+		            }
+		        } else {
+		            alert("유효하지 않은 댓글입니다.");
+		        }
+		    }
+		});
+				  
 		  
 </script>
 </body>
