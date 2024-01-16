@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -152,6 +153,7 @@ public class CampBoardController {
 	
 	@PostMapping("insertCampBoard.su")
 	public String insertCampBoard(@ModelAttribute CampBoard board, @RequestParam("file") ArrayList<MultipartFile> files,HttpServletRequest request, Model model) {
+		board.setMemberId(((Member)request.getSession().getAttribute("loginUser")).getMemberId());
 		int resultB = 0;
 		int resultA = 0;
 		ArrayList<Photo> fileList = new ArrayList<>();
@@ -218,13 +220,25 @@ public class CampBoardController {
 		return "views/seongun/campboard/listBoard";
 	}
 	
-	@GetMapping("deleteCampBoard.su")
+	@PostMapping("deleteCampBoard.su")
+	@ResponseBody
 	public String deleteBoard(@RequestParam("cbNo") int cbNo,Model model) {
 		int result = cService.deleteCampBoard(cbNo);
 		
 		String msg = result > 0 ? "게시판을 삭제했습니다." : null;
 		
 		sWork.deleteModel(model, msg);
-		return "views/seongun/campboard/listBoard";
+		return msg;
+	}
+	
+	@GetMapping("updateBoardPage.su")
+	public String updateBoardPage(@RequestParam("cbNo") int cbNo,Model model) {
+		CampBoard bList = cService.selectBoard(cbNo, null);
+		ArrayList<Photo> pList = pService.selectBoardPhoto(sWork.selectBoard(cbNo, 1));
+		
+		System.out.println(pList.toString());
+		
+		sWork.editModel(bList, pList, model);
+		return "views/seongun/campboard/editBoard";
 	}
 }

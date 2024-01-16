@@ -12,4 +12,6 @@ public interface PhotoService {
 	int insertPhotoCampBoard(ArrayList<Photo> fileList);
 
 	int deletePhoto(Photo temp);
+
+	ArrayList<Photo> updateBoardPage(SelectCondition selectBoard);
 }

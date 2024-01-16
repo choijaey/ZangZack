@@ -20,6 +20,7 @@ body {
 }
 
 .container {
+	position: relative;
 	width: 800px;
 	margin: 50px auto;
 	background: #fff;
@@ -100,11 +101,11 @@ body {
 /* 보드 수정 버튼 */
 #boardEditContainer {
 	position: absolute;
-	top: 30%;
-	right: 20%;
+    top: 10px; /* 상단에서의 거리 */
+    right: 10px; /* 우측에서의 거리 */
 }
 
-#board_edit_btn {
+#boardEditBtn {
 	background-color: none;
 	background-image: url("../../image/seongun/boardAdd.png");
 	width: 15px;
@@ -118,7 +119,7 @@ body {
 	position: relative;
 }
 
-#board_edit_btn img#settingBtn {
+#boardEditBtn img#settingBtn {
 	width: 30px;
 	position: relative;
 }
@@ -129,7 +130,7 @@ body {
 	right: 29.7%;
 }
 
-#board_edit_btn :hover {
+#boardEditBtn :hover {
 	cursor: pointer;
 }
 

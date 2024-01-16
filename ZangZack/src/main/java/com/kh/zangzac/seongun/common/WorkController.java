@@ -99,4 +99,9 @@ public class WorkController {
 		model.addAttribute("msg", msg);
 	}
 
+	public void editModel(CampBoard bList, ArrayList<Photo> pList, Model model) {
+		model.addAttribute("bList", bList);
+		model.addAttribute("pList", pList);
+	}
+
 }

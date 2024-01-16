@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>글쓰기 페이지</title>
-    <link href="css/seongun/writeboard.css" rel="stylesheet">
+    <title>게시판 수정</title>
+    <link href="css/seongun/campboard/editboard.css" rel="stylesheet">
 </head>
 <body>
+	<div th:replace="~{common/navbar :: navbar}"></div>
     <div class="head-container">
-        <h1>캠핑게시판 등록</h1>
+        <h1>캠핑게시판 수정</h1>
     </div>
     <div class="write-container">
         <form method="post" action="insertCampBoard.su" enctype="multipart/form-data">
@@ -30,25 +31,31 @@
                 <textarea id="content" name="cbContent" placeholder="내용을 입력하세요."></textarea>
             </div>
             <!-- 파일 첨부 -->
-            <div class="upload-container">
-                <div class="upload-top-area">
-                    <label class="upload-label">등록한 사진</label>
-                    <button type="button" id="add-upload-container">파일 추가</button>
-                </div>
-                <label class="upload-box">
-                    <input type="file" name="file" class="file-input" accept="image/*" onchange="sumviewImage(event)" />
-                    <div class="upload-area">
-                        <div class="upload-content" id="uploadContent">
-                            <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                            </svg>
-                            <p class="upload-text">대표사진</p>
-                        </div>
-                        <!-- Image Preview -->
-                        <img id="imagePreview" class="image-preview" />
-                    </div>
-                </label>
-            </div>
+            <!-- th:id="|delete-${p.photo_rename }/${p.photo_level}|"  -->
+            <th:block th:if="${not #lists.isEmpty(pList)}">
+			    <th:block th:each="p : ${pList}">
+			        <input type="hidden" name="deletePhoto" th:value="p.photoRename">
+			        <div class="upload-container">
+			            <div class="upload-top-area">
+			                <label class="upload-label" th:text=${p.photo}>등록한 사진</label>
+			                <button type="button" id="add-upload-container">파일 추가</button>
+			            </div>
+			            <label class="upload-box">
+			                <input type="file" name="file" class="file-input" accept="image/*" onchange="sumviewImage(event)" />
+			                <div class="upload-area">
+			                    <div class="upload-content" id="uploadContent">
+			                        <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
+			                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+			                        </svg>
+			                        <p class="upload-text">대표사진</p>
+			                    </div>
+			                    <!-- Image Preview -->
+			                    <img id="imagePreview" class="image-preview" th:src="${p.photoPath}" />
+			                </div>
+			            </label>
+			        </div>
+			    </th:block>
+			</th:block>
             <div class="write-row">
                 <button type="submit" class="submit-btn">등록</button>
             </div>
@@ -99,13 +106,25 @@
         function sumviewImage(event) {
             var imagePreview = event.target.parentNode.querySelector('.image-preview');
             var uploadContent = event.target.parentNode.querySelector('.upload-content');
-            imagePreview.src = URL.createObjectURL(event.target.files[0]);
-            imagePreview.onload = function() {
-                URL.revokeObjectURL(imagePreview.src); // 메모리 해제
+
+            // 선택한 파일의 URL을 사용하여 미리보기 설정
+            var file = event.target.files[0];
+            if (file) {
+                imagePreview.src = URL.createObjectURL(file);
+                imagePreview.onload = function() {
+                    URL.revokeObjectURL(imagePreview.src); // 메모리 해제
+                }
+                imagePreview.style.display = 'block'; // 이미지 미리보기 표시
+                uploadContent.style.display = 'none'; // 기존 콘텐츠 숨김
+            } else {
+                // 파일이 선택되지 않았을 경우, 기존 이미지 (있는 경우) 표시
+                if (imagePreview.getAttribute('src') !== '') {
+                    imagePreview.style.display = 'block';
+                    uploadContent.style.display = 'none';
+                }
             }
-            imagePreview.style.display = 'block'; // 이미지 미리보기 표시
-            uploadContent.style.display = 'none'; // 기존 콘텐츠 숨김
-		}
+        }
+
         
         window.onload = function() {
             // 서버로부터 전달받은 오류 메시지 확인
@@ -117,6 +136,19 @@
             if(msg && msg.trim().length > 0) {
                 alert(msg);
             }
+            
+            var imagePreviews = document.querySelectorAll('.image-preview');
+            imagePreviews.forEach(function(imagePreview) {
+                var src = imagePreview.getAttribute('src');
+                if (src) {
+                    // 이미지가 이미 존재한다면 미리보기를 보여주고, 업로드 아이콘을 숨김
+                    imagePreview.style.display = 'block';
+                    var uploadContent = imagePreview.parentNode.querySelector('.upload-content');
+                    if (uploadContent) {
+                        uploadContent.style.display = 'none';
+                    }
+                }
+            });
         };
     </script>
 </body>
