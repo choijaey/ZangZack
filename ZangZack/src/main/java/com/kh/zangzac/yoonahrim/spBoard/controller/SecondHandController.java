@@ -437,7 +437,6 @@ public class SecondHandController {
 	      ArrayList<secondHandProduct> spList = spService.searchSpList(map);
 	      ArrayList<Photo> aList = spService.selectPhotoSeconHand(null);
 	      
-	      
 	      if(spList != null) {
 	    	 model.addAttribute("aList", aList);
 	         model.addAttribute("result", result);

@@ -117,8 +117,7 @@ public class secondHandServiceImpl implements secondHandService{
 
 	@Override
 	public ArrayList<secondHandProduct> selectBoardList(PageInfo pi, int i) {
-		int offset = (pi.getCurrentPage()-1)*pi.getPageLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
 		return spDAO.selectBoardList(i, rowBounds);
 	}
 
@@ -129,8 +128,7 @@ public class secondHandServiceImpl implements secondHandService{
 
 	@Override
 	public ArrayList<secondHandProduct> selectSeconHand(PageInfo pi, int i) {
-		int offset = (pi.getCurrentPage()-1)*pi.getPageLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
 		return spDAO.selectSeconHand(i, rowBounds);
 	}
 
