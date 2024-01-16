@@ -607,11 +607,48 @@
 						 where board_no = #{productNo} and board_type=5 and photo_level = 1)
 	</update>
 	
+	
 	<select id="selectCart" resultType="Cart">
 		select *
 		from cart
 		where member_id = #{id}
 	</select>
 	
+	
+	
+	<insert id="insertPayment">
+		insert all
+		
+		<foreach collection="list" item="item">
+			into payment
+			values (order_aid,  #{ item.orderPrice }, sysdate, #{item.orderContent}, #{item.orderNo}, default, #{item.memberId}, #{item.orderAddress}, #{item.orderProductEno},#{item.deliveryStatus},#{item.productOption}, #{item.productNo}, #{item.orderPhone}, #{item.orderName}, sysdate + 3)
+		</foreach>
+		select * from dual
+	</insert>
+	
+	<select id="selectMyOrder" resultType="Payment">
+		select *
+		from payment
+		order by order_key_no
+	</select>
+	
+	<select id="selectOrderNo" resultType="_int">
+		SELECT order_no
+		FROM (select * from payment order by order_key_no)
+		GROUP BY order_no
+	</select>
+	
+	<select id="selectPayment" resultType="Payment">
+		select *
+		FROM PAYMENT
+		WHERE order_no = #{orderNo}
+	</select>
+	
+	<select id="selectBuyerInfo" resultType="Payment">
+		select order_no, member_id , order_Address, ORDER_PHONE, ORDER_NAME, order_price, order_date, delivery_date
+		from payment 
+		where order_no = #{orderNo}
+		group by order_no , member_id, order_Address, ORDER_PHONE, ORDER_NAME, order_price, order_date, delivery_date
+	</select>
 	
 </mapper>

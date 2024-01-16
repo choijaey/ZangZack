@@ -14,6 +14,7 @@ import com.kh.zangzac.sohwa.product.model.dao.ProductDAO;
 import com.kh.zangzac.sohwa.product.model.vo.Attachment;
 import com.kh.zangzac.sohwa.product.model.vo.Cart;
 import com.kh.zangzac.sohwa.product.model.vo.Option;
+import com.kh.zangzac.sohwa.product.model.vo.Payment;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
 import com.kh.zangzac.sohwa.product.model.vo.Qna;
 import com.kh.zangzac.sohwa.product.model.vo.Review;
@@ -355,6 +356,31 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public ArrayList<Cart> selectCart(String id) {
 		return pDAO.selectCart(id);
+	}
+
+	@Override
+	public int insertPayment(ArrayList<Payment> paList) {
+		return pDAO.insertPayment(paList);
+	}
+
+	@Override
+	public ArrayList<Payment> selectMyOrder(String id) {
+		return pDAO.selectMyOrder(id);
+	}
+
+	@Override
+	public ArrayList<Integer> selectOrderNo() {
+		return pDAO.selectOrderNo();
+	}
+
+	@Override
+	public ArrayList<Payment> selectPayment(int orderNo) {
+		return pDAO.selectPayment(orderNo);
+	}
+
+	@Override
+	public Payment selectBuyerInfo(int orderNo) {
+		return pDAO.selectBuyerInfo(orderNo);
 	}
 
 

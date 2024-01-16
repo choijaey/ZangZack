@@ -9,6 +9,7 @@ import com.kh.zangzac.ming.member.model.vo.Member;
 import com.kh.zangzac.sohwa.product.model.vo.Attachment;
 import com.kh.zangzac.sohwa.product.model.vo.Cart;
 import com.kh.zangzac.sohwa.product.model.vo.Option;
+import com.kh.zangzac.sohwa.product.model.vo.Payment;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
 import com.kh.zangzac.sohwa.product.model.vo.Qna;
 import com.kh.zangzac.sohwa.product.model.vo.Review;
@@ -144,6 +145,16 @@ public interface ProductService {
 	int updateYReview(ArrayList<String> checkBoxArr);
 
 	ArrayList<Cart> selectCart(String id);
+
+	int insertPayment(ArrayList<Payment> paList);
+
+	ArrayList<Payment> selectMyOrder(String id);
+
+	ArrayList<Integer> selectOrderNo();
+
+	ArrayList<Payment> selectPayment(int orderNo);
+
+	Payment selectBuyerInfo(int orderNo);
 
 
 

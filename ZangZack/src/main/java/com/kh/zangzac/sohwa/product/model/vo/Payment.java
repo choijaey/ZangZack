@@ -13,21 +13,24 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Payment {
-	
-	private int orderKeyNo;
-	private int orderPrice;
-	private Date orderDate;
-	private String orderContent;
-	private int orderNo;
-	private String orderMethod;
-	private String orderCard;
-	private String orderStatus;
-	private String memberId;
-	private String orderAddress;
-	private int orderProductEno;
-	private String deliveryStatus;
-	private int productOptionNo;
-	private int productNo;
-	
+   
+   private int orderKeyNo;
+   private int orderPrice;
+   private Date orderDate;
+   private String orderContent;
+   private int orderNo;
+   private String orderMethod;
+   private String orderCard;
+   private String orderStatus;
+   private String memberId;
+   private String orderAddress;
+   private int orderProductEno;
+   private String deliveryStatus;
+   private String productOption;
+   private int productNo;
+   private String orderPhone;
+   private String orderName;
+   private Date deliveryDate;
+   
 
 }

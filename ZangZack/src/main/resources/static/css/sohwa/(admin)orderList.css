@@ -54,7 +54,7 @@ td {
     text-align: center;
   }
   
-nav{
+#pagination nav{
 	float:right;
 }
 .pagination .page-link {
