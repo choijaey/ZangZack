@@ -180,19 +180,28 @@
 		   <main>
 			  <h1>PRODUCT ></h1>
 		  	  <section class="products">
-		  	  <th:block th:each="p:${pList}">
-		  	  	<article class="product" th:each="th:${thList}" th:if="${ p.productNo eq th.boardNo && th.boardType==5 && th.photoLevel==0}" onclick="redirectToProductDetail(this)">
-		  	  		<input type="hidden" th:value="${p.productNo}">
-				    <div class="thumbnails"><a href="#"><img th:each="th:${thList}" th:if="${ p.productNo eq th.boardNo && th.boardType==5}" th:src="${th.photoPath}"></a></div>
-			        <p>[[${p.productName}]]</p>
-			        <p class="price" th:text="|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|"></p>
-			        <span class="starImage" th:each="r : ${rList}" th:if="${p.productNo == r.productNo }">
-						<img src="image/sohwa/icons8-star.gif" style="height: 10px;">[[${p.productScore}]]<span style="color:gray;">평점</span></img>
-					</span><br>
-			        <th:block th:if="${p.eno == 0}"><span class="badge rounded-pill text-bg-dark">일시품절</span></th:block>
-			        <th:block th:if="${p.deliveryPrice == 0}"><span class="badge text-bg-secondary">무료배송</span></th:block>
-		      	</article>
-		  	  </th:block>
+			  	  <th:block th:each="p : ${pList}">
+				    <article class="product" th:each="th : ${thList}" th:if="${p.productNo eq th.boardNo && th.boardType==5 && th.photoLevel==0}" onclick="redirectToProductDetail(this)">
+				        <input type="hidden" th:value="${p.productNo}">
+				        <div class="thumbnails">
+				            <a href="#"><img th:if="${p.productNo eq th.boardNo && th.boardType==5}" th:src="${th.photoPath}"></a>
+				        </div>
+				        <p>[[${p.productName}]]</p>
+				        <p class="price" th:text="|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|"></p>
+				        <span class="starImage" th:if="${#lists.size(rList) > 0}">
+				            <img src="image/sohwa/icons8-star.gif" style="height: 10px;">
+				            [[${p.productScore}]]
+				            <span style="color: gray;">평점</span>
+				            <input type="hidden" class="productScore" th:value="${p.productScore}">
+				        </span><br>
+				        <th:block th:if="${p.eno == 0}">
+				            <span class="badge rounded-pill text-bg-dark">일시품절</span>
+				        </th:block>
+				        <th:block th:if="${p.deliveryPrice == 0}">
+				            <span class="badge text-bg-secondary">무료배송</span>
+				        </th:block>
+				    </article>
+				</th:block>
 	  	  		
 		      	
 <!-- 			      반복 샘플 -->
@@ -269,10 +278,7 @@
 	
     
     
-    <script>
-    
-    
-    
+    <script th:inline="javascript">
     
     
     

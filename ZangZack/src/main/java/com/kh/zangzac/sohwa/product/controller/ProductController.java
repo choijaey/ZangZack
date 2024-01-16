@@ -391,14 +391,18 @@ public class ProductController {
    @GetMapping("orderPage.so")
    public String insertOrder(@RequestParam("price") int price, @RequestParam("option") String option, @RequestParam("productNo") int productNo, @RequestParam("eno") int eno, Model model) {
       
-      String id = ((Member)model.getAttribute("loginUser")).getMemberId();
+      Member loginUser = (Member)model.getAttribute("loginUser");
       Payment pa = new Payment();
       pa.setOrderPrice(price);
       pa.setProductNo(productNo);
       pa.setOrderProductEno(eno);
       
       Product p = pService.selectProductDetail(productNo);
+      ArrayList<Attachment> aList = pService.selectAllPhoto();
       
+      model.addAttribute("option", option);
+      model.addAttribute("aList", aList);
+      model.addAttribute("loginUser", loginUser);
       model.addAttribute("p", p);
       model.addAttribute("eno", eno);
       return "views/sohwa/orderPage";
@@ -987,8 +991,23 @@ public class ProductController {
    
    
    @GetMapping("adminOrderListView.so")
-   public String adminOrderListView() {
+   public String adminOrderListView(Model model) {
+	   ArrayList<Payment> paList = pService.selectAllPayment();
+	   
+	   model.addAttribute("paList", paList);
 	   return "views/sohwa/(admin)orderList";
+   }
+   
+   @GetMapping("adminOrderDetail.so")
+   public String adminOrderDetail(@RequestParam("orderKeyNo") int orderKeyNo, Model model) {
+	   Payment pa = pService.selectOrderDetail(orderKeyNo);
+	   ArrayList<Attachment> aList = pService.selectAllPhoto();
+	   ArrayList<Product> pList = pService.selectAllProduct();
+	   
+	   model.addAttribute("pList", pList);
+	   model.addAttribute("aList", aList);
+	   model.addAttribute("pa", pa);
+	   return "views/sohwa/(admin)orderDetail";
    }
    
    
@@ -1188,7 +1207,19 @@ public class ProductController {
    }
    
    
-   
+   @GetMapping("updateDeliveryStatus.so")
+   public String updateDeliveryStatus(@RequestParam("orderKeyNo") int orderKeyNo, @RequestParam("orderNo") String orderNo, @RequestParam("deliveryStatus") String deliveryStatus, Model model) {
+	   HashMap<String, String> map = new HashMap<>();
+	   map.put("orderNo", orderNo);
+	   map.put("deliveryStatus", deliveryStatus);
+	   int result = pService.updateDeliveryStatus(map);
+	   
+	   if(result > 0) {
+		   return "redirect:adminOrderDetail.so?orderKeyNo=" + orderKeyNo;
+	   }else {
+		   throw new ProductException("배송 상태 변경 실패");
+	   }
+   }
    
    
    

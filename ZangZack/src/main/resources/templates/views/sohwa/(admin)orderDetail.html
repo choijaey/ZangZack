@@ -4,17 +4,16 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link href="css/sohwa/(admin)orderDetail.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 </head>
 <body>
 
-	<br><br><br><br><!--네비--><br><br><br><br>
+	<div th:replace="~{common/admin :: admin}"></div>
+	<br><br><br><br><br>
     
     
     <div id="orderDetailWrapped">
         <h1>결제상세</h1>
-        <span style="font-weight: bold;">2023.12.18 주문</span> <span style="color:gray; margin-left:20px;">주문번호 001234442</span>
+        <span style="font-weight: bold;">[[${pa.orderDate}]] 주문</span> <span style="color:gray; margin-left:20px;">주문번호 [[${pa.orderNo}]]</span>
         
         
         <!--같은 날짜 일때 반복-->
@@ -26,20 +25,22 @@
 						
                         <td class="td1">
                        	 	<img src="image/sohwa/tent1core1.png">
-                            <div>
-                                <div>모비가든</div>
-                                캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br>
-                                410,000원
-                                <div style="margin-top:0px;">상품번호 : 11235465</div>
+                            <div th:each="p:${pList}" th:if="${pa.productNo == p.productNo}">
+                                <div>[[${p.productCompany}]]</div>
+                                [[${p.productName}]]<br>
+                                [[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]
+                                <div style="margin-top:0px;">상품번호 : [[${p.productNo}]]</div>
                             </div>
                         </td>
                         <td class="td2">
                             <div class="quantity-input">&nbsp;&nbsp;&nbsp;
-                                <input type="text" class="quantity" value="1" min="1" readonly>개
+                            	<input type="hidden" class="productPrice" th:each="p:${pList}" th:if="${pa.productNo == p.productNo}" th:value="${p.productPrice}">
+                                <input type="text" class="quantity" th:value="${pa.orderProductEno}" min="1" readonly>개
                             </div>
                         </td>
+                        <td style="width:150px; text-align:center;">[[${pa.productOption}]]</td>
                         <td class="td3">
-                            410,000원
+                            
                         </td>
                     </tr>   
                 </table>
@@ -52,57 +53,16 @@
                     <div class="enoDiv">
                         <div class="quantity-input2">&nbsp;&nbsp;&nbsp;
                             <button class="quantity-btn decrementBtn">-</button>
+                            
                             <input type="text" class="quantity2" value="0" min="0">
                             <button class="quantity-btn incrementBtn">+</button>
                         </div>
                     </div>
-                    <div class="resultDiv"></div>
+                    <div class="resultDiv" style="margin-right:130px; text-align:center;"></div>
                     <button>환불처리</button><br>
                 </div>
             </div>
             
-            <div class="products">
-                <div class="left">
-                <!-- 왼쪽 컨테이너 내용 -->
-                <table>
-                    <tr class="cart-row">
-						
-                        <td class="td1">
-                       	 	<img src="image/sohwa/tent1core1.png">
-                            <div>
-                                <div>모비가든</div>
-                                캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br>
-                                410,000원
-                                <div style="margin-top:0px;">상품번호 : 00156855</div>
-                            </div>
-                        </td>
-                        <td class="td2">
-                            <div class="quantity-input">&nbsp;&nbsp;&nbsp;
-                                <input type="text" class="quantity" value="1" min="1" readonly>개
-                            </div>
-                        </td>
-                        <td class="td3">
-                            520,000원
-                        </td>
-                    </tr>   
-                </table>
-                </div>
-                
-                <div class="line"></div>
-                
-                <div class="right">
-                <!-- 오른쪽 컨테이너 내용 -->
-                    <div class="enoDiv">
-                        <div class="quantity-input2">&nbsp;&nbsp;&nbsp;
-                            <button class="quantity-btn decrementBtn">-</button>
-                            <input type="text" class="quantity2" value="0" min="0">
-                            <button class="quantity-btn incrementBtn">+</button>
-                        </div>
-                    </div>
-                    <div class="resultDiv"></div>
-                    <button>환불처리</button><br>
-                </div>
-            </div>
             
             <br><br>
             
@@ -110,52 +70,47 @@
             <hr style="border:2px solid black;">
             <div>
                 <span class="infoName">받는 사람</span>
-                <span class="info">신소화</span>
+                <span class="info">[[${pa.orderName}]]</span>
             </div>
             <div>
                 <span class="infoName">연락처</span>
-                <span class="info">010-9145-7175</span>
+                <span class="info">[[${pa.orderPhone.substring(0, 3) + '-' + pa.orderPhone.substring(3, 7) + '-' + pa.orderPhone.substring(7)}]]</span>
             </div>
             <div>
                 <span class="infoName">배송주소</span>
-                <span class="info">경기도 남양주시 진접읍 해밀예당 1로 어쩌구 1층 어쩌구호</span>
+                <span class="info">[[${pa.orderAddress.split('@')[1]}]] [[${pa.orderAddress.split('@')[2]}]]</span>
             </div>
             <div>
                 <span class="infoName">배송 요청사항</span>
-                <span class="info">배송 전 연락바랍니다.</span>
+                <span class="info">[[${pa.orderContent}]]</span>
             </div>
             <div>
                 <span class="infoName">배송 상태</span>
                 <span class="info">
 					<div class="dropdown" style="display: inline-block;">
 		                <button class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-		                    배송 준비 중
+		                    [[${pa.deliveryStatus}]]
 		                </button>
 		                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-		                    <li><a class="dropdown-item" href="#" onclick="showSearch('배송 준비 중')">배송 준비 중</a></li>
-		                    <li><a class="dropdown-item" href="#" onclick="showSearch('배송 중')">배송 중</a></li>
-		                    <li><a class="dropdown-item" href="#" onclick="showSearch('환불요청 중')">환불요청 중</a></li>
+		                    <li><a class="dropdown-item" th:href="'updateDeliveryStatus.so?orderKeyNo=' + ${pa.orderKeyNo} +'&orderNo=' + ${pa.orderNo} +'&deliveryStatus=결제완료'" onclick="showSearch('결제완료')">결제완료</a></li>
+		                    <li><a class="dropdown-item" th:href="'updateDeliveryStatus.so?orderNo=' + ${pa.orderNo} +'&deliveryStatus=배송중'" onclick="showSearch('배송중')">배송중</a></li>
+		                    <li><a class="dropdown-item" th:href="'updateDeliveryStatus.so?orderNo=' + ${pa.orderNo} +'&deliveryStatus=배송완료'" onclick="showSearch('배송완료')">배송완료</a></li>
 		                </ul>
 		            </div>
 				</span>
-				<button style="background-color: rgb(0, 0, 0); color: #F9612B">배송상태 변경</button>
             </div>
             <br><br>
             
             <h3>결제 정보</h3>
             <table id="payInfo">
                 <tr>
-                    <td style="border-bottom: 1px solid lightgray; width:50%;"><div style="color:#F9612B">결제수단</div> <div>국민카드 / 일시불</div></td>
-                    <td style="background-color: rgb(235, 235, 235);">
-                        <div>총 상품 가격 <span class="totalProductPrice">0원</span></div> 
-                        <div>배송비<span>0원</span></div>
+                    <td style="background-color: rgb(235, 235, 235); border-bottom:1px dotted gray;">
+                        <div>총 상품 가격 <span class="totalProductPrice">[[|${#numbers.formatDecimal(pa.orderPrice, 0, 'COMMA', 0, 'POINT')}원|]]</span></div> 
                     </td>
                 </tr>
                 <tr>
-                    <td style="border-bottom: 1px solid lightgray;"></td>
                     <td style="background-color: rgb(236, 236, 236);">
-                        <div>국민카드 일시불 <span>0원</span></div>
-                        <div style="color:#F9612B">총 결제 금액 <span class="totalPayment">0원</span></div>
+                        <div style="color:#F9612B">총 결제 금액 <span class="totalPayment">[[|${#numbers.formatDecimal(pa.orderPrice, 0, 'COMMA', 0, 'POINT')}원|]]</span></div>
                     </td>
                 </tr>
             </table>
@@ -235,6 +190,19 @@
 		function showSearch(dropdownText) {
             document.getElementById('dropdownMenuButton').innerText = dropdownText;
         }
+    	
+    	
+    	
+		window.onload=()=>{
+		   const inputs = document.querySelectorAll('.quantity-input');
+		   
+		   for (let i = 0; i < inputs.length; i++) {
+			   const price = inputs[i].querySelector('.productPrice').value;
+			   const eno = inputs[i].querySelector('.quantity').value;
+			   inputs[i].parentNode.nextElementSibling.nextElementSibling.innerText=(price * eno).toLocaleString() + '원';
+			   console.log(inputs[i].parentNode.nextElementSibling);
+		   }
+		 }
     </script>
 
 </body>

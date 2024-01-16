@@ -156,6 +156,12 @@ public interface ProductService {
 
 	Payment selectBuyerInfo(int orderNo);
 
+	ArrayList<Payment> selectAllPayment();
+
+	Payment selectOrderDetail(int orderKeyNo);
+
+	int updateDeliveryStatus(HashMap<String, String> map);
+
 
 
 

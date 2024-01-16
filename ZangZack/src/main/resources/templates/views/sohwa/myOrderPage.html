@@ -37,11 +37,9 @@
 		         	</span>
 		         	<h5 style="margin-left:60px;">주문번호 : [[${on}]]</h5> 
 		         </div>
-		         <div th:each="pa : ${paList}"  th:with="isMatched=${pa.orderNo == on}">
-		         	<h4 th:if="${isMatched}" style="margin-left:5%; color:darkolivegreen;">[[${pa.deliveryStatus}]]</h4>
-		         </div>
 		         <!--같은 날짜 일때 반복-->
 		            <div class="products" th:each="pa:${paList}" th:if="${pa.orderNo == on}">
+		            	<span style="margin-left:10px; font-size:13px;color:darkolivegreen; width:80px;">[[${pa.orderDate}]]<br>[[${pa.deliveryStatus}]]</span>
 		                <div class="left" th:each="p:${pList}" th:if="${pa.productNo == p.productNo}">
 		                <!-- 왼쪽 컨테이너 내용 -->
 			                <table>
@@ -60,6 +58,7 @@
 		                                  <input type="text" class="quantity" th:value="${pa.orderProductEno}" min="1" readonly>개
 		                              </div>
 		                          </td>
+		                          <td style="width:150px;">[[${pa.productOption}]]</td>
 		                          <td class="td3">
 		                          
 		                          </td>
@@ -279,7 +278,7 @@
 		   for (let i = 0; i < inputs.length; i++) {
 			   const price = inputs[i].querySelector('.productPrice').value;
 			   const eno = inputs[i].querySelector('.quantity').value;
-			   inputs[i].parentNode.nextElementSibling.innerText=(price * eno).toLocaleString() + '원';
+			   inputs[i].parentNode.nextElementSibling.nextElementSibling.innerText=(price * eno).toLocaleString() + '원';
 			   console.log(inputs[i].parentNode.nextElementSibling);
 		   }
 	   }

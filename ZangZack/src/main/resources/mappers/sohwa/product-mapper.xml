@@ -645,10 +645,27 @@
 	</select>
 	
 	<select id="selectBuyerInfo" resultType="Payment">
-		select order_no, member_id , order_Address, ORDER_PHONE, ORDER_NAME, order_price, order_date, delivery_date
+		select order_no, member_id , order_Address, ORDER_PHONE, ORDER_NAME, order_price, order_date, delivery_date, order_content
 		from payment 
 		where order_no = #{orderNo}
-		group by order_no , member_id, order_Address, ORDER_PHONE, ORDER_NAME, order_price, order_date, delivery_date
+		group by order_no , member_id, order_Address, ORDER_PHONE, ORDER_NAME, order_price, order_date, delivery_date, order_Content
 	</select>
 	
+	<select id="selectAllPayment" resultType="Payment">
+		select *
+		from payment
+		where order_status = 'N'
+	</select>
+	
+	<select id="selectOrderDetail" resultType="Payment">
+		select *
+		from payment
+		where order_key_no = #{orderKeyNo} and order_status = 'N'
+	</select>
+	
+	<update id="updateDeliveryStatus">
+		update payment
+		set delivery_status = #{deliveryStatus}
+		where order_no = #{orderNo}
+	</update>
 </mapper>

@@ -383,6 +383,21 @@ public class ProductServiceImpl implements ProductService{
 		return pDAO.selectBuyerInfo(orderNo);
 	}
 
+	@Override
+	public ArrayList<Payment> selectAllPayment() {
+		return pDAO.selectAllPayment();
+	}
+
+	@Override
+	public Payment selectOrderDetail(int orderKeyNo) {
+		return pDAO.selectOrderDetail(orderKeyNo);
+	}
+
+	@Override
+	public int updateDeliveryStatus(HashMap<String, String> map) {
+		return pDAO.updateDeliveryStatus(map);
+	}
+
 
 
 
