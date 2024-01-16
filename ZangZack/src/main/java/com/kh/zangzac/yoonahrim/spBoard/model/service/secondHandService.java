@@ -59,6 +59,8 @@ public interface secondHandService {
 
 	ArrayList<secondHandProduct> searchSpList(HashMap<String, String> map);
 
+	int getReplyCount(int spNo);
+
 
 
 

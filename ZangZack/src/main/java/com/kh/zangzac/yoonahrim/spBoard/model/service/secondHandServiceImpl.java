@@ -142,6 +142,11 @@ public class secondHandServiceImpl implements secondHandService{
 		return spDAO.searchSpList(map);
 	}
 
+	@Override
+	public int getReplyCount(int spNo) {
+		return spDAO.getReplyCount(spNo);
+	}
+
 	
 
 

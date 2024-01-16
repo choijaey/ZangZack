@@ -31,4 +31,5 @@ public class secondHandProduct {
 	private String memberName;
 	private String memberNickName;
 	private String memberProfilePath;
+	private int replyCount;
 }

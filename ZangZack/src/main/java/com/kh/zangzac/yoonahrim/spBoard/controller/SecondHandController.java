@@ -47,8 +47,8 @@ public class SecondHandController {
     
 	//중고 메인 페이지로 이동
 	@GetMapping("secondHand.ah")
-	public String secondHand(@ModelAttribute secondHandProduct sp, Model model, 
-							 @RequestParam(value="page", defaultValue="1") int page, HttpServletRequest request) {
+	public String secondHand(@ModelAttribute secondHandProduct sp, Model model,
+							 @RequestParam(value="page", defaultValue="1") int page, HttpServletRequest request, HttpSession session) {
 		
 		
 		int listCount = spService.getListCount();
@@ -59,10 +59,12 @@ public class SecondHandController {
 		
 		int spNo = sp.getSpNo();
 		ArrayList<secondHandProduct> sList =  spService.selectSeconHand(pi, 4);
+		int replyCount = spService.getReplyCount(spNo);
 		
-		
+		model.addAttribute("loginUser", session.getAttribute("loginUser"));
 		model.addAttribute("aList", aList);
 		model.addAttribute("sList", sList);
+		model.addAttribute("replyCount", replyCount);
 		model.addAttribute("pi", pi);
 		model.addAttribute("loc", request.getRequestURI());
 		

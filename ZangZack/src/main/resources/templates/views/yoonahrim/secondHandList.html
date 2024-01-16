@@ -10,7 +10,7 @@
 </head>
 <body>
 	<div th:replace="~{common/navbar :: navbar}" th:each="s : ${sList}"></div>
-	
+	<input type="hidden" id="loginUser" th:value="${loginUser}"/>
 	<!-- 게시판 navbar -->
 	<a id="back-to-top"><img src='image/seongun/topBtn.png' style='width:38px; height:38px;'></a>
     <button type="button" th:onclick="location.href='admin.ah'"></button>
@@ -75,7 +75,7 @@
       <button type="button" id="searchBtn" onclick="categorySelect()">GO</button>
       
       <div class="pointerBtn">
-         <button class="btn-hover color-1" th:onclick="location.href='write.ah'">글쓰기</button>&nbsp;&nbsp;
+         <button id="writeBtn" class="btn-hover color-1" th:onclick="location.href='write.ah'">글쓰기</button>&nbsp;&nbsp;
       </div>
       <br><br>
       
@@ -108,7 +108,7 @@
 	                         </span>
 	                       ∙
 	                         <span>
-	                           채팅 10
+	                           댓글[[${replyCount}]]
 	                         </span>
 	                     </div>
 	                </div>
@@ -183,6 +183,18 @@
                 location.href = 'searchSecondHand.ah?region=' + selectedRegion + '&type=' + selectedCategory;
             }
         }
+        
+       
+        var loginUser = document.getElementById('loginUser').value; 
+
+        document.getElementById('writeBtn').addEventListener('click', function() {
+            
+            if (!loginUser) {
+                alert('로그인 후 이용해주세요');
+                location.href='signUp.me';
+            }
+        });
+        
         
         
 </script>
