@@ -150,6 +150,16 @@ public class CampServiceImpl implements CampService {
 		return cDAO.searchCampList(map);
 	}
 
+	@Override
+	public ArrayList<CampingGround> getMainList(String recomendation) {
+		return cDAO.getMainList(recomendation);
+	}
+
+	@Override
+	public ArrayList<Photo> selectMainPhoto(ArrayList<Integer> intArrayList) {
+		return cDAO.selectMainPhoto(intArrayList);
+	}
+
 
 
 

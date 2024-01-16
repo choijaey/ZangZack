@@ -1,8 +1,7 @@
 package com.kh.zangzac.yoonseo.camp.controller;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,9 +101,8 @@ public class CampController {
 			                       @RequestParam("page") int page,
 			                       Model model) {
 		
-		System.out.println("dd"+no);
+		
 		CampingGround camp = cService.selectCampingDetail(no);
-		System.out.println(camp.getCgImgInfo());
 		
 		ArrayList<Photo> campList = cService.selectPhoto(no); //캠핑장 사진
 		
@@ -139,6 +137,8 @@ public class CampController {
 			                
 			                 ) {
 		
+		
+		
 		ArrayList<Photo> campList = new ArrayList<>();
 		
 		String name = "yoonseo";
@@ -155,11 +155,18 @@ public class CampController {
 				Photo a = new Photo();
 				if(i == 0) {
 					a.setPhotoLevel(0);
+					
+					a.setPhotoRename(returnArr[0]);
+					a.setPhotoPath(returnArr[1]);
+					
+				
 				}else {
 					a.setPhotoLevel(1);
+					
+					a.setPhotoRename(returnArr[0]);
+					a.setPhotoPath(returnArr[1]);
+					
 				}
-				a.setPhotoRename(returnArr[0]);
-				a.setPhotoPath(returnArr[1]);
 				
 				campList.add(a);
 			}
@@ -174,11 +181,9 @@ public class CampController {
 			a.setBoardNo(camp.getCgNo());
 		}
 		result2 = cService.insertCampImg(campList);
-		
-	
-		
+				
 		if(result1 + result2  == campList.size()+ 1) {
-			return "views/yoonseo/campDetail";
+			return "redirect:campUpdate.ys";
 		}else {
 			throw new CampException("캠핑장 등록 실패");
 		}
@@ -211,7 +216,7 @@ public class CampController {
 			                  @RequestParam("state") String state,
 			                  @RequestParam("no") String no) {
 		
-		System.out.println(column);
+		
 		Properties prop = new Properties();//map형식으로 key와 value로 이루어져있음.문자열만 받아줌.
 		prop.setProperty("column",column);
 		prop.setProperty("state", state);
@@ -230,10 +235,16 @@ public class CampController {
 		CampingGround campList = cService.selectAllCamping(no);
 		ArrayList<Photo> photoList = cService.selectPhoto(no);
 		
+		String info = campList.getCgImgInfo();
+	    String recomendation = campList.getCgRecomendation();
+	    
+		
 		if(campList != null) {
 			model.addAttribute("campList", campList);
 			model.addAttribute("photoList", photoList);
 			model.addAttribute("page", page);
+			model.addAttribute("info", info);
+			model.addAttribute("recomendation", recomendation);
 			
 			return "views/yoonseo/campEdit";
 		}else {
@@ -250,7 +261,6 @@ public class CampController {
 			               RedirectAttributes redirectAttributes) {
 		
 		String name = "yoonseo";
-		System.out.println("캠핑장번호"+camp.getCgNo());
 		
 		ArrayList<Photo> list = new ArrayList<>();
 		//files 새로 추가한 파일들이 들어가 있는곳
@@ -368,14 +378,37 @@ public class CampController {
 		
 	}
 	
+	@GetMapping("/")
+	public String main(Model model) {
+		
+		String recomendation = "Y";
+		ArrayList<CampingGround> list = cService.getMainList(recomendation);
+		System.out.println(list.size());
+		
+		ArrayList<Integer> intArrayList = new ArrayList<>();
+
+		for (CampingGround cg : list) {
+		    intArrayList.add(cg.getCgNo());
+		}
+		System.out.println(intArrayList);
+		
+		
+ 		ArrayList<Photo> photo = cService.selectMainPhoto(intArrayList);
+ 		System.out.println(photo);
+		
+		if(list != null) {
+			model.addAttribute("list", list);
+			model.addAttribute("photo", photo);
+			
+			return"index";
+		}else {
+			return"index";
+		}
+	
+	}
+	
 	
 
-	
-
-	
-
-	
-	
 	
 
 }

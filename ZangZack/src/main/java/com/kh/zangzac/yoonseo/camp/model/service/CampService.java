@@ -53,5 +53,9 @@ public interface CampService {
 
 	ArrayList<CampingGround> searchCampList(String keyword, String city, String type);
 
+	ArrayList<CampingGround> getMainList(String recomendation);
+
+	ArrayList<Photo> selectMainPhoto(ArrayList<Integer> intArrayList);
+
 	
 }

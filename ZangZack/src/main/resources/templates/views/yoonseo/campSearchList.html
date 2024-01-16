@@ -128,13 +128,8 @@
 		               </li>
 		                <!-- 페이지 번호 -->
 		               <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
-		                 <!-- <th:block th:if="${(keyword == null or keyword == '') and (city == null or city == '') and (type == null or type == '')}">
-					        <a th:href="@{${loc}(page=${p})}" th:id="${p == pi.currentPage ? 'check_page' : ''}">
-					            [[${p}]] 
-					        </a>
-					     </th:block> -->
 					     <a th:href="@{${loc}(page=${p},keyword=${keyword},city=${city},type=${type})}" th:id="${p == pi.currentPage ? 'check_page' : ''}">
-					            [[${p}]] 
+					        [[${p}]] 
 					     </a>
 					 
 		
@@ -337,6 +332,10 @@
 		                // 정상적으로 검색이 완료됐으면
 		                if (status === kakao.maps.services.Status.OK) {
 		                    const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+		                    
+		                    // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+					        map.setCenter(coords); //제거한 코드
+					        setBounds();  //추가한 코드
 
 		                    // 결과값으로 받은 위치를 마커로 표시합니다
 		                    const marker = new kakao.maps.Marker({

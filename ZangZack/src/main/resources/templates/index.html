@@ -218,18 +218,20 @@
 	
 	
 	<div class="section">
-        <div class="news-section">
-            <div class="section-header">배송 NEWS</div>
+        <div th:each="list : ${list}" class="news-section">
+           <div class="section-header">추천 캠핑장</div>
             <!-- 뉴스 아이템들 -->
-            <div class="news-item">
-                <img src="news1.jpg" alt="뉴스 이미지">
-                <h3>뉴스 제목 1</h3>
-                <p>뉴스 설명 1</p>
-            </div>
-            <div class="news-item">
-                <img src="news2.jpg" alt="뉴스 이미지">
-                <h3>뉴스 제목 2</h3>
-                <p>뉴스 설명 2</p>
+            <div  id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+              <div th:each="photo : ${photo}" th:if="${list.cgNo eq photo.boardNo}" class="carousel-inner">
+               <div class="card" style="width: 18rem;">
+			     <img th:src="${photo.photoPath}" class="card-img-top" alt="...">
+				  <div class="card-body">
+				    <h5 class="card-title">[ [[${list.cgRegion}]] ] [[${list.cgName}]]</h5>
+				    <p class="card-text"></p>
+				    <a href="#" class="btn btn-primary">Go somewhere</a>
+				  </div>
+			    </div>
+			  </div>
             </div>
         </div>
 

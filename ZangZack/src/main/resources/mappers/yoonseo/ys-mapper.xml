@@ -25,16 +25,6 @@
       select * from dual
    </insert>
    
-   <insert id="insertInfoImg">
-     insert all
-     <foreach collection="list" item="item">
-       into photo 
-       values (new_aid, #{item.photoRename},
-               #{item.photoPath}, #{item.photoLevel}, 3, #{item.boardNo},
-               default)
-     </foreach>
-      select * from dual
-   </insert>
    
    <select id="getListCount" resultType="_int">
      select count(*)
@@ -65,15 +55,7 @@
      select *
      from photo
      where photo_status = 'N' 
-            and board_no = #{no} and board_type = 3 and photo_level = 1
-     order by photo_no
-   </select>
-   
-   <select id="selectInfoPhoto" resultType="Photo">
-      select *
-     from photo
-     where photo_status = 'N' 
-            and board_no = #{no} and board_type = 3 and photo_level = 2
+            and board_no = #{no} and board_type = 3 
      order by photo_no
    </select>
    
@@ -87,6 +69,7 @@
      select *
      from camping_ground
      where cg_status = 'N' and cg_recomendation = #{recomendation}
+     order by cg_no desc
    </select>
    
    <select id="selectOnePhoto" resultType="Photo">
@@ -104,6 +87,7 @@
    <select id="selectAllList" resultType="CampingGround">
      select *
      from camping_ground
+     order by cg_no desc
    </select>
    
    <update id="stateUpdate">
@@ -182,5 +166,31 @@
 	        AND cg_type LIKE '%' || #{type} || '%'
 	    </if>
    </select>
+   
+   <select id="getMainList" resultType="CampingGround">
+       <![CDATA[ 
+       SELECT *
+		FROM (
+		    SELECT *
+		    FROM camping_ground
+		    WHERE cg_status = 'N' AND CG_RECOMENDATION = #{recomendation} AND CG_STAR_POINT >= 4.5
+		    ORDER BY CG_STAR_POINT DESC
+		    )
+		
+		WHERE ROWNUM <= 3
+		]]> 
+   </select>
+   
+   <select id="selectMainPhoto" resultType="Photo" >
+     select *
+     from photo
+     where (
+     <foreach collection="list" item="item" separator=" OR ">
+        BOARD_NO = #{item}
+     </foreach>
+      ) and photo_status = 'N'AND BOARD_TYPE=3 AND PHOTO_LEVEL = 0
+   </select>
+   
+   
 
 </mapper>

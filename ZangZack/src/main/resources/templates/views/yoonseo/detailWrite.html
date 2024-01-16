@@ -69,6 +69,10 @@ button {
 button:hover {
     background-color: #4cae4c;
 }
+
+.info{
+  margin-left: 10px;
+}
 </style>
 
 </head>
@@ -80,25 +84,26 @@ button:hover {
 	       <h1 style="text-align: center;">캠핑장 등록</h1>
 	       <br>
 	       <div class="form-group">
+	          <h6 style="color:red;">*입력값이 없을 경우 - 로 입력해주세요</h6>
 	         <label for="campsiteName">캠핑장 지역:</label>
-	         <select name="cgRegion" id="" style=" margin-right: 10px; height:30px; ">
-	              <option value=>시/도 선택</option>
-	              <option>강원도</option>
-	              <option>경기도</option>
-	              <option>경상남도</option>
-	              <option>경상북도</option>
-	              <option>광주</option>
-	              <option>대구</option>
-	              <option>대전</option>
-	              <option>부산</option>
-	              <option>서울</option>
-	              <option>울산</option>
-	              <option>인천</option>
-	              <option >전라남도</option>
-	              <option>전라북도</option>
-	              <option>제주도</option>
-	              <option>충청남도</option>
-	              <option>충청북도</option>
+	         <select name="cgRegion" style=" margin-right: 10px; height:30px;">
+	              <option value=''>시/도 선택</option>
+	              <option value="강원도">강원도</option>
+	              <option value="경기도">경기도</option>
+	              <option value="경상남도">경상남도</option>
+	              <option value="경상북도">경상북도</option>
+	              <option value="광주">광주</option>
+	              <option value="대구">대구</option>
+	              <option value="대전">대전</option>
+	              <option value="부산">부산</option>
+	              <option value="서울">서울</option>
+	              <option value="울산">울산</option>
+	              <option value="인천">인천</option>
+	              <option value="전라남도">전라남도</option>
+	              <option value="전라북도">전라북도</option>
+	              <option value="제주도">제주도</option>
+	              <option value="충청남도">충청남도</option>
+	              <option value="충청북도">충청북도</option>
 	           </select>
 	       </div><br>
 	       <div class="form-group">
@@ -114,7 +119,7 @@ button:hover {
 			    <button type="button" id="addfile">추가버튼</button>
 			    <div id="fileArea">
 			      <div class="mb-3">
-			        <input type="file" id="campImg" name="campImg" accept="image/*" style=" width:200px;" onchange="previewImage3()">
+			        <input type="file" id="campImg" name="campImg" accept="image/*" style=" width:200px;" onchange="previewImage3()" required>
 			        <div class="infoImgs" style="display:inline-block"></div> 
 			      </div>
 				</div>		
@@ -124,51 +129,68 @@ button:hover {
 			         <table class="table" >
 					   <tr>
 					     <td>주소</td>
-					     <td><input text="text" style="width:500px;" name="cgAddress"></td>
+					     <td><input text="text" style="width:500px;" name="cgAddress" required></td>
 					   </tr>
 					   <tr>
 					     <td>문의처</td>
-					     <td><input text="text" style="width:500px;" name="cgPhone"></td>
+					     <td><input text="text" style="width:500px;" name="cgPhone" required></td>
 					   </tr>
 					   <tr>
 					     <td>캠핑장 유형</td>
-					     <td><input text="text" style="width:500px;" name="cgType"></td>
+					     <td><input text="text" style="width:500px;" name="cgType" required></td>
 					   </tr>
 					   <tr>
 					     <td>캠핑장 환경</td>
-					     <td><input text="text" style="width:500px;" name="cgArea"></td>
+					     <td><input text="text" style="width:500px;" name="cgArea" required></td>
 					   </tr>
 					   <tr>
 					     <td>운영기간</td>
-					     <td><input text="text" style="width:500px;" name="cgSeason"></td>
+					     <td><input text="text" style="width:500px;" name="cgSeason" required></td>
 					   </tr>
 					   <tr>
 					     <td>운영일</td>
-					     <td><input text="text" style="width:500px;" name="cgManageDate"></td>
+					     <td><input text="text" style="width:500px;" name="cgManageDate" required></td>
 					   </tr>
 					   <tr>
 					     <td>홈페이지</td>
-					     <td><input text="text" style="width:500px;" name="cgPage"></td>
+					     <td><input text="text" style="width:500px;" name="cgPage" required></td>
 					   </tr>
 					   <tr>
 					     <td>예약방법</td>
-					     <td><input text="text" style="width:500px;" name="cgBooking"></td>
+					     <td><input text="text" style="width:500px;" name="cgBooking" required></td>
 					   </tr>
 					   <tr>
 					     <td>주변이용가능시설</td>
-					     <td><input text="text" style="width:500px;" name="cgInfo"></td>
+					     <td><input text="text" style="width:500px;" name="cgInfo" required></td>
 					   </tr>
 					  <tr>
 					     <td>캠핑장 소개</td>
-					     <td><textarea style="width:500px;height:200px;" name="cgAmenity"></textarea></td>
+					     <td><textarea style="width:500px;height:200px;" name="cgAmenity" required></textarea></td>
 					  </tr> 
 					  <tr>
 					     <td>시설안내</td>
-					     <td><input text="text" style="width:500px;" name="cgImgInfo"></td>
+					     <td>
+					       <input class="info" type="checkbox" name="cgImgInfo" value="전기사용">전기사용
+					       <input class="info" type="checkbox" name="cgImgInfo" value="온수사용">온수사용
+					       <input class="info" type="checkbox" name="cgImgInfo" value="와이파이">와이파이
+					       <input class="info" type="checkbox" name="cgImgInfo" value="산책로">산책로
+					       <input class="info" type="checkbox" name="cgImgInfo" value="물놀이장">물놀이장
+					       <input class="info" type="checkbox" name="cgImgInfo" value="놀이터">놀이터<br>
+					       <input class="info" type="checkbox" name="cgImgInfo" value="마트.편의점">마트.편의점
+					       <input class="info" type="checkbox" name="cgImgInfo" value="운동시설">운동시설
+					       <input class="info" type="checkbox" name="cgImgInfo" value="운동장">운동장
+					       <input class="info" type="checkbox" name="cgImgInfo" value="장작판매">장작판매
+					       <input class="info" type="checkbox" name="cgImgInfo" value="트렘폴린">트렘폴린<br>
+					       <input class="info" type="checkbox" name="cgImgInfo" value="공용화장실">공용화장실
+					       <input class="info" type="checkbox" name="cgImgInfo" value="주차장">주차장
+					     </td>
 					  </tr> 
 					  <tr>
 					     <td>추천여부</td>
-					     <td><input text="text" style="width:100px;" name="cgRecomendation"></td>
+					     <td>
+					       <input type="radio" style="margin-left: 10px;" name="cgRecomendation" value="Y">Y
+					       <input type="radio" style="margin-left: 10px;" name="cgRecomendation" value="N">N
+					     </td>
 					  </tr>    
 				  </table>	  
 	          </div>

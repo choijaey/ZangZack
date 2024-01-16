@@ -87,22 +87,22 @@ button:hover {
 	         <label for="campsiteName">캠핑장 지역:</label>
 	         <select name="cgRegion" th:value="${campList.cgRegion}"  style=" margin-right: 10px; height:30px;">
 	              <option>시/도 선택</option>
-	              <option th:selected="${campList.cgRegion} == '강원도'" >강원도</option>
-	              <option th:selected="${campList.cgRegion} == '경기도'">경기도</option>
-	              <option th:selected="${campList.cgRegion} == '경상남도'">경상남도</option>
-	              <option th:selected="${campList.cgRegion} == '경상북도'">경상북도</option>
-	              <option th:selected="${campList.cgRegion} == '광주'">광주</option>
-	              <option th:selected="${campList.cgRegion} == '대구'">대구</option>
-	              <option th:selected="${campList.cgRegion} == '대전'">대전</option>
-	              <option th:selected="${campList.cgRegion} == '부산'">부산</option>
-	              <option th:selected="${campList.cgRegion} == '서울'">서울</option>
-	              <option th:selected="${campList.cgRegion} == '울산'">울산</option>
-	              <option th:selected="${campList.cgRegion} == '인천'">인천</option>
-	              <option th:selected="${campList.cgRegion} == '전라남도'">전라남도</option>
-	              <option th:selected="${campList.cgRegion} == '전라북도'">전라북도</option>
-	              <option th:selected="${campList.cgRegion} == '제주도'">제주도</option>
-	              <option th:selected="${campList.cgRegion} == '충청남도'">충청남도</option>
-	              <option th:selected="${campList.cgRegion} == '충청북도'">충청북도</option>
+	              <option th:selected="${campList.cgRegion} == '강원도'"  value="강원도">강원도</option>
+	              <option th:selected="${campList.cgRegion} == '경기도'" value="경기도">경기도</option>
+	              <option th:selected="${campList.cgRegion} == '경상남도'" value="경상남도">경상남도</option>
+	              <option th:selected="${campList.cgRegion} == '경상북도'" value="경상북도">경상북도</option>
+	              <option th:selected="${campList.cgRegion} == '광주'" value="광주">광주</option>
+	              <option th:selected="${campList.cgRegion} == '대구'" value="대구">대구</option>
+	              <option th:selected="${campList.cgRegion} == '대전'" value="대전">대전</option>
+	              <option th:selected="${campList.cgRegion} == '부산'" value="부산">부산</option>
+	              <option th:selected="${campList.cgRegion} == '서울'" value="서울">서울</option>
+	              <option th:selected="${campList.cgRegion} == '울산'" value="울산">울산</option>
+	              <option th:selected="${campList.cgRegion} == '인천'" value="인천">인천</option>
+	              <option th:selected="${campList.cgRegion} == '전라남도'" value="전라남도">전라남도</option>
+	              <option th:selected="${campList.cgRegion} == '전라북도'" value="전라북도">전라북도</option>
+	              <option th:selected="${campList.cgRegion} == '제주도'" value="제주도">제주도</option>
+	              <option th:selected="${campList.cgRegion} == '충청남도'" value="충청남도">충청남도</option>
+	              <option th:selected="${campList.cgRegion} == '충청북도'" value="충청북도">충청북도</option>
 	           </select>
 	       </div><br>
 	       <div class="form-group">
@@ -186,11 +186,30 @@ button:hover {
 				  </tr> 
 				  <tr>
 				     <td>시설안내</td>
-				     <td><input th:value="${campList.cgImgInfo}" style="width:500px;" name="cgImgInfo"></td>
+					 <td>
+						 <div>
+					       <input class="info" type="checkbox" name="cgImgInfo" value="전기사용" th:checked="${#strings.contains(info, '전기사용')}">전기사용
+						   <input class="info" type="checkbox" name="cgImgInfo" value="온수사용" th:checked="${#strings.contains(info, '온수사용')}">온수사용
+						   <input class="info" type="checkbox" name="cgImgInfo" value="와이파이" th:checked="${#strings.contains(info, '와이파이')}">와이파이
+					       <input class="info" type="checkbox" name="cgImgInfo" value="산책로" th:checked="${#strings.contains(info, '산책로')}">산책로
+					       <input class="info" type="checkbox" name="cgImgInfo" value="물놀이장" th:checked="${#strings.contains(info, '물놀이장')}">물놀이장
+					       <input class="info" type="checkbox" name="cgImgInfo" value="놀이터" th:checked="${#strings.contains(info, '놀이터')}">놀이터
+					       <input class="info" type="checkbox" name="cgImgInfo" value="마트.편의점" th:checked="${#strings.contains(info, '마트.편의점')}">마트.편의점
+					       <input class="info" type="checkbox" name="cgImgInfo" value="운동시설" th:checked="${#strings.contains(info, '운동시설')}">운동시설
+					       <input class="info" type="checkbox" name="cgImgInfo" value="운동장" th:checked="${#strings.contains(info, '운동장')}">운동장
+					       <input class="info" type="checkbox" name="cgImgInfo" value="장작판매" th:checked="${#strings.contains(info, '장작판매')}">장작판매
+					       <input class="info" type="checkbox" name="cgImgInfo" value="트렘폴린" th:checked="${#strings.contains(info, '트렘폴린')}">트렘폴린
+					       <input class="info" type="checkbox" name="cgImgInfo" value="공용화장실" th:checked="${#strings.contains(info, '공용화장실')}">공용화장실
+					       <input class="info" type="checkbox" name="cgImgInfo" value="주차장" th:checked="${#strings.contains(info, '주차장')}">주차장
+					     </div>
+				     </td>
 				  </tr> 
 				  <tr>
 				     <td>추천여부</td>
-				     <td><input th:value="${campList.cgRecomendation}" style="width:100px;" name="cgRecomendation"></td>
+				     <td>
+				       <input type="radio" style="margin-left: 10px;" name="cgRecomendation" value="Y" th:checked="${#strings.contains(recomendation, 'Y')}">Y
+					   <input type="radio" style="margin-left: 10px;" name="cgRecomendation" value="N" th:checked="${#strings.contains(recomendation, 'N')}">N
+					 </td>
 				  </tr>    
 			  </table>	  
 	       </div>

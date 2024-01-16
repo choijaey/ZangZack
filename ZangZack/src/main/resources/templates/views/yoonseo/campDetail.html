@@ -85,9 +85,9 @@
 	           <h3 style="display:inline-block;  margin-top:30px;">[[${camp.cgName}]]</h3>
 	        </div>
 		    <div style="margin-top: 10px;">
-			    <div id="carouselExampleFade" class="carousel slide carousel-fade carousel-dark w-50" data-bs-ride="carousel" style=" float: left; margin-bottom: 60px; z-index: 0;">
+			    <div id="carouselExampleFade" class="carousel slide carousel-fade carousel-dark w-50" data-bs-ride="carousel" style=" float: left; margin-bottom: 60px; z-index: 0; overflow: hidden;">
 				     <div class="carousel-inner" >
-				       <div class="carousel-item active"  th:each="list : ${list}" >
+				       <div class="carousel-item active"  th:each="list : ${list}" style="height:450px;">
 				        <th:block th:if="${#strings.containsIgnoreCase(list.photoRename, 'jpg') 
 					                       or #strings.containsIgnoreCase(list.photoRename, 'png') 
 					                        or #strings.containsIgnoreCase(list.photoRename, 'jpeg')}">
@@ -168,8 +168,8 @@
 	        <h3 style="position: absolute; top:20%; left:20px;">캠핑장 시설 정보</h3>
 	      </div>
 	      <div style="background-color:#F3F4F6; border-radius: 10px; height:130px; text-align: center;">
-	         <div style="margin-top: 10px; width:100xp; display: inline-block; margin-left: 30px; ">
-		         <div style="text-align: center; float: left; padding:25px;" th:each="info : ${infoArray}" >
+	         <div style="margin-top: 10px;  display: inline-block; margin-left: 30px; ">
+		         <div style="text-align: center;  float: left; padding:25px;" th:each="info : ${infoArray}" >
 				   <th:block th:if="${info == '전기사용'}" >
 				   	 	 <img src="https://storage.googleapis.com/zangzac/image/yoonseo/%EC%A0%84%EA%B8%B0%EC%82%AC%EC%9A%A9.png">  
 				    	 <div style="text-align: center;" th:text="${info}"></div>
@@ -229,9 +229,12 @@
     <script>
  // 페이지 로딩 후 자동 슬라이딩을 중지
     $(document).ready(function () {
-        $('#carouselExampleFade').carousel({ interval: 3000 });
+        // Set the interval for transitioning to the next slide
+        $('.carousel').carousel({
+            interval: 2000,  // Set the interval time in milliseconds (adjust as needed)
+            pause: false // Set to true if you want the carousel to pause on hover
+        });
     });
-
     // 수동으로 다음 슬라이드로 이동
     $('.carousel-control-next').click(function () {
         $('#carouselExampleFade').carousel('next');
