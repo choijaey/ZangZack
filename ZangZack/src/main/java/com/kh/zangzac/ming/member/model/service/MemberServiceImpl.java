@@ -27,8 +27,10 @@ import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.ming.member.model.dao.MemberDAO;
 import com.kh.zangzac.ming.member.model.vo.Member;
+import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
 import com.kh.zangzac.sohwa.product.model.vo.Review;
+import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
 
 @Service
@@ -353,12 +355,12 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public ArrayList<Review> selectReview(PageInfo pi, int i) {
+	public ArrayList<Review> selectReview(String memberId,PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
 		int limit = pi.getBoardLimit();
 		
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		return mDAO.selectReview(i, rowBounds);
+		return mDAO.selectReview(memberId, rowBounds);
 	}
 
 	@Override
@@ -370,6 +372,45 @@ public class MemberServiceImpl implements MemberService{
 	public ArrayList<Photo> selectAllPotoProduct() {
 		return mDAO.selectAllPotoProduct();
 	}
+
+	@Override
+	public int deleteReview(int reviewNo) {
+		return mDAO.deleteReview(reviewNo);
+	}
+
+	@Override
+	public String deleteSelectReview(int reviewNo) {
+		return mDAO.deleteSelectReview(reviewNo);
+	}
+
+	@Override
+	public int getmyBoardListCount(int i) {
+		return mDAO.getmyBoardListCount(i);
+	}
+
+	@Override
+	public int getmySecondHandProductListCount(int i) {
+		return mDAO.getmySecondHandProductListCount(i);
+	}
+
+	@Override
+	public ArrayList<secondHandProduct> selectsecondHandProduct(String memberId, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return mDAO.selectsecondHandProduct(memberId,rowBounds);
+	}
+
+	@Override
+	public ArrayList<CampBoard> selectCampBoard(String memberId, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return mDAO.selectCampBoard(memberId,rowBounds);
+	}
+
 
 
 

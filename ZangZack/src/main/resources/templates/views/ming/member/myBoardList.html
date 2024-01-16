@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+<meta http-equiv="X-UA-Compatible" content="ie=edge" /> 
+<title>Insert title here</title>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<link href="../css/ming/member/MyPage.css" rel="stylesheet">
+<link href="../css/ming/member/MyBoardList.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+	<div class="logo">
+		<a href="home.me"><img src="../image/ming/member/logo.png" alt="logo"></a>
+	</div>
+	<aside class="sidebar">
+		<div class="user">
+			<img th:src="${loginUser.memberProfilePath}" style="width: 80px; height:80px; border-radius: 50%"></img><br><br>
+			<p style="font-weight: bold; font-size: 1.5em;" th:text="${loginUser.memberName}"></p><br><br>
+		</div>
+		<ul class="links">
+			<li>
+				<img src="../image/ming/member/프로필수정.png" style="width: 60px;"></img>
+				<a href="myPage.me">정보 수정</a>
+			</li>
+			<li th:if="${session.loginUser.memberLoginType == 1}">
+				<img src="../image/ming/member/icons8-비밀번호-50.png" style="width: 60px;"></img>
+				<a href="updatePwd.me">비밀번호 수정</a>
+			</li>
+		<hr>
+			<li>
+				<img src="../image/ming/member/icons8-edit-64.png" style="width: 60px;"></img>
+				<a href="myBoardList.me">내가 쓴 게시글</a>
+			</li>
+			<li>
+				<img src="../image/ming/member/icons8-댓글-58.png" style="width: 60px;"></img>
+				<a href="#">내가 쓴 댓글</a>
+			</li>
+			<li>
+				<img src="../image/ming/member/리뷰.png" style="width: 60px;"></img>
+				<a href="review.me">리뷰</a>
+			</li>
+			<li>
+				<img src="../image/ming/member/택배.png" style="width: 60px;"></img>
+				<a href="#">배송</a>
+			</li>
+		<hr>
+			<li>
+				<img src="../image/ming/member/icons8-쇼핑몰-50.png" style="width: 60px;"></img>
+				<a href="productListView.so">쇼핑몰 이동</a>
+			</li>
+			<li>
+				<img src="../image/ming/member/icons8-게시판-50.png" style="width: 60px;"></img>
+				<a href="campBoard.su">커뮤니티 이동</a>
+			</li>
+			<li>
+				<img src="../image/ming/member/logout.png" style="width: 60px;"></img>
+				<a href="logout.me">로그아웃</a>
+			</li>
+			<li id="deleteMemberBtn">
+				<img src="../image/ming/member/icons8-취소-100 (1).png" style="width: 60px;"></img>
+				<a id="deleteMember" style="color: red;">회원탈퇴</a>
+			</li>
+		</ul>
+	</aside>
+		<div id="myModal" class="modal">
+	       <!-- 모달 내용 -->
+	       <div class="modal-content">
+	           	<h4 id="modalContent"></h4>
+	           	<span id="modalResult"></span>
+	       </div>
+    	</div>
+	<!-------------------------------------------------------게시판 시작--------------------------------------------------------------------->
+		<div id="orderListWrapped">
+	      <h1>내가 쓴 게시글</h1><br>
+	      <a class="cateBtn active" style="margin-right: 20px;" href="myBoardList.me">커뮤니티 게시판</a>
+	      <a class="cateBtn" href="mySecondHandProductList.me">중고 게시판</a><br>
+	      <div style="float:right;">
+	         <form action="search.me" method="post">
+		         <div class="nav-item dropdown" id="search1">
+		         	<select name="searchType" class="dropdown-item">
+		         		<option value="memberId" name="memberId" th:selected="${searchType eq 'memberId'}">아이디</option>
+		         		<option value="memberName" name="memberName" th:selected="${searchType eq 'memberName'}">이름</option>
+		         		<option value="memberNickName" name="memberNickName" th:selected="${searchType eq 'memberNickName'}">닉네임</option>
+		         	</select>
+		            <input type="text" name="keyword">
+		            <button type="submit" id="searchMem">검색</button>
+		         </div>
+	         </form>
+	      </div>
+	      
+	      
+	      <table id="allMember">
+	         <tr>
+	            <th class="td1">글번호</th>
+	            <th class="td2">분류</th>
+	            <th class="td3">작성자</th>
+	            <th class="td4">제목</th>
+	            <th class="td5">조회수</th>
+	            <th class="td6">추천</th>
+	            <th class="td7">댓글수</th>
+	            <th class="td8">작성날짜</th>
+	         </tr>
+	         
+	         <tr th:each="cb:${cbList}">
+		            <td class="td1">[[${cb.cbNo}]]</td>
+		            <td class="td2">[[${cb.categoryName}]]</td>
+		            <td class="td3">[[${cb.memberName}]]</td>
+		            <td class="td4">[[${cb.cbTitle}]]</td>
+		            <td class="td5">[[${cb.cbCount}]]</td>
+		            <td class="td6">[[${cb.heartCount}]]</td>
+		            <td class="td7">[[${cb.replyCount}]]</td>
+		            <td class="td7">[[${cb.cbModifyDate}]]</td>
+	         </tr>
+	         
+	      </table>
+	      <th:block th:if="${!cbList.isEmpty}">
+		      <nav class="nav2" aria-label="Page navigation example" style="float: right;" th:with="loc=${loc}">
+		         <ul class="pagination">
+		               <li class="page-item">
+		               	  <a class="page-link" th:if="${pi.currentPage <= 1}" aria-label="Previous">
+		                  	<span aria-hidden="true">&laquo;</span>
+		                  </a>
+		                  <a class="page-link" th:if="${pi.currentPage > 1}" th:href="@{${loc}(page=${pi.currentPage-1})}" aria-label="Previous">
+		                  	<span aria-hidden="true">&laquo;</span>
+		                  </a>
+		               </li>
+		               <li class="page-item" th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+		                  <a class="page-link" th:href="@{${loc}(page=${p})}">[[${ p }]]</a>
+		               </li>
+		               
+			          <li class="page-item">
+			              <a class="page-link" th:if="${pi.currentPage >= pi.maxPage}" aria-label="Next">
+			                 <span aria-hidden="true">&raquo;</span>
+			              </a>
+			              <a class="page-link" th:if="${pi.currentPage < pi.maxPage}" th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next">
+			                 <span aria-hidden="true">&raquo;</span>
+			              </a>
+			          </li>
+		          </ul>
+		      </nav>
+	   	 </th:block>
+	   </div>
+	<!-------------------------------------------------------- 게시판 끝 -------------------------------------------------------------------->
+	<script>
+		let check_code=false;
+		let check_num;
+		let code="";
+    	let checkE = false;
+	 	document.getElementById('deleteMember').addEventListener('click', function(event) {
+	 		event.preventDefault();
+	 		const modal = document.getElementById('myModal');
+            const modalContent = document.getElementById('modalContent');
+            modalContent.textContent = '정말 탈퇴하시겠습니까? \n 탈퇴 후 계정 복구는 불가능합니다.';
+            modalContent.appendChild(document.createElement('br'));
+            modalContent.appendChild(document.createElement('br'));
+
+            modal.style.display = 'block';
+            
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = '네';
+            deleteButton.className = 'homepage-btn';
+            deleteButton.addEventListener('click', function() {
+                window.location.href = 'deleteMember.me';
+            });
+            modalContent.appendChild(deleteButton);
+            
+            const homepageButton = document.createElement('button');
+            homepageButton.textContent = '아니오';
+            homepageButton.className = 'homepage-btn';
+            homepageButton.addEventListener('click', function() {
+                closeModal();
+            });
+            modalContent.appendChild(homepageButton);
+            
+	 	});
+	 	
+	 	function closeModal() {
+	 	    const modal = document.getElementById('myModal');
+	 	    modal.style.display = 'none';
+	 	};
+	 	
+	 	
+	</script>
+	
+	
+</body>
+</html>

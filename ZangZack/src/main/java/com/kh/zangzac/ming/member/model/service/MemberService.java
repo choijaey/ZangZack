@@ -7,8 +7,10 @@ import java.util.Properties;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.ming.member.model.vo.Member;
+import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
 import com.kh.zangzac.sohwa.product.model.vo.Review;
+import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
 public interface MemberService {
 
@@ -66,11 +68,25 @@ public interface MemberService {
 
 	int getReviewListCount(int i);
 
-	ArrayList<Review> selectReview(PageInfo pi, int i);
+	ArrayList<Review> selectReview(String memberId, PageInfo pi);
 
 	ArrayList<Product> selectAllProduct();
 
 	ArrayList<Photo> selectAllPotoProduct();
+
+	int deleteReview(int reviewNo);
+
+	String deleteSelectReview(int reviewNo);
+
+	int getmyBoardListCount(int i);
+
+	int getmySecondHandProductListCount(int i);
+
+	ArrayList<secondHandProduct> selectsecondHandProduct(String memberId, PageInfo pi);
+
+	ArrayList<CampBoard> selectCampBoard(String memberId, PageInfo pi);
+
+
 
 	
 

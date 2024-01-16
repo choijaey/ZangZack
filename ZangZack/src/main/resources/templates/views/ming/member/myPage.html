@@ -122,40 +122,48 @@
 			<p style="font-weight: bold; font-size: 1.5em;" th:text="${loginUser.memberName}"></p><br><br>
 		</div>
 		<ul class="links">
-			<hr>
-				<li>
-					<img src="../image/ming/member/프로필수정.png" style="width: 60px;"></img>
-					<a href="myPage.me">정보 수정</a>
-				</li>
-				<li th:if="${session.loginUser.memberLoginType == 1}">
-					<img src="../image/ming/member/icons8-비밀번호-50.png" style="width: 60px;"></img>
-					<a href="updatePwd.me">비밀번호 수정</a>
-				</li>
-				<li>
-					<img src="../image/ming/member/리뷰.png" style="width: 60px;"></img>
-					<a href="review.me">리뷰</a>
-				</li>
-				<li>
-					<img src="../image/ming/member/택배.png" style="width: 60px;"></img>
-					<a href="#">배송</a>
-				</li>
-			<hr>
-				<li>
-					<img src="../image/ming/member/icons8-쇼핑몰-50.png" style="width: 60px;"></img>
-					<a href="#">쇼핑몰 이동</a>
-				</li>
-				<li>
-					<img src="../image/ming/member/리뷰.png" style="width: 60px;"></img>
-					<a href="#">커뮤니티 이동</a>
-				</li>
-				<li>
-					<img src="../image/ming/member/logout.png" style="width: 60px;"></img>
-					<a href="logout.me">로그아웃</a>
-				</li>
-				<li id="deleteMemberBtn">
-					<img src="../image/ming/member/icons8-취소-100 (1).png" style="width: 60px;"></img>
-					<a id="deleteMember">회원탈퇴</a>
-				</li>
+			<li>
+				<img src="../image/ming/member/프로필수정.png" style="width: 60px;"></img>
+				<a href="myPage.me">정보 수정</a>
+			</li>
+			<li th:if="${session.loginUser.memberLoginType == 1}">
+				<img src="../image/ming/member/icons8-비밀번호-50.png" style="width: 60px;"></img>
+				<a href="updatePwd.me">비밀번호 수정</a>
+			</li>
+		<hr>
+			<li>
+				<img src="../image/ming/member/icons8-edit-64.png" style="width: 60px;"></img>
+				<a href="myBoardList.me">내가 쓴 게시글</a>
+			</li>
+			<li>
+				<img src="../image/ming/member/icons8-댓글-58.png" style="width: 60px;"></img>
+				<a href="#">내가 쓴 댓글</a>
+			</li>
+			<li>
+				<img src="../image/ming/member/리뷰.png" style="width: 60px;"></img>
+				<a href="review.me">리뷰</a>
+			</li>
+			<li>
+				<img src="../image/ming/member/택배.png" style="width: 60px;"></img>
+				<a href="#">배송</a>
+			</li>
+		<hr>
+			<li>
+				<img src="../image/ming/member/icons8-쇼핑몰-50.png" style="width: 60px;"></img>
+				<a href="productListView.so">쇼핑몰 이동</a>
+			</li>
+			<li>
+				<img src="../image/ming/member/icons8-게시판-50.png" style="width: 60px;"></img>
+				<a href="campBoard.su">커뮤니티 이동</a>
+			</li>
+			<li>
+				<img src="../image/ming/member/logout.png" style="width: 60px;"></img>
+				<a href="logout.me">로그아웃</a>
+			</li>
+			<li id="deleteMemberBtn">
+				<img src="../image/ming/member/icons8-취소-100 (1).png" style="width: 60px;"></img>
+				<a id="deleteMember">회원탈퇴</a>
+			</li>
 		</ul>
 	</aside>
 		<div id="myModal" class="modal">

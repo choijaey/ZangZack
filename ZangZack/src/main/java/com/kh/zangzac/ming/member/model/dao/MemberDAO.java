@@ -11,8 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.ming.member.model.vo.Member;
+import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
 import com.kh.zangzac.sohwa.product.model.vo.Review;
+import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
 
 @Mapper
@@ -74,10 +76,24 @@ public interface MemberDAO {
 
 	int getReviewListCount(int i);
 
-	ArrayList<Review> selectReview(int i, RowBounds rowBounds);
-
 	ArrayList<Product> selectAllProduct();
 
 	ArrayList<Photo> selectAllPotoProduct();
+
+	ArrayList<Review> selectReview(String memberId, RowBounds rowBounds);
+
+	int deleteRerview(int reviewNo);
+
+	String deleteSelectReview(int reviewNo);
+
+	int deleteReview(int reviewNo);
+
+	int getmyBoardListCount(int i);
+
+	int getmySecondHandProductListCount(int i);
+
+	ArrayList<secondHandProduct> selectsecondHandProduct(String memberId, RowBounds rowBounds);
+
+	ArrayList<CampBoard> selectCampBoard(String memberId, RowBounds rowBounds);
 
 }

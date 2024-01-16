@@ -2,6 +2,7 @@ package com.kh.zangzac.ming.member.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
@@ -33,8 +34,10 @@ import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.ming.member.model.exception.MemberException;
 import com.kh.zangzac.ming.member.model.service.MemberService;
 import com.kh.zangzac.ming.member.model.vo.Member;
+import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
 import com.kh.zangzac.sohwa.product.model.vo.Review;
+import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
@@ -668,14 +671,12 @@ public class MemberController {
 										@ModelAttribute Review r,@ModelAttribute Product p, HttpServletRequest request) {
 		Member loginUser = (Member) model.getAttribute("loginUser");
 		String memberId = loginUser.getMemberId();
-		System.out.println(memberId);
 		int listCount = mService.getReviewListCount(6);
 		PageInfo pi = Pagination.getPageInfo(page, listCount, 3);
-		ArrayList<Review>rList = mService.selectReview(pi,6);
+		ArrayList<Review>rList = mService.selectReview(memberId,pi);
 		ArrayList<Product>pList = mService.selectAllProduct();
 		ArrayList<Photo>phList = mService.selectAllPotoProduct();
 		r.setMemberId(memberId);
-		
 		
 		if(rList != null) {
 			model.addAttribute("pList",pList);
@@ -690,4 +691,67 @@ public class MemberController {
 		}
 		
 	}
+	
+	//리뷰삭제
+	   @PostMapping("deleteReview.me")
+	   public String deleteReview(@RequestParam("reviewNo") int reviewNo) {
+	      
+	      String name="sohwa";
+	      int result = mService.deleteReview(reviewNo);
+	      String deleteRename = mService.deleteSelectReview(reviewNo);
+	      System.out.println("deleteRename" + deleteRename);
+	      
+	      if(deleteRename != null) {
+	    	  Boolean sf = imageStorage.deleteImage(deleteRename, name);
+	    	  
+	      }
+	      
+	      if(result > 0) {
+	         return "redirect:review.me";
+	      }else {
+	         throw new MemberException("리뷰 삭제 실패");
+	      }
+	   }
+	   
+	   // 게시글 가져오기
+	   @GetMapping("myBoardList.me")
+	   public String myBoardList(@RequestParam(value = "page", defaultValue = "1") int page, Model model,
+									 @ModelAttribute CampBoard cb, HttpServletRequest request) {
+		   
+		   Member loginUser = (Member) model.getAttribute("loginUser");
+		   String memberId = loginUser.getMemberId();
+		   int listCount = mService.getmyBoardListCount(1);
+		   PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
+		   ArrayList<CampBoard> cbList = mService.selectCampBoard(memberId,pi); 
+		  
+		   System.out.println("listCount:  " +listCount);
+		   System.out.println("cbList:  " +cbList);
+		   if(cbList != null) {
+			   model.addAttribute("cbList",cbList);
+			   model.addAttribute("pi",pi);
+			   model.addAttribute("memberId", memberId);
+			   model.addAttribute("loc", request.getRequestURI());
+		   }
+		   
+		   return "views/ming/member/myBoardList";
+	   }
+	   
+	   //중고게시글 가져오기
+	   @GetMapping("mySecondHandProductList.me")
+	   public String secondHandProductList(@RequestParam(value = "page", defaultValue = "1") int page, Model model,
+			   								@ModelAttribute secondHandProduct sp,HttpServletRequest request) {
+		   Member loginUser = (Member) model.getAttribute("loginUser");
+		   String memberId = loginUser.getMemberId();
+		   int listCount = mService.getmySecondHandProductListCount(4);
+		   PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
+		   ArrayList<secondHandProduct> spList = mService.selectsecondHandProduct(memberId,pi); 
+		   
+		   if(spList != null) {
+			   model.addAttribute("spList",spList);
+			   model.addAttribute("pi",pi);
+			   model.addAttribute("memberId", memberId);
+			   model.addAttribute("loc", request.getRequestURI());
+		   }
+		   return "views/ming/member/mySecondHandProductList";
+	   }
 }

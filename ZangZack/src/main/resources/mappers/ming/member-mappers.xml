@@ -160,25 +160,66 @@
 	<select id="getReviewListCount" resultType="_int">
 		select count(*)
 		from REVIEW
+		where REVIEW_STATUS = 'N'
 	</select>
 	
 	<select id="selectReview" resultType="review">
 	    SELECT *
 	    FROM review
-	    JOIN photo ON (board_no = review_no)
-	    JOIN PRODUCT USING (PRODUCT_NO)
-	    WHERE review_status = 'N' AND board_type = '6' AND member_id=#{memberId}
+	    WHERE review_status = 'N' AND member_id=#{memberId}
 	    ORDER BY review_no DESC
 	</select>
+	
 	
 	<select id="selectAllProduct" resultType="Product">
 		select *
 		from Product
 		where PRODUCT_STATUS ='N'
 	</select>
+	
+	
 	<select id="selectAllPotoProduct" resultType="Photo">
 		select *
 		from Photo
 		where PHOTO_STATUS ='N'
 	</select>
+	
+	<update id="deleteReview">
+		update review
+		set review_status = 'Y'
+		where review_no = #{reviewNo}
+	</update>
+	
+	<select id="deleteSelectReview" resultType="string">
+		select photo_rename
+        from photo
+        where board_type = 6 and board_no=#{review_no}
+	</select>
+	
+	<select id="getmySecondHandProductListCount" resultType="_int">
+		select count(*)
+		from SECONDHAND_PRODUCT
+		where SP_STATUS = 'N'
+	</select>
+	
+	<select id="getmyBoardListCount" resultType="_int">
+		select count(*)
+		from CAMP_BOARD
+		where CB_STATUS = 'N'
+	</select>
+	
+	<select id="selectsecondHandProduct" resultType="secondHandProduct">
+		select *
+		from SECONDHAND_PRODUCT
+		WHERE SP_STATUS = 'N' AND member_id=#{memberId}
+	    ORDER BY SP_NO DESC
+	</select>
+	
+	<select id="selectCampBoard" resultType="CampBoard">
+		select *
+		from CAMP_BOARD_VIEW
+		WHERE CB_STATUS = 'N' AND member_id=#{memberId}
+	    ORDER BY CB_NO DESC
+	</select>
+	
 </mapper>
