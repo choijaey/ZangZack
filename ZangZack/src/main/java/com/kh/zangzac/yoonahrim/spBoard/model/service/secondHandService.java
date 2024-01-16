@@ -35,7 +35,7 @@ public interface secondHandService {
 
 	ArrayList<Reply> selectReply(int spNo);
 
-	ArrayList<Photo> selectPhotoSeconHand(secondHandProduct sp);
+	ArrayList<Photo> selectPhotoSeconHand(Integer spNo);
 
 	int updateAttmSecondHand(ArrayList<Photo> list);
 
@@ -47,11 +47,17 @@ public interface secondHandService {
 
 	ArrayList<secondHandProduct> selectAdminList(secondHandProduct sp);
 
-	int getListCount(int i);
+	int getListCount();
 
 	ArrayList<secondHandProduct> selectBoardList(PageInfo pi, int i);
 
 	int updateAdminInfo(secondHandProduct sp);
+
+	ArrayList<secondHandProduct> selectSeconHand(PageInfo pi, int i);
+
+	int searchSpCount(HashMap<String, String> map);
+
+	ArrayList<secondHandProduct> searchSpList(HashMap<String, String> map);
 
 
 

@@ -1,5 +1,7 @@
 package com.kh.zangzac.yoonahrim.spBoard.model.vo;
 
+import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +24,8 @@ public class secondHandProduct {
 	private String memberId;
 	private int categoryNo;
 	private String spIsBook;
+	private Date spCreateDate;
+	private Date spModifyDate;
 	
 	private String categoryName;
 	private String memberName;

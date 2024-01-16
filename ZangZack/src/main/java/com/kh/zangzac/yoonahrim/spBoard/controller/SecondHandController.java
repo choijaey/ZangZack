@@ -1,10 +1,9 @@
 package com.kh.zangzac.yoonahrim.spBoard.controller;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,14 +47,24 @@ public class SecondHandController {
     
 	//중고 메인 페이지로 이동
 	@GetMapping("secondHand.ah")
-	public String secondHand(@ModelAttribute secondHandProduct sp, Model model) {
-		int spNo = sp.getSpNo();
+	public String secondHand(@ModelAttribute secondHandProduct sp, Model model, 
+							 @RequestParam(value="page", defaultValue="1") int page, HttpServletRequest request) {
 		
-		ArrayList<secondHandProduct> sList =  spService.selectSeconHand(sp);
-		ArrayList<Photo> aList = spService.selectPhotoSeconHand(sp);
+		
+		int listCount = spService.getListCount();
+		
+		int currentPage = page;
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 8);
+		ArrayList<Photo> aList = spService.selectPhotoSeconHand(null);
+		
+		int spNo = sp.getSpNo();
+		ArrayList<secondHandProduct> sList =  spService.selectSeconHand(pi, 4);
+		
 		
 		model.addAttribute("aList", aList);
 		model.addAttribute("sList", sList);
+		model.addAttribute("pi", pi);
+		model.addAttribute("loc", request.getRequestURI());
 		
 		return "views/yoonahrim/secondHandList";
 	}
@@ -191,7 +200,6 @@ public class SecondHandController {
 	    }
 		
 	}
-	 
 	
 	//중고 게시글 상세페이지
 	@GetMapping("detail.ah")
@@ -379,11 +387,11 @@ public class SecondHandController {
 	@GetMapping("admin.ah")
 	public String adminSecondPage(@ModelAttribute secondHandProduct sp, Model model ,@RequestParam(value="page", defaultValue="1")int page, HttpServletRequest request) {
 		
-		int listCount = spService.getListCount(4);
+		int listCount = spService.getListCount();
 		int currentPage = page;
 		
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
-		ArrayList<secondHandProduct> list = spService.selectBoardList(pi,1);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 8);
+		ArrayList<secondHandProduct> list = spService.selectBoardList(pi,4);
 		ArrayList<secondHandProduct> sList=  spService.selectAdminList(sp);
 		ArrayList<Photo> aList = spService.selectAttachmentList(sp.getSpNo());
 		
@@ -411,6 +419,40 @@ public class SecondHandController {
 		}
 		
 	}
+	
+	@GetMapping("searchSecondHand.ah")
+	   public String campSerchList(@ModelAttribute secondHandProduct sp,@RequestParam("region") String region,
+	                              @RequestParam("type") String type,
+	                              @RequestParam(value="page", defaultValue="1") int page,
+	                              Model model) {
+	      
+		  HashMap<String, String> map = new HashMap<>();
+		  map.put("region", region);
+		  map.put("type", type);
+		  int result = spService.searchSpCount(map);
+		  
+		  int currentPage = page;
+	      PageInfo pi = Pagination.getPageInfo(currentPage, result, 8);
+		  
+	      ArrayList<secondHandProduct> spList = spService.searchSpList(map);
+	      ArrayList<Photo> aList = spService.selectPhotoSeconHand(null);
+	      
+	      
+	      if(spList != null) {
+	    	 model.addAttribute("aList", aList);
+	         model.addAttribute("result", result);
+	         model.addAttribute("spList", spList);
+	         model.addAttribute("region", region);
+	         model.addAttribute("type", type);
+	         model.addAttribute("pi", pi);
+	         
+	         return "views/yoonahrim/searchSecondHand";
+	      }else {
+	         throw new secondHandException("검색에 실패하였습니다");
+	      }
+	      
+	   }
+	
 	
 	
 }
