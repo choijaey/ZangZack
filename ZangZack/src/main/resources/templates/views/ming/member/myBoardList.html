@@ -78,12 +78,11 @@
 	      <a class="cateBtn active" style="margin-right: 20px;" href="myBoardList.me">커뮤니티 게시판</a>
 	      <a class="cateBtn" href="mySecondHandProductList.me">중고 게시판</a><br>
 	      <div style="float:right;">
-	         <form action="search.me" method="post">
+	         <form action="searchCbList.me" method="get">
 		         <div class="nav-item dropdown" id="search1">
 		         	<select name="searchType" class="dropdown-item">
-		         		<option value="memberId" name="memberId" th:selected="${searchType eq 'memberId'}">아이디</option>
-		         		<option value="memberName" name="memberName" th:selected="${searchType eq 'memberName'}">이름</option>
-		         		<option value="memberNickName" name="memberNickName" th:selected="${searchType eq 'memberNickName'}">닉네임</option>
+		         		<option value="cbTitle" name="cbTitle" th:selected="${searchType eq 'cbTitle'}">제목</option>
+		         		<option value="categoryName" name="categoryName" th:selected="${searchType eq 'categoryName'}">분류</option>
 		         	</select>
 		            <input type="text" name="keyword">
 		            <button type="submit" id="searchMem">검색</button>
@@ -116,7 +115,6 @@
 	         </tr>
 	         
 	      </table>
-	      <th:block th:if="${!cbList.isEmpty}">
 		      <nav class="nav2" aria-label="Page navigation example" style="float: right;" th:with="loc=${loc}">
 		         <ul class="pagination">
 		               <li class="page-item">
@@ -141,10 +139,23 @@
 			          </li>
 		          </ul>
 		      </nav>
-	   	 </th:block>
 	   </div>
 	<!-------------------------------------------------------- 게시판 끝 -------------------------------------------------------------------->
-	<script>
+	<script th:inline="javascript">
+		
+	window.onload =()=>{
+		const tbody = document.querySelector("tbody");
+		const tds = tbody.querySelectorAll('td');
+		for(const td of tds){
+			td.addEventListener('click',function(){
+				const trTds = this.parentElement.querySelectorAll('td');
+					const boardId = trTds[0].innerText;
+					/*<![CDATA[*/
+					location.href='selectBoard.su?cbNo=' + boardId + "&page=" +/*[[${pi.currentPage}]]*/1;
+					/*]]>*/
+			});
+		}
+	}
 		let check_code=false;
 		let check_num;
 		let code="";

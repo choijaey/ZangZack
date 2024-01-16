@@ -222,4 +222,63 @@
 	    ORDER BY CB_NO DESC
 	</select>
 	
+	<select id="searchSPListCount" resultType="_int">
+		SELECT COUNT(*)
+	    FROM SECONDHAND_PRODUCT
+	    where SP_STATUS = 'N'
+	    <if test="searchType =='spTitle'">
+	         and SP_TITLE LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    <if test="searchType == 'spContent'">
+	       	and SP_CONTENT LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    <if test="searchType == 'spAddress'">
+	        and SP_ADDRESS LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    ORDER BY SP_NO DESC
+	</select>
+	
+	<select id="searchSpList" resultType="secondHandProduct">
+		SELECT *
+	    FROM SECONDHAND_PRODUCT
+	    where SP_STATUS = 'N'
+	    <if test="searchType =='spTitle'">
+	         and SP_TITLE LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    <if test="searchType == 'spContent'">
+	       	and SP_CONTENT LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    <if test="searchType == 'spAddress'">
+	        and SP_ADDRESS LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    ORDER BY SP_NO DESC
+	</select>
+	
+	
+	<select id="searchCbListCount" resultType="_int">
+		SELECT COUNT(*)
+	    FROM CAMP_BOARD_VIEW
+	    where CB_STATUS = 'N'
+	    <if test="searchType == 'cbTitle'">
+	       	and CB_TITLE LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    <if test="searchType == 'categoryName'">
+	        and CATEGORY_NAME LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    ORDER BY CB_NO DESC
+	</select>
+	
+	<select id="searchCbList" resultType="CampBoard">
+		SELECT *
+	    FROM CAMP_BOARD_VIEW
+	    where CB_STATUS = 'N'
+	    <if test="searchType == 'cbTitle'">
+	       	and CB_TITLE LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    <if test="searchType == 'categoryName'">
+	        and CATEGORY_NAME LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    ORDER BY CB_NO DESC
+	</select>
+	
 </mapper>

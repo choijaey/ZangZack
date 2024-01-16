@@ -78,12 +78,12 @@
 	      <a class="cateBtn" style="margin-right: 20px;" href="myBoardList.me">커뮤니티 게시판</a>
 	      <a class="cateBtn active" href="mySecondHandProductList.me">중고 게시판</a><br>
 	      <div style="float:right;">
-	         <form action="search.me" method="post">
+	         <form action="searchSpList.me" method="get">
 		         <div class="nav-item dropdown" id="search1">
 		         	<select name="searchType" class="dropdown-item">
-		         		<option value="memberId" name="memberId" th:selected="${searchType eq 'memberId'}">아이디</option>
-		         		<option value="memberName" name="memberName" th:selected="${searchType eq 'memberName'}">이름</option>
-		         		<option value="memberNickName" name="memberNickName" th:selected="${searchType eq 'memberNickName'}">닉네임</option>
+		         		<option value="spTitle" name="spTitle" th:selected="${searchType eq 'spTitle'}">물품명</option>
+		         		<option value="spContent" name="spContent" th:selected="${searchType eq 'spContent'}">물품내용</option>
+		         		<option value="spAddress" name="spAddress" th:selected="${searchType eq 'spAddress'}">주소</option>
 		         	</select>
 		            <input type="text" name="keyword">
 		            <button type="submit" id="searchMem">검색</button>
@@ -94,7 +94,7 @@
 	      
 	      <table id="allMember">
 	         <tr>
-	            <th class="td1">물품번호</th>
+	            <th class="td1">분류</th>
 	            <th class="td2">물품명</th>
 	            <th class="td3">물품내용</th>
 	            <th class="td4">주소</th>
@@ -105,7 +105,14 @@
 	         </tr>
 	         
 	         <tr th:each="sp:${spList}">
-	            <td class="td1">[[${sp.spNo}]]</td>
+	            <td class="td1">
+	            	<span th:if="${sp.categoryNo == 11}">텐트</span>
+					<span th:if="${sp.categoryNo == 12}">취침용품</span>
+					<span th:if="${sp.categoryNo == 13}">조리도구</span>
+					<span th:if="${sp.categoryNo == 14}">발화용품</span>
+					<span th:if="${sp.categoryNo == 15}">백팩</span>
+					<span th:if="${sp.categoryNo == 16}">기타용품</span>
+	            </td>
 	            <td class="td2">[[${sp.spTitle}]]</td>
 	            <td class="td3">[[${sp.spContent}]]</td>
 	            <td class="td4">[[${sp.spAddress}]]</td>
@@ -116,7 +123,6 @@
 	         </tr>
 	         
 	      </table>
-	      <th:block th:if="${!spList.isEmpty}">
 		      <nav class="nav2"  aria-label="Page navigation example" style="float: right;" th:with="loc=${loc}">
 		         <ul class="pagination">
 		               <li class="page-item">
@@ -141,10 +147,22 @@
 			          </li>
 		          </ul>
 		      </nav>
-	      </th:block>
 	   </div>
 	<!-------------------------------------------------------- 게시판 끝 -------------------------------------------------------------------->
-	<script>
+	<script th:inline="javascript">
+		window.onload =()=>{
+			const tbody = document.querySelector("tbody");
+			const tds = tbody.querySelectorAll('td');
+			for(const td of tds){
+				td.addEventListener('click',function(){
+					const trTds = this.parentElement.querySelectorAll('td');
+						const boardId = trTds[0].innerText;
+						/*<![CDATA[*/
+						location.href='detail.ah?spNo=' + boardId + "&page=" +/*[[${pi.currentPage}]]*/1;
+						/*]]>*/
+				});
+			}
+		}
 		let check_code=false;
 		let check_num;
 		let code="";

@@ -724,8 +724,6 @@ public class MemberController {
 		   PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
 		   ArrayList<CampBoard> cbList = mService.selectCampBoard(memberId,pi); 
 		  
-		   System.out.println("listCount:  " +listCount);
-		   System.out.println("cbList:  " +cbList);
 		   if(cbList != null) {
 			   model.addAttribute("cbList",cbList);
 			   model.addAttribute("pi",pi);
@@ -735,6 +733,32 @@ public class MemberController {
 		   
 		   return "views/ming/member/myBoardList";
 	   }
+	   
+	   //게시글 검색
+	   @GetMapping("searchCbList.me")
+	   public String searchCbList(@RequestParam(value = "page", defaultValue = "1") int page,
+									@RequestParam(value = "searchType", defaultValue = "") String searchType,
+									@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
+									HttpServletRequest request){
+		    HashMap<String, String>map = new HashMap<>();
+			map.put("keyword", keyword);
+			map.put("searchType", searchType);
+			
+			int currentPage = page;
+			int listCount = mService.searchCbListCount(map);
+			
+			PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
+			ArrayList<CampBoard> cbList = mService.searchCbList(pi, map);
+			
+			if(cbList != null) {
+				model.addAttribute("pi", pi);
+				model.addAttribute("cbList",cbList);
+				model.addAttribute("loc", request.getRequestURI());
+				return "views/ming/member/myBoardList";
+			} else {
+				throw new MemberException("게시글 목록 조회에 실패하였습니다.");
+			}
+		}
 	   
 	   //중고게시글 가져오기
 	   @GetMapping("mySecondHandProductList.me")
@@ -754,4 +778,33 @@ public class MemberController {
 		   }
 		   return "views/ming/member/mySecondHandProductList";
 	   }
-}
+	   
+	   //중고 검색
+	   @GetMapping("searchSpList.me")
+	   public String searchSpList(@RequestParam(value = "page", defaultValue = "1") int page,
+									@RequestParam(value = "searchType", defaultValue = "") String searchType,
+									@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
+									HttpServletRequest request){
+		    HashMap<String, String>map = new HashMap<>();
+			map.put("keyword", keyword);
+			map.put("searchType", searchType);
+			
+			int currentPage = page;
+			int listCount = mService.searchSPListCount(map);
+			
+			PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
+			ArrayList<secondHandProduct> spList = mService.searchSpList(pi, map);
+			
+			if(spList != null) {
+				model.addAttribute("pi", pi);
+				model.addAttribute("spList", spList);
+				model.addAttribute("loc", request.getRequestURI()); // url 다 가져옴 / uri 뒤에만 가져옴
+				System.out.println("spList: " + spList);
+				return "views/ming/member/mySecondHandProductList";
+			} else {
+				throw new MemberException("게시글 목록 조회에 실패하였습니다.");
+			}
+		}
+	   
+	 
+   }

@@ -411,6 +411,34 @@ public class MemberServiceImpl implements MemberService{
 		return mDAO.selectCampBoard(memberId,rowBounds);
 	}
 
+	@Override
+	public ArrayList<secondHandProduct> searchSpList(PageInfo pi, HashMap<String, String> map) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return mDAO.searchSpList(rowBounds,map);
+	}
+
+	@Override
+	public int searchSPListCount(HashMap<String, String> map) {
+		return mDAO.searchSPListCount(map);
+	}
+
+	@Override
+	public ArrayList<CampBoard> searchCbList(PageInfo pi, HashMap<String, String> map) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return mDAO.searchCbList(rowBounds,map);
+	}
+
+	@Override
+	public int searchCbListCount(HashMap<String, String> map) {
+		return mDAO.searchCbListCount(map);
+	}
+
 
 
 

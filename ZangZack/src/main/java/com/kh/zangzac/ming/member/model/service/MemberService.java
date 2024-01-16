@@ -84,7 +84,15 @@ public interface MemberService {
 
 	ArrayList<secondHandProduct> selectsecondHandProduct(String memberId, PageInfo pi);
 
+	ArrayList<secondHandProduct> searchSpList(PageInfo pi, HashMap<String, String> map);
+
 	ArrayList<CampBoard> selectCampBoard(String memberId, PageInfo pi);
+
+	ArrayList<CampBoard> searchCbList(PageInfo pi, HashMap<String, String> map);
+
+	int searchSPListCount(HashMap<String, String> map);
+
+	int searchCbListCount(HashMap<String, String> map);
 
 
 

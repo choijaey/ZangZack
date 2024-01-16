@@ -96,4 +96,12 @@ public interface MemberDAO {
 
 	ArrayList<CampBoard> selectCampBoard(String memberId, RowBounds rowBounds);
 
+	ArrayList<secondHandProduct> searchSpList(RowBounds rowBounds, HashMap<String, String> map);
+
+	int searchSPListCount(HashMap<String, String> map);
+
+	ArrayList<CampBoard> searchCbList(RowBounds rowBounds, HashMap<String, String> map);
+
+	int searchCbListCount(HashMap<String, String> map);
+
 }
