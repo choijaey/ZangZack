@@ -102,7 +102,7 @@
                   <hr id="hr_count">
                   <!-- 작성한 댓글이 보이는 부분 -->
                   <div class="reply_content" id="reply_content" style="width:820px; height:245px; overflow: auto; overflow-x: hidden">
-                     <div class="media fs-7" th:each="r : ${rList}">
+                     <div class="media fs-7" th:each="r : ${rList}" th:if="${r.replyStatus == 'N'}">
                         <img class="d-flex rounded-circle" alt="reply_profile" th:src="${r.memberProfilePath}" style="position:absolute; width:50px; height:50px">
                         <div class="media-body" style="position:relative; left:60px">
                            <input type="hidden" id="replyNo" th:value="${r.replyNo}"/>
@@ -129,7 +129,7 @@
 	                              </div>
                               <input type="hidden" id="replyNo" th:value="${r.replyNo}"/>
                            <span id="insert_reply" class="insert_reply" style="cursor: pointer;" th:onclick="'showUpdateModal(' + ${r.replyNo} + ')'" >수정</span>&nbsp;&nbsp;
-                           <span th:id="deleteReply" class="delete_reply" style="cursor: pointer;">삭제</span>
+                           <span th:id="deleteReply" class="delete_reply" style="cursor: pointer;" th:onclick="'deleteComment(' + ${r.replyNo} + ')'">삭제</span>
                         </div>
                         <br>
                      </div>
@@ -307,13 +307,18 @@
           }
 		
         //댓글 delete
-        document.addEventListener('DOMContentLoaded', function () {
+        
+        	/*웹 페이지가 로드될 때(DOMContentLoaded 이벤트) document.body에 클릭 이벤트 리스너를 추가합니다. 
+        		이 리스너는 사용자가 페이지 어딘가를 클릭할 때 실행됩니다. 
+        		클릭된 요소가 'delete_reply' 클래스를 포함하는 경우, handleDeleteReply 함수가 호출됩니다.
+        		
+        	document.addEventListener('DOMContentLoaded', function () {
 		    document.body.addEventListener('click', function (event) {
 		        if (event.target.classList.contains('delete_reply')) {
 		            handleDeleteReply(event);
 		        }
 		    });
-		
+		    
 		    function handleDeleteReply(event) {
 		        const mediaElement = event.target.closest('.media');
 		        const replyNo = mediaElement.querySelector('#replyNo').value;
@@ -339,8 +344,28 @@
 		        }
 		    }
 		});
-				  
+		*/		  
 		  
+		function deleteComment(replyNo){
+			if ( !confirm('선택하신 댓글을 삭제할까요?') ) {
+	            return false;
+	        }
+			console.log(replyNo)
+			
+	        	$.ajax({
+                    url: 'deleteReply.rep',
+                    method: 'POST',
+                    data: { replyNo: replyNo },
+                    success: (data) => {
+                        console.log(data);
+                        alert('삭제되었습니다.')
+                        location.reload();
+                    },
+                    error: data => console.log(data)
+                });
+		}
+		
+		
 </script>
 </body>
 </html>
