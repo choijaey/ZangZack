@@ -191,14 +191,14 @@
 					   	</div>
 				    </div>
 				</div>
-		       	<div class="flex gap-2" th:if="${list.size() == 0}">
+		       	<div class="flex gap-2" th:if="${list == null || list.size() == 0}">
 					<h2 class="text-lg font-semibold mb-2" style="text-align:center; margin:auto; padding:100px;">검색된 결과가 없습니다.</h2>
 				</div>
 		    </div>
 		</div>
     </div>
     
-    <div id="pagenation" th:with="loc=${loc}" th:if="${!list.isEmpty}">
+    <div id="pagenation" th:with="loc=${loc}" th:if="${list == null || !list.isEmpty}">
             <ul>
                <!-- 이전 버튼 -->
                <li th:if="${pi.currentPage > 10}">

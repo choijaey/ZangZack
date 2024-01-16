@@ -74,6 +74,8 @@ public class CampingReviewController {
 		 model.addAttribute("list", list);
 		 model.addAttribute("loc", request.getRequestURI());
 		 model.addAttribute("pi", pi);
+		 
+		 System.out.println(list);
 		
 		return "views/jaeyoung/champingRiewList";
 	}
@@ -86,7 +88,7 @@ public class CampingReviewController {
 	
 	@PostMapping("campingReviewWirte.jy")
 	public String campingReviewWirte(@RequestParam(value = "file", required = false) ArrayList<MultipartFile> files,
-			@RequestParam("thumnail") MultipartFile thumnail,@ModelAttribute CampingReview cr) {
+			@RequestParam("thumnailFile") MultipartFile thumnail,@ModelAttribute CampingReview cr) {
 		
 		//글 등록
 		int result = crService.insertCampingReview(cr);
@@ -113,7 +115,7 @@ public class CampingReviewController {
             	
             	String[] returnArr2 = imageStorage.saveImage(file, name);
                 // 파일 처리 로직
-            	 if (returnArr != null) {
+            	 if (returnArr2 != null) {
                  	Photo b = new Photo();
                  	b.setPhotoRename(returnArr2[0]);
                      b.setPhotoPath(returnArr2[1]);
@@ -125,11 +127,10 @@ public class CampingReviewController {
             }
         }
 		
-        System.out.println(list);
         //DB에 사진 저장
         pService.insertPhotoCampBoard(list);
 		
-		return "views/jaeyoung/champingRiewList";
+		return "redirect:champingReviewListView.jy";
 	}
 	
 	
@@ -163,7 +164,6 @@ public class CampingReviewController {
 		  reply.setBoardType(8);
 		  int result = rService.insertReply(reply);
 		  
-		  System.out.println(reply);
 		  Reply r = rService.selectReplyOne(reply);
 		  
 		  
@@ -219,8 +219,8 @@ public class CampingReviewController {
 	  }
 	
 	
-	@GetMapping("campingReviewEdit.jy")
-	public String campingReviewEdit(@RequestParam("crNo")int crNo,Model model) {
+	@GetMapping("campingReviewEditView.jy")
+	public String campingReviewEditView(@RequestParam("crNo")int crNo,Model model) {
 		
 		CampingReview cr = crService.selectDetailCr(crNo);
 		model.addAttribute("cr", cr);
@@ -236,6 +236,101 @@ public class CampingReviewController {
 		return "views/jaeyoung/champingReviewEdit";
 	}
 	
-	//campingReviewEdit.jy
+	
+	@PostMapping("campingReviewEdit.jy")
+	public String campingReviewEdit(@ModelAttribute CampingReview cr,Model model,@RequestParam("prethumnail") String prethumnail,
+			@RequestParam(value="preImage",required=false) String preImage,@RequestParam(value="thumnailFile",required =false) MultipartFile thumnail,@RequestParam(value = "file", required = false) ArrayList<MultipartFile> files ) {
+		
+		System.out.println(cr);
+		System.out.println(prethumnail);
+		System.out.println(preImage);
+		System.out.println(thumnail);
+		System.out.println(files);
+		
+		//내용 수정 
+		int result = crService.updateCampingReview(cr);
+		int result2;
+		ArrayList<Photo> list = new ArrayList<Photo>();
+		
+		
+		//썸네일 수정 - 새로운 썸네일 수정
+		if(prethumnail.split("#")[1].equals("2")) {
+			//삭제가 된경우
+			//구글클라우드에서 삭제
+			imageStorage.deleteImage(prethumnail.split("#")[0], "jaeyoung");
+			//DB에서 삭제
+			result2= pService.deletePhotoName(prethumnail.split("#")[0]);
+			
+			// 썸네일 새로 등록
+			//구글 클라우드에 사진 저장
+			String[] returnArr = imageStorage.saveImage(thumnail, "jaeyoung");
+			
+	        if (returnArr != null) {
+	        	Photo a = new Photo();
+	        	a.setPhotoRename(returnArr[0]);
+	            a.setPhotoPath(returnArr[1]);
+	            a.setPhotoLevel(0);
+	            a.setBoardNo(cr.getCrNo()); 
+	            a.setBoardType(8);
+	            list.add(a);
+	        }
+			
+		}
+		
+		int result3=0;
+		//전 이미지 수정
+		if(preImage != null) {
+			//null 아닐때만 검사
+			//여러개의 이미지들 중 골라야함
+			String[] images  = preImage.split(",");
+			
+			for(String image : images) {
+				if(image.split("#")[1].equals("2")) {
+					//삭제 된 사진이 있을시
+					
+					//구글클라우드에서 삭제
+					imageStorage.deleteImage(image.split("#")[0], "jaeyoung");
+					//DB에서 삭제
+					result3= pService.deletePhotoName(image.split("#")[0]);
+					
+				}
+			}
+			
+		}
+		
+		//이미지 추가
+		if (files != null && !files.isEmpty()) {
+            // files가 비어있지 않은 경우, 파일 처리 로직 수행
+            for (MultipartFile file : files) {
+            	
+            	String[] returnArr2 = imageStorage.saveImage(file, "jaeyoung");
+                // 파일 처리 로직
+            	 if (returnArr2 != null) {
+                 	Photo b = new Photo();
+                 	b.setPhotoRename(returnArr2[0]);
+                     b.setPhotoPath(returnArr2[1]);
+                     b.setPhotoLevel(1);
+                     b.setBoardNo(cr.getCrNo()); 
+                     b.setBoardType(8);
+                     list.add(b);
+                 }
+            }
+        }
+		
+        //DB에 사진 저장 무엇인가 들어있을 경우만
+		if(!list.isEmpty()) {
+			pService.insertPhotoCampBoard(list);
+		}
+	      
+		return "redirect:campingReviewDetail.jy?crNo="+cr.getCrNo();
+	}
+	
+	@GetMapping("campingReviewDelete.jy")
+	public String campingReviewDelete(@RequestParam("crNo")int crNo) {
+		
+		int result = crService.campingReviewDelete(crNo);
+		return "redirect:champingReviewListView.jy";
+	}
+	
 
 }

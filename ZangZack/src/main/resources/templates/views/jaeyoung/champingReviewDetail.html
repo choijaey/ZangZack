@@ -78,7 +78,7 @@
                 <h1 class="text-2xl font-bold">[[${cr.crTitle}]]</h1>
                 <span class="oval-tag">[[${cr.categoryName}]]</span>
             </div>
-            <button class="px-4 py-2  bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300" onclick="campingReviewEdit()" th:if="${session.loginUser != null and session.loginUser.memberId eq cr.memberId}">글수정</button>
+            <button class="px-4 py-2  bg-blue-500 text-white rounded hover:bg-blue-600" onclick="campingReviewEdit()" th:if="${session.loginUser != null and session.loginUser.memberId eq cr.memberId}">글수정</button>
         </div>
         <div class="image-container">
             <div class="image-slideshow">
@@ -348,7 +348,7 @@
 		
 		function campingReviewEdit(){
 			const crNo = document.getElementById("crNo").value;
-			window.location.href="campingReviewEdit.jy?crNo="+crNo;
+			window.location.href="campingReviewEditView.jy?crNo="+crNo;
 		}
 
     // 초기 댓글 렌더링

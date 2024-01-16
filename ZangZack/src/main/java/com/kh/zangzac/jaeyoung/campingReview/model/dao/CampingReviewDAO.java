@@ -20,4 +20,10 @@ public interface CampingReviewDAO {
 
 	CampingReview selectDetailCr(int crNo);
 
+	int updateCampingReview(CampingReview cr);
+
+	int campingReviewDelete(int crNo);
+
+	void updateCount(int crNo);
+
 }

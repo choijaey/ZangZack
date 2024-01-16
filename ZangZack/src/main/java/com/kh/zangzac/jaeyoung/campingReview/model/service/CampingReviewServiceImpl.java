@@ -39,7 +39,22 @@ public class CampingReviewServiceImpl implements CampingReviewService{
 
 	@Override
 	public CampingReview selectDetailCr(int crNo) {
-		return crDAO.selectDetailCr(crNo);
+		CampingReview cr = crDAO.selectDetailCr(crNo);
+		crDAO.updateCount(crNo);
+		
+		cr.setCrCount(cr.getCrCount()+1);
+		
+		return cr;
+	}
+
+	@Override
+	public int updateCampingReview(CampingReview cr) {
+		return crDAO.updateCampingReview(cr);
+	}
+
+	@Override
+	public int campingReviewDelete(int crNo) {
+		return crDAO.campingReviewDelete(crNo);
 	}
 
 }

@@ -52,6 +52,26 @@
 	    WHERE CR_NO = #{crNo}
 	</select>
 	
+	<update id="updateCampingReview">
+		update camping_reviews
+		set cr_title =#{crTitle},cr_content=#{crContent},category_no=#{categoryNo},cr_star=#{crStar}
+		where cr_no = #{crNo}
+	</update>
+	
+	<update id="campingReviewDelete">
+		update camping_reviews
+		set cr_status ='Y'
+		where cr_no = #{crNo}
+	</update>
+	
+	<update id="updateCount">
+		update camping_reviews
+		set cr_count = cr_count+1
+		where cr_no = #{crNo}
+	</update>
+	
+
+	
 
 
 </mapper>

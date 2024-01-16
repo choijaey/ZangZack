@@ -27,23 +27,28 @@
 		     height: 20px;
 		
 		  }
+		  .deleteBtn{
+		  	margin-left: 540px;
+		  }
     </style>
 </head>
 <body >
    <div th:insert="~{common/navbar :: navbar}"></div>
     <div class=" max-w-2xl mx-auto my-10">
    <form action="campingReviewEdit.jy" method="post" enctype="multipart/form-data" onsubmit="return checkThumnail()">
+   		<input type="hidden" th:value="${cr.crNo}" id="crNo" name="crNo">
     	<header class="flex justify-between items-center mb-6 ">
             <h1 class="text-2xl font-bold ml-12">캠핑장 후기</h1>
         </header>
         <div class=" bg-gray-50 shadow-md rounded-md p-6">
             <!-- Post Title -->
-            <div class="mb-4">
+              <div class="flex justify-between items-center mb-8">
             	<input type="hidden" name="memberId" th:value ="${session.loginUser.memberId}">
+            	<button class="px-4 py-2 deleteBtn bg-red-500 text-white rounded hover:bg-red-600 " onclick="campingReviewDelete()" th:if="${session.loginUser != null and session.loginUser.memberId eq cr.memberId}">글삭제</button>
+            </div>
                 <label for="postTitle" class="block text-gray-700 text-sm font-bold mb-2">제목</label>
                 <input id="postTitle" th:value="${cr.crTitle}" required="required" name="crTitle" type="text" placeholder="포스트제목" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            </div>
-            
+            	<br><br>
             <div class="mb-4">
                 <label for="postCategory" class="block text-gray-700 text-sm font-bold mb-2">카테고리</label>
                 <select id="postCategory" name="categoryNo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -64,7 +69,7 @@
 				    <span id="background" class="background" th:style="'width: ' + (${cr.crStar} * 100 / 5) + '%;'"></span>
 				</div>
 				<span id="ratingValue">[[${cr.crStar}]]</span>
-				<input type="hidden" id="crStar" name="crStar">
+				<input type="hidden" id="crStar" name="crStar" th:value="${cr.crStar}">
 				<br>
             </div>
 
@@ -81,7 +86,9 @@
             	
             	<label class="block text-gray-700 text-sm font-bold mb-2">등록된 사진</label> 
             	 <th:block th:each="im, iterStat : ${cr.photos}">
-				    <input type="hidden" name="preImage" th:value="${im.photoRename}+'#1'">
+            	 	<th:block  th:if="${iterStat.index != 0}">
+				    	<input type="hidden" name="preImage" th:value="${im.photoRename}+'#1'">
+				    </th:block>
 				    <div  th:if="${iterStat.index != 0}">
 				        <img th:src="${im.photoPath}">
 				        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="removeImage(event)">
@@ -102,7 +109,7 @@
                                 썸네일
                             </p>
                         </div>
-                        <input type="file" id="thumnail" name="thumnail" class="opacity-0" accept="image/*" onchange="sumviewImage(event)" />
+                        <input type="file" id="thumnail" name="thumnailFile" class="opacity-0" accept="image/*" onchange="sumviewImage(event)" />
                     </label>
                 </div>
                 <!-- Image Preview -->
@@ -283,6 +290,11 @@
 	 
 	 inputThumnail
 	 
+ }
+ 
+ function campingReviewDelete(){
+	 let crNo = document.getElementById('crNo').value;
+	 window.location.href="campingReviewDelete.jy?crNo="+crNo;
  }
  
 

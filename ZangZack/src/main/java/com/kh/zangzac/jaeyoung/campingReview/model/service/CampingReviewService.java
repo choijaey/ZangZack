@@ -18,4 +18,8 @@ public interface CampingReviewService {
 
 	CampingReview selectDetailCr(int crNo);
 
+	int updateCampingReview(CampingReview cr);
+
+	int campingReviewDelete(int crNo);
+
 }
