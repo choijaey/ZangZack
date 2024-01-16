@@ -16,18 +16,19 @@
         }
     </style>
 </head>
-<body class="bg-gray-100">
-<div th:insert="~{common/navbar :: navbar}"></div>
+<body >
+	<div th:insert="~{common/navbar :: navbar}"></div>
+	<form action="eventBoardWrite.jy" enctype="multipart/form-data" method="post">
     <div class="container mx-auto p-6 bg-white shadow-lg max-w-2xl mt-10">
         <div class="flex justify-between items-center mb-4">
             <div class="space-x-2">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">등록</button>
-                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">취소</button>
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">수정</button>
+                <button type="button" onclick="cancleEdit()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">취소</button>
             </div>
         </div>
         <div class="mb-4">
             <div class="flex items-center mb-2">
-                <input type="text" class="text-3xl font-bold text-yellow-400 bg-transparent" value="9.8" >
+                <input type="text" class="text-3xl font-bold text-yellow-400 bg-transparent" name="ebScore" th:value="${eb.ebScore}">
                 <span class="ml-2 text-lg">/10</span>
             </div>
             <div class="flex space-x-4 text-sm text-gray-600">
@@ -38,42 +39,45 @@
             <!-- 기간/장소 정보 -->
             <div class="mr-8">
                 <div class="mb-4">
+                	<h2 class="text-lg font-bold test">행사이름 : </h2>
+                    <input type="text" th:value="${eb.ebName}" name="ebName" class="bg-transparent border-b border-gray-300"><br>
                     <h2 class="text-lg font-bold test">기간 : </h2>
-                    <input type="text" value="2023.10.04 ~ 2023.11.30" class="bg-transparent border-b border-gray-300"><br>
+                    <input type="text" th:value="${eb.ebDate}" name="ebDate" class="bg-transparent border-b border-gray-300"><br>
                     <h2 class="text-lg font-bold test">시간 : </h2>
-                    <input type="text" value="09:00 ~ 18:00" class="bg-transparent border-b border-gray-300"><br>
-                    <h2 class="text-lg font-bold test">규모 : </h2>
-                    <input type="text" value="9.8평 규모" class="bg-transparent border-b border-gray-300"><br>
+                    <input type="text" th:value="${eb.ebTime}" name="ebTime" class="bg-transparent border-b border-gray-300"><br>
                     <h2 class="text-lg font-bold test">장소 : </h2>
-                    <input type="text" value="몬트리소" class="bg-transparent border-b border-gray-300">
+                    <input type="text" th:value="${eb.ebLocation}" name="ebLocation" class="bg-transparent border-b border-gray-300">
                 </div>
                 <div class="mb-4">
                     <h2 class="text-lg font-bold">주최</h2>
-                    <input type="text" value="몬트리소 제과점" class="bg-transparent border-b border-gray-300">
+                    <input type="text" th:value="${eb.ebHost}" name="ebHost" class="bg-transparent border-b border-gray-300">
                 </div>
                 <div class="mb-4">
                     <h2 class="text-lg font-bold">요금</h2>
-                    <input type="text" value="무료" class="bg-transparent border-b border-gray-300">
+                    <input type="text" th:value="${eb.ebPrice}" name="ebPrice" class="bg-transparent border-b border-gray-300">
                 </div>
                 <div class="mb-4">
-                    <h2 class="text-lg font-bold">장비</h2>
-                    <input type="text" value="인스타그램" class="bg-transparent border-b border-gray-300">
+                    <h2 class="text-lg font-bold">정보</h2>
+                    <input type="text" th:value="${eb.ebInformation}" name="ebInformation" class="bg-transparent border-b border-gray-300">
                 </div>
                 <div>
                     <h2 class="text-lg font-bold">관련 특징</h2>
-                    <textarea class="bg-transparent border-b border-gray-300" style="width:500px;">행사들의 대한 이름,기간,장소와 행사 소개가 상세히 나와있다.
-                    </textarea>
+                    <textarea class="bg-transparent border-b border-gray-300" name="ebIntroduce" style="width:500px;">[[${eb.ebIntroduce}]]</textarea>
                 </div>
                
             </div>
 				
         </div>
+        <label class="block text-gray-700 text-sm font-bold mb-2">등록한 사진</label>
+		<input type="hidden" name="preImage" th:value="${ed.photo != null ? ed.photo.photoPath : ''}">
+		<div id="preImage" th:if="${ed.photo != null and ed.photo.photoPath != null}">
+		    <img th:src="${ed.photo.photoPath}">
+		    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="removeImage()">
+		        삭제
+		    </button>
+		    <br><br>
+		</div>
 
-        <div>
-        	<h2 class="text-lg font-bold">기타 의견</h2>
-        	<textarea class="bg-transparent border-b border-gray-300" style="width:500px;">9.8평 규모의 카페 공간을 활용해 베이커리들의 다양한 맛을 경험할 수 있는 예술 축제! 981명의 방문객을 기록했다고 하니, 기대해도 좋을 것 같네요! 앞으로 이런 이벤트가 더 많이 열렸으면 좋겠네요. - 관람객 후기
-			</textarea>
-        </div>
         <h2 class="text-lg font-bold">이미지</h2><br>
          <div class="flex items-center justify-center w-full">
          	
@@ -86,13 +90,13 @@
                                 이미지
                             </p>
                         </div>
-                        <input type="file" class="opacity-0" accept="image/*" onchange="sumviewImage(event)" />
+                        <input type="file" class="opacity-0" name="file" accept="image/*" onchange="sumviewImage(event)" />
                     </label>
                 </div>
                 <!-- Image Preview -->
                 <img id="imagePreview" class="image-preview" />
     </div>
-    
+    </form>
     <script>
 	    function sumviewImage(event) {
 	        var reader = new FileReader();
@@ -109,6 +113,11 @@
 	            output.style.display = 'none';
 	        }
 	    }
+	    
+	    function cancleEdit(){
+	    	window.location.href = 'eventBoardListView.jy';
+	    }
+	    
     </script>
     
     

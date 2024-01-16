@@ -6,6 +6,7 @@
 <title>Event Listing Prototype - Light Theme</title>
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 <style>
   .event-card {
     background-color: #ffffff;
@@ -38,63 +39,87 @@
     font-size: 0.875rem;
     color: #666666;
   }
+  
+  #pagenation {
+			   text-align: center;
+			}
+			
+			#pagenation ul {
+			   list-style: none;
+			   padding: 0;
+			   display: inline-block; /* 중앙 정렬을 위해 inline-block으로 변경 */
+			   margin: 0; /* 기본 마진 제거 */
+			}
+			
+			#pagenation ul li {
+			   display: inline;
+			   margin: 0 5px;
+			}
+			
+			#pagenation ul li a {
+			   text-decoration: none;
+			    text-align: center;
+			    color: #333;
+			    font-size: 14px;
+			    width: 30px; /* 정사각형의 너비 */
+			    height: 30px; /* 정사각형의 높이 */
+			    line-height: 30px; /* 텍스트를 수직 중앙에 위치시킴 */
+			    padding: 0; /* 패딩을 제거하거나 조정 */
+			    border-radius: 5px; /* 모서리를 둥글게 */
+			    display: inline-block; /* 블록 레벨 요소처럼 너비와 높이를 적용 */
+			    transition: background-color 0.3s, color 0.3s;
+			}
+			
+			#pagenation ul li a:hover {
+			   background-color: #5cb85c;
+			   color: #e6e6e6;
+			}
+			
+			#pagenation ul li a#check_page {
+			   background-color: #5cb85c;
+			   color: #e6e6e6;
+			}
 </style>
 </head>
 <body >
 	<div th:insert="~{common/navbar :: navbar}"></div>
-	
 	<br><br>
+	
 	<div class="container mx-auto p-4">
+	 <div id="header1" class="bg-white rounded-lg shadow-md text-black p-4 flex items-center justify-between">
+		    <span class="text-5xl mx-auto">이달의 행사</span>
+		    <div id="writeButton" class="flex items-center">
+		        <div class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded cursor-pointer" onclick="goToEvnentWrite()">글쓰기</div>
+		    </div>
+	 </div><br>
+		
 	  <div class="grid grid-cols-2 gap-4">
+	 
 	    <!-- Event Card 1 -->
-	    <div class="event-card" id="1" onclick="openModal(1)">
-	      <div class="event-image" style="background-image: url('https://source.unsplash.com/random/400x200?event');"></div>
-	      <div class="event-content">
-	        <div class="event-title">제4회 MICE Festival</div>
-	        <div class="event-date">기간: 2021.11.30 - 2023.12.03</div>
-	        <div class="event-location">장소: 부산역시 해운대구...</div>
-	      </div>
-	    </div>
-	    <!-- Event Card 1 -->
-	    <div class="event-card" id="2" onclick="openModal(2)">
-	      <div class="event-image" style="background-image: url('https://source.unsplash.com/random/400x200?event');"></div>
-	      <div class="event-content">
-	        <div class="event-title">제4회 MICE Festival</div>
-	        <div class="event-date">기간: 2021.11.30 - 2023.12.03</div>
-	        <div class="event-location">장소: 부산역시 해운대구...</div>
-	      </div>
-	    </div>
-	    <!-- Event Card 1 -->
-	    <div class="event-card" id="3" onclick="openModal(3)">
-	      <div class="event-image" style="background-image: url('https://source.unsplash.com/random/400x200?event');"></div>
-	      <div class="event-content">
-	        <div class="event-title">제4회 MICE Festival</div>
-	        <div class="event-date">기간: 2021.11.30 - 2023.12.03</div>
-	        <div class="event-location">장소: 부산역시 해운대구...</div>
-	      </div>
-	    </div>
-	    <!-- Event Card 1 -->
-	    <div class="event-card" id="4" onclick="openModal(4)">
-	      <div class="event-image" style="background-image: url('https://source.unsplash.com/random/400x200?event');"></div>
-	      <div class="event-content">
-	        <div class="event-title">제4회 MICE Festival</div>
-	        <div class="event-date">기간: 2021.11.30 - 2023.12.03</div>
-	        <div class="event-location">장소: 부산역시 해운대구...</div>
-	      </div>
-	    </div>
+	    <th:block th:each="eb:${list}">
+		   <div class="event-card" id="[[${eb.ebNo}]]" th:onclick="openModal([[${eb.ebNo}]])">
+			    <div class="event-image" th:style="'background-image: url(' + *{eb.photo.photoPath} + ');'"></div>
+			    <div class="event-content">
+			        <div class="event-title">[[${eb.ebName}]]</div>
+			        <div class="event-date">[[|기간: ${eb.ebTime}|]]</div>
+			        <div class="event-location">[[|장소: ${eb.ebLocation}|]]</div>
+			    </div>
+			</div>
+	    </th:block>
 	  </div>
 	</div>
 	
 	
 	<!-- 행사 상세 정보 모달창 -->
-	<div id="modal" class="fixed inset-0 bg-black bg-opacity-25 flex justify-center items-center hidden"  onclick="closeModal(event)">
-		<div class="container mx-auto p-6 bg-white shadow-lg max-w-2xl mt-10">
+	<div id="modal" class="fixed inset-0 bg-black bg-opacity-25 flex justify-center items-center hidden"  onclick="closeModal(event)" style="z-index: 999;"  >
+		<div class="container mx-auto p-6 bg-white shadow-lg max-w-2xl mt-10" style="width:550px">
 	        <div class="flex justify-between items-center mb-4">
-	            <h1 class="text-2xl font-bold">행사 상세정보</h1>
+	            <h1 class="text-2xl font-bold" id ="ebName">행사 상세정보</h1>
 	            <div class="space-x-2">
+	            	<input type="hidden" id ="ebNo">
 	            	<th:block th:if="${session.loginUser != null}">
 	            		<th:block th:if="${session.loginUser.memberIsAdmin =='Y'}">
-			                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">수정</button>
+			                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="EventBoardEdit()">수정</button>
 			                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">삭제</button>
 		                </th:block>
 	                </th:block>
@@ -102,68 +127,112 @@
 	        </div>
 	        <div class="mb-4">
 	            <div class="flex items-center mb-2">
-	                <span class="text-3xl font-bold text-yellow-400">9.8</span>
+	                <span class="text-3xl font-bold text-yellow-400" id="ebScore">9.8</span>
 	                <span class="ml-2 text-lg">/10</span>
-	                <span class="ml-2 text-sm text-gray-500">(<span class="font-bold">981</span> 예상 방문)</span>
 	            </div>
-	            <div class="flex space-x-4 text-sm text-gray-600">
-	                <span>전체</span>
-	                <span>|</span>
-	                <span class="text-blue-500">관리자용</span>
-	                <span>|</span>
-	                <span>리뷰</span>
-	                <span>|</span>
-	                <span>행사 상세 후기</span>
-	            </div>
+	            
 	        </div>
 	        <div class="mb-6 flex">
 			  <!-- 기간/장소 정보 -->
-			  <div class="mr-8">
+			  <div class="mr-8" >
 			      <div class="mb-4">
 			          <h2 class="text-lg font-bold">기간 & 장소</h2>
-			          <p>2023.10.04.(수) ~ 2023.11.30.(목)</p>
-			          <p>09:00 ~ 18:00</p>
-			          <p>9.8평 규모</p>
-			          <p>몬트리소</p>
+			          <p id="ebDate">2023.10.04.(수) ~ 2023.11.30.(목)</p>
+			          <p id="ebTime">09:00 ~ 18:00</p>
+			          <p id="ebLocation">몬트리소</p>
 			      </div>
 			      <div class="mb-4">
 			          <h2 class="text-lg font-bold">주최</h2>
-			          <p>몬트리소 제과점</p>
+			          <p id="ebHost">몬트리소 제과점</p>
 			      </div>
 			      <div class="mb-4">
 			          <h2 class="text-lg font-bold">요금</h2>
-			          <p>무료</p>
+			          <p id="ebPrice">무료</p>
 			      </div>
 			      <div class="mb-4">
-			          <h2 class="text-lg font-bold">장비</h2>
-			          <p>인스타그램</p>
-			      </div>
-			      <div>
-			          <h2 class="text-lg font-bold">관련 특징</h2>
-			          <p>행사들의 대한 이름,기간,장소와 행사 소개가 상세히 나와있다.</p>
+			          <h2 class="text-lg font-bold">정보</h2>
+			          <p id="ebInformation">인스타그램</p>
 			      </div>
 			  </div>
+
 			
 			  <!-- 이미지 -->
 			    <div>
-			        <img src="https://source.unsplash.com/random/400x600" alt="Event" class="rounded-lg shadow-md">
+			        <img src="https://source.unsplash.com/random/400x600" id="photoPath" alt="Event" class="rounded-lg shadow-md" style="width:300px; height:350px">
 			    </div>
 			</div>
-	        
-	        <div>
-		            <p>9.8평 규모의 카페 공간을 활용해 베이커리들의 다양한 맛을 경험할 수 있는 예술 축제! 981명의 방문객을 기록했다고 하니, 기대해도 좋을 것 같네요! 앞으로 이런 이벤트가 더 많이 열렸으면 좋겠네요. - 관람객 후기</p>
-		        </div>
-		        
+			<div>
+	          <h2 class="text-lg font-bold" style="width:500px;">관련 특징</h2>
+	          <p id="ebIntroduce" style="width:500px;">행사들의 대한 이름,기간,장소와 행사 소개가 상세히 나와있다.</p>
+	       </div>
 	   </div>
 	</div>
+	
+	<div id="pagenation" th:with="loc=${loc}" th:if="${list == null || !list.isEmpty}">
+           <ul>
+              <!-- 이전 버튼 -->
+              <li th:if="${pi.currentPage > 10}">
+                 <a th:href="@{${loc}(page=${pi.currentPage-10})}">&lt; 이전</a>
+              </li>
+                  <!-- 페이지 번호 -->
+                  <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+                    
+                     <a th:href="@{${loc}(page=${p}, searchText=${searchText})}" th:id="${p == pi.currentPage} ? 'check_page'">
+                        [[${p}]]
+                    </a>
+                  
+              </li>
+                  <!-- 다음 버튼 -->
+                  <li th:if="${pi.maxPage >= 10 && pi.maxPage - pi.currentPage > 10}">
+                     <a th:href="@{${loc}(page=${pi.currentPage+10})}">다음 &gt;</a>
+                  </li>
+                </ul>
+      </div>
 	
 	
 <script>
     const modal = document.getElementById('modal');
+    const ebLocation = document.getElementById('ebLocation'); 
+    const ebName = document.getElementById('ebName'); 
+    const ebIntroduce = document.getElementById('ebIntroduce'); 
+    const ebPrice = document.getElementById('ebPrice'); 
+    const ebTime = document.getElementById('ebTime'); 
+    const ebDate = document.getElementById('ebDate'); 
+    const ebInformation = document.getElementById('ebInformation'); 
+    const ebScore = document.getElementById('ebScore'); 
+    const ebHost = document.getElementById('ebHost'); 
+    const photoPath = document.getElementById('photoPath'); 
+    const ebNoDiv = document.getElementById('ebNo'); 
     
     function openModal(ebNo) {
-    	//보이게 하기
-    	console.log(ebNo);
+
+    	$.ajax({
+            url: 'selectEventBoard.jy', // 서버의 댓글 목록 불러오기 URL
+            method: 'GET',
+            data: { 
+            	ebNo : ebNo
+            },
+            success: function(data) {
+            	ebLocation.innerText = data.ebLocation;
+            	ebName.innerText = data.ebName;
+            	ebIntroduce.innerText = data.ebIntroduce;
+            	ebPrice.innerText = data.ebPrice;
+            	ebTime.innerText = data.ebTime;
+            	ebDate.innerText = data.ebDate;
+            	ebInformation.innerText = data.ebInformation;
+            	ebScore.innerText = data.ebScore;
+            	ebHost.innerText = data.ebHost;
+            	photoPath.src = data.ebPhoto;
+            	ebNoDiv.value=data.ebNo;
+            	
+            	
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+    	
+    	
     	modal.classList.remove('hidden');
 	 	
     }
@@ -181,6 +250,14 @@
     }
     
 	 
+    function goToEvnentWrite(){
+    	window.location.href = 'eventBoardWriteView.jy';
+    }
+    
+    function EventBoardEdit(){
+    	window.location.href = 'eventBoardEditView.jy?ebNo='+ebNoDiv.value;
+    }
+    
 	 
     
 </script>
