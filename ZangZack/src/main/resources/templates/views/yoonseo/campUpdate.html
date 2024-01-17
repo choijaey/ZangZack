@@ -30,7 +30,7 @@
 }
 
 .selectState{
-  background: lightgray;
+  background :yellow;
  }
 .unselectState{
   background: none;
@@ -80,12 +80,12 @@
 	}
 	
 	#pagenation ul li a:hover {
-	   background-color: #5cb85c;
+	   background-color:#F9612B;
 	   color: #e6e6e6;
 	}
 	
 	#pagenation ul li a#check_page {
-	   background-color: #5cb85c;
+	   background-color:#F9612B;
 	   color: #e6e6e6;
 	}
 
@@ -123,25 +123,25 @@
               </tbody>
            </table>
            <div id="pagenation" th:with="loc=${loc}" th:if="${list != null}">
-		             <ul>
-		               <!-- 이전 버튼 -->
-		               <li>
-		                  <a th:href="@{${loc}(page=${pi.currentPage-1})}">&lt;</a>
-		               </li>
-		                <!-- 페이지 번호 -->
-		               <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
-		                 <th:block th:if="${ list != null}">
-					        <a th:href="@{${loc}(page=${p})}" th:id="${p == pi.currentPage ? 'check_page' : ''}">
-					            [[${p}]] 
-					        </a>
-					     </th:block>		
-		               </li>
-	                   <!-- 다음 버튼 -->
-	                   <li>
-	                      <a th:href="@{${loc}(page=${pi.currentPage+1})}">&gt;</a>
-	                   </li>
-		              </ul>
-                   </div>   
+             <ul>
+               <!-- 이전 버튼 -->
+               <li th:if="${pi.currentPage > 10}">
+                  <a th:href="@{${loc}(page=${pi.currentPage-10})}">&lt; 이전</a>
+               </li>
+                <!-- 페이지 번호 -->
+               <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+                 <th:block th:if="${ list != null}">
+			        <a th:href="@{${loc}(page=${p})}" th:id="${p == pi.currentPage ? 'check_page' : ''}">
+			            [[${p}]] 
+			        </a>
+			     </th:block>		
+               </li>
+                  <!-- 다음 버튼 -->
+                  <li th:if="${pi.maxPage >= 10 && pi.maxPage - pi.currentPage > 10}">
+                     <a th:href="@{${loc}(page=${pi.currentPage+10})}">다음 &gt;</a>
+                  </li>
+              </ul>
+           </div>     
 		</div>
    <script th:inline="javascript">
      window.onload = () =>{

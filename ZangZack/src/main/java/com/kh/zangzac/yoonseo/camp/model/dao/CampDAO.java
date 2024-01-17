@@ -63,4 +63,6 @@ public interface CampDAO {
 	ArrayList<Photo> selectMainPhoto(int[] cgNo);
 
 	ArrayList<CampingGround> selectMainPhoto(ArrayList<Integer> intArrayList);
+
+	int updateCount(int no);
 }

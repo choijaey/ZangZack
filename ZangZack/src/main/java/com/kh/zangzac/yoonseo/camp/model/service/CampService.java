@@ -57,5 +57,7 @@ public interface CampService {
 
 	ArrayList<CampingGround> selectMainPhoto(ArrayList<Integer> intArrayList);
 
+	int updateCount(int no);
+
 	
 }

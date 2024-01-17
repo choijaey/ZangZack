@@ -191,6 +191,12 @@
      ]]>
    </select>
    
+   <update id="updateCount">
+    update camping_ground
+    set cg_count = cg_count + 1
+    where cg_no = #{no}
+   </update>
+   
    
 
 </mapper>

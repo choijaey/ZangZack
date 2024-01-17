@@ -119,14 +119,14 @@ button:hover {
 			    <button type="button" id="addfile">추가버튼</button>
 			    <div id="fileArea">
 			      <div class="mb-3">
-			        <input type="file" id="campImg" name="campImg" accept="image/*" style=" width:200px;" onchange="previewImage3()" required>
+			        <input type="file" class="form-control form control" id="campImg" name="campImg" accept="image/*" style=" width:200px;" onchange="previewImage3()" required>
 			        <div class="infoImgs" style="display:inline-block"></div> 
 			      </div>
 				</div>		
 		    </div>
 		    <br>
 			<div style="width:750px; margin-left: 10px;">
-			         <table class="table" >
+			         <table class="table">
 					   <tr>
 					     <td>주소</td>
 					     <td><input text="text" style="width:500px;" name="cgAddress" required></td>
@@ -206,7 +206,7 @@ button:hover {
 		document.getElementById('addfile').addEventListener('click', ()=> {
 			const newDiv = document.createElement('div');
 			newDiv.classList.add('mb-3');
-			newDiv.innerHTML = '<input type="file" name="campImg" accept="image/*" style=" width:200px;" onchange="previewImage4()"><div class="infoImgs" style="display:inline-block"></div><button type="button" class="deleteInput">삭제</button>';
+			newDiv.innerHTML = '<input type="file" class="form-control form-control" name="campImg" accept="image/*" style=" width:200px;" onchange="previewImage4()"><div class="infoImgs" style="display:inline-block"></div><button type="button" class="deleteInput">삭제</button>';
 			
 			fileArea.append(newDiv);
 			

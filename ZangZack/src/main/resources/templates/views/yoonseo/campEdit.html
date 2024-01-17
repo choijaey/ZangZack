@@ -122,7 +122,7 @@ button:hover {
 					           <!-- 삭제할 파일을 담으려고 만듦  -->
 				    <div>
 				      <div class="mb-3">
-				        <input th:value="${photo.photoPath}"  name="campImg" accept="image/*"  onchange="previewImage3()">
+				        <input th:value="${photo.photoPath}"  name="campImg">
 				        <div class="infoImgs" style="display:inline-block">
 				          <th:block th:if="${#strings.containsIgnoreCase(photo.photoRename, 'jpg') 
 					                       or #strings.containsIgnoreCase(photo.photoRename, 'png') 
@@ -134,11 +134,13 @@ button:hover {
 					</div>
 				  </th:block>		
 			    </div>
-		     <button type="button" class="w-25 btn btn-outline-success" id="addfile">
+		        <button type="button" class="w-25 btn btn-outline-success" id="addfile">
 				+파일추가</button>
 		        <div id="fileArea">
 		          <div class="mb-3">
-		            <input type="file" class="form-control form control-lg" name ="file">
+		            <input type="file" id="campImg" class="form-control form control" name ="file" accept="image/*" style="width:300px;" onchange="previewImage3()" required>
+		            <div class="infoImgs" style="display:inline-block"></div>
+		            <button type="button" class="deleteInput" onclick="deleteBtn()">삭제</button>
 		          </div>
 		        </div>
 		    <br>
@@ -220,7 +222,7 @@ button:hover {
 	 
 	 </div>
 	 
-<script >
+<script th:lnline="javascript">
    window.onload = () => {
 	   
 	   const delBtns = document.getElementsByClassName('deleteFile');
@@ -247,7 +249,7 @@ button:hover {
   	   document.getElementById('addfile').addEventListener('click', ()=>{
   		 const newDiv = document.createElement('div');
   		 newDiv.classList.add('mb-3');
-  		 newDiv.innerHTML = '<input type="file" class="form-control form-control-lg" name ="file"><button type="button" class="deleteInput">삭제</button>';
+  		 newDiv.innerHTML = '<input type="file" class="form-control form-control" name ="file" style="width:300px;" onchange="previewImage()"><div class="infoImgs" style="display:inline-block"></div><button type="button" class="deleteInput">삭제</button>';
   		 
   		 fileArea.append(newDiv);
   		 
@@ -276,6 +278,60 @@ button:hover {
 	     }
 	     form.submit();
 	 });
+	 
+   }
+   
+   function previewImage() {
+		const input = event.target;
+       const infoImgs = input.parentElement.querySelector('.infoImgs');
+
+       while (infoImgs.firstChild) {
+           infoImgs.removeChild(infoImgs.firstChild);
+       }
+
+       const files = input.files;
+       for (const file of files) {
+           const reader = new FileReader();
+           reader.onload = function (e) {
+               const img = document.createElement('img');
+               img.src = e.target.result;
+               img.style.width = '150px'; // 미리보기 이미지의 너비를 조절할 수 있습니다.
+               infoImgs.appendChild(img);
+           };
+           reader.readAsDataURL(file);
+       }
+	}
+   
+   
+   function previewImage3() {
+		const input = document.getElementById('campImg');
+		console.log(input);
+       const infoImgs = input.parentElement.querySelector('.infoImgs');
+        
+       while (infoImgs.firstChild) {
+           infoImgs.removeChild(infoImgs.firstChild);
+       }
+
+       const files = input.files;
+       console.log(files);
+       for(const file of files){
+           const reader = new FileReader();
+           reader.onload = function (e) {
+               const img = document.createElement('img');
+               img.src = e.target.result;
+               img.style.width = '150px'; // 미리보기 이미지의 너비를 조절할 수 있습니다.
+               infoImgs.appendChild(img);
+           };
+           reader.readAsDataURL(file);
+       }
+   }
+   
+   function deleteBtn() {
+	   const input = document.getElementById('campImg');
+	   
+	   input.value='';
+	   previewImage3();
+	 
    }
 
 </script>

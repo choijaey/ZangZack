@@ -160,6 +160,11 @@ public class CampServiceImpl implements CampService {
 		return cDAO.selectMainPhoto(intArrayList);
 	}
 
+	@Override
+	public int updateCount(int no) {
+		return cDAO.updateCount(no);
+	}
+
 
 
 

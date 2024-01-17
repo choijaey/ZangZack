@@ -1,7 +1,6 @@
 package com.kh.zangzac.yoonseo.camp.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,8 @@ import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.yoonseo.camp.model.exception.CampException;
 import com.kh.zangzac.yoonseo.camp.model.service.CampService;
 import com.kh.zangzac.yoonseo.camp.model.vo.CampingGround;
-
 import jakarta.servlet.http.HttpServletRequest;
+
 
 @Controller
 public class CampController {
@@ -101,8 +100,11 @@ public class CampController {
 			                       @RequestParam("page") int page,
 			                       Model model) {
 		
-		
 		CampingGround camp = cService.selectCampingDetail(no);
+		int count = cService.updateCount(no);
+		if(count > 0) {
+			camp.setCgCount(camp.getCgCount() + 1);
+		}
 		
 		ArrayList<Photo> campList = cService.selectPhoto(no); //캠핑장 사진
 		
