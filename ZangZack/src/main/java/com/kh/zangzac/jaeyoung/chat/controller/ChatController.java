@@ -65,5 +65,5 @@ public class ChatController {
         //chatRoomId
         return "views/jaeyoung/chatRoomPage";
     }
-
+    
 }

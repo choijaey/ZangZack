@@ -118,7 +118,7 @@ public class SocketHandler extends TextWebSocketHandler {
    @SuppressWarnings("unchecked")
    @Override
    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-	   
+	 //소켓 연결
 	   if(first) {
 		 //채팅방 개수 가져오기
 		   
@@ -130,7 +130,6 @@ public class SocketHandler extends TextWebSocketHandler {
 		   }
 		   first=false;
 	   }
-	   
 	   
       //소켓 연결
       super.afterConnectionEstablished(session);
@@ -216,6 +215,8 @@ public class SocketHandler extends TextWebSocketHandler {
     		  ArrayList<Chatter> changeList = cService.selectChatterList(Integer.parseInt(roomName));
     		  chatterList.set(Integer.parseInt(roomName), changeList);
     	  }
+      }else if(chatType == 2) {
+    	  
       }
       
       

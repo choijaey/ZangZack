@@ -240,4 +240,9 @@
 	   	set sp_count = sp_count + 1
 	   	where sp_no = #{spNo}
    </update>
+   
+   <select id="chatterList" resultType="Member">
+   		select *
+	 	from member
+   </select>
 </mapper>

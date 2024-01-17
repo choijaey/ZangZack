@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
+import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,8 @@ import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.common.reply.model.vo.Reply;
+import com.kh.zangzac.jaeyoung.chat.ChatFileManager;
+import com.kh.zangzac.jaeyoung.chat.model.vo.Chatter;
 import com.kh.zangzac.ming.member.model.exception.MemberException;
 import com.kh.zangzac.ming.member.model.vo.Member;
 import com.kh.zangzac.yoonahrim.spBoard.model.service.secondHandService;
@@ -45,6 +48,9 @@ public class SecondHandController {
     public SecondHandController(ImageStorage imageStorage) {
         this.imageStorage = imageStorage;
     }
+    
+    @Autowired
+    ChatFileManager cFileManager;
     
 	//중고 메인 페이지로 이동
 	@GetMapping("secondHand.ah")
@@ -380,7 +386,29 @@ public class SecondHandController {
 	
 	//채팅 화면 이동
 	@GetMapping("chating.ah")
-	public String chating() {
+	public String chating(@RequestParam("memberId") String memberId, @RequestParam("userId") String userId , Model model) {
+		
+	    String roomName = "";
+		//두 숫자를 비교
+  	   int result = userId.compareTo(memberId);
+  	   
+  	   //정렬에 따라 룸네임 정하기
+        if (result < 0) {
+          roomName = userId+"@"+memberId;
+        } else if (result > 0) {
+      	  roomName = memberId+"@"+userId;
+        } 
+		
+        ArrayList<Chatter> list = spService.chatterList(roomName);
+		JSONArray chatLogs = cFileManager.readChatLog(roomName);
+		
+		System.out.println(chatLogs);
+		
+		model.addAttribute("id", memberId);
+		model.addAttribute("list", list);
+		model.addAttribute("chatLogs", chatLogs);
+		
+		
 		return "views/yoonahrim/chatingRoom";
 	}
 	
