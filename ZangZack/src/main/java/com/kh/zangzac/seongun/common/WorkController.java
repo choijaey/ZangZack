@@ -15,6 +15,8 @@ import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.common.reply.controller.ReplyController;
 import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
 import com.kh.zangzac.seongun.common.model.vo.SearchBoard;
+import com.kh.zangzac.seongun.recipe.model.vo.CookwareList;
+import com.kh.zangzac.seongun.recipe.model.vo.Recipe;
 
 @Controller
 public class WorkController {
@@ -66,9 +68,9 @@ public class WorkController {
 		return a;
 	}
 
-	public SelectCondition selectBoard(int cbNo, int i) {
+	public SelectCondition selectBoard(int boardNo, int i) {
 		SelectCondition b = new SelectCondition();
-		b.setBoardNo(cbNo);
+		b.setBoardNo(boardNo);
 		b.setBoardType(i);
 		return b;
 	}
@@ -113,6 +115,25 @@ public class WorkController {
 	public void editModel(CampBoard bList, ArrayList<Photo> pList, Model model) {
 		model.addAttribute("bList", bList);
 		model.addAttribute("pList", pList);
+	}
+
+	public CookwareList setCook(int set, int i) {
+		CookwareList c = new CookwareList();
+		c.setCwRecipeNo(set);
+		c.setCookCategoryNo(i);
+		return c;
+	}
+
+	public void addRec(ArrayList<Recipe> list, String msg, PageInfo pi, Model model, String loc) {
+		model.addAttribute("pi", pi);
+		model.addAttribute("list", list);
+		model.addAttribute("msg", msg);
+	    model.addAttribute("loc", loc);
+	}
+
+	public void recipeDetatil(Model model, Recipe r, ArrayList<Photo> pList) {
+		model.addAttribute("r", r);
+		model.addAttribute("pLIst", pList);
 	}
 
 }
