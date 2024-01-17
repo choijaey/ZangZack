@@ -37,4 +37,14 @@ public class EventBoardServiceImpl implements EventBoardService {
 		return ebDAO.selectEventBoard(ebNo);
 	}
 
+	@Override
+	public int updateEventBoard(EventBoard eb) {
+		return ebDAO.updateEventBoard(eb);
+	}
+
+	@Override
+	public int deleteEventBoard(int ebNo) {
+		return ebDAO.deleteEventBoard(ebNo);
+	}
+
 }

@@ -18,7 +18,8 @@
 </head>
 <body >
 	<div th:insert="~{common/navbar :: navbar}"></div>
-	<form action="eventBoardWrite.jy" enctype="multipart/form-data" method="post">
+	<form action="eventBoardEdit.jy" enctype="multipart/form-data" method="post">
+	<input type="hidden" th:value="${eb.ebNo}" name="ebNo">
     <div class="container mx-auto p-6 bg-white shadow-lg max-w-2xl mt-10">
         <div class="flex justify-between items-center mb-4">
             <div class="space-x-2">
@@ -69,17 +70,17 @@
 				
         </div>
         <label class="block text-gray-700 text-sm font-bold mb-2">등록한 사진</label>
-		<input type="hidden" name="preImage" th:value="${ed.photo != null ? ed.photo.photoPath : ''}">
-		<div id="preImage" th:if="${ed.photo != null and ed.photo.photoPath != null}">
-		    <img th:src="${ed.photo.photoPath}">
-		    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="removeImage()">
+		<input type="hidden" name="preImage" th:value="${eb.photo.photoRename + '#1'}">
+		<div id="preImage" th:if="${eb.photo != null and eb.photo.photoPath != null}">
+		    <img th:src="${eb.photo.photoPath}">
+		    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="removeImage(event)">
 		        삭제
 		    </button>
 		    <br><br>
 		</div>
 
+         <div class="flex items-center justify-center w-full" style="display:none;" id="newImage">
         <h2 class="text-lg font-bold">이미지</h2><br>
-         <div class="flex items-center justify-center w-full">
          	
                     <label class="flex flex-col w-full h-32 border-4 border-dashed hover:bg-gray-100 hover:border-gray-300">
                         <div class="flex flex-col items-center justify-center pt-7">
@@ -92,9 +93,9 @@
                         </div>
                         <input type="file" class="opacity-0" name="file" accept="image/*" onchange="sumviewImage(event)" />
                     </label>
-                </div>
+          </div>
                 <!-- Image Preview -->
-                <img id="imagePreview" class="image-preview" />
+                <img id="imagePreview" class="image-preview w-full" />
     </div>
     </form>
     <script>
@@ -116,6 +117,22 @@
 	    
 	    function cancleEdit(){
 	    	window.location.href = 'eventBoardListView.jy';
+	    }
+	    
+	    
+	    function removeImage(event){
+	    const  newImage = document.getElementById('newImage');	
+	   	 const hiddenDiv = event.target.parentNode.previousElementSibling;
+	   	 const originalValue = hiddenDiv.value;
+	   	 const modifiedValue = originalValue.replace("#1", "#2");
+
+	   	 // 수정된 값을 다시 할당
+	   	 hiddenDiv.value = modifiedValue;
+	   	 
+	   	 event.target.parentNode.remove();
+	   	 
+	   	newImage.style.display='block';
+	   	 
 	    }
 	    
     </script>

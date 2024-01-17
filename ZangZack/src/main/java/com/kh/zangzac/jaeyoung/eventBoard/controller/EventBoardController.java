@@ -99,7 +99,7 @@ public class EventBoardController {
             pService.insertPhotoCampBoard(list);
         }
 		
-		return "views/jaeyoung/champingEvent"; 
+        return "redirect:eventBoardListView.jy";  
 	}
 
 	
@@ -150,7 +150,57 @@ public class EventBoardController {
 		
 		return "views/jaeyoung/champingEventEdit"; 
 	}
+	
+	@PostMapping("eventBoardEdit.jy")
+	public String eventBoardEdit(@ModelAttribute EventBoard eb,@RequestParam("file") MultipartFile file,@RequestParam("preImage") String preImage) {
+		
+		int result = ebService.updateEventBoard(eb);
+		String checkDelete =preImage.split("#")[1]; 
+		String imgName=preImage.split("#")[0];
+		int result2=0;
+		
+		//삭제된 경우
+		if(checkDelete.equals("2")) {
+			//사진 삭제 진행
+			
+			//삭제가 된경우
+			//구글클라우드에서 삭제
+			imageStorage.deleteImage(imgName, "jaeyoung");
+			//DB에서 삭제
+			result2= pService.deletePhotoName(imgName);
+			
+			
+			//사진 넣기
+	        String name = "jaeyoung";
+	        String[] returnArr = imageStorage.saveImage(file, name);
+	        Photo a = new Photo();
+	        ArrayList<Photo> list = new ArrayList<Photo>();
+	        
+	        //구글 클라우드에 사진 저장
+	        if (returnArr != null) {
+	        	a.setPhotoRename(returnArr[0]);
+	            a.setPhotoPath(returnArr[1]);
+	            a.setPhotoLevel(0);
+	            a.setBoardNo(eb.getEbNo()); 
+	            a.setBoardType(9);
+	            list.add(a);
+	            //DB에 사진 저장
+	            pService.insertPhotoCampBoard(list);
+	        }
+		}
+		
+		return "redirect:eventBoardListView.jy"; 
+	}
 
+	
+	
+	@GetMapping("eventBoardDelete.jy")
+	public String eventBoardDelete(@RequestParam("ebNo") int ebNo) {
+		
+		 int result = ebService.deleteEventBoard(ebNo);
+	     return "redirect:eventBoardListView.jy"; 
+	}
+	
 	
 
 }

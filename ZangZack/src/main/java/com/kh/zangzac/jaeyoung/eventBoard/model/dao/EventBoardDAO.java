@@ -18,4 +18,8 @@ public interface EventBoardDAO {
 
 	EventBoard selectEventBoard(int ebNo);
 
+	int updateEventBoard(EventBoard eb);
+
+	int deleteEventBoard(int ebNo);
+
 }

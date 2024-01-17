@@ -8,23 +8,49 @@
          	from dual
      	 </selectKey>
 		insert into event_board
-		values (#{ebNo}, #{ebLocation}, #{ebName}, #{ebIntroduce}, #{ebPrice},#{ebTime},default,#{ebDate}, #{ebInformation}, #{ebExtraoption}, #{ebScore}, #{ebHost}) 
+		values (#{ebNo}, #{ebLocation}, #{ebName}, #{ebIntroduce}, #{ebPrice},#{ebTime},default,#{ebDate}, #{ebInformation}, #{ebScore}, #{ebHost}) 
 	</insert>
 	<select id="getListCount">
 		select count(*)
 		from event_board
+		where eb_status='N'
 	</select>
 	
 	<select id="selectEventBoardList">
 		select *
 		from event_board
+		where eb_status='N'
 	</select>
 	
 	<select id="selectEventBoard">
 		select * 
 		from event_board
-		where eb_no = #{ebNo}
+		where eb_no = #{ebNo} and eb_status='N'
 	</select>
+	
+	<update id="updateEventBoard">
+		UPDATE event_board
+		SET
+		  eb_location = #{ebLocation},
+		  eb_name = #{ebName},
+		  eb_introduce = #{ebIntroduce},
+		  eb_price = #{ebPrice},
+		  eb_time = #{ebTime},
+		  eb_date = #{ebDate},
+		  eb_information = #{ebInformation},
+		  eb_score = #{ebScore},
+		  eb_host = #{ebHost}
+		WHERE
+		  eb_no = #{ebNo}
+	</update>
+	
+	<update id="deleteEventBoard">
+		UPDATE event_board
+		SET
+		  eb_status = 'Y'
+		WHERE
+		  eb_no = #{ebNo}
+	</update>
 	
 
 
