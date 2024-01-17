@@ -13,5 +13,4 @@ public interface PhotoService {
 
 	int deletePhoto(Photo temp);
 
-	ArrayList<Photo> updateBoardPage(SelectCondition selectBoard);
 }

@@ -34,11 +34,17 @@
             <!-- th:id="|delete-${p.photo_rename }/${p.photo_level}|"  -->
             <th:block th:if="${not #lists.isEmpty(pList)}">
 			    <th:block th:each="p : ${pList}">
-			        <input type="hidden" name="deletePhoto" th:value="p.photoRename">
+			        <input type="hidden" name="deletePhoto" th:value="${p.photoRename + '#'}">
 			        <div class="upload-container">
 			            <div class="upload-top-area">
-			                <label class="upload-label" th:text=${p.photo}>등록한 사진</label>
-			                <button type="button" id="add-upload-container">파일 추가</button>
+			                <label class="upload-label">등록한 사진</label>
+			                <button type="button" class="delete-upload-file">취소하기</button>
+			                <div th:if="${p.photoLevel == 0}">
+							    <button type="button" id="add-upload-container">파일 추가</button>
+							</div>
+							<div th:if="${p.photoLevel == 1}">
+							    <button type="button" class="delete-upload-container">파일 삭제</button>
+							</div>
 			            </div>
 			            <label class="upload-box">
 			                <input type="file" name="file" class="file-input" accept="image/*" onchange="sumviewImage(event)" />
@@ -63,93 +69,136 @@
     </div>
 
     <script th:inline="javascript">
-        document.addEventListener('DOMContentLoaded', function() {
-            var addUploadButton = document.getElementById('add-upload-container');
-            var originalUploadContainer = document.querySelector('.upload-container');
+    /*<![CDATA[*/
+    function sumviewImage(event) {
+        var imagePreview = event.target.parentNode.querySelector('.image-preview');
+        var uploadContent = event.target.parentNode.querySelector('.upload-content');
 
-            addUploadButton.addEventListener('click', function() {
-                var newUploadContainerHTML = `
-                    <div class="upload-container">
-                        <div class="upload-top-area">
-                            <label class="upload-label">등록한 사진</label>
-                            <button type="button" class="delete-upload-container">파일 삭제</button>
-                        </div>
-                        <label class="upload-box">
-                            <input type="file" name="file" class="file-input" accept="image/*" onchange="sumviewImage(event)" />
-                            <div class="upload-area">
-                                <div class="upload-content">
-                                    <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                    </svg>
-                                    <p class="upload-text">추가 사진</p>
-                                </div>
-                                <!-- Image Preview -->
-                                <img class="image-preview" style="display: none;" />
+        var file = event.target.files[0];
+        if (file) {
+            imagePreview.src = URL.createObjectURL(file);
+            imagePreview.onload = function() {
+                URL.revokeObjectURL(imagePreview.src); // 메모리 해제
+            }
+            imagePreview.style.display = 'block'; // 이미지 미리보기 표시
+            uploadContent.style.display = 'none'; // 기존 콘텐츠 숨김
+        } else {
+            // 파일이 선택되지 않았을 경우, 기존 이미지 (있는 경우) 표시
+            if (imagePreview.getAttribute('src') !== '') {
+                imagePreview.style.display = 'block';
+                uploadContent.style.display = 'none';
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var addUploadButton = document.getElementById('add-upload-container');
+        var originalUploadContainer = document.querySelector('.upload-container');
+
+        addUploadButton.addEventListener('click', function() {
+            var newUploadContainerHTML = `
+                <div class="upload-container">
+                    <div class="upload-top-area">
+                        <label class="upload-label">등록한 사진</label>
+                        <button type="button" class="delete-upload-container">파일 삭제</button>
+                    </div>
+                    <label class="upload-box">
+                        <input type="file" name="file" class="file-input" accept="image/*" onchange="sumviewImage(event)" />
+                        <div class="upload-area">
+                            <div class="upload-content">
+                                <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                                <p class="upload-text">추가 사진</p>
                             </div>
-                        </label>
-                    </div>`;
+                            <!-- Image Preview -->
+                            <img class="image-preview" style="display: none;" />
+                        </div>
+                    </label>
+                </div>`;
 
-                var newUploadContainer = document.createElement('div');
-                newUploadContainer.innerHTML = newUploadContainerHTML;
-                originalUploadContainer.parentNode.insertBefore(newUploadContainer, originalUploadContainer.nextSibling);
+            var newUploadContainer = document.createElement('div');
+            newUploadContainer.innerHTML = newUploadContainerHTML;
+            originalUploadContainer.parentNode.insertBefore(newUploadContainer, originalUploadContainer.nextSibling);
 
-                // 파일 삭제 버튼에 이벤트 리스너 추가
-                var deleteButtons = document.querySelectorAll('.delete-upload-container');
-                deleteButtons.forEach(function(button) {
-                    button.onclick = function() {
-                        this.parentElement.parentElement.remove();
-                    };
-                });
+            // 파일 삭제 버튼에 이벤트 리스너 추가
+            var deleteButtons = document.querySelectorAll('.delete-upload-container');
+            deleteButtons.forEach(function(button) {
+                button.onclick = function() {
+                    this.parentElement.parentElement.remove();
+                };
+            });
+        });
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        // 파일 삭제 및 취소하기 버튼에 대한 이벤트 리스너 설정 함수
+        function setupListeners() {
+            // 파일 삭제 버튼 이벤트 리스너
+            document.querySelectorAll('.delete-upload-container').forEach(function(button) {
+            button.addEventListener('click', function() {
+                // 현재 버튼과 관련된 hidden input 찾기
+                var hiddenInput = this.closest('.upload-container').querySelector('input[type="hidden"]');
+                // hidden input 값 업데이트
+                if (hiddenInput && hiddenInput.type === 'hidden' && !hiddenInput.value.includes('del')) {
+                    hiddenInput.value += 'del';
+                    console.log(hiddenInput.value);
+                }
+
+                // 현재 버튼이 포함된 upload-container 요소 찾기 및 제거
+                var uploadContainer = this.closest('.upload-container');
+                if (uploadContainer) {
+                    uploadContainer.remove();
+                }
             });
         });
 
-        function sumviewImage(event) {
-            var imagePreview = event.target.parentNode.querySelector('.image-preview');
-            var uploadContent = event.target.parentNode.querySelector('.upload-content');
+            // 취소하기 버튼 이벤트 리스너
+            document.querySelectorAll('.delete-upload-file').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var hiddenInput = this.closest('.upload-container').querySelector('input[type="hidden"]');
+                    var imagePreview = this.closest('.upload-container').querySelector('.image-preview');
+                    hideImagePreview(imagePreview);
+                    updateHiddenInput(hiddenInput);
+                    console.log(hiddenInput);
+                });
+            });
+        }
 
-            // 선택한 파일의 URL을 사용하여 미리보기 설정
-            var file = event.target.files[0];
-            if (file) {
-                imagePreview.src = URL.createObjectURL(file);
-                imagePreview.onload = function() {
-                    URL.revokeObjectURL(imagePreview.src); // 메모리 해제
-                }
-                imagePreview.style.display = 'block'; // 이미지 미리보기 표시
-                uploadContent.style.display = 'none'; // 기존 콘텐츠 숨김
-            } else {
-                // 파일이 선택되지 않았을 경우, 기존 이미지 (있는 경우) 표시
-                if (imagePreview.getAttribute('src') !== '') {
-                    imagePreview.style.display = 'block';
-                    uploadContent.style.display = 'none';
-                }
+        // hiddenInput 값을 업데이트하는 함수
+        function updateHiddenInput(hiddenInput) {
+            if (hiddenInput && hiddenInput.type === 'hidden' && !hiddenInput.value.includes('del')) {
+                hiddenInput.value += 'del';
             }
         }
 
-        
-        window.onload = function() {
-            // 서버로부터 전달받은 오류 메시지 확인
-            /*<![CDATA[*/
-            var msg = /*[[${msg}]]*/'';
-            /*]]>*/
-            
-            // errorMessage가 비어있지 않은 경우에만 알림 표시
-            if(msg && msg.trim().length > 0) {
-                alert(msg);
+        // 이미지 미리보기 숨기는 함수
+        function hideImagePreview(imagePreview) {
+            if (imagePreview) {
+                imagePreview.style.display = 'none';
+                imagePreview.src = '';
             }
-            
-            var imagePreviews = document.querySelectorAll('.image-preview');
-            imagePreviews.forEach(function(imagePreview) {
-                var src = imagePreview.getAttribute('src');
-                if (src) {
-                    // 이미지가 이미 존재한다면 미리보기를 보여주고, 업로드 아이콘을 숨김
+        }
+
+        // 이벤트 리스너 설정
+        setupListeners();
+    });
+
+
+
+    
+        // 페이지 로드 시 이미지를 표시하는 로직
+        window.onload = function() {
+        	document.querySelectorAll('.image-preview').forEach(function(imagePreview) {
+                if (imagePreview.getAttribute('src') !== '') {
                     imagePreview.style.display = 'block';
-                    var uploadContent = imagePreview.parentNode.querySelector('.upload-content');
-                    if (uploadContent) {
-                        uploadContent.style.display = 'none';
-                    }
+                    imagePreview.parentNode.querySelector('.upload-content').style.display = 'none';
                 }
             });
         };
-    </script>
+    /*]]>*/
+</script>
+
+
+
 </body>
 </html>

@@ -29,7 +29,5 @@ public class PhotoServiceImpl implements PhotoService{
    public int deletePhoto(Photo temp) {
       return pDAO.deletePhoto(temp);
    }
-   
-   
 
 }

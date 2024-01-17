@@ -5,6 +5,7 @@
       select *
       from photo
       where photo_status = 'N' and board_type = #{boardType} and board_no = #{boardNo}
+      order by photo_no asc
    </select>
    
    <insert id="insertPhotoCampBoard">
