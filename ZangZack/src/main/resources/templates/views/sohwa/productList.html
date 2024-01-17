@@ -283,11 +283,162 @@
     
     
     
+    // 무한 스크롤 부분
+    // 현재 페이지와 한 번에 로드되는 아이템 수
+       let currentPage = 2;
+       const itemsPerPage = 3; 
+       let scrollflag=true;
+       /*<![CDATA[*/
+        let maxPages = /*[[${maxPage}]]*/1;
+        /*]]>*/
+   
+       // 스크롤 이벤트 리스너 등록
+       window.addEventListener('scroll', () => {
+           // 스크롤이 페이지의 80%에 도달하면 추가 데이터 로드
+           if(scrollflag){
+              if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight * 0.9) {
+                  loadMoreItems();
+                 scrollflag=false;
+              }
+           }
+       });
+   
+       // 추가 데이터 로드 함수
+       function loadMoreItems() {
+           
+          if(currentPage <= maxPages){
+             //ajax 부분 추가 예정
+              $.ajax({
+                    url: 'cfList.jy', // 서버의 댓글 목록 불러오기 URL   -------------------------------------------------------------------------------
+                    method: 'GET',
+                    data: { 
+                       currentPage : currentPage  //----------------------------------------------------------------------------------------
+                    },
+                    success: function(data) {
+                        
+                        // 리스트 가져와서 만들기
+                        const newItems = createItems(data);  
+                        
+                        // 뿌리기
+                        appendItemsToDOM(newItems);  
+                        
+                        currentPage=1+currentPage;  
+                        scrollflag = true;
+                    },
+                    error: function(data) {
+                        console.log(data);
+                    }
+                });
+   
+             }
+          }
+   
+       // 가상의 데이터 생성 함수
+       function createItems(data) {
+             const newItems = [];
+             /*<![CDATA[*/
+              let User = /*[[${session.loginUser}]]*/null;
+              /*]]>*/
+             
+          for (let itemData of data.list) {
+              // 이 부분에서 각 캠핑 프렌드 아이템에 대한 HTML을 생성하고 데이터를 적용
+              const photoHTML = itemData.photoPath ? `<img src="${itemData.photoPath}" alt="Rocket Launch" class="rounded-lg mt-3">` : '';
+             
+              let ButtonHTML="";
+              let replyHTML="";
+              
+              for(let reply of itemData.replys){
+                 ButtonHTML="";
+                 
+                 if(User){
+                    if(User.memberId == reply.memberId){
+                       ButtonHTML+=`
+                          <input type="hidden" value ="${reply.replyNo}" id="reply${reply.replyNo}">
+                           <div class="edit" onclick="openEditModal(event)" >수정</div>
+                         <div class="delete" onclick="openDeleteModal(event)" >삭제</div>
+                       `
+                    }
+                 }
+                 
+                 
+                 
+                 replyHTML+=`
+                    <div class="comment-item">
+                         <img class="comment-thumb" src="${reply.memberProfilePath}" alt="프로필 사진">
+                         <div class="comment-content">
+                             <div class="comment-author">${reply.memberName}</div>
+                             <div class="comment-message">${reply.replyContent}</div><br>
+                             <div class="comment-info">${reply.formatDate}</div>
+                         </div>
+                        ${ButtonHTML}
+                     </div>
+                 `
+              }
+              
+              const newItemHTML = `
+                  <div class="bg-white rounded-lg shadow-md p-4">
+                      <div class="flex items-center" style="width: 100%;">
+                          <div class="rounded-full h-16 w-16 bg-gray-300 mr-3"></div>
+                          <div class="flex flex-col flex-grow">
+                              <div class="font-semibold text-lg">${itemData.cfTitle}</div>
+                              <div class="text-gray-500 text-md" style="display:inline-block">@${itemData.categoryName} @${itemData.memberId}</div>
+                          </div>
+                          <button type="button" class="review-options-btn l-4" onclick="boardEditModalOpen(event)">...</button>
+                      </div>
+                      
+                      <div class="mb-4">
+                          <br>
+                          <p>${itemData.cfContent}</p>
+                          ${photoHTML}
+                          <div class="post-like-comment">
+                              ${itemData.likeStatus} 
+                              <span class="like-text">좋아요</span>
+                              <span class="like-count" id="likeCount${itemData.cfNo}">${itemData.likeCount}</span> 
+                              <span class="comment-text">댓글</span>
+                              <span class="comment-count" id="commentCount${itemData.cfNo}">${itemData.replyCount}</span>
+                          </div>
+                      </div>
+                      <div class="flex justify-between items-center text-gray-500 text-sm">
+                          <div class="flex items-center">
+                             <input type="hidden" value="${itemData.memberId}">
+                        <input type="hidden" value="${itemData.cfNo}">
+                             <div name="reply" onclick="openModal(event)">댓글 달기</div>
+                          </div>
+                          
+                          <div class="flex items-center">
+                              <span class="toggle-comments" style="cursor: pointer;" onclick="toggleCo(event)">전체 댓글</span>
+                          </div>
+                          
+                      </div>
+                      <div class="comment-section comment-list" id="${itemData.cfNo}">
+                         ${replyHTML}
+                      </div>
+                      
+                  </div>
+                  <br>
+              `;
+              newItems.push(newItemHTML);
+          }
+          return newItems;
+      }
+   
+       // DOM에 아이템 추가 함수
+       function appendItemsToDOM(newItems) {
+           const container = document.getElementById('BoardList'); // 실제로 사용하는 컨테이너의 ID로 변경
+           container.innerHTML += newItems.join('');
+       }
+
     
     
     
     
-    
+       
+       
+       
+       
+       
+       
+       
     
     
     function changeImages() {
