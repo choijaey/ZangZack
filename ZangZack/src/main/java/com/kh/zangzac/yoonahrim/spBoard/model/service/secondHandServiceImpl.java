@@ -30,7 +30,6 @@ public class secondHandServiceImpl implements secondHandService{
 		return spDAO.updateSecondHand(sp);
 	}
 
-
 	@Override
 	public ArrayList<secondHandProduct> selectMyList(secondHandProduct sp) {
 		return (ArrayList)spDAO.selectMyList(sp);
@@ -82,8 +81,8 @@ public class secondHandServiceImpl implements secondHandService{
 	}
 
 	@Override
-	public ArrayList<Photo> selectPhotoSeconHand(secondHandProduct sp) {
-		return spDAO.selectPhotoSeconHand(sp);
+	public ArrayList<Photo> selectPhotoSeconHand(Integer spNo) {
+		return spDAO.selectPhotoSeconHand(spNo);
 	}
 
 	@Override
@@ -112,15 +111,51 @@ public class secondHandServiceImpl implements secondHandService{
 	}
 
 	@Override
-	public int getListCount(int i) {
-		return spDAO.getListCount(4);
+	public int getListCount() {
+		return spDAO.getListCount();
 	}
 
 	@Override
 	public ArrayList<secondHandProduct> selectBoardList(PageInfo pi, int i) {
-		int offset = (pi.getCurrentPage()-1)*pi.getPageLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
 		return spDAO.selectBoardList(i, rowBounds);
+	}
+
+	@Override
+	public int updateAdminInfo(secondHandProduct sp) {
+		return spDAO.updateAdminInfo(sp);
+	}
+
+	@Override
+	public ArrayList<secondHandProduct> selectSeconHand(PageInfo pi, int i) {
+		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
+		return spDAO.selectSeconHand(i, rowBounds);
+	}
+
+	@Override
+	public int searchSpCount(HashMap<String, String> map) {
+		return spDAO.searchSpCount(map);
+	}
+
+	@Override
+	public ArrayList<secondHandProduct> searchSpList(HashMap<String, String> map) {
+		return spDAO.searchSpList(map);
+	}
+
+	@Override
+	public int searchAdminList(HashMap<String, String> map) {
+		return spDAO.searchAdminList(map);
+	}
+
+	@Override
+	public ArrayList<secondHandProduct> searchtAdminList(PageInfo pi, HashMap<String, String> map) {
+		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
+		return spDAO.searchtAdminList(map, rowBounds);
+	}
+
+	@Override
+	public int updateCount(int spNo) {
+		return spDAO.updateCount(spNo);
 	}
 
 	
