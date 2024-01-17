@@ -1,5 +1,6 @@
 package com.kh.zangzac.yoonahrim.spBoard.model.vo;
 
+
 import java.sql.Date;
 
 import lombok.AllArgsConstructor;
@@ -32,4 +33,5 @@ public class secondHandProduct {
 	private String memberNickName;
 	private String memberProfilePath;
 	private int replyCount;
+	private int spCount;
 }

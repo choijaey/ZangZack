@@ -61,7 +61,13 @@ public interface secondHandDAO {
 
 	ArrayList<secondHandProduct> searchSpList(HashMap<String, String> map);
 
-	int getReplyCount(int spNo);
+	int searchAdminList(HashMap<String, String> map);
+
+	ArrayList<secondHandProduct> searchtAdminList(HashMap<String, String> map, RowBounds rowBounds);
+
+	int updateCount(int spNo);
+
+	
 
 
 

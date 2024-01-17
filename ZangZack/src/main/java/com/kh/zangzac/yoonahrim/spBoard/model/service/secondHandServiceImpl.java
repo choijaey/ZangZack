@@ -143,8 +143,19 @@ public class secondHandServiceImpl implements secondHandService{
 	}
 
 	@Override
-	public int getReplyCount(int spNo) {
-		return spDAO.getReplyCount(spNo);
+	public int searchAdminList(HashMap<String, String> map) {
+		return spDAO.searchAdminList(map);
+	}
+
+	@Override
+	public ArrayList<secondHandProduct> searchtAdminList(PageInfo pi, HashMap<String, String> map) {
+		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
+		return spDAO.searchtAdminList(map, rowBounds);
+	}
+
+	@Override
+	public int updateCount(int spNo) {
+		return spDAO.updateCount(spNo);
 	}
 
 	

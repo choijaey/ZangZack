@@ -1,5 +1,7 @@
 package com.kh.zangzac.ming.member.model.vo;
 
+
+
 import java.sql.Date;
 
 import lombok.AllArgsConstructor;

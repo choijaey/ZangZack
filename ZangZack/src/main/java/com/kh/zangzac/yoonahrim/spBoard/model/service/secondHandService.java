@@ -59,7 +59,11 @@ public interface secondHandService {
 
 	ArrayList<secondHandProduct> searchSpList(HashMap<String, String> map);
 
-	int getReplyCount(int spNo);
+	int searchAdminList(HashMap<String, String> map);
+
+	ArrayList<secondHandProduct> searchtAdminList(PageInfo pi, HashMap<String, String> map);
+
+	int updateCount(int spNo);
 
 
 

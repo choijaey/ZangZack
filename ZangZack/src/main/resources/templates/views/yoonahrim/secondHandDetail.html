@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <link href="css/yoonahrim/SecondHandDetail.css?after" rel="stylesheet" type="text/css"/>
 </head>
@@ -13,7 +13,7 @@
    <br><br>
    <h1 style="text-align:center; font-size: 30px; margin: 50px">중고 거래 매물 상세페이지</h1>
    <th:block th:each="s : ${slist}" th:if="${true}">
-   <form id="showDetail" name="showDetail">
+   <form id="showDetail" name="showDetail" method="POST">
    
       <input type="hidden" th:value="${s.spNo}" name="spNo" id="spNo"/>
       <div class="d-grid gap-2 d-md-block">
@@ -73,9 +73,9 @@
                         <img alt="img" src="image/yoonahrim/user.png"> <!-- 프로필 가져오기 -->
                            <p><b>윤아림</b></p>
                            <p>[[${#strings.arraySplit(s.spAddress, ',')[0]}]]</p>
-                        <div class="container2 text-end">
-                           <button type="button" class="btn_booked" th:onclick="location.href='chating.ah'">1 : 1 채팅방</button>
-                        </div>   
+                        	<div class="container2 text-end">
+                          		<button type="button" class="btn_booked" th:onclick="location.href='chating.ah?memberId=' + '${session.loginUser}'" th:if="${session.loginUser != null && session.loginUser != s.memberId}">1 : 1 채팅방</button>
+                        	</div>   
                      </span>
                   </span>   
                    
@@ -102,34 +102,34 @@
                   <hr id="hr_count">
                   <!-- 작성한 댓글이 보이는 부분 -->
                   <div class="reply_content" id="reply_content" style="width:820px; height:245px; overflow: auto; overflow-x: hidden">
-                     <div class="media fs-7" th:each="r : ${rList}">
+                     <div class="media fs-7" th:each="r : ${rList}" th:if="${r.replyStatus == 'N'}">
                         <img class="d-flex rounded-circle" alt="reply_profile" th:src="${r.memberProfilePath}" style="position:absolute; width:50px; height:50px">
                         <div class="media-body" style="position:relative; left:60px">
                            <input type="hidden" id="replyNo" th:value="${r.replyNo}"/>
                               <h6 class="mt-0">[[${r.memberId}]]</h6>
                               <p>[[${r.replyContent}]]</p>
-                              
-                           <!-- 수정 input type="text" 창 -->
-                              <div class="modal" tabindex="-1" th:id="'modal-' + ${r.replyNo}" aria-labelledby="exampleModalCenteredScrollableTitle" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <h6 class="modal-title" id="exampleModalCenteredScrollableTitle">댓글 수정 [[${r.replyNo}]]</h6>
-                                      <button type="button" class="btn-close" id="mymodal" data-bs-dismiss="modal" aria-label="Close" onclick="CloseModal()"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                      <input type="text" th:id="'replyUpdateContent-' + ${r.replyNo}" class="replyUpdateContent" th:value="${r.replyContent}"/>
-                                    </div>
-                                    <div class="modal-footer">
-                                      <h6>[[${r.replyCreateDate}]]</h6>
-                                      <button type="button" class="editReply btn btn-primary" th:id="'editReply-' + ${r.replyNo}">수정</button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              
+	                           <!-- 수정 input type="text" 창 -->
+	                             <div class="modal" tabindex="-1" th:id="'modal-' + ${r.replyNo}">
+	                              <input type="hidden" id="replyNo" th:value="${r.replyNo}"/>
+	                                <div class="modal-dialog modal-dialog-centered">
+	                                  <div class="modal-content">
+	                                    <div class="modal-header">
+	                                      <h6 class="modal-title">댓글 수정 [[${r.replyNo}]]</h6>
+	                                      <button type="button" class="btn-close" id="mymodal" data-bs-dismiss="modal" aria-label="Close" onclick="CloseModal()"></button>
+	                                    </div>
+	                                    <div class="modal-body">
+	                                      <input type="text" th:id="'replyUpdateContent-' + ${r.replyNo}" class="replyUpdateContent" th:value="${r.replyContent}"/>
+	                                    </div>
+	                                    <div class="modal-footer">
+	                                      <h6>[[${r.replyCreateDate}]]</h6>
+	                                      <button type="button" class="editReply btn btn-primary" th:id="'editReply-' + ${r.replyNo}">수정</button>
+	                                    </div>
+	                                  </div>
+	                                </div>
+	                              </div>
+                              <input type="hidden" id="replyNo" th:value="${r.replyNo}"/>
                            <span id="insert_reply" class="insert_reply" style="cursor: pointer;" th:onclick="'showUpdateModal(' + ${r.replyNo} + ')'" >수정</span>&nbsp;&nbsp;
-                           <span id="delete_reply" class="delete_reply" style="cursor: pointer;">삭제</span>
+                           <span th:id="deleteReply" class="delete_reply" style="cursor: pointer;" th:onclick="'deleteComment(' + ${r.replyNo} + ')'">삭제</span>
                         </div>
                         <br>
                      </div>
@@ -156,7 +156,6 @@
     </th:block>
       
 <script th:inline="javascript">
-      
          function booking() {
             
                var button = document.getElementById('bookButton');
@@ -261,57 +260,112 @@
          function showUpdateModal(replyNo) {
 		    const modal = document.getElementById('modal-' + replyNo);
 		    modal.style.display = 'block';
-		
 		    // 추가된 부분: 모달 창이 열릴 때 replyNo를 전역 변수로 설정
 		    window.currentReplyNo = replyNo;
 		}
          
          //댓글 update
         var editReplys = document.getElementsByClassName('editReply');
+         
 		for (var i = 0; i < editReplys.length; i++) {
 		    editReplys[i].addEventListener('click', function (event) {
 		        // 클릭된 버튼을 찾음
-		        var clickedButton = event.target;
-		
-		        // 해당 버튼에 속한 replyUpdateContent를 찾음
-		        var replyUpdateContent = clickedButton.closest('.modal').querySelector('.replyUpdateContent');
-		
-		        // replyUpdateContent 존재 여부 확인
-		        if (replyUpdateContent) {
-		            const content = replyUpdateContent.value;
-		            const boardNo = document.getElementById("boardNo").value;
-		            const replyNo = clickedButton.getAttribute('data-replyNo');
-		            
-		            console.log(replyNo);
-		            console.log(content);
-		
-		            function editReply(replyNo, content) {
-		                if (content !== '') {
-		                    $.ajax({
-		                        url: 'updateReply.rep',
-		                        method: 'POST',
-		                        data: { replyContent: content, boardType: '4', boardNo: boardNo, replyNo: replyNo },
-		                        success: (data) => {
-		                            console.log(data);  //전송에 성공했을 때
-		                            location.reload();
-		                        },
-		                        error: data => console.log(data)  //전송에 실패했을 때
-		                    });
-		                } else {
-		                    alert("댓글 내용을 입력해주세요");
-		                }
-		            }
-		            editReply(replyNo, content);
+		        let clickedButton = event.target.id;
+		        
+		     	// 정규표현식을 사용하여 숫자 부분 추출
+		        let replyNo = clickedButton.match(/\d+/);
+				let content = document.getElementById('replyUpdateContent-' + replyNo).value;
+	            const boardNo = document.getElementById("boardNo").value;
+	            
+	            //찍히는지 확인
+	            console.log(replyNo, content);
+	            
+		        if (content !== '') {
+		            editReply(replyNo, content, boardNo);
 		        } else {
-		            console.error("replyUpdateContent not found");
+		            //console.error("replyUpdateContent not found");
 		        }
 		    });
 		    
-		    
-		    
 		}
 		
-         
+		  function editReply(replyNo, content, boardNo) {
+              if (content !== '') {
+                  $.ajax({
+                      url: 'updateReply.rep',
+                      method: 'POST',
+                      data: { replyContent: content, boardType: '4', boardNo: boardNo, replyNo: replyNo },
+                      success: (data) => {
+                          console.log(data);  //전송에 성공했을 때
+                          location.reload();
+                      },
+                      error: data => console.log(data)  //전송에 실패했을 때
+                  });
+              } else {
+                  alert("댓글 내용을 입력해주세요");
+              }
+          }
+		
+        //댓글 delete
+        
+        	/*웹 페이지가 로드될 때(DOMContentLoaded 이벤트) document.body에 클릭 이벤트 리스너를 추가합니다. 
+        		이 리스너는 사용자가 페이지 어딘가를 클릭할 때 실행됩니다. 
+        		클릭된 요소가 'delete_reply' 클래스를 포함하는 경우, handleDeleteReply 함수가 호출됩니다.
+        		
+        	document.addEventListener('DOMContentLoaded', function () {
+		    document.body.addEventListener('click', function (event) {
+		        if (event.target.classList.contains('delete_reply')) {
+		            handleDeleteReply(event);
+		        }
+		    });
+		    
+		    function handleDeleteReply(event) {
+		        const mediaElement = event.target.closest('.media');
+		        const replyNo = mediaElement.querySelector('#replyNo').value;
+				console.log(replyNo)
+		        if (replyNo !== 0) {
+		            const confirmDelete = confirm("정말 삭제하시겠습니까?");
+		            if (confirmDelete) {
+		                $.ajax({
+		                    url: 'deleteReply.rep',
+		                    method: 'POST',
+		                    data: { replyNo: replyNo },
+		                    success: (data) => {
+		                        console.log(data);
+		                        location.reload();
+		                    },
+		                    error: data => console.log(data)
+		                });
+		            } else {
+		                alert("삭제가 취소되었습니다.");
+		            }
+		        } else {
+		            alert("유효하지 않은 댓글입니다.");
+		        }
+		    }
+		});
+		*/		  
+		  
+		function deleteComment(replyNo){
+			if ( !confirm('선택하신 댓글을 삭제할까요?') ) {
+	            return false;
+	        }
+			console.log(replyNo)
+			
+	        	$.ajax({
+                    url: 'deleteReply.rep',
+                    method: 'POST',
+                    data: { replyNo: replyNo },
+                    success: (data) => {
+                        console.log(data);
+                        alert('삭제되었습니다.')
+                        location.reload();
+                    },
+                    error: data => console.log(data)
+                });
+		}
+		
+		
 </script>
 </body>
 </html>
