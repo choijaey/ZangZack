@@ -50,39 +50,42 @@
             </div>
             <div class="board-container" th:if="${!list.isEmpty}">
                 <!-- 카드 반복 -->
-                <div class="card" th:each="b : ${list}">
-                    <div class="card-image">
-                    	<th:block th:if="${b.photoPath != null}">
-                        	<img th:src="${b.photoPath}" alt="썸네일 이미지" />
-                        </th:block>
-                    	<th:block th:if="${b.photoPath == null}">
-                        	<img src="image/seongun/NONE.png" alt="썸네일 이미지" />
-                        </th:block>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-title">
-                            <span class="title-text">[[${b.cbTitle}]]</span>
-                            <span class="card-category">[[${b.categoryName}]]</span>
-                        </div>
-                        <div class="card-author">[[${b.memberName}]]</div>
-                        <div class="card-info">
-                            <table>
-                                <tr>
-                                    <td class="info-label">조회수</td>
-                                    <td class="info-label">댓글</td>
-                                    <td class="info-label">좋아요</td>
-                                    <td class="info-value date-year">[[${#dates.format(b.cbCreateDate, 'YYYY')}]]</td>
-                                </tr>
-                                <tr>
-                                    <td class="info-value">[[${b.cbCount}]]</td>
-                                    <td class="info-value">[[${b.replyCount}]]</td>
-                                    <td class="info-value">[[${b.heartCount}]]</td>
-                                    <td class="info-value date-day">[[${#dates.format(b.cbCreateDate, 'MM.dd')}]]</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <th:block th:each="b : ${list}">
+	                <div class="card">
+	                	<input type="hidden" th:value="${b.cbNo}">
+	                    <div class="card-image">
+	                    	<th:block th:if="${b.photoPath != null}">
+	                        	<img th:src="${b.photoPath}" alt="썸네일 이미지" />
+	                        </th:block>
+	                    	<th:block th:if="${b.photoPath == null}">
+	                        	<img src="image/seongun/NONE.png" alt="썸네일 이미지" />
+	                        </th:block>
+	                    </div>
+	                    <div class="card-body">
+	                        <div class="card-title">
+	                            <span class="title-text">[[${b.cbTitle}]]</span>
+	                            <span class="card-category">[[${b.categoryName}]]</span>
+	                        </div>
+	                        <div class="card-author">[[${b.memberName}]]</div>
+	                        <div class="card-info">
+	                            <table>
+	                                <tr>
+	                                    <td class="info-label">조회수</td>
+	                                    <td class="info-label">댓글</td>
+	                                    <td class="info-label">좋아요</td>
+	                                    <td class="info-value date-year">[[${#strings.arraySplit(b.formatDate, ' ')[0]}]]</td>
+	                                </tr>
+	                                <tr>
+	                                    <td class="info-value">[[${b.cbCount}]]</td>
+	                                    <td class="info-value">[[${b.replyCount}]]</td>
+	                                    <td class="info-value">[[${b.heartCount}]]</td>
+	                                    <td class="info-value date-day">[[${#strings.arraySplit(b.formatDate, ' ')[1]}]]</td>
+	                                </tr>
+	                            </table>
+	                        </div>
+	                    </div>
+	                </div>
+                </th:block>
                 <!-- 카드 반복 끝 -->
             </div>
             <div class="board-container" th:if="${list.isEmpty}">
@@ -95,38 +98,53 @@
                 <button type="button" id="write_btn" onclick="writeBtn()">글쓰기</button>
             </div>
             <div class="board_bottom_area">
-                <div id="pagenation">
-                  <ul>
-                    <!-- 이전 버튼 -->
-                    <li><a href="#">&lt; 이전</a></li>
-                    <!-- 페이지 번호 -->
-                    <li><a href="#" id="check_page">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li><a href="#">6</a></li>
-                    <li><a href="#">7</a></li>
-                    <li><a href="#">8</a></li>
-                    <li><a href="#">9</a></li>
-                    <li><a href="#">10</a></li>
-                    <!-- 다음 버튼 -->
-                    <li><a href="#">다음 &gt;</a></li>
-                  </ul>
-                </div>
-                <hr/>
-                  <!-- 검색 필터 영역 -->
-                <div class="search_area">
-                    <select name="search_type" class="search_select">
-                        <option value="all">전체</option>
-                        <option value="title">제목</option>
-                        <option value="content">내용</option>
-                        <option value="author">글쓴이</option>
-                    </select>
-                    <input type="text" class="search_input" placeholder="검색어를 입력하세요." />
-                    <button type="submit" class="search_button">검색</button>
-                </div>
-            </div>
+				<div id="pagenation" th:with="loc=${loc}" th:if="${!list.isEmpty}">
+					<ul>
+						<!-- 이전 버튼 -->
+						<li th:if="${pi.currentPage > 10}">
+							<a th:href="@{${loc}(page=${pi.currentPage-10})}">&lt; 이전</a>
+						</li>
+		                <!-- 페이지 번호 -->
+		                <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+		                	<th:block th:if="${search.searchText == null}">
+								<a th:href="@{${loc}(page=${p})}" th:id="${p == pi.currentPage} ? 'check_page'">
+							        [[${p}]] 
+							    </a>
+						    </th:block>
+						    <th:block th:if="${search.searchText != null}">
+							    <a th:href="@{${loc}(page=${p}, searchCategory=${search.searchCategory}, searchText=${search.searchText})}" th:id="${p == pi.currentPage} ? 'check_page'">
+								    [[${p}]]
+								</a>
+						    </th:block>
+						</li>
+		                <!-- 다음 버튼 -->
+		                <li th:if="${pi.maxPage >= 10 && pi.maxPage - pi.currentPage > 10}">
+		                	<a th:href="@{${loc}(page=${pi.currentPage+10})}">다음 &gt;</a>
+		                </li>
+	              	</ul>
+				</div>
+	            <hr/>
+	              <!-- 검색 필터 영역 -->	
+	            <div class="search_area">
+		            <form action="albumBoard.su">
+			            <select name="searchCategoryNo" class="search_select">
+				            <option value="0">전체보기</option>
+				            <option value="1">백패킹</option>
+				            <option value="2">오토캠핑</option>
+				            <option value="3">장박</option>
+				            <option value="4">글램핑</option>
+				        </select>
+		                <select name="searchCategory" class="search_select">
+		                    <option value="0">전체</option>
+		                    <option value="1">제목</option>
+		                    <option value="2">내용</option>
+		                    <option value="3">글쓴이</option>
+		                </select>
+		                <input type="text" name="searchText" class="search_input" placeholder="검색어를 입력하세요." />
+		                <button type="submit" class="search_button">검색</button>
+	                </form>
+	            </div>
+	        </div>
         </div>
     </div>
     <script th:inline="javascript">
@@ -168,6 +186,17 @@
         		window.location.href="signUp.me";
         	}
         }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // 모든 card 클래스를 가진 요소에 대한 클릭 이벤트 리스너 추가
+            document.querySelectorAll('.card').forEach(function(card) {
+                card.addEventListener('click', function() {
+                    // 클릭된 card 내의 첫 번째 input 요소의 value 추출
+                    var boardId = this.querySelector('input[type="hidden"]').value;
+                    location.href = 'selectBoard.su?cbNo=' + boardId + "&page=" + /*[[${pi.currentPage}]]*/1;
+                });
+            });
+        });
         /*]]>*/
     </script>
 </body>

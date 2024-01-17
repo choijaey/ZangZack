@@ -1,5 +1,6 @@
 package com.kh.zangzac.seongun.campboard.model.service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import org.apache.ibatis.session.RowBounds;
@@ -31,7 +32,11 @@ public class CampBoardServiceImpl implements CampBoardService{
 	@Override
 	public ArrayList<CampBoard> selectBoardList(PageInfo pi, int i) {
 		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
-		return cDAO.selectBoardList(i, rowBounds);
+		ArrayList<CampBoard> list = cDAO.selectBoardList(i, rowBounds);
+		for(CampBoard b : list) {
+			format(b);
+		}
+		return list;
 	}
 
 	@Override
@@ -47,6 +52,7 @@ public class CampBoardServiceImpl implements CampBoardService{
 	@Override
 	public CampBoard selectBoard(int cbNo, String id) {
 		CampBoard b = cDAO.selectBoard(cbNo);
+		format(b);
 	      if(b != null) {
 	    	  if(id != null && !b.getMemberId().equals(id)) {
 	    		  int result = cDAO.updateCount(cbNo);
@@ -71,11 +77,33 @@ public class CampBoardServiceImpl implements CampBoardService{
 	@Override
 	public ArrayList<CampBoard> searchBoardList(PageInfo pi, SearchBoard search) {
 		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
-		return cDAO.searchBoardList(search, rowBounds);
+		ArrayList<CampBoard> list = cDAO.searchBoardList(search, rowBounds);
+		for(CampBoard b : list) {
+			format(b);
+		}
+		return list;
 	}
 
 	@Override
 	public int deleteCampBoard(int cbNo) {
 		return cDAO.deleteCampBoard(cbNo);
 	}
+	
+	@Override
+	public int updateCampBoard(CampBoard b) {
+		return cDAO.updateCampBoard(b);
+	}
+	
+	public void format(CampBoard b) {
+		String DATE_TIME_FORMAT = "YYYY MM-dd";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+        String create = b.getCbCreateDate().format(formatter);
+        String modify = b.getCbModifyDate().format(formatter);
+        
+        if(create.equals(modify)) {
+        	b.setFormatDate(create);
+        }else {
+        	b.setFormatDate("(수정)"+modify);
+        }
+    }
 }

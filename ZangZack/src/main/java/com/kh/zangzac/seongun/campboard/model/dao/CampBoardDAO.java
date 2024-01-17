@@ -29,4 +29,6 @@ public interface CampBoardDAO {
 	ArrayList<CampBoard> searchBoardList(SearchBoard search, RowBounds rowBounds);
 
 	int deleteCampBoard(int cbNo);
+
+	int updateCampBoard(CampBoard b);
 }

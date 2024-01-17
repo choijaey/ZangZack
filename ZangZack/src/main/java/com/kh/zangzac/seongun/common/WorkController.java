@@ -38,19 +38,30 @@ public class WorkController {
 		model.addAttribute("loc", loc);
 	}
 
-	public Photo setAttachment(String[] returnArr, int i) {
+	public Photo setAttachment(String[] returnArr, int i, int j) {
 		Photo a = new Photo();
 		if(i==0) {
 			a.setPhotoRename(returnArr[0]);
 			a.setPhotoPath(returnArr[1]);
-			a.setBoardType(1);
+			a.setBoardType(j);
 			a.setPhotoLevel(0);
 		}else {
 			a.setPhotoRename(returnArr[0]);
 			a.setPhotoPath(returnArr[1]);
-			a.setBoardType(1);
+			a.setBoardType(j);
 			a.setPhotoLevel(1);
 		}
+		
+		return a;
+	}
+	
+	//썸네일 삭제 X
+	public Photo setAttachment(String[] returnArr) {
+		Photo a = new Photo();
+		a.setPhotoRename(returnArr[0]);
+		a.setPhotoPath(returnArr[1]);
+		a.setBoardType(1);
+		a.setPhotoLevel(1);
 		
 		return a;
 	}

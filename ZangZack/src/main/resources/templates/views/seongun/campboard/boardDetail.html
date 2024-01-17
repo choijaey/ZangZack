@@ -37,7 +37,7 @@
 					<div class="profile_area">
 						<span class="author-name">[[${bList.memberName}]]</span>
 						<div class="article_info">
-							<span class="post-date">[[${bList.cbCreateDate}]]</span> 
+							<span class="post-date">[[${bList.formatDate}]]</span> 
 							<span class="post-views">조회수: [[${bList.cbCount}]]</span>
 						</div>
 					</div>
@@ -47,7 +47,7 @@
 		<div class="post-content">
 			<p>[[${bList.cbContent}]]</p>
 			<th:block th:if="${!pList.isEmpty}">
-				<img th:src="${p.photoPath}" alt="게시글 이미지" th:each="p : ${pList}">
+				<img style="max-width:100%;"th:src="${p.photoPath}" alt="게시글 이미지" th:each="p : ${pList}">
 			</th:block>
 		</div>
 		<div class="comments-section">

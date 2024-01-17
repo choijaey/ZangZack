@@ -17,4 +17,6 @@ public interface PhotoDAO {
 
 	int deletePhotoName(String deletePhotoName);
 
+	int updatePhoto(int photoNo);
+
 }

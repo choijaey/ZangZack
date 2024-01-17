@@ -112,4 +112,10 @@
 		set cb_status = 'Y'
 		where cb_no = #{cbNo}
 	</update>
+	
+	<update id="updateCampBoard">
+		update camp_board
+		set cb_title = #{cbTitle}, category_no=#{categoryNo}, cb_content=#{cbContent}
+		where cb_no = #{cbNo}
+	</update>
 </mapper>
