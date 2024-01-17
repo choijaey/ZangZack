@@ -22,4 +22,8 @@ public interface ChatDAO {
 
 	ArrayList<Chatter> chatterList(String roomName);
 
+	int insertChat(ChatRoom cr);
+
+	void deleteChat(String no);
+
 }

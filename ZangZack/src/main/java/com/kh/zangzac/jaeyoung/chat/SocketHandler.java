@@ -50,7 +50,7 @@ public class SocketHandler extends TextWebSocketHandler {
    
    
   @SuppressWarnings("unchecked")
-@Override
+  @Override
    public void handleTextMessage(WebSocketSession session, TextMessage message) {
       //메시지 발송
       String msg = message.getPayload();
