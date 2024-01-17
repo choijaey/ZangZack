@@ -37,7 +37,7 @@ public interface secondHandDAO {
 
 	ArrayList<Reply> selectReply(int spNo);
 
-	ArrayList<Photo> selectPhotoSeconHand(secondHandProduct sp);
+	ArrayList<Photo> selectPhotoSeconHand(Integer spNo);
 
 	int updateAttmSecondHand(ArrayList<Photo> detailList);
 
@@ -49,9 +49,25 @@ public interface secondHandDAO {
 
 	ArrayList<secondHandProduct> selectAdminList(secondHandProduct sp);
 
-	int getListCount(int i);
+	int getListCount();
 
 	ArrayList<secondHandProduct> selectBoardList(int i, RowBounds rowBounds);
+
+	int updateAdminInfo(secondHandProduct sp);
+
+	ArrayList<secondHandProduct> selectSeconHand(int i, RowBounds rowBounds);
+
+	int searchSpCount(HashMap<String, String> map);
+
+	ArrayList<secondHandProduct> searchSpList(HashMap<String, String> map);
+
+	int searchAdminList(HashMap<String, String> map);
+
+	ArrayList<secondHandProduct> searchtAdminList(HashMap<String, String> map, RowBounds rowBounds);
+
+	int updateCount(int spNo);
+
+	
 
 
 

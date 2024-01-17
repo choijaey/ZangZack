@@ -15,4 +15,6 @@ public interface PhotoDAO {
 
 	int deletePhoto(Photo temp);
 
+	int deletePhotoName(String deletePhotoName);
+
 }

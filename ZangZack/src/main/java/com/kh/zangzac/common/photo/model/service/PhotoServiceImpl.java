@@ -11,23 +11,30 @@ import com.kh.zangzac.common.photo.model.vo.Photo;
 
 @Service
 public class PhotoServiceImpl implements PhotoService{
-   
-   @Autowired
-   PhotoDAO pDAO;
+	
+	@Autowired
+	PhotoDAO pDAO;
 
-   @Override
-   public ArrayList<Photo> selectBoardPhoto(SelectCondition b) {
-      return pDAO.selectBoardPhoto(b);
-   }
+	@Override
+	public ArrayList<Photo> selectBoardPhoto(SelectCondition b) {
+		return pDAO.selectBoardPhoto(b);
+	}
 
-   @Override
-   public int insertPhotoCampBoard(ArrayList<Photo> fileList) {
-      return pDAO.insertPhotoCampBoard(fileList);
-   }
+	@Override
+	public int insertPhotoCampBoard(ArrayList<Photo> fileList) {
+		return pDAO.insertPhotoCampBoard(fileList);
+	}
 
-   @Override
-   public int deletePhoto(Photo temp) {
-      return pDAO.deletePhoto(temp);
-   }
+	@Override
+	public int deletePhoto(Photo temp) {
+		return pDAO.deletePhoto(temp);
+	}
+
+	@Override
+	public int deletePhotoName(String deletePhotoName) {
+		return pDAO.deletePhotoName(deletePhotoName);
+	}
+	
+	
 
 }

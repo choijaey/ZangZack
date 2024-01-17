@@ -13,4 +13,6 @@ public interface PhotoService {
 
 	int deletePhoto(Photo temp);
 
+	int deletePhotoName(String deletePhotoName);
+
 }

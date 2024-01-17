@@ -203,10 +203,10 @@ public class FriendController {
             a.setBoardNo(cf.getCfNo()); 
             a.setBoardType(7);
             list.add(a);
+            //DB에 사진 저장
+            pService.insertPhotoCampBoard(list);
         }
         
-        //DB에 사진 저장
-	    pService.insertPhotoCampBoard(list);
 	    
 		return "redirect:champingFriend.jy";
 		
@@ -292,13 +292,85 @@ public class FriendController {
 	   
 	   
 	   @GetMapping("campingFriendEditView.jy")
-		public String campingFriendEditView() {
+		public String campingFriendEditView(@RequestParam("boardNo") int boardNo,Model model) {
 		   
 		   //보드 정보 가져와서 넘기기
+		   CampingFriend cf = cService.selectCampingFriend(boardNo);
 		   
-			return "views/jaeyoung/champingFriendEdit";
+		   model.addAttribute("cf",cf);
+		   
+		   return "views/jaeyoung/champingFriendEdit";
 			
 		}
-	
+	   
+	   @PostMapping("campingFriendEdit.jy")
+	   public String campingFriendEdit(@ModelAttribute CampingFriend cf,@RequestParam("file")MultipartFile file,@RequestParam("preImage")String preImage) {
+		   
+		   int result =0;
+		   //전 사진이 있는 경우만 
+		   if(preImage !=null) {
+			   String[] segments = preImage.split("/");
+			   String imagePath = segments[segments.length - 1];
+			   String imageName = imagePath.split("@")[0];
+			   String checkDelete = imagePath.split("@")[1];
+			   
+			   
+			   //삭제 한다면
+			   if(checkDelete.equals("2")) {
+				   
+				   //구글에서 파일 삭제
+				   imageStorage.deleteImage(cf.getPhotoRename(), "jaeyoung");
+				   
+				   //DB에서 삭제
+				   Photo temp = new Photo();
+				   temp.setBoardNo(cf.getCfNo());
+				   temp.setBoardType(7);
+				   
+				   result = pService.deletePhoto(temp);
+				   
+			   }
+		   }
+		   
+		   //사진 넣기
+	        String name = "jaeyoung";
+	        String[] returnArr = imageStorage.saveImage(file, name);
+	        Photo a = new Photo();
+	        ArrayList<Photo> list = new ArrayList<Photo>();
+	        
+	        //구글 클라우드에 사진 저장
+	        if (returnArr != null) {
+	        	a.setPhotoRename(returnArr[0]);
+	            a.setPhotoPath(returnArr[1]);
+	            a.setPhotoLevel(0);
+	            a.setBoardNo(cf.getCfNo()); 
+	            a.setBoardType(7);
+	            list.add(a);
+	            //DB에 사진 저장
+	            pService.insertPhotoCampBoard(list);
+	        }
+	        
+	        //글 내용 수정
+	        int result2 = cService.updateCampingFriend(cf);
+		   
+		   
+		   if(result +result2 > 0) {
+			   return "redirect:champingFriend.jy";
+		   }
+		   
+		   
+		   return "redirect:home.do";
+	   }
+	   
+	   
+	   @GetMapping("campingFriendDelete.jy")
+	   public String campingFriendDelete(@ModelAttribute CampingFriend cf) {
+		   int result = cService.deleteCampingFriend(cf);
+		   
+		   if(result  > 0) {
+			   return "redirect:champingFriend.jy";
+		   }
+		   
+		   return "redirect:home.do";
+	   }
 	
 }
