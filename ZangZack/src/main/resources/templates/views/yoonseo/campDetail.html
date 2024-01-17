@@ -87,7 +87,7 @@
 		    <div style="margin-top: 10px;">
 			    <div id="carouselExampleFade" class="carousel slide carousel-fade carousel-dark w-50" data-bs-ride="carousel" style=" float: left; margin-bottom: 60px; z-index: 0; overflow: hidden;">
 				     <div class="carousel-inner" >
-				       <div class="carousel-item active"  th:each="list : ${list}" style="height:450px;">
+				       <div th:each="list, iterStat : ${list}" th:class="${iterStat.index == 0} ? 'carousel-item active' : 'carousel-item'" style="height:450px;">
 				        <th:block th:if="${#strings.containsIgnoreCase(list.photoRename, 'jpg') 
 					                       or #strings.containsIgnoreCase(list.photoRename, 'png') 
 					                        or #strings.containsIgnoreCase(list.photoRename, 'jpeg')}">
@@ -131,9 +131,9 @@
 				     <td>운영일</td>
 				     <td>[[${camp.cgManageDate}]]</td>
 				   </tr>
-				   <tr th:if="${camp.cgPage != null}">
+				   <tr th:if="${camp.cgPage != null && camp.cgPage != '-' && camp.cgPage != ''}">
 				     <td>홈페이지</td>
-				     <td><a th:href="@{${camp.cgPage}}">홈페이지 바로가기</a></td>
+				     <td><a th:href="@{${camp.cgPage}}" th:target="_blank">홈페이지 바로가기</a></td>
 				   </tr>
 				   <tr>
 				     <td>예약방법</td>

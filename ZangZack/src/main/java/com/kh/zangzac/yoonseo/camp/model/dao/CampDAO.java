@@ -62,5 +62,5 @@ public interface CampDAO {
 
 	ArrayList<Photo> selectMainPhoto(int[] cgNo);
 
-	ArrayList<Photo> selectMainPhoto(ArrayList<Integer> intArrayList);
+	ArrayList<CampingGround> selectMainPhoto(ArrayList<Integer> intArrayList);
 }

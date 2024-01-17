@@ -55,7 +55,7 @@ public interface CampService {
 
 	ArrayList<CampingGround> getMainList(String recomendation);
 
-	ArrayList<Photo> selectMainPhoto(ArrayList<Integer> intArrayList);
+	ArrayList<CampingGround> selectMainPhoto(ArrayList<Integer> intArrayList);
 
 	
 }

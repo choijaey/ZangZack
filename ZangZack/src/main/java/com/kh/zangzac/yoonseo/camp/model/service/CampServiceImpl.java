@@ -156,7 +156,7 @@ public class CampServiceImpl implements CampService {
 	}
 
 	@Override
-	public ArrayList<Photo> selectMainPhoto(ArrayList<Integer> intArrayList) {
+	public ArrayList<CampingGround> selectMainPhoto(ArrayList<Integer> intArrayList) {
 		return cDAO.selectMainPhoto(intArrayList);
 	}
 

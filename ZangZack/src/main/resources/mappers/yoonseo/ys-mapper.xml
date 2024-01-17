@@ -181,14 +181,14 @@
 		]]> 
    </select>
    
-   <select id="selectMainPhoto" resultType="Photo" >
-     select *
-     from photo
-     where (
-     <foreach collection="list" item="item" separator=" OR ">
-        BOARD_NO = #{item}
-     </foreach>
-      ) and photo_status = 'N'AND BOARD_TYPE=3 AND PHOTO_LEVEL = 0
+   <select id="selectMainPhoto" resultType="CampingGround" >
+     <![CDATA[
+     select cg_region, cg_name, photo_path, photo_rename
+     from camping_ground join photo on (cg_no = board_no) 
+     where  photo_status = 'N'AND BOARD_TYPE=3 AND PHOTO_LEVEL = 0
+            and cg_recomendation = 'Y' and rownum <= 3  AND CG_STAR_POINT >= 4.5
+     order by cg_star_point desc
+     ]]>
    </select>
    
    

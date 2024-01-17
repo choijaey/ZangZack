@@ -378,34 +378,7 @@ public class CampController {
 		
 	}
 	
-	@GetMapping("/")
-	public String main(Model model) {
-		
-		String recomendation = "Y";
-		ArrayList<CampingGround> list = cService.getMainList(recomendation);
-		System.out.println(list.size());
-		
-		ArrayList<Integer> intArrayList = new ArrayList<>();
-
-		for (CampingGround cg : list) {
-		    intArrayList.add(cg.getCgNo());
-		}
-		System.out.println(intArrayList);
-		
-		
- 		ArrayList<Photo> photo = cService.selectMainPhoto(intArrayList);
- 		System.out.println(photo);
-		
-		if(list != null) {
-			model.addAttribute("list", list);
-			model.addAttribute("photo", photo);
-			
-			return"index";
-		}else {
-			return"index";
-		}
 	
-	}
 	
 	
 
