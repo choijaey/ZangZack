@@ -135,31 +135,25 @@
         function setupListeners() {
             // 파일 삭제 버튼 이벤트 리스너
             document.querySelectorAll('.delete-upload-container').forEach(function(button) {
-            button.addEventListener('click', function() {
-                // 현재 버튼과 관련된 hidden input 찾기
-                var hiddenInput = this.closest('.upload-container').querySelector('input[type="hidden"]');
-                // hidden input 값 업데이트
-                if (hiddenInput && hiddenInput.type === 'hidden' && !hiddenInput.value.includes('del')) {
-                    hiddenInput.value += 'del';
-                    console.log(hiddenInput.value);
-                }
+                button.addEventListener('click', function() {
+                    // 현재 버튼과 관련된 hidden input 찾기 (부모의 부모의 부모의 이전 요소)
+                    var hiddenInput = this.parentNode.parentNode.parentNode.previousElementSibling;
+                    updateHiddenInput(hiddenInput);
 
-                // 현재 버튼이 포함된 upload-container 요소 찾기 및 제거
-                var uploadContainer = this.closest('.upload-container');
-                if (uploadContainer) {
-                    uploadContainer.remove();
-                }
+                    // upload-container 요소 제거
+                    var uploadContainer = this.closest('.upload-container');
+                    if (uploadContainer) {
+                        uploadContainer.remove();
+                    }
+                });
             });
-        });
 
             // 취소하기 버튼 이벤트 리스너
             document.querySelectorAll('.delete-upload-file').forEach(function(button) {
                 button.addEventListener('click', function() {
-                    var hiddenInput = this.closest('.upload-container').querySelector('input[type="hidden"]');
-                    var imagePreview = this.closest('.upload-container').querySelector('.image-preview');
-                    hideImagePreview(imagePreview);
+                    // 현재 버튼과 관련된 hidden input 찾기 (부모의 부모의 이전 요소)
+                    var hiddenInput = this.parentNode.parentNode.previousElementSibling;
                     updateHiddenInput(hiddenInput);
-                    console.log(hiddenInput);
                 });
             });
         }
@@ -168,20 +162,14 @@
         function updateHiddenInput(hiddenInput) {
             if (hiddenInput && hiddenInput.type === 'hidden' && !hiddenInput.value.includes('del')) {
                 hiddenInput.value += 'del';
-            }
-        }
-
-        // 이미지 미리보기 숨기는 함수
-        function hideImagePreview(imagePreview) {
-            if (imagePreview) {
-                imagePreview.style.display = 'none';
-                imagePreview.src = '';
+                console.log(hiddenInput.value); // 값 확인을 위한 콘솔 로그
             }
         }
 
         // 이벤트 리스너 설정
         setupListeners();
     });
+
 
 
 
