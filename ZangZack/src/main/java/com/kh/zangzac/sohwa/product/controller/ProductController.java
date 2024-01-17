@@ -135,7 +135,7 @@ public class ProductController {
       if(!categoryNo.equals("0")) {
          listCount = pService.getListCount(categoryNo);
          int currentPage = page;
-         pi = Pagination.getPageInfo(currentPage, listCount, 16);
+         pi = Pagination.getPageInfo(currentPage, listCount, 12);
          categoryMap.put("categoryNo", categoryNo);
          categoryMap.put("standard", standard);
          pList = pService.selectProductList(pi, categoryMap);
@@ -144,7 +144,7 @@ public class ProductController {
       }else {
          listCount = pService.getListCountKeyword(keyword);
          int currentPage = page;
-         pi = Pagination.getPageInfo(currentPage, listCount, 16);
+         pi = Pagination.getPageInfo(currentPage, listCount, 12);
          
          searchMap.put("keyword", keyword);
          searchMap.put("standard", standard);
@@ -156,8 +156,7 @@ public class ProductController {
       
       
       ArrayList<Review> rList = pService.selectproductAllReview();
-      
-      
+      System.out.println(pi.getMaxPage());
       if(aList != null) {
          model.addAttribute("thList", thList);
          model.addAttribute("rList", rList);
@@ -201,6 +200,67 @@ public class ProductController {
 //      }
 //   }
 //   
+   
+   @GetMapping("infiniteScroll.so")
+   @ResponseBody
+   public HashMap<String, Object> infiniteScroll(@RequestParam(value="keyword", defaultValue="") String keyword, @RequestParam(value="standard", defaultValue="1") String standard, @RequestParam(value="categoryNo", defaultValue="0") String categoryNo, @RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
+	   
+	   int listCount = 0;
+	      HashMap<String, String> categoryMap = new HashMap<>();
+	      HashMap<String, String> searchMap = new HashMap<>();
+	      ArrayList<Product> pList = new ArrayList<>();
+	      ArrayList<Attachment> aList = new ArrayList<>();
+	      ArrayList<Attachment> thList = new ArrayList<>();
+	      ArrayList<Option> oList = new ArrayList<>();
+	      PageInfo pi = new PageInfo();
+	      int currentPage = 0;
+	      //categoryNo가 0일때는 keyword가져가기
+	      //keyword가 ""일때는 categoryNo가져가기
+	      if(!categoryNo.equals("0")) {
+	         listCount = pService.getListCount(categoryNo);
+	         currentPage = page;
+	         pi = Pagination.getPageInfo(currentPage, listCount, 12);
+	         categoryMap.put("categoryNo", categoryNo);
+	         categoryMap.put("standard", standard);
+	         pList = pService.selectProductList(pi, categoryMap);
+	         aList = pService.selectPhotoList(categoryNo);
+	         thList = pService.selectPhotothList(categoryNo);
+	      }else {
+	         listCount = pService.getListCountKeyword(keyword);
+	         currentPage = page;
+	         pi = Pagination.getPageInfo(currentPage, listCount, 12);
+	         
+	         searchMap.put("keyword", keyword);
+	         searchMap.put("standard", standard);
+	         
+	         pList = pService.searchProduct(pi, searchMap);
+	         aList = pService.searchPhoto(searchMap);
+	         thList = pService.searchPhototh(searchMap);
+	      }
+	      
+	      
+	      ArrayList<Review> rList = pService.selectproductAllReview();
+	      HashMap<String, Object> map = new HashMap<>();
+	      if(aList != null) {
+	    	 map.put("currentPage", currentPage);
+	         map.put("thList", thList);
+	         map.put("rList", rList);
+	         map.put("categoryNo", categoryNo);
+	         map.put("keyword", keyword);
+	         map.put("aList", aList);
+	         map.put("pList", pList);
+	         map.put("pi", pi);
+	         map.put("loc", request.getRequestURI());
+	         return map;
+	      }else {
+	         throw new ProductException("상품 목록 조회 실패");
+	      }
+   }
+   
+   
+   
+   
+   
    
    @GetMapping("productDetail.so")
    public String productDetailView(@RequestParam(value="reviewStatus", defaultValue="1") int reviewStatus, @RequestParam("productNo") int productNo, Model model) {
