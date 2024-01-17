@@ -1,6 +1,7 @@
 package com.kh.zangzac.yoonseo.camp.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
 import com.kh.zangzac.common.model.vo.Attachment;
@@ -58,6 +59,8 @@ public interface CampService {
 	ArrayList<CampingGround> selectMainPhoto(ArrayList<Integer> intArrayList);
 
 	int updateCount(int no);
+
+	/* int updateLike(HashMap<String, Object> like, String check); */
 
 	
 }

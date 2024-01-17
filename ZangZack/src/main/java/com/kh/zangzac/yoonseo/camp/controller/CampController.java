@@ -1,6 +1,7 @@
 package com.kh.zangzac.yoonseo.camp.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -18,12 +20,15 @@ import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.photo.model.vo.Photo;
+import com.kh.zangzac.ming.member.model.vo.Member;
 import com.kh.zangzac.yoonseo.camp.model.exception.CampException;
 import com.kh.zangzac.yoonseo.camp.model.service.CampService;
 import com.kh.zangzac.yoonseo.camp.model.vo.CampingGround;
+
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
-
+@SessionAttributes("loginUser")
 @Controller
 public class CampController {
 	
@@ -98,7 +103,13 @@ public class CampController {
 	@GetMapping("campDetail.ys")
 	public String selectCampDetail(@RequestParam("no") int no,
 			                       @RequestParam("page") int page,
-			                       Model model) {
+			                       Model model,HttpSession session) {
+		
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		String id = null;
+		if(loginUser != null) {
+			id = loginUser.getMemberId();
+		}
 		
 		CampingGround camp = cService.selectCampingDetail(no);
 		int count = cService.updateCount(no);
@@ -120,6 +131,7 @@ public class CampController {
 		   model.addAttribute("page", page);
 		   model.addAttribute("infoArray", infoArray);
 		   model.addAttribute("point", point);
+		   model.addAttribute("id", id);
 		  
 		   
 		   return"views/yoonseo/campDetail";   
@@ -385,5 +397,4 @@ public class CampController {
 	
 
 	
-
 }

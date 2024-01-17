@@ -65,4 +65,6 @@ public interface CampDAO {
 	ArrayList<CampingGround> selectMainPhoto(ArrayList<Integer> intArrayList);
 
 	int updateCount(int no);
+
+	int updateLike(HashMap<String, Object> like, String check);
 }

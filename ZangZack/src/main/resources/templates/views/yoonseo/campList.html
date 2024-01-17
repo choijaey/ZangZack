@@ -89,12 +89,7 @@
 			        <div>
 			          <h5 class="card-title" style="float: left;" th:text="|[${list.cgRegion}]|"></h5>
 			          <h5 class="card-title" style="float: left; margin-left: 10px;">[[${list.cgName}]]</h5>
-			          <span id="likeCount" style="float: left; margin-left: 20%;">
-			             <span id="fillHeart">
-			               <i class="bi-heart-fill fs-5" style="color:red;"></i>
-			             </span>
-			           </span>
-			          <span style="float: left; margin-left: 10px;">조회수 [[${list.cgCount}]]</span>
+			          <span style="float: left; margin-left: 30%;">조회수 [[${list.cgCount}]]</span>
 			          <div class="score" style="margin-left: 80%;">  
 			            <div class="foreground" style="float: left;">
 			               <span class="background" th:style="'width: ' + ${list.point} + '%;'"></span><!-- 4.8 x 100 / 5 = 96 퍼센트 계산 식.-->

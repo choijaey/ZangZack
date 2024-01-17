@@ -165,6 +165,15 @@ public class CampServiceImpl implements CampService {
 		return cDAO.updateCount(no);
 	}
 
+	/*
+	 * @Override public int updateLike(HashMap<String, Object> like, String check) {
+	 * 
+	 * int result = 0;
+	 * 
+	 * if(check.equals(""))
+	 * 
+	 * return cDAO.updateLike(like,check); }
+	 */
 
 
 
