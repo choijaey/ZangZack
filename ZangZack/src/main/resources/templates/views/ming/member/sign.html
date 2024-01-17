@@ -43,6 +43,18 @@
 	.input-group{
 		margin: 8px
 	}
+	#kakaoBtn{
+		background-color:white;
+		color:rgb(251, 125, 83);
+		border: 1px solid rgb(251, 125, 83);
+		text-decoration: none;
+		margin-top:50px;
+		padding-left: 137px;
+		padding-right: 137px;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		border-radius: 10px;
+	}
 </style>
 </head>
 <body>
@@ -140,11 +152,10 @@
 	            </div>
 	            <button style="background-color: rgb(251, 125, 83); color: white; margin-bottom: 10px;">
 	              Sign in
-	            </button>
+	            </button><br><br>
 	           <a class="btnset btnset-round contents-start-kakao" 
-				    href="https://kauth.kakao.com/oauth/authorize?client_id=18ae7b1bab696aadfa39200fae9ad11b&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2FkakaoLogin&response_type=code&prompt=login">
-				    <img src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg" width="222"
-				        alt="카카오 로그인 버튼" />
+				    href="https://kauth.kakao.com/oauth/authorize?client_id=18ae7b1bab696aadfa39200fae9ad11b&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2FkakaoLogin&response_type=code&prompt=login"
+				   id="kakaoBtn">카카오톡 연동하기
 				</a>
 	            <p style="text-align: center;">
 	              <a href="home.me" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.2em;" >

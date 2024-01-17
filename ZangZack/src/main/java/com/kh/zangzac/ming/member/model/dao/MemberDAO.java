@@ -2,6 +2,7 @@ package com.kh.zangzac.ming.member.model.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -88,9 +89,7 @@ public interface MemberDAO {
 
 	int deleteReview(int reviewNo);
 
-	int getmyBoardListCount(int i);
-
-	int getmySecondHandProductListCount(int i);
+	int getmySecondHandProductListCount(Map<String, Object> paramMap);
 
 	ArrayList<secondHandProduct> selectsecondHandProduct(String memberId, RowBounds rowBounds);
 
@@ -103,5 +102,7 @@ public interface MemberDAO {
 	ArrayList<CampBoard> searchCbList(RowBounds rowBounds, HashMap<String, String> map);
 
 	int searchCbListCount(HashMap<String, String> map);
+
+	int getmyBoardListCount(Map<String, Object> paramMap);
 
 }

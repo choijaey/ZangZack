@@ -228,6 +228,7 @@
 				    				const memberId = memberData.memberId;
 				    				const memberName = memberData.memberName;
 				    				const memberNickName = memberData.memberNickName;
+				    				const nickNameParts = memberNickName.split('#');
 				    				const memberEmail = memberData.memberEmail;
 				    				const memberBirth = memberData.memberBirth;
 				    				const memberPhone = memberData.memberPhone;
@@ -238,7 +239,7 @@
 				    				
 				    				document.getElementById('memberId').innerText =  memberId;
 				    				document.getElementById('memberName').innerText =  memberName;
-				    				document.getElementById('memberNickName').innerText = memberNickName;
+				    				document.getElementById('memberNickName').innerText = nickNameParts[0];
 				    				document.getElementById('memberEmail').innerText =  memberEmail;
 				    				document.getElementById('memberBirth').innerText = memberBirth;
 				    				document.getElementById('memberPhone').innerText = memberPhone;

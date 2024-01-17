@@ -499,7 +499,7 @@ th{
 }
 
 .td1{
-   width:3%;
+   width:5%;
 }
 
 .td2{
@@ -511,23 +511,20 @@ th{
 }
 
 .td4{
-   width:8%;
+   width:25%;
 }
 
 .td5{
-   width:20%;
+   width:10%;
 }
 .td6{
-   width:12%;
+   width:10%;
 }
 .td7{
    width:5%;
 }
-.td7 div{
-   text-align: center;
-}
 .td8{
-   width:5%;
+   width:15%;
    text-align: center;
 }
 

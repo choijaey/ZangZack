@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
@@ -383,14 +384,14 @@ public class MemberServiceImpl implements MemberService{
 		return mDAO.deleteSelectReview(reviewNo);
 	}
 
-	@Override
-	public int getmyBoardListCount(int i) {
-		return mDAO.getmyBoardListCount(i);
-	}
+//	@Override
+//	public int getmyBoardListCount(String memberId,int i) {
+//		return mDAO.getmyBoardListCount(memberId,i);
+//	}
 
 	@Override
-	public int getmySecondHandProductListCount(int i) {
-		return mDAO.getmySecondHandProductListCount(i);
+	public int getmySecondHandProductListCount(Map<String, Object> paramMap) {
+		return mDAO.getmySecondHandProductListCount(paramMap);
 	}
 
 	@Override
@@ -437,6 +438,11 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int searchCbListCount(HashMap<String, String> map) {
 		return mDAO.searchCbListCount(map);
+	}
+
+	@Override
+	public int getmyBoardListCount(Map<String, Object> paramMap) {
+		return mDAO.getmyBoardListCount(paramMap);
 	}
 
 

@@ -2,6 +2,7 @@ package com.kh.zangzac.ming.member.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import com.kh.zangzac.common.model.vo.PageInfo;
@@ -78,9 +79,7 @@ public interface MemberService {
 
 	String deleteSelectReview(int reviewNo);
 
-	int getmyBoardListCount(int i);
-
-	int getmySecondHandProductListCount(int i);
+	int getmySecondHandProductListCount(Map<String, Object> paramMap);
 
 	ArrayList<secondHandProduct> selectsecondHandProduct(String memberId, PageInfo pi);
 
@@ -93,6 +92,8 @@ public interface MemberService {
 	int searchSPListCount(HashMap<String, String> map);
 
 	int searchCbListCount(HashMap<String, String> map);
+
+	int getmyBoardListCount(Map<String, Object> paramMap);
 
 
 

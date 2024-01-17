@@ -10,6 +10,32 @@
 <link href="../css/ming/member/MyPage.css" rel="stylesheet">
 <link href="../css/ming/member/MyBoardList.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<style>
+	#searchMem{
+		width: 30px;
+		height: 30px;
+		position: relative;
+		border: 1px solid rgb(100, 100, 100);
+		border-radius: 10px;
+	}
+	#searchMem img{
+		width: 30px;
+		height: 30px;
+		position: relative;
+	}
+	#search1{
+		position: relative;
+		top: -30px;
+	}
+	.dropdown-item{
+		position: relative;
+		top:32px;
+		left: -100px;
+		width: 80px;
+		height: 30px;
+	}
+	
+</style>
 </head>
 <body>
 	<div class="logo">
@@ -33,10 +59,6 @@
 			<li>
 				<img src="../image/ming/member/icons8-edit-64.png" style="width: 60px;"></img>
 				<a href="myBoardList.me">내가 쓴 게시글</a>
-			</li>
-			<li>
-				<img src="../image/ming/member/icons8-댓글-58.png" style="width: 60px;"></img>
-				<a href="#">내가 쓴 댓글</a>
 			</li>
 			<li>
 				<img src="../image/ming/member/리뷰.png" style="width: 60px;"></img>
@@ -85,7 +107,7 @@
 		         		<option value="categoryName" name="categoryName" th:selected="${searchType eq 'categoryName'}">분류</option>
 		         	</select>
 		            <input type="text" name="keyword">
-		            <button type="submit" id="searchMem">검색</button>
+		            <button type="submit" id="searchMem"><img src="../image/ming/member/—Pngtree—magnifying glass icon_4419957.png"></button>
 		         </div>
 	         </form>
 	      </div>
@@ -95,8 +117,8 @@
 	         <tr>
 	            <th class="td1">글번호</th>
 	            <th class="td2">분류</th>
-	            <th class="td3">작성자</th>
 	            <th class="td4">제목</th>
+	            <th class="td3">작성자</th>
 	            <th class="td5">조회수</th>
 	            <th class="td6">추천</th>
 	            <th class="td7">댓글수</th>
@@ -106,16 +128,16 @@
 	         <tr th:each="cb:${cbList}">
 		            <td class="td1">[[${cb.cbNo}]]</td>
 		            <td class="td2">[[${cb.categoryName}]]</td>
-		            <td class="td3">[[${cb.memberName}]]</td>
 		            <td class="td4">[[${cb.cbTitle}]]</td>
+		            <td class="td3">[[${cb.memberName}]]</td>
 		            <td class="td5">[[${cb.cbCount}]]</td>
 		            <td class="td6">[[${cb.heartCount}]]</td>
 		            <td class="td7">[[${cb.replyCount}]]</td>
-		            <td class="td7">[[${cb.cbModifyDate}]]</td>
+		            <td class="td8">[[${cb.cbModifyDate}]]</td>
 	         </tr>
 	         
 	      </table>
-		      <nav class="nav2" aria-label="Page navigation example" style="float: right;" th:with="loc=${loc}">
+		      <nav class="nav2" th:if="${!cbList.isEmpty}" aria-label="Page navigation example" style="float: right;" th:with="loc=${loc}">
 		         <ul class="pagination">
 		               <li class="page-item">
 		               	  <a class="page-link" th:if="${pi.currentPage <= 1}" aria-label="Previous">

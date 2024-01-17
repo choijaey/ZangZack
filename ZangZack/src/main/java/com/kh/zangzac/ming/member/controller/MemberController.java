@@ -721,10 +721,15 @@ public class MemberController {
 		   
 		   Member loginUser = (Member) model.getAttribute("loginUser");
 		   String memberId = loginUser.getMemberId();
-		   int listCount = mService.getmyBoardListCount(1);
+		   
+		   Map<String, Object> paramMap = new HashMap<>();
+		   paramMap.put("memberId", memberId);
+		   paramMap.put("1", 1);
+		   int listCount = mService.getmyBoardListCount(paramMap);
+
 		   PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
+		   
 		   ArrayList<CampBoard> cbList = mService.selectCampBoard(memberId,pi); 
-		  
 		   if(cbList != null) {
 			   model.addAttribute("cbList",cbList);
 			   model.addAttribute("pi",pi);
@@ -767,7 +772,13 @@ public class MemberController {
 			   								@ModelAttribute secondHandProduct sp,HttpServletRequest request) {
 		   Member loginUser = (Member) model.getAttribute("loginUser");
 		   String memberId = loginUser.getMemberId();
-		   int listCount = mService.getmySecondHandProductListCount(4);
+		   
+		   Map<String, Object> paramMap = new HashMap<>();
+		   paramMap.put("memberId", memberId);
+		   paramMap.put("4", 4);
+		   int listCount = mService.getmySecondHandProductListCount(paramMap);
+		   System.out.println(listCount);
+		   
 		   PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
 		   ArrayList<secondHandProduct> spList = mService.selectsecondHandProduct(memberId,pi); 
 		   

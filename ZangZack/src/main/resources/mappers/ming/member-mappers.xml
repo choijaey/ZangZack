@@ -196,16 +196,16 @@
         where board_type = 6 and board_no=#{review_no}
 	</select>
 	
-	<select id="getmySecondHandProductListCount" resultType="_int">
+	<select id="getmySecondHandProductListCount" resultType="_int" parameterType="map">
 		select count(*)
 		from SECONDHAND_PRODUCT
-		where SP_STATUS = 'N'
+		where SP_STATUS = 'N' AND member_id = #{memberId}
 	</select>
 	
-	<select id="getmyBoardListCount" resultType="_int">
-		select count(*)
-		from CAMP_BOARD
-		where CB_STATUS = 'N'
+	<select id="getmyBoardListCount" resultType="_int" parameterType="map">
+	    SELECT COUNT(*)
+	    FROM CAMP_BOARD
+	    WHERE CB_STATUS = 'N' AND member_id = #{memberId}
 	</select>
 	
 	<select id="selectsecondHandProduct" resultType="secondHandProduct">
