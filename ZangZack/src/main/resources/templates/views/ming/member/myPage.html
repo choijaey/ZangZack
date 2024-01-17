@@ -349,10 +349,10 @@
 	 	//닉네임 정규식
 		let checkNickName = false; // 전역 변수로 선언
 
-		document.getElementById('memberNickName').addEventListener('input', function () {
+		document.getElementById('memberNickName').addEventListener('blur', function () {
 		    let nickNameval = $('#memberNickName').val();
 		    let nickNamevalcheck = /^[ㄱ-ㅎㅏ-ㅣ가-힣가-힣A-Za-z0-9]+$/;
-		    let prohibitedWords = ['ㅅㅂ', '염병', '옘병', '시발', '시바', 'ㅂㅅ', '미친', 'ㅂ1ㅅ', '수1발'];
+		    let prohibitedWords = ['ㅅㅂ', '염병', '옘병', '시발', '시바', 'ㅂㅅ', '미친', 'ㅂ1ㅅ', '수1발','tlqkf'];
 		
 		    if (this.value.trim() === '') {
 		        memberNickName.style.borderColor = 'red';

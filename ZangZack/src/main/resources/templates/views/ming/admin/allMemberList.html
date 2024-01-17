@@ -43,14 +43,26 @@
       	font-weight: bold;
       	padding-bottom: 5px;
       }
-      .modal_body p{
-      	padding: 7px;
+      .modal_body div{
+      	display: flex;
+	    flex-direction: column;
+	    align-items: flex-start;
       }
       .selectState{
       	color: rgb(251, 125, 83);
       	font-weight: bold;
       }
 	  .unselectState{background: none;}
+	  
+	  .member-info {
+	    display: flex;
+	    flex-direction: column;
+	    align-items: flex-start;
+	  }
+	 #modalP{
+	 	font-size: 0.8em;
+	 	margin-bottom: -30px;
+	 }
   </style>
 </head>
 <body>
@@ -76,7 +88,7 @@
       
       <table id="allMember">
          <tr>
-            <th class="td1"><input type="checkbox" id="allSelect" onclick="toggleAllCheckboxes('allOrder', 'allSelect')"></th>
+            <th class="td1" style="display: none;"><input type="checkbox" id="allSelect" onclick="toggleAllCheckboxes('allOrder', 'allSelect')"></th>
             <th class="td2">아이디</th>
             <th class="td3">이름</th>
             <th class="td4">닉네임</th>
@@ -87,10 +99,10 @@
          </tr>
          
          <tr th:each="m:${list}">
-	            <td class="td1"><input type="checkbox"></td>
+	            <td class="td1" style="display: none;"><input type="checkbox"></td>
 	            <td class="td2">[[${m.memberId}]]</td>
 	            <td class="td3">[[${m.memberName}]]</td>
-	            <td class="td4">[[${m.memberNickName}]]</td>
+	            <td class="td4" th:text="${#strings.substringBefore(m.memberNickName, '#')}"></td>
 	            <td class="td5">[[${m.memberAddress.replace('@', ' ')}]]</td>
 	            <td class="td6">[[${m.memberPhone}]]</td>
 	            <td class="td7"> 
@@ -134,15 +146,15 @@
 	<div class="modal">
 		<div class="modal_body">
 			<p class="modal_title">회원정보</p>
-			<img id="memberProfilePath" style="width: 80px; position: relative; left: 170px;" alt="프로필 이미지" />
-			<p id="memberId">ID:</p>
-			<p id="memberName">NAME</p>
-			<p id="memberNickName">NICKNAME</p>
-			<p id="memberEmail">EMAIL</p>
-			<p id="memberBirth">생일</p>
-			<p id="memberPhone">PHONE</p>
-			<p id="memberAddress">ADDRESS</p>
-			<p id="memberEnrollDate">가입일</p>
+			<img id="memberProfilePath" style="width: 80px; height:80px; position: relative; border-radius:50%; left: 170px;" alt="프로필 이미지" />
+				<br><div style="font-size: 1.1em;">아이디<p style="color:rgb(128, 128, 128); margin-bottom: -16px; margin-left:10px; font-size: 0.9em;" id="memberId"></p></div><br>
+				<div style="font-size: 1.1em;">이름<p style="color:rgb(128, 128, 128); margin-bottom: -16px; margin-left:10px; font-size: 0.9em;" id="memberName"> </p></div><br>
+				<div style="font-size: 1.1em;">닉네임<p style="color:rgb(128, 128, 128); margin-bottom: -16px; margin-left:10px; font-size: 0.9em;" id="memberNickName"> </p></div><br>
+				<div style="font-size: 1.1em;">이메일<p style="color:rgb(128, 128, 128); margin-bottom: -16px; margin-left:10px; font-size: 0.9em;" id="memberEmail"> </p></div><br>
+				<div style="font-size: 1.1em;">생년월일:<p style="color:rgb(128, 128, 128); margin-bottom: -16px; margin-left:10px; font-size: 0.9em;" id="memberBirth"> </p></div><br>
+				<div style="font-size: 1.1em;">핸드폰<p style="color:rgb(128, 128, 128); margin-bottom: -16px; margin-left:10px; font-size: 0.9em;" id="memberPhone"> </p></div><br>
+				<div style="font-size: 1.1em;">주소<p style="color:rgb(128, 128, 128); margin-bottom: -16px; margin-left:10px; font-size: 0.9em;" id="memberAddress"> </p></div><br>
+				<div style="font-size: 1.1em;">가입일<p style="color:rgb(128, 128, 128); margin-bottom: -16px; margin-left:10px; font-size: 0.9em;" id="memberEnrollDate"> </p></div><br>
 		 </div>
 	</div>
    <script>
@@ -224,14 +236,14 @@
 				    				const memberEnrollDate = memberData.memberEnrollDate;
 				    				const memberProfilePath = memberData.memberProfilePath;
 				    				
-				    				document.getElementById('memberId').innerText = '아이디 : ' + memberId;
-				    				document.getElementById('memberName').innerText = '이름 : ' + memberName;
-				    				document.getElementById('memberNickName').innerText = '닉네임 : ' + memberNickName;
-				    				document.getElementById('memberEmail').innerText = '이메일 : ' + memberEmail;
-				    				document.getElementById('memberBirth').innerText = '생년월일 : ' + memberBirth;
-				    				document.getElementById('memberPhone').innerText = '전화번호 : ' + memberPhone;
-				    				document.getElementById('memberAddress').innerText = '주소 : ' + formattedAddress;
-				    				document.getElementById('memberEnrollDate').innerText = '가입일 : ' + memberEnrollDate;
+				    				document.getElementById('memberId').innerText =  memberId;
+				    				document.getElementById('memberName').innerText =  memberName;
+				    				document.getElementById('memberNickName').innerText = memberNickName;
+				    				document.getElementById('memberEmail').innerText =  memberEmail;
+				    				document.getElementById('memberBirth').innerText = memberBirth;
+				    				document.getElementById('memberPhone').innerText = memberPhone;
+				    				document.getElementById('memberAddress').innerText = formattedAddress;
+				    				document.getElementById('memberEnrollDate').innerText = memberEnrollDate;
 				    				document.getElementById('memberProfilePath').src = memberProfilePath;
 				    				
 				    			},

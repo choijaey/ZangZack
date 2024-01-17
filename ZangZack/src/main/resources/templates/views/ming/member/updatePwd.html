@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link href="../css/ming/member/MyPage.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <style>
+input:focus {outline:none;}
 </style>
 </head>
 <body>
@@ -67,17 +67,18 @@
 			<span class="editTitle">비밀번호 수정</span><br>
 			<form action="changePwd.me" method="post" onsubmit="return NoSign()">
 			    <input type="password" class="updateInput" name="currentPwd" id="currentPwd" placeholder="현재 비밀번호">
-			    <input type="password" class="updateInput" name="newMemberPwd" placeholder="새 비밀번호">
-			    <input type="password" class="updateInput" name="configPwd" placeholder="새 비밀번호 확인">
+			    <input type="password" class="updateInput" name="newMemberPwd" id="newMemberPwd" placeholder="새 비밀번호">
+			    <input type="password" class="updateInput" name="configPwd" id="configPwd" placeholder="새 비밀번호 확인">
 			    <input type="tel" th:value="${loginUser.memberPhone}" id="phone" class="updateInput" name="memberPhone" placeholder="전화번호(-제외)">
 				<input type="button" id="send" value="코드전송" class="updateBtn" >
 				<input type="text" id="userNum" class="updateInput" name="phoneCode" placeholder="인증코드">
 				<input type="button" id="enterBtn" value="인증확인" class="updateBtn" >
-     			<button class="btn-hover color-2" type="submit" style=" left:250px;">수정</button>
+     			<button class="btn-hover color-2"  type="submit" style=" left:250px;">수정</button>
 				<button class="btn-hover color-1" type="reset" style=" left:550px;">취소</button>
 			</form>
 		</div>	
 
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 	<script>
 	 	document.getElementById('deleteMember').addEventListener('click', function(event) {
 	 		event.preventDefault();
@@ -114,31 +115,46 @@
 	 	
 	</script>
 	
-	<script>
+	<script th:inline="javascript">
+	window.onload = function() {
+        /*<![CDATA[*/
+        var msg = /*[[${msg}]]*/'';
+        /*]]>*/
+        
+           if(msg && msg.trim().length > 0) {
+                alert(msg);
+            }
+        	
+        }
+	
 		<!-- 비밀번호 확인 + 정규식 -->
-	    let checkPwd = false;
-		function focusOut(){
-			let pwd = document.getElementById("pwd");
-	        let pwdConfirm = document.getElementById("pwdConfirm");
-	        let pwdcheck = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#%^&*])[A-Za-z\d!@#%^&*]{8,}$/;
-	        
-			if(pwd2.value.trim() == ''){		// 비밀번호 입력안하고
-			
-			} else if(pwdConfirm.value != pwd.value || !pwdcheck.test(pwd.value)) {	
-				pwd.style.borderColor = 'red';
-				pwdConfirm.style.borderColor = 'red';
-				console.log(pwd.value);
-				console.log(pwdConfirm.value);
-				alert('비밀번호는 영대소문자,숫자로 구성된 8글자 이상으로 조합하시오.')
-				checkPwd = false;
-			} else if(pwdConfirm.value == pwd.value && pwdcheck.test(pwd.value)){// 비밀번호가 같지 않고, 정규식 안 맞을 때
-				pwd.style.borderColor = 'green';
-				pwdConfirm.style.borderColor = 'green';
-				console.log(pwd.value);
-				console.log(pwd2.value);
-				checkPwd = true;
-			} 
-		}
+		document.getElementById('configPwd').addEventListener('blur', function(event) {
+		    let newMemberPwd = document.getElementById("newMemberPwd");
+		    let pwdConfirm = document.getElementById("configPwd");  // 수정된 부분: "pwdConfirm"으로 변경
+		    let pwdcheck = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#%^&*])[A-Za-z\d!@#%^&*]{8,}$/;
+		    
+		    console.log(pwdConfirm.value);
+		    console.log(newMemberPwd.value);
+		    console.log(pwdcheck.test(newMemberPwd.value));
+		    
+				
+		    if (newMemberPwd.value.trim() == '') {
+		        // 비밀번호 입력하지 않은 경우
+		    } else if (pwdConfirm.value != newMemberPwd.value || !pwdcheck.test(newMemberPwd.value)) {
+		        newMemberPwd.style.borderColor = 'red';
+		        pwdConfirm.style.borderColor = 'red';
+		        console.log(newMemberPwd.value);
+		        console.log(pwdConfirm.value);
+		        alert('비밀번호는 영대소문자, 숫자로 구성된 8글자 이상으로 조합하시오.');
+		        checkPwd = false;
+		    } else if (pwdConfirm.value == newMemberPwd.value && pwdcheck.test(newMemberPwd.value)) {
+		        newMemberPwd.style.borderColor = 'green';
+		        pwdConfirm.style.borderColor = 'green';
+		        console.log(newMemberPwd.value);
+		        console.log(pwdConfirm.value);
+		        checkPwd = true;
+		    }
+		});
 	</script> 
 	<script type="text/javascript">
 		let check_code=false;

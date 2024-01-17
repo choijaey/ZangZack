@@ -295,10 +295,20 @@
 	    } 
 	</script>
 	
-	 <script >
+	 <script th:inline="javascript">
 		//그전 url로 돌아가기
 	
 		window.onload = () =>{
+			
+			 /*<![CDATA[*/
+	        var msg = /*[[${msg}]]*/'';
+	        /*]]>*/
+	        
+	           if(msg && msg.trim().length > 0) {
+	                alert(msg);
+	            }
+	        	
+	        }
 			
 			const beforeURL = document.referrer;
 			document.getElementsByName('beforeURL')[0].value = beforeURL;
@@ -389,7 +399,7 @@
 					error : data => console.log(data)
 				});
 		});
-	}
+	
 	</script>
 	<script>
 		<!-- 비밀번호 확인 + 정규식 -->

@@ -166,13 +166,14 @@ public class MemberController {
 			}else {
 				model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
 				model.addAttribute("searchUrl","views/ming/member/sign");
-				return "redirect:signUp.me";
+				return "views/ming/member/sign";
+				
 			}
 			
 		}else {
 			model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
 			model.addAttribute("searchUrl","views/ming/member/sign");
-			return "redirect:signUp.me";
+			return "views/ming/member/sign";
 		}
 	}
 	
@@ -345,12 +346,12 @@ public class MemberController {
 			 } else {
 				 model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
 				 model.addAttribute("searchUrl","views/ming/member/updatePwd");
-				 return "redirect:updatePwd.me";
+				 return "views/ming/member/updatePwd";
 			 }
 		 }else {
 			 model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
 			 model.addAttribute("searchUrl","views/ming/member/updatePwd");
-			 return "redirect:updatePwd.me";
+			 return "views/ming/member/updatePwd";
 		 }
 		 
 	}
@@ -806,5 +807,5 @@ public class MemberController {
 			}
 		}
 	   
-	 
+	
    }
