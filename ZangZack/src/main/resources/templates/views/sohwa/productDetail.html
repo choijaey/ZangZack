@@ -251,6 +251,7 @@
 												        <div class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
 												            <div class="p-4 flex">
 												                <img th:each="l:${list}" th:if="${l.photoLevel==0 && l.boardType == 5}" th:src="${l.photoPath}" class="w-20 h-20 object-cover rounded-full" alt="Product">
+												                
 												                <div class="ml-4">
 												                    <h2 class="text-lg font-semibold">[[${p.productCompany}]]</h2>
 												                    <p class="text-sm text-gray-600">[[${p.productName}]]</p><hr>
@@ -281,12 +282,13 @@
 													                    <div class="updatePreviewDiv">
 												                    		<img th:each="a:${aList}" th:if="${a.boardNo == r.reviewNo && a.boardType==6}" style="width:200px; height:200px;" th:src="${a.photoPath}">
 													                    </div>
-													                    <div class="updateReviewDiv">
-													                    	
+													                    <div class="updateReviewDiv" style="text-align:center;">
+													                    	<button type="button" style="background-color:white; border:1px solid red; width:100px; color:red; margin-top:10px;">취소</button>
 													                    </div>
 													                    <br>
 													                    <div class="updatePhoto" onclick="openFileUploadModal()">
 																			<img src="image/sohwa/icons8-camera-80.png">사진첨부
+																			
 																		</div>
 													                    <br>
 													                    
@@ -342,15 +344,7 @@
 									
 							
 						            <!-- Pagination -->
-						            <div class="flex justify-center space-x-1">
-										<a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200"><</a>
-						                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">1</a>
-						                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">2</a>
-						                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">3</a>
-						                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">4</a>
-						                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">5</a>
-						                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">></a>
-						            </div>
+						            
 						        </div>
 						  </div>
 						  
@@ -439,15 +433,7 @@
 <!-- 				  </div> -->
 				  
 				  <br>
-				  <div class="flex justify-center space-x-1">
-						<a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200"><</a>
-		                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">1</a>
-		                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">2</a>
-		                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">3</a>
-		                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">4</a>
-		                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">5</a>
-		                <a href="#" class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-200">></a>
-		           </div>
+				  
 				  
 			  </div>
 	           

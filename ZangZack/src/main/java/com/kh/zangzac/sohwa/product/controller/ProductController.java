@@ -76,40 +76,94 @@ public class ProductController {
    }
    
    
-   
+   @GetMapping("adminQnaListView.so")
+   public String adminQnaListView(@RequestParam(value="searchType", defaultValue="1") String searchType, @RequestParam(value="keyword", defaultValue="") String keyword, @RequestParam(value="status", defaultValue="1") int status, @RequestParam(value="page", defaultValue="1") int page, HttpServletRequest request, Model model) {
+      
+      if(status ==1) {
+    	  PageInfo pi = new PageInfo();
+          ArrayList<Qna> qList = new ArrayList<>();
+          ArrayList<Product> pList = pService.selectAllProduct();
+          ArrayList<Attachment> aList = pService.selectAllPhoto();
+         
+          if(keyword != null) {
+             HashMap<String, String> map = new HashMap<>();
+             map.put("keyword", keyword);
+             map.put("searchType", searchType);
+             int listCount = pService.getListQnaCount(map);
+             int currentPage = page;
+             pi = new PageInfo();
+             pi = Pagination.getPageInfo(currentPage, listCount, 10);
+             qList = pService.searchKeyword(map, pi);
+          }else {
+             qList = pService.selectQna();
+          } 
+          model.addAttribute("searchType", searchType);
+          model.addAttribute("keyword", keyword);
+          model.addAttribute("status", status);
+          model.addAttribute("pList", pList);
+          model.addAttribute("aList", aList);
+          model.addAttribute("qList", qList);
+          model.addAttribute("pi", pi);
+          model.addAttribute("loc", request.getRequestURI());
+          return "views/sohwa/(admin)qnaList";
+         
+      }else {
+    	  PageInfo pi = new PageInfo();
+          ArrayList<Qna> qList = new ArrayList<>();
+          ArrayList<Product> pList = pService.selectAllProduct();
+          ArrayList<Attachment> aList = pService.selectAllPhoto();
+         
+         if(keyword != null) {
+             HashMap<String, String> map = new HashMap<>();
+             map.put("keyword", keyword);
+             map.put("searchType", searchType);
+             int listCount = pService.getListQnaYCount(map);
+             int currentPage = page;
+             pi = new PageInfo();
+             pi = Pagination.getPageInfo(currentPage, listCount, 10);
+             qList = pService.searchYKeyword(map, pi);
+         }else {
+            qList = pService.selectQnaY();
+         }
+         model.addAttribute("searchType", searchType);
+         model.addAttribute("keyword", keyword);
+         model.addAttribute("status", status);
+         model.addAttribute("pList", pList);
+         model.addAttribute("aList", aList);
+         model.addAttribute("qList", qList);
+         model.addAttribute("pi", pi);
+         model.addAttribute("loc", request.getRequestURI());
+         return "views/sohwa/(admin)qnaList";
+      }
+      
+   }
    
    
    //관리자 상품 목록페이지 view
    @GetMapping("adminProductList.so")
-   public String adminProductListView(Model model) {
-      ArrayList<Product> pList = pService.selectAllProduct();
+   public String adminProductListView(Model model, @RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="searchType", defaultValue="1") String searchType, @RequestParam(value="keyword", defaultValue="") String keyword, HttpServletRequest request) {
+//      ArrayList<Product> pList = pService.selectAllProduct();
       ArrayList<Attachment> aList = pService.selectAllPhoto();
+      int listCount = 0;
+      HashMap<String, String> map = new HashMap<>();
+      map.put("keyword", keyword);
+      map.put("searchType", searchType);
+      int currentPage = page;
+      listCount = pService.getListCountProduct(map);
+      PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+      ArrayList<Product> pList = pService.selectAdminProduct(map, pi);
       
+      model.addAttribute("loc", request.getRequestURI());
+      model.addAttribute("pi", pi);
+      model.addAttribute("keyword", keyword);
+      model.addAttribute("searchType", searchType);
       model.addAttribute("pageStatus", "Y");
       model.addAttribute("aList", aList);
       model.addAttribute("pList", pList);
       return "views/sohwa/(admin)productList";
    }
    
-   
-   @GetMapping("productListN.so")
-   public String adminProductListN(Model model) {
-      ArrayList<Product> pList = pService.selectDeleteProduct();
-      ArrayList<Attachment> aList = pService.selectDeletePhoto();
-      
-      model.addAttribute("pageStatus", "N");
-      model.addAttribute("aList", aList);
-      model.addAttribute("pList", pList);
-      return "views/sohwa/(admin)productList";
-   }
-   
-   
-   
-   
-   
-   
-   
-   
+  
    
    
    
@@ -153,8 +207,8 @@ public class ProductController {
          aList = pService.searchPhoto(searchMap);
          thList = pService.searchPhototh(searchMap);
       }
-      
-      
+      System.out.println(categoryNo);
+      System.out.println("pi:" + pi);
       ArrayList<Review> rList = pService.selectproductAllReview();
       System.out.println(pi.getMaxPage());
       if(aList != null) {
@@ -237,10 +291,11 @@ public class ProductController {
 	         aList = pService.searchPhoto(searchMap);
 	         thList = pService.searchPhototh(searchMap);
 	      }
-	      
-	      
+	      System.out.println(categoryNo);
+	      System.out.println(pi.getMaxPage());
 	      ArrayList<Review> rList = pService.selectproductAllReview();
 	      HashMap<String, Object> map = new HashMap<>();
+	      
 	      if(aList != null) {
 	    	 map.put("currentPage", currentPage);
 	         map.put("thList", thList);
@@ -427,6 +482,18 @@ public class ProductController {
    
    
    
+   @GetMapping("refundOrder.so")
+   public String refundOrder(@RequestParam("orderKeyNo") int orderKeyNo, Model model) {
+	   int result = pService.refundOrder(orderKeyNo);
+	   if(result > 0) {
+		   return "redirect:myOrderPageView.so";
+	   }else {
+		   throw new ProductException("환불 요청 실패");
+	   }
+   }
+   
+   
+   
    
    @GetMapping("insertCart.so")
       public String insertCart(@RequestParam("price") int price, @RequestParam("option") String option, @RequestParam("productNo") int productNo, @RequestParam("eno") int eno, Model model) {
@@ -590,64 +657,7 @@ public class ProductController {
       }
    }
    
-   @GetMapping("adminQnaListView.so")
-   public String adminQnaListView(@RequestParam(value="searchType", defaultValue="1") String searchType, @RequestParam(value="keyword", defaultValue="") String keyword, @RequestParam(value="status", defaultValue="1") int status, @RequestParam(value="page", defaultValue="1") int page, HttpServletRequest request, Model model) {
-      
-      if(status ==1) {
-         int listCount = pService.getListQnaCount();
-         int currentPage = page;
-         PageInfo pi = new PageInfo();
-         pi = Pagination.getPageInfo(currentPage, listCount, 10);
-         
-         ArrayList<Qna> qList = new ArrayList<>();
-         ArrayList<Product> pList = pService.selectAllProduct();
-         ArrayList<Attachment> aList = pService.selectAllPhoto();
-         
-         if(keyword != null) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("keyword", keyword);
-            map.put("searchType", searchType);
-            qList = pService.searchKeyword(map);
-         }else {
-            qList = pService.selectQna();
-         }
-         
-         model.addAttribute("status", status);
-         model.addAttribute("pList", pList);
-         model.addAttribute("aList", aList);
-         model.addAttribute("qList", qList);
-         model.addAttribute("pi", pi);
-         model.addAttribute("loc", request.getRequestURI());
-         return "views/sohwa/(admin)qnaList";
-         
-      }else {
-         int listCount = pService.getListQnaYCount();
-         int currentPage = page;
-         PageInfo pi = new PageInfo();
-         pi = Pagination.getPageInfo(currentPage, listCount, 10);
-         
-         ArrayList<Qna> qList = new ArrayList<>();
-         ArrayList<Product> pList = pService.selectAllProduct();
-         ArrayList<Attachment> aList = pService.selectAllPhoto();
-         
-         if(keyword != null) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("keyword", keyword);
-            map.put("searchType", searchType);
-            qList = pService.searchYKeyword(map);
-         }else {
-            qList = pService.selectQnaY();
-         }
-         model.addAttribute("status", status);
-         model.addAttribute("pList", pList);
-         model.addAttribute("aList", aList);
-         model.addAttribute("qList", qList);
-         model.addAttribute("pi", pi);
-         model.addAttribute("loc", request.getRequestURI());
-         return "views/sohwa/(admin)qnaList";
-      }
-      
-   }
+   
    
 //   @GetMapping("answerY.so")
 //   public String selectAnswerY(@RequestParam(value="page", defaultValue="1") int page, HttpServletRequest request, Model model){
@@ -752,10 +762,10 @@ public class ProductController {
       String name="sohwa";
       int result = pService.deleteReview(reviewNo);
       String deleteRename = pService.deleteSelectReview(reviewNo);
-      System.out.println(deleteRename);
       
-      Boolean sf = imageStorage.deleteImage(deleteRename, name);
-      System.out.println(sf);
+      if(deleteRename != null) {
+    	  Boolean sf = imageStorage.deleteImage(deleteRename, name);
+      }
       
       
       if(result > 0) {
@@ -866,7 +876,7 @@ public class ProductController {
    
    
    
-   
+   //상품삭제
    @GetMapping("updateStatus.so")
    @ResponseBody
    public String deleteList(@RequestParam("checked[]") ArrayList<String> checkBoxArr) {
@@ -883,6 +893,7 @@ public class ProductController {
           Boolean sf = imageStorage.deleteImage(delRename, name);
           System.out.println(delRename);
           pService.updateYPhoto(checkBoxArr);
+          pService.deleteCarts(checkBoxArr);
           System.out.println(sf);
        }
        
@@ -970,6 +981,19 @@ public class ProductController {
    }
    
    
+   @GetMapping("deleteOrder.so")
+   public String deleteOrder(@RequestParam("orderNo") int orderNo) {
+	   int result = pService.deleteOrder(orderNo);
+	   
+	   if(result > 0) {
+		   return "redirect:myOrderPageView.so";
+	   }else {
+		   throw new ProductException("주문내역삭제 실패");
+	   }
+	   
+   }
+   
+   
    @GetMapping("detailOrderView.so")
    public String detailOrderView(@RequestParam("orderNo") int orderNo, Model model) {
 	   
@@ -1051,12 +1075,39 @@ public class ProductController {
    
    
    @GetMapping("adminOrderListView.so")
-   public String adminOrderListView(Model model) {
-	   ArrayList<Payment> paList = pService.selectAllPayment();
+   public String adminOrderListView(@RequestParam(value="keyword", defaultValue="") String keyword, @RequestParam(value="searchType", defaultValue="0") String searchType, @RequestParam(value="page", defaultValue="1") int page,Model model, @RequestParam(value="status", defaultValue="1") int status, HttpServletRequest request) {
+	   ArrayList<Payment> paList = new ArrayList<>();
+	   int listCount = 0;
+	   PageInfo pi = new PageInfo();
+	   if(status == 1) {
+		   HashMap<String, String> map = new HashMap<>();
+	       map.put("keyword", keyword);
+	       map.put("searchType", searchType);
+	       int currentPage = page;
+	       listCount = pService.getListCountOrder(map);
+	       pi = Pagination.getPageInfo(currentPage, listCount, 10);
+		   paList = pService.selectAllPayment(map, pi);
+	   }else {
+		   HashMap<String, String> map = new HashMap<>();
+	       map.put("keyword", keyword);
+	       map.put("searchType", searchType);
+	       int currentPage = page;
+	       listCount = pService.getListCountOrderN(map);
+	       pi = Pagination.getPageInfo(currentPage, listCount, 10);
+		   paList = pService.selectNPayment(map,pi);
+	   }
 	   
+	   model.addAttribute("loc", request.getRequestURI());
+	   model.addAttribute("keyword", keyword);
+	   model.addAttribute("searchType", searchType);
+	   model.addAttribute("pi", pi);
+	   model.addAttribute("status", status);
 	   model.addAttribute("paList", paList);
 	   return "views/sohwa/(admin)orderList";
    }
+   
+   
+   
    
    @GetMapping("adminOrderDetail.so")
    public String adminOrderDetail(@RequestParam("orderKeyNo") int orderKeyNo, Model model) {

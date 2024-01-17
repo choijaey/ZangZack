@@ -128,8 +128,8 @@
 		<br><br>
 		
 		<div id="underBtns">
-			<button>< 주문목록 돌아가기</button> 
-			<button style="float:right;">주문내역 삭제</button>
+			<a href="myOrderPageView.so"><button><< 주문목록 돌아가기</button></a> 
+			<a th:href="@{'deleteOrder.so?orderNo=' + ${buyerInfo.orderNo}}" onclick="return confirm('정말 삭제하시겠습니까?')"><button style="float:right;">주문내역 삭제</button></a>
 		</div>
 			
 	</div>

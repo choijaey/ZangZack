@@ -225,6 +225,7 @@
 	        if (scrollPosition >= 0.8 * (wrapper.scrollHeight - wrapper.clientHeight)) {
 	            loadMoreItems();
 	            scrollflag = false;
+	            console.log(currentPage, maxPages);
 	        }
 		}
 	        
@@ -240,7 +241,10 @@
                     url: 'infiniteScroll.so', // 서버의 댓글 목록 불러오기 URL   -------------------------------------------------------------------------------
                     method: 'GET',
                     data: { 
-                       page : currentPage  //----------------------------------------------------------------------------------------
+                       page : currentPage,  //----------------------------------------------------------------------------------------
+                       keyword: /*[[${keyword}]]*/'',
+                       categoryNo: /*[[${categoryNo}]]*/0,
+                       status: /*[[${status}]]*/1
                     },
                     success: function(data) {
                         console.log(data);
@@ -268,27 +272,63 @@
               let User = /*[[${session.loginUser}]]*/null;
               /*]]>*/
              
-          for (let itemData of data.pList) {
+              const rList = /*[[rList]]*/null;
               
               
-              const newItemHTML = `
-            	  <article class="product" onclick="redirectToProductDetail(this)">
-			        <input type="hidden" value="${itemData.productNo}">
-			        <div class="thumbnails">
-			            <a href="#"></a>
-			        </div>
-			        <p></p>
-			        <p class="price"></p>
-			        <span class="starImage">
-			            <img src="image/sohwa/icons8-star.gif" style="height: 10px;">
-			            <span style="color: gray;">평점</span>
-			            <input type="hidden" class="productScore" >
-			        </span><br>
-			            <span class="badge rounded-pill text-bg-dark">일시품절</span>
-			            <span class="badge text-bg-secondary">무료배송</span>
-			    </article>
-              `;
-              newItems.push(newItemHTML);
+              
+              
+          for (let p of data.pList) {
+              for(let th of data.thList){
+            	  if (p.productNo == th.boardNo && th.boardType == 5 && th.photoLevel == 0) {
+            		  let imgHTML ='';
+            		  
+            		  if (p.productNo == th.boardNo && th.boardType == 5) {
+            			  imgHTML = `<img src="${th.photoPath}">`;
+            		  }
+            		  const productPrice = `${p.productPrice.toLocaleString()}원`;
+           		      
+            		  
+            		  let starImageDiv='';
+            		  if (rList && rList.length > 0) {
+            			  starImageDiv = `
+            				  <span class="starImage">
+		      			            <img src="image/sohwa/icons8-star.gif" style="height: 10px;">
+		      			            ${p.productScore}
+		      			            <span style="color: gray;">평점</span>
+		      			            <input type="hidden" class="productScore">
+		      			      </span><br>`
+            		  }
+            		  
+            		  
+            		  let noEno ='';
+            		  if (p.eno === 0) {
+            			  noEno = `<span class="badge rounded-pill text-bg-dark">일시품절</span>`
+            		  }
+            		  
+            		  let noDeliveryPrice = '';
+            		  if(p.deliveryPrice == 0){
+            			  noDeliveryPrice = `<span class="badge text-bg-secondary">무료배송</span>`
+            		  }
+            		  
+            		  const newItemHTML = `
+                    	  <article class="product" onclick="redirectToProductDetail(this)">
+        			        <input type="hidden" value="${p.productNo}">
+        			        <div class="thumbnails">
+        			            <a href="#">${imgHTML}</a>
+        			        </div>
+        			        <p>${p.productName}</p>
+        			        <p class="price">${productPrice}</p>
+        			        
+        			        
+        			        ${starImageDiv}
+        			        ${noEno}
+        			        ${noDeliveryPrice}
+        			    </article>
+                      `;
+                      newItems.push(newItemHTML);
+                  }
+            	 }
+              
           }
           return newItems;
       }
@@ -304,39 +344,40 @@
        
     
     
-    function changeImages() {
-    	  const thumbnails = document.querySelectorAll('.thumbnails');
-    	  
-    	  thumbnails.forEach(thumbnail => {
-    	    const images = thumbnail.querySelectorAll('img');
-    	    let currentIndex = 0;
+       function changeImages() {
+           const thumbnails = document.querySelectorAll('.thumbnails');
+           
+           thumbnails.forEach(thumbnail => {
+             const images = thumbnail.querySelectorAll('img');
+             let currentIndex = 0;
 
-    	    // 이미지 숨기는 함수
-    	    const hideImages = () => {
-    	      images.forEach(image => {
-    	        image.style.display = 'none';
-    	      });
-    	    };
+             // 이미지 숨기는 함수
+             const hideImages = () => {
+               images.forEach(image => {
+                 image.style.display = 'none';
+               });
+             };
 
-    	    // 초기에 모든 이미지를 숨기고 첫 번째 이미지만 보이도록 설정
-    	    hideImages();
-    	    images[0].style.display = 'block';
+             // 초기에 모든 이미지를 숨기고 첫 번째 이미지만 보이도록 설정
+             hideImages();
+             images[0].style.display = 'block';
 
-    	    // setInterval 내부 함수에서 hideImages와 currentIndex를 사용하도록 수정
-    	    const changeImage = () => {
-    	      hideImages();
-    	      currentIndex = (currentIndex + 1) % images.length;
-    	      images[currentIndex].style.display = 'block';
-    	    };
+             // setInterval 내부 함수에서 hideImages와 currentIndex를 사용하도록 수정
+             const changeImage = () => {
+               hideImages();
+               currentIndex = (currentIndex + 1) % images.length;
+               images[currentIndex].style.display = 'block';
+             };
 
-    	    // 초기 이미지 변경 후 2초마다 이미지 변경 함수 실행
-    	    setInterval(changeImage, 2000);
-    	  });
-    	}
+             // 초기 이미지 변경 후 2초마다 이미지 변경 함수 실행
+             setInterval(changeImage, 2000);
+           });
+         }
 
-    	window.onload = function() {
-    	  changeImages();
-    	};
+         window.onload = function() {
+           changeImages();
+         };
+
     
     
     

@@ -157,8 +157,8 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public int getListQnaCount() {
-		return pDAO.getListQnaCount();
+	public int getListQnaCount(HashMap<String, String> map) {
+		return pDAO.getListQnaCount(map);
 	}
 
 	@Override
@@ -182,8 +182,8 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public int getListQnaYCount() {
-		return pDAO.getListQnaYCount();
+	public int getListQnaYCount(HashMap<String, String> map) {
+		return pDAO.getListQnaYCount(map);
 	}
 
 	@Override
@@ -192,13 +192,19 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public ArrayList<Qna> searchKeyword(HashMap<String, String> map) {
-		return pDAO.searchKeyword(map);
+	public ArrayList<Qna> searchKeyword(HashMap<String, String> map, PageInfo pi) {
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return pDAO.searchKeyword(map, rowBounds);
 	}
 
 	@Override
-	public ArrayList<Qna> searchYKeyword(HashMap<String, String> map) {
-		return pDAO.searchYKeyword(map);
+	public ArrayList<Qna> searchYKeyword(HashMap<String, String> map, PageInfo pi) {
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return pDAO.searchYKeyword(map, rowBounds);
 	}
 
 	@Override
@@ -384,8 +390,11 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public ArrayList<Payment> selectAllPayment() {
-		return pDAO.selectAllPayment();
+	public ArrayList<Payment> selectAllPayment(HashMap<String, String> map, PageInfo pi) {
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return pDAO.selectAllPayment(map, rowBounds);
 	}
 
 	@Override
@@ -396,6 +405,53 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public int updateDeliveryStatus(HashMap<String, String> map) {
 		return pDAO.updateDeliveryStatus(map);
+	}
+
+	@Override
+	public int deleteOrder(int orderNo) {
+		return pDAO.deleteOrder(orderNo);
+	}
+
+	@Override
+	public int getListCountProduct(HashMap<String, String> map) {
+		return pDAO.getListCountProduct(map);
+	}
+	
+	@Override
+	public int refundOrder(int orderKeyNo) {
+		return pDAO.refundOrder(orderKeyNo);
+	}
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public ArrayList<Product> selectAdminProduct(HashMap<String, String> map, PageInfo pi) {
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return pDAO.selectAdminProduct(map, rowBounds);
+	}
+
+	@Override
+	public ArrayList<Payment> selectNPayment(HashMap<String, String> map, PageInfo pi) {
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return pDAO.selectNPayment(map,rowBounds);
+	}
+
+	@Override
+	public int getListCountOrder(HashMap<String, String> map) {
+		return pDAO.getListCountOrder(map);
+	}
+
+	@Override
+	public int getListCountOrderN(HashMap<String, String> map) {
+		return pDAO.getListCountOrderN(map);
 	}
 
 

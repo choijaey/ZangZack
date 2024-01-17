@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <link href="css/sohwa/cartPage.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+
 <title>Insert title here</title>
 </head>
 <body>
@@ -50,7 +51,9 @@
                   <div>
                      <div>[[${p.productCompany}]]</div>
                      [[${p.productName}]]<br>
-                     <span class="price">[[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]</span>
+                     <span class="price">[[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]</span><br>
+                     <th:block th:if="${p.eno == 0}"><button style="background-color:black; border-radius:3px;width:90px; border:none; color:white;">일시품절</button></th:block>
+                 	 <th:block th:if="${p.deliveryPrice == 0}"><button style="background-color:gray; border-radius:3px;width:90px; border:none; color:white;">무료배송</button></th:block>
                   </div>
                   
                </td>
@@ -66,7 +69,6 @@
                </td>
                <td class="td3">
                   <span class="resultPrice"></span>
-                  <button style="background-color: black; color:white; display:inline-block;">Buy now</button>
                </td>
                <td class="td4">
                	  <th:block th:if="${p.deliveryPrice == 0}">무료배송</th:block>
@@ -124,6 +126,16 @@
    
    
    <script th:inline="javascript">
+   
+   	  
+   
+   
+   
+   
+   
+   
+   
+   
       //전체선택/해제
       document.addEventListener('DOMContentLoaded', function() {
           const allSelect = document.getElementById('allSelect');

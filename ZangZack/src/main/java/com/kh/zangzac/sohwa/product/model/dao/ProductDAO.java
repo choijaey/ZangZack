@@ -69,7 +69,7 @@ public interface ProductDAO {
 
 	ArrayList<Qna> selectMyQna(String id);
 
-	int getListQnaCount();
+	int getListQnaCount(HashMap<String, String> map);
 
 	ArrayList<Qna> selectQna();
 
@@ -79,13 +79,13 @@ public interface ProductDAO {
 
 	int deleteQna(int questionNo);
 
-	int getListQnaYCount();
+	int getListQnaYCount(HashMap<String, String> map);
 
 	ArrayList<Qna> selectQnaY();
 
-	ArrayList<Qna> searchKeyword(HashMap<String, String> map);
+	ArrayList<Qna> searchKeyword(HashMap<String, String> map, RowBounds rowBounds);
 
-	ArrayList<Qna> searchYKeyword(HashMap<String, String> map);
+	ArrayList<Qna> searchYKeyword(HashMap<String, String> map, RowBounds rowBounds);
 
 	int insertReview(Review r);
 
@@ -159,11 +159,21 @@ public interface ProductDAO {
 
 	Payment selectBuyerInfo(int orderNo);
 
-	ArrayList<Payment> selectAllPayment();
+	ArrayList<Payment> selectAllPayment(HashMap<String, String> map, RowBounds rowBounds);
 
 	Payment selectOrderDetail(int orderKeyNo);
 
 	int updateDeliveryStatus(HashMap<String, String> map);
+
+	int deleteOrder(int orderNo);
+
+	int getListCountProduct(HashMap<String, String> map);
+
+	ArrayList<Product> selectAdminProduct(HashMap<String, String> map, RowBounds rowBounds);
+
+	int refundOrder(int orderKeyNo);
+
+	ArrayList<Payment> selectNPayment();
 
 
 

@@ -70,7 +70,7 @@
 		                
 		                <div class="right">
 		                <!-- 오른쪽 컨테이너 내용 -->
-		                   <button>환불신청</button><br>
+		                   <a th:href="@{'refundOrder.so?orderKeyNo=' + ${pa.orderKeyNo}}" onclick="return confirm('정말 환불요청을 진행하시겠습니까?')"><button>환불신청</button></a><br>
 		                </div>
 		            </div>
 	            </div>
@@ -229,25 +229,7 @@
          
          <br><br>
          
-         <nav aria-label="Page navigation example">
-             <ul class="pagination">
-                <li class="page-item">
-                  <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                  </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-                </li>
-             </ul>
-         </nav>
+         
       
       
       

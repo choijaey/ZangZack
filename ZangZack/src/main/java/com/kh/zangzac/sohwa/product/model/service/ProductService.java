@@ -66,7 +66,7 @@ public interface ProductService {
 
 	ArrayList<Qna> selectMyQna(String id);
 
-	int getListQnaCount();
+	int getListQnaCount(HashMap<String, String> map);
 
 	ArrayList<Qna> selectQna();
 
@@ -76,13 +76,13 @@ public interface ProductService {
 
 	int deleteQna(int questionNo);
 
-	int getListQnaYCount();
+	int getListQnaYCount(HashMap<String, String> map);
 
 	ArrayList<Qna> selectQnaY();
 
-	ArrayList<Qna> searchKeyword(HashMap<String, String> map);
+	ArrayList<Qna> searchKeyword(HashMap<String, String> map, PageInfo pi);
 
-	ArrayList<Qna> searchYKeyword(HashMap<String, String> map);
+	ArrayList<Qna> searchYKeyword(HashMap<String, String> map, PageInfo pi);
 
 	int insertReview(Review r);
 
@@ -155,12 +155,26 @@ public interface ProductService {
 	ArrayList<Payment> selectPayment(int orderNo);
 
 	Payment selectBuyerInfo(int orderNo);
-
-	ArrayList<Payment> selectAllPayment();
-
+	
 	Payment selectOrderDetail(int orderKeyNo);
 
 	int updateDeliveryStatus(HashMap<String, String> map);
+
+	int deleteOrder(int orderNo);
+
+	int getListCountProduct(HashMap<String, String> map);
+
+	ArrayList<Product> selectAdminProduct(HashMap<String, String> map, PageInfo pi);
+
+	int refundOrder(int orderKeyNo);
+
+	ArrayList<Payment> selectAllPayment(HashMap<String, String> map, PageInfo pi);
+	
+	ArrayList<Payment> selectNPayment(HashMap<String, String> map, PageInfo pi);
+
+	int getListCountOrder(HashMap<String, String> map);
+
+	int getListCountOrderN(HashMap<String, String> map);
 
 
 
