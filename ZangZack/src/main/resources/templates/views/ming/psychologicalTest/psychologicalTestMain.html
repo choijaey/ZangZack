@@ -25,6 +25,7 @@
 </style>
 </head>
 <body>
+ <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.6.0/kakao.min.js" integrity="sha384-6MFdIr0zOira1CHQkedUqJVql0YtcZA1P0nbPrQYJXVJZUkTk/oX4U9GhUIs3/z8" crossorigin="anonymous"></script>
 	<div th:insert="~{common/navbar :: navbar}"></div>
 	  <div class="container">
 	    <section id="main" class="mx-auto my-5 py-5 px-3">
@@ -71,23 +72,23 @@
 		    	<img class="poto2" src="image/ming/psychologicalTest/autumn-season-5580628_1280.png" style="width: 300px; height: 300px;"><a href="" id="poto2" >침낭</a>
 		    </div>
 		    <div class="box bg-3">
-			 	 <button class="button button--quidel button--inverted" style="position: absolute; top: 1930px;" onclick="index"><i class="button__icon icon icon-cross"></i><span>홈으로가기</span></button>
+			 	 <button class="button button--quidel button--inverted" style="position: absolute; top: 1930px;" onclick="index"><i class="button__icon icon icon-cross"></i><span>공유하기</span></button>
 			 </div>
 		  </div>
 	</section>
 	  </div>
-	   <script src="js/ming/psychologicalTest/data.js" charset="UTF-8"></script>
-	    <script src="js/ming/psychologicalTest/start.js" charset="UTF-8"></script>
-	    <script src="js/ming/psychologicalTest/share.js" charset="UTF-8"></script>
-	   <!--  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.6.0/kakao.min.js" integrity="sha384-6MFdIr0zOira1CHQkedUqJVql0YtcZA1P0nbPrQYJXVJZUkTk/oX4U9GhUIs3/z8" crossorigin="anonymous"></script>
-		<script>
-		  Kakao.init('27f35515f4482390b9bfc7632ab7663f'); // 사용하려는 앱의 JavaScript 키 입력
-		</script>
-		
 		<a id="kakaotalk-sharing-btn" href="javascript:;" class="kakaoText"> 
 		  <img src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png"
 		    alt="카카오톡 공유 보내기 버튼" class="kakao" />친구와 함께하기
 		</a>
+	   <script src="js/ming/psychologicalTest/data.js" charset="UTF-8"></script>
+	    <script src="js/ming/psychologicalTest/start.js" charset="UTF-8"></script>
+	    <script src="js/ming/psychologicalTest/share.js" charset="UTF-8"></script>
+	  
+		<script>
+		  Kakao.init('27f35515f4482390b9bfc7632ab7663f'); // 사용하려는 앱의 JavaScript 키 입력
+		</script>
+		
 		
 		<script>
 		  Kakao.Share.createDefaultButton({
@@ -117,7 +118,14 @@
 		      },
 		    ],
 		  });
-		</script> -->
+		</script>
+		
+		<script>
+			  function showShareButton() {
+			    // 마지막 세션에서만 버튼 표시
+			    document.getElementById('kakaotalk-sharing-btn').style.display = 'block';
+			  }
+		</script>
 </body>
 
 </html>
