@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +16,9 @@
         }
     </style>
 </head>
-<body class="bg-gray-100">
+<body >
+	<div th:insert="~{common/navbar :: navbar}"></div>
+	<form action="eventBoardWrite.jy" enctype="multipart/form-data" method="post">
     <div class="container mx-auto p-6 bg-white shadow-lg max-w-2xl mt-10">
         <div class="flex justify-between items-center mb-4">
             <div class="space-x-2">
@@ -26,7 +28,7 @@
         </div>
         <div class="mb-4">
             <div class="flex items-center mb-2">
-                <input type="text" class="text-3xl font-bold text-yellow-400 bg-transparent" value="">
+                <input type="text" class="text-3xl font-bold text-yellow-400 bg-transparent" name="ebScore" value="">
                 <span class="ml-2 text-lg">/10</span>
             </div>
             <div class="flex space-x-4 text-sm text-gray-600">
@@ -37,42 +39,36 @@
             <!-- 기간/장소 정보 -->
             <div class="mr-8">
                 <div class="mb-4">
+                	<h2 class="text-lg font-bold test">행사이름 : </h2>
+                    <input type="text" value="" name="ebName" class="bg-transparent border-b border-gray-300"><br>
                     <h2 class="text-lg font-bold test">기간 : </h2>
-                    <input type="text" value="" class="bg-transparent border-b border-gray-300"><br>
+                    <input type="text" value="" name="ebDate" class="bg-transparent border-b border-gray-300"><br>
                     <h2 class="text-lg font-bold test">시간 : </h2>
-                    <input type="text" value="" class="bg-transparent border-b border-gray-300"><br>
-                    <h2 class="text-lg font-bold test">규모 : </h2>
-                    <input type="text" value="" class="bg-transparent border-b border-gray-300"><br>
+                    <input type="text" value="" name="ebTime" class="bg-transparent border-b border-gray-300"><br>
                     <h2 class="text-lg font-bold test">장소 : </h2>
-                    <input type="text" value="" class="bg-transparent border-b border-gray-300">
+                    <input type="text" value="" name="ebLocation" class="bg-transparent border-b border-gray-300">
                 </div>
                 <div class="mb-4">
                     <h2 class="text-lg font-bold">주최</h2>
-                    <input type="text" value="" class="bg-transparent border-b border-gray-300">
+                    <input type="text" value="" name="ebHost" class="bg-transparent border-b border-gray-300">
                 </div>
                 <div class="mb-4">
                     <h2 class="text-lg font-bold">요금</h2>
-                    <input type="text" value="" class="bg-transparent border-b border-gray-300">
+                    <input type="text" value="" name="ebPrice" class="bg-transparent border-b border-gray-300">
                 </div>
                 <div class="mb-4">
-                    <h2 class="text-lg font-bold">장비</h2>
-                    <input type="text" value="" class="bg-transparent border-b border-gray-300">
+                    <h2 class="text-lg font-bold">정보</h2>
+                    <input type="text" value="" name="ebInformation" class="bg-transparent border-b border-gray-300">
                 </div>
                 <div>
                     <h2 class="text-lg font-bold">관련 특징</h2>
-                    <textarea class="bg-transparent border-b border-gray-300" style="width:500px;">
-                    </textarea>
+                    <textarea class="bg-transparent border-b border-gray-300"  name="ebIntroduce" style="width:500px;"></textarea>
                 </div>
                
             </div>
 				
         </div>
 
-        <div>
-        	<h2 class="text-lg font-bold">기타 의견</h2>
-        	<textarea class="bg-transparent border-b border-gray-300" style="width:500px;">
-			</textarea>
-        </div>
         <h2 class="text-lg font-bold">이미지</h2><br>
          <div class="flex items-center justify-center w-full">
          	
@@ -85,13 +81,13 @@
                                 이미지
                             </p>
                         </div>
-                        <input type="file" class="opacity-0" accept="image/*" onchange="sumviewImage(event)" />
+                        <input type="file" class="opacity-0" name="file" accept="image/*" onchange="sumviewImage(event)" />
                     </label>
                 </div>
                 <!-- Image Preview -->
                 <img id="imagePreview" class="image-preview" />
     </div>
-    
+    </form>
     <script>
 	    function sumviewImage(event) {
 	        var reader = new FileReader();

@@ -1,5 +1,6 @@
 package com.kh.zangzac.seongun.campboard.model.vo;
 
+
 import java.sql.Date;
 
 import lombok.AllArgsConstructor;

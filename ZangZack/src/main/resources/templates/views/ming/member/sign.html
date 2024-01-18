@@ -72,11 +72,11 @@
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="password" placeholder="Password" style="height: 45px;" name="memberPwd">
+	              <input type="password" placeholder="Password" style="height: 45px;" id="memberId" name="memberPwd">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="password" placeholder="Confirm password" style="height: 45px;" name="pwdConfirm">
+	              <input type="password" placeholder="Confirm password" id="pwdConfirm" style="height: 45px;" name="pwdConfirm">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bx-mail-send'></i>
@@ -419,7 +419,7 @@
 	    let checkPwd = false;
 	    let checkEmail = false;
 		function focusOut(){
-			let pwd = document.getElementById("pwd");
+			let pwd = document.getElementById("memberId");
 	        let pwdConfirm = document.getElementById("pwdConfirm");
 	        let pwdcheck = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#%^&*])[A-Za-z\d!@#%^&*]{8,}$/;
 	        

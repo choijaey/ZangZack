@@ -18,7 +18,7 @@
 	   <!-- 업로드할 파일 사진 업로드 및 버튼(업로드버튼 및 추가버튼 구현)-->
 	   <div>
 	      <div class="photoNum">
-	         <div class="photoUploads" style="">
+	         <div class="photoUploads">
 	            <img src="#" id="photoUpload" style="width:200px; height:200px; border-radius:20%;"/>
 	         </div>
 	      	 <br>
@@ -49,7 +49,7 @@
 				</select>
 			</label><br><br>
 	   		<label>가격
-	   			<input class="form-control" type="number" name="spPrice" placeholder="Default input" aria-label="default input example" style="width: 800px;">
+	   			<input class="form-control" type="number" id="spPrice" name="spPrice" placeholder="Default input" aria-label="default input example" style="width: 800px;">
 	   		</label><br><br>
 	   		<label>자세한 설명
 	   			<input class="form-control" type="text" name="spContent" placeholder="Default input" aria-label="default input example" style="width: 800px; height:500px;">
@@ -69,7 +69,7 @@
 		    </label>
 	   	</div>
 		   <div class="pointerBtn">
-		  		<button type="submit" class="btn-hover color-1">작성 완료</button>
+		  		<button type="submit" class="btn-hover color-1" onclick="checkPhotos()">작성 완료</button>
 		   </div>
     </form>
    
@@ -127,6 +127,29 @@
            } ).open();
          }
        
+       function checkPhotos() {
+    	    const photoElements = document.querySelectorAll('.form-control');
+
+    	    if (!photoElements || photoElements.length === 0 || photoElements == null) {
+    	        alert('사진을 한 장 이상 첨부해주세요');
+    	        return false;
+    	    }
+
+    	    return true;
+    	}
+       
+       var priceInput = document.getElementById('spPrice');
+
+       priceInput.addEventListener('mouseover', function () {
+           var priceNum = parseFloat(priceInput.value);
+
+           if (priceNum < 0) {
+               alert('0부터 입력 가능합니다.');
+           } else if (priceNum > 100000000) {
+               alert('안전한 거래를 위해 100,000,000 보다 작은 금액을 입력해주세요.');
+           }
+       });
+       		
    </script>
 </body>
 </html>

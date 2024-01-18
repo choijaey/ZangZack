@@ -15,4 +15,16 @@
       </foreach>
       select * from dual
    </insert>
+   
+   <delete id="deletePhoto">
+  		 DELETE FROM photo
+         WHERE board_no = #{boardNo}
+         AND board_type = #{boardType}
+   </delete>
+   
+   <delete id="deletePhotoName">
+  		 DELETE FROM photo
+         WHERE photo_rename = #{photoName}
+   </delete>
+   
 </mapper>

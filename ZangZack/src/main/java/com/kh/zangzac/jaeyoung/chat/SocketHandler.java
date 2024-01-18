@@ -50,7 +50,7 @@ public class SocketHandler extends TextWebSocketHandler {
    
    
   @SuppressWarnings("unchecked")
-@Override
+  @Override
    public void handleTextMessage(WebSocketSession session, TextMessage message) {
       //메시지 발송
       String msg = message.getPayload();
@@ -123,7 +123,7 @@ public class SocketHandler extends TextWebSocketHandler {
 		 //채팅방 개수 가져오기
 		   
 		   //1번방 저장 // 2번방 3번방 저장
-		   for(int i=0;i<3;i++) { // 기본적으로 3개라 치고 추후에 변경 예정
+		   for(int i=0;i<4;i++) { // 기본적으로 3개라 치고 추후에 변경 예정
 			   //방 번호에 따라 가져오기 
 			   ArrayList<Chatter> temp = cService.selectChatterList(i);
 			   chatterList.add(temp);
@@ -171,7 +171,7 @@ public class SocketHandler extends TextWebSocketHandler {
     	  
     	  if(count>0) {
     		  // 채팅방에 이미 있는 상태라면
-    		  cFileManager.updateUnreadChatter(roomName,myId);
+    		  boolean check = cFileManager.updateUnreadChatter(roomName,myId);
     		  
     		  //입장한 채팅방에 메시지를 보내 갱신시키게 만들거.
     		  
@@ -186,24 +186,25 @@ public class SocketHandler extends TextWebSocketHandler {
     	               break;
     	            }
     	         }
-    	         
-    	         //해당 방의 세션들만 찾아서 메시지를 발송해준다.
-    	         for(String k : temp.keySet()) { 
-    	            if(k.equals("roomName")) { //다만 방번호일 경우에는 건너뛴다.
-    	               continue;
-    	            }
-    	            
-    	            obj.put("type", "reset");
-    	            //각 세션에 보내기
-    	            WebSocketSession wss = (WebSocketSession)((ChatSession)(temp.get(k))).getSession();
-    	            if(wss != null) {
-    	               try {
-    	                  wss.sendMessage(new TextMessage(obj.toJSONString()));
-    	               } catch (IOException e) {
-    	                  e.printStackTrace();
-    	               }
-    	            }
-    	         }
+    	       if(check) {  
+	    	         //해당 방의 세션들만 찾아서 메시지를 발송해준다.
+	    	         for(String k : temp.keySet()) { 
+	    	            if(k.equals("roomName")) { //다만 방번호일 경우에는 건너뛴다.
+	    	               continue;
+	    	            }
+	    	            
+	    	            obj.put("type", "reset");
+	    	            //각 세션에 보내기
+	    	            WebSocketSession wss = (WebSocketSession)((ChatSession)(temp.get(k))).getSession();
+	    	            if(wss != null) {
+	    	               try {
+	    	                  wss.sendMessage(new TextMessage(obj.toJSONString()));
+	    	               } catch (IOException e) {
+	    	                  e.printStackTrace();
+	    	               }
+	    	            }
+	    	         }
+    	       	 }
     	      }
     		  
     	  }else {

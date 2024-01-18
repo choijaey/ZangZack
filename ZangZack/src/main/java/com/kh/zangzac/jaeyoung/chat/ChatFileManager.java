@@ -43,15 +43,15 @@ public class ChatFileManager {
     }
     
     @SuppressWarnings("unchecked")
-	public void updateUnreadChatter(String roomName, String memberId) {
+	public boolean updateUnreadChatter(String roomName, String memberId) {
     	
     	String filePath = "C:/zangzacChat/chatlog/"+roomName+".txt";
-    	
+    	boolean check =false;
         try {
             // JSON 파일 읽기
             File file = new File(filePath);
             if (!file.exists() || file.length() == 0) {
-                return;
+                return false;
             }
 
             // 수정된 내용을 임시 리스트에 저장
@@ -72,6 +72,7 @@ public class ChatFileManager {
                         while (iterator.hasNext()) {
                         	String chatterValue = (String) iterator.next();
                         	 if (chatterValue.equals(memberId)) {
+                        		    check = true;
                         	        iterator.remove();
                         	  }
                         }
@@ -94,6 +95,7 @@ public class ChatFileManager {
             e.printStackTrace();
             // 애플리케이션 요구사항에 따라 예외 처리를 수행하세요
         }
+        return check;
     }
     
     public static JSONArray readChatLog(String roomName) {

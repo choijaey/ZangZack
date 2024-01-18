@@ -1,10 +1,9 @@
 package com.kh.zangzac.yoonahrim.spBoard.controller;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +21,7 @@ import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.common.reply.model.vo.Reply;
+import com.kh.zangzac.ming.member.model.exception.MemberException;
 import com.kh.zangzac.ming.member.model.vo.Member;
 import com.kh.zangzac.yoonahrim.spBoard.model.service.secondHandService;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandException;
@@ -48,14 +48,34 @@ public class SecondHandController {
     
 	//중고 메인 페이지로 이동
 	@GetMapping("secondHand.ah")
-	public String secondHand(@ModelAttribute secondHandProduct sp, Model model) {
+	public String secondHand(@ModelAttribute secondHandProduct sp, Model model,
+							 @RequestParam(value="page", defaultValue="1") int page, HttpServletRequest request, HttpSession session) {
+		
+		
+		int listCount = spService.getListCount();
+		
+		int currentPage = page;
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 8);
+		ArrayList<Photo> aList = spService.selectPhotoSeconHand(null);
+		
 		int spNo = sp.getSpNo();
+		ArrayList<secondHandProduct> sList =  spService.selectSeconHand(pi, 4);
 		
-		ArrayList<secondHandProduct> sList =  spService.selectSeconHand(sp);
-		ArrayList<Photo> aList = spService.selectPhotoSeconHand(sp);
+		if (sp.getMemberId() != null && session.getAttribute("loginUser") != null &&
+			    !session.getAttribute("loginUser").equals(sp.getMemberId())) {
+			    int result = spService.updateCount(spNo);
+			    
+			    System.out.println(result);
+			    if (result > 0) {
+			        sp.setSpCount(sp.getSpCount() + 1);
+			    }
+			}
 		
+		model.addAttribute("loginUser", session.getAttribute("loginUser"));
 		model.addAttribute("aList", aList);
 		model.addAttribute("sList", sList);
+		model.addAttribute("pi", pi);
+		model.addAttribute("loc", request.getRequestURI());
 		
 		return "views/yoonahrim/secondHandList";
 	}
@@ -116,6 +136,7 @@ public class SecondHandController {
 	            
 	            if(returnArr != null) {
 	               Photo a = new Photo();
+	               a.setBoardNo(sp.getSpNo());
 	               a.setBoardType(4);
 	               a.setPhotoRename(returnArr[0]);
 	               a.setPhotoPath(returnArr[1]);
@@ -182,20 +203,14 @@ public class SecondHandController {
 			if(!list.isEmpty()) {
 		    	 result2 = spService.insertAttmSecondHand(list);
 		    }
-			
-		System.out.println(result1);
-		System.out.println(result2);
-		System.out.println(list.size() + 1);
 		
-	    if (result1 + result2 == list.size() + 1) {
-	    	redirectAttributes.addAttribute("no", sp.getSpNo());
+	    if (result1 >= 0 && result2 >= 0) {
 	        return "redirect:secondHand.ah";
 	    } else {
 	        throw new secondHandException("게시판 등록 실패");
 	    }
 		
 	}
-	 
 	
 	//중고 게시글 상세페이지
 	@GetMapping("detail.ah")
@@ -209,15 +224,17 @@ public class SecondHandController {
 		
 		ArrayList<secondHandProduct> sList=  spService.selectMyList(sp);
 		ArrayList<Photo> aList = spService.selectAttachmentList(spNo);
+		ArrayList<Reply> rList = spService.selectReply(spNo);
+		//댓글 개수를 가져오는 로직
+	    //int replyCount = replyService.getReplyCountByPostId(postId);
 		
 		 // aList를 spNo의 순서로 정렬
 	    Collections.sort(aList, Comparator.comparingInt(Photo::getPhotoNo));
 		
-		ArrayList<Reply> rList = spService.selectReply(spNo);
-		
 		model.addAttribute("aList", aList);
 		model.addAttribute("slist", sList);
 		model.addAttribute("rList", rList);
+		//model.addAttribute("replyCount", replyCount); // 댓글 개수
 		return "views/yoonahrim/secondHandDetail";
 	}
 	
@@ -272,13 +289,6 @@ public class SecondHandController {
 	    for (Photo a : detailList) {
 	        a.setBoardNo(sp.getSpNo());
 	        
-	        
-	        
-	        
-	        
-	        
-	        
-	        
 	    }
 	    
 	    if(!detailList.isEmpty()) {
@@ -297,13 +307,13 @@ public class SecondHandController {
 	//예약 중 -> 예약완료
 	//booking.ah
 	@GetMapping("booking.ah")
-	public String booking(@RequestParam("spNo") int spNo, Model model) {
+	public String booking(@RequestParam("spNo") int spNo) {
 		
 		 int result = spService.updateBooking(spNo);
 		
 		 if (result > 0) {
 		        // 예약 성공
-		        return "views/yoonahrim/secondHandList";
+		        return "redirect:secondHand.ah";
 		    } else {
 		        // 예약 실패
 		        throw new secondHandException("예약 실패");
@@ -319,7 +329,7 @@ public class SecondHandController {
 		
 		 if (result > 0) {
 		        // 예약 취소
-		        return "views/yoonahrim/secondHandList";
+		        return "redirect:secondHand.ah";
 		    } else {
 		        // 예약 실패
 		        throw new secondHandException("예약 실패");
@@ -337,7 +347,7 @@ public class SecondHandController {
 		
 		 if (result > 0) {
 		        // 판매 완료
-		        return "views/yoonahrim/secondHandList";
+		        return "redirect:secondHand.ah";
 		    } else {
 		        // 판매 완료 실패
 		        throw new secondHandException("판매완료 실패");
@@ -353,7 +363,7 @@ public class SecondHandController {
 		
 		 if (result > 0) {
 		        // 삭제
-		        return "views/yoonahrim/secondHandList";
+		        return "redirect:secondHand.ah";
 		    } else {
 		        // 삭제 실패
 		        throw new secondHandException("삭제 실패");
@@ -374,7 +384,6 @@ public class SecondHandController {
 		return "views/yoonahrim/chatingRoom";
 	}
 	
-	
 	public String deleteAttm(@RequestParam("spNo") int spNo, Model model) {
 		
 		int result = spService.deleteAttmForN(spNo);
@@ -387,26 +396,97 @@ public class SecondHandController {
 	}
 	
 	@GetMapping("admin.ah")
-	public String adminSecondPage(@ModelAttribute secondHandProduct sp, Model model, @RequestParam(value="page", defaultValue="1")int page, HttpServletRequest request) {
+	public String adminSecondPage(@ModelAttribute secondHandProduct sp, Model model ,@RequestParam(value="page", defaultValue="1")int page, HttpServletRequest request) {
 		
-		
-		int listCount = spService.getListCount(4);
+		int listCount = spService.getListCount();
 		int currentPage = page;
 		
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
-		ArrayList<secondHandProduct> list = spService.selectBoardList(pi,1);
-		ArrayList<secondHandProduct> sList=  spService.selectAdminList(sp);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 8);
+		ArrayList<secondHandProduct> list = spService.selectBoardList(pi, 4);
+		ArrayList<Photo> aList = spService.selectAttachmentList(sp.getSpNo());
 		
 		if(list != null) {
 			model.addAttribute("pi", pi);
 			model.addAttribute("list", list);
 			model.addAttribute("loc", request.getRequestURI());
-			model.addAttribute("sList", sList);
-			return "views/yoonahrim/test2";
+			model.addAttribute("aList", aList);
+			return "views/yoonahrim/adminSecondHand";
 		}else {
 			throw new secondHandException("없다");
 		}
 	}
+	
+	@PostMapping("editAdmin.ah")
+	public String editAdmin(@ModelAttribute secondHandProduct sp) {
+		int result = spService.updateAdminInfo(sp);
+		
+		System.out.println(sp);
+		if(result > 0) {
+			return "redirect:admin.ah";
+		}else {
+			throw new secondHandException("업데이트 실패함.");
+		}
+		
+	}
+	
+	@GetMapping("searchSecondHand.ah")
+	   public String campSerchList(@ModelAttribute secondHandProduct sp,@RequestParam("region") String region,
+	                              @RequestParam("type") String type,
+	                              @RequestParam(value="page", defaultValue="1") int page,
+	                              Model model) {
+	      
+		  HashMap<String, String> map = new HashMap<>();
+		  map.put("region", region);
+		  map.put("type", type);
+		  int result = spService.searchSpCount(map);
+		  
+		  int currentPage = page;
+	      PageInfo pi = Pagination.getPageInfo(currentPage, result, 8);
+		  
+	      ArrayList<secondHandProduct> spList = spService.searchSpList(map);
+	      ArrayList<Photo> aList = spService.selectPhotoSeconHand(null);
+	      
+	      if(spList != null) {
+	    	 model.addAttribute("aList", aList);
+	         model.addAttribute("result", result);
+	         model.addAttribute("spList", spList);
+	         model.addAttribute("region", region);
+	         model.addAttribute("type", type);
+	         model.addAttribute("pi", pi);
+	         
+	         return "views/yoonahrim/searchSecondHand";
+	      }else {
+	         throw new secondHandException("검색에 실패하였습니다");
+	      }
+	      
+	   }
+	
+	//회원 검색
+		@PostMapping("searchAdmin.ah")
+		public String searchId(@RequestParam(value = "page", defaultValue = "1") int page,
+								@RequestParam(value = "searchType", defaultValue = "") String searchType,
+								@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
+								HttpServletRequest request) {
+			
+			HashMap<String, String>map = new HashMap<>();
+			map.put("keyword", keyword);
+			map.put("searchType", searchType);
+			
+			int currentPage = page;
+			int listCount = spService.searchAdminList(map);
+			
+			PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 8);
+			ArrayList<secondHandProduct> slist = spService.searchtAdminList(pi, map);
+			
+			if(slist != null) {
+				model.addAttribute("pi", pi);
+				model.addAttribute("slist", slist);
+				model.addAttribute("loc", request.getRequestURI()); // url 다 가져옴 / uri 뒤에만 가져옴
+				return "views/yoonahrim/searchAdminSecondHand";
+			} else {
+				throw new MemberException("게시글 목록 조회에 실패하였습니다.");
+			}
+		}
 	
 }
 	

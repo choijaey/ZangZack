@@ -43,4 +43,14 @@ public class ChatServiceImpl implements ChatService{
 		return cDAO.chatterList(roomName);
 	}
 
+	@Override
+	public int insertChat(ChatRoom cr) {
+		return cDAO.insertChat(cr);
+	}
+
+	@Override
+	public void deleteChat(String no) {
+		cDAO.deleteChat(no);
+	}
+
 }
