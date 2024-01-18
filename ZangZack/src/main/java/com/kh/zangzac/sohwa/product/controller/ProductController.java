@@ -618,6 +618,7 @@ public class ProductController {
       }
    }
    
+   
    @GetMapping("centerView.so")
    public String qnaView(Model model) {
       Member loginUser = (Member)model.getAttribute("loginUser");
@@ -1161,8 +1162,6 @@ public class ProductController {
          }
          
       int optionResult = pService.insertOption(oList);
-      
-      
       
       
       //deleteAttm이 비워져있고, coreFiles와 detailFiles도 비워져있을 때
