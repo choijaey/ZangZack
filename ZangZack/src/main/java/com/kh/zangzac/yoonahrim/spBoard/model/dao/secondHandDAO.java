@@ -70,6 +70,8 @@ public interface secondHandDAO {
 
 	ArrayList<Chatter> chatterList(String roomName);
 
+	secondHandProduct selectBoard(int spNo);
+
 	
 
 

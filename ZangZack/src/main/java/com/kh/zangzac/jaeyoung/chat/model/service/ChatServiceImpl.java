@@ -40,7 +40,8 @@ public class ChatServiceImpl implements ChatService{
 
 	@Override
 	public ArrayList<Chatter> chatterList(String roomName) {
-		return cDAO.chatterList(roomName);
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -52,5 +53,6 @@ public class ChatServiceImpl implements ChatService{
 	public void deleteChat(String no) {
 		cDAO.deleteChat(no);
 	}
+
 
 }
