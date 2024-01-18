@@ -1,7 +1,6 @@
 package com.kh.zangzac.yoonahrim.spBoard.model.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
@@ -13,7 +12,6 @@ import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.jaeyoung.chat.model.vo.Chatter;
-import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
 import com.kh.zangzac.yoonahrim.spBoard.model.dao.secondHandDAO;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
@@ -128,42 +126,13 @@ public class secondHandServiceImpl implements secondHandService{
 	public int updateAdminInfo(secondHandProduct sp) {
 		return spDAO.updateAdminInfo(sp);
 	}
-	/*
+
 	@Override
-	public ArrayList<secondHandProduct> selectSeconHand(PageInfo pi, String id, int spNo) {
+	public ArrayList<secondHandProduct> selectSeconHand(PageInfo pi, int i) {
 		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
-		
-		secondHandProduct s = spDAO.selectBoard(spNo);
-	      if(s != null) {
-	         if(id != null && !s.getMemberId().equals(id)) {
-	            int result = spDAO.updateCount(spNo);
-	            if(result > 0) {
-	               s.setReplyCount(s.getReplyCount() + 1);
-	            }
-	         }
-	      } 
-		return 
+		return spDAO.selectSeconHand(i, rowBounds);
 	}
-	*/
-	
-	@Override
-	public secondHandProduct selectSeconHand(PageInfo pi, String id, int spNo) {
-	    RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1) * pi.getBoardLimit(), pi.getBoardLimit());
 
-	    secondHandProduct s = spDAO.selectBoard(spNo);
-
-	    if (s != null) {
-	        if (id != null && !s.getMemberId().equals(id)) {
-	            // Update count and ignore the result
-	            spDAO.updateCount(spNo);
-	            s.setReplyCount(s.getReplyCount() + 1);
-	        }
-	    }
-
-	    // 바로 객체를 반환합니다.
-	    return s;
-	}
-	
 	@Override
 	public int searchSpCount(HashMap<String, String> map) {
 		return spDAO.searchSpCount(map);
@@ -188,6 +157,7 @@ public class secondHandServiceImpl implements secondHandService{
 	@Override
 	public int updateCount(int spNo) {
 		return spDAO.updateCount(spNo);
+
 	}
 
 	@Override

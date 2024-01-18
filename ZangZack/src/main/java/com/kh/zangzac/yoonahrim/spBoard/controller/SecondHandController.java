@@ -19,9 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.Pagination;
-import com.kh.zangzac.common.controller.BoardCondition;
 import com.kh.zangzac.common.model.vo.PageInfo;
-import com.kh.zangzac.common.model.vo.SelectCondition;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.jaeyoung.chat.ChatFileManager;
@@ -51,16 +49,14 @@ public class SecondHandController {
         this.imageStorage = imageStorage;
     }
     
-    @Autowired
+ @Autowired
     ChatFileManager cFileManager;
-    
-    @Autowired
-    private BoardCondition boardSet;
-    
+
 	//중고 메인 페이지로 이동
 	@GetMapping("secondHand.ah")
 	public String secondHand(@ModelAttribute secondHandProduct sp, Model model,
 							 @RequestParam(value="page", defaultValue="1") int page, HttpServletRequest request, HttpSession session) {
+		
 		
 		int listCount = spService.getListCount();
 		
@@ -69,14 +65,13 @@ public class SecondHandController {
 		ArrayList<Photo> aList = spService.selectPhotoSeconHand(null);
 		
 		int spNo = sp.getSpNo();
-		secondHandProduct sList =  spService.selectSeconHand(pi, ((Member)session.getAttribute("loginUser")).getMemberId(), sp.getSpNo());
+		ArrayList<secondHandProduct> sList =  spService.selectSeconHand(pi, 4);
 		
 		model.addAttribute("loginUser", session.getAttribute("loginUser"));
 		model.addAttribute("aList", aList);
 		model.addAttribute("sList", sList);
 		model.addAttribute("pi", pi);
 		model.addAttribute("loc", request.getRequestURI());
-		
 		
 		return "views/yoonahrim/secondHandList";
 	}
@@ -226,6 +221,8 @@ public class SecondHandController {
 		ArrayList<secondHandProduct> sList=  spService.selectMyList(sp);
 		ArrayList<Photo> aList = spService.selectAttachmentList(spNo);
 		ArrayList<Reply> rList = spService.selectReply(spNo);
+		//댓글 개수를 가져오는 로직
+	    //int replyCount = replyService.getReplyCountByPostId(postId);
 		
 		 // aList를 spNo의 순서로 정렬
 	    Collections.sort(aList, Comparator.comparingInt(Photo::getPhotoNo));
@@ -233,6 +230,7 @@ public class SecondHandController {
 		model.addAttribute("aList", aList);
 		model.addAttribute("slist", sList);
 		model.addAttribute("rList", rList);
+		//model.addAttribute("replyCount", replyCount); // 댓글 개수
 		return "views/yoonahrim/secondHandDetail";
 	}
 	
@@ -377,32 +375,33 @@ public class SecondHandController {
 	}
 	
 	//채팅 화면 이동
-	@GetMapping("chating.ah")
-	public String chating(@RequestParam("memberId") String memberId, @RequestParam("userId") String userId , Model model) {
-		
-	    String roomName = "";
-		//두 숫자를 비교
-  	   int result = userId.compareTo(memberId);
-  	   
-  	   //정렬에 따라 룸네임 정하기
-        if (result < 0) {
-          roomName = userId+"@"+memberId;
-        } else if (result > 0) {
-      	  roomName = memberId+"@"+userId;
-        } 
-		
-        ArrayList<Chatter> list = spService.chatterList(roomName);
-		JSONArray chatLogs = cFileManager.readChatLog(roomName);
-		
-		System.out.println(chatLogs);
-		
-		model.addAttribute("id", memberId);
-		model.addAttribute("list", list);
-		model.addAttribute("chatLogs", chatLogs);
-		
-		
-		return "views/yoonahrim/chatingRoom";
-	}
+	   @GetMapping("chating.ah")
+	   public String chating(@RequestParam("memberId") String memberId, @RequestParam("userId") String userId , Model model) {
+	      
+	       String roomName = "";
+	      //두 숫자를 비교
+	        int result = userId.compareTo(memberId);
+	        
+	        //정렬에 따라 룸네임 정하기
+	        if (result < 0) {
+	          roomName = userId+"@"+memberId;
+	        } else if (result > 0) {
+	           roomName = memberId+"@"+userId;
+	        } 
+	      
+	        ArrayList<Chatter> list = spService.chatterList(roomName);
+	      JSONArray chatLogs = cFileManager.readChatLog(roomName);
+	      
+	      System.out.println(chatLogs);
+	      
+	      model.addAttribute("id", memberId);
+	      model.addAttribute("list", list);
+	      model.addAttribute("chatLogs", chatLogs);
+	      
+	      
+	      return "views/yoonahrim/chatingRoom";
+	   }
+	   
 	
 	public String deleteAttm(@RequestParam("spNo") int spNo, Model model) {
 		
@@ -450,7 +449,8 @@ public class SecondHandController {
 	}
 	
 	@GetMapping("searchSecondHand.ah")
-	   public String campSerchList(@ModelAttribute secondHandProduct sp,@RequestParam("region") String region,
+	   public String campSerchList(@ModelAttribute secondHandProduct sp,
+			   					  @RequestParam("region") String region,
 	                              @RequestParam("type") String type,
 	                              @RequestParam(value="page", defaultValue="1") int page,
 	                              Model model) {
@@ -481,7 +481,7 @@ public class SecondHandController {
 	      
 	   }
 	
-		//회원 검색
+	//회원 검색
 		@PostMapping("searchAdmin.ah")
 		public String searchId(@RequestParam(value = "page", defaultValue = "1") int page,
 								@RequestParam(value = "searchType", defaultValue = "") String searchType,
@@ -494,6 +494,7 @@ public class SecondHandController {
 			
 			int currentPage = page;
 			int listCount = spService.searchAdminList(map);
+			
 			PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 8);
 			ArrayList<secondHandProduct> slist = spService.searchtAdminList(pi, map);
 			

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<head>
+<meta charset="UTF-8">
+<meta>
+<title>캠핑장 정보 등록</title>
+<style>
+ body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+}
+
+.container2 {
+    width: 50%;
+    margin-top:100px;
+    margin:0 auto;
+    margin-top:100px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.form-group input[type="number"] {
+     width: 90%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width:100px;
+}
+
+.form-group input[type="file"] {
+    border: none;
+}
+
+button {
+    width: 100px;
+    padding: 10px;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #4cae4c;
+}
+</style>
+
+</head>
+<body>
+   <div th:replace="~{common/admin :: admin}"></div>
+	<form action="campInsert.ys" method="POST"  enctype="multipart/form-data">  
+	   <div class="container2">
+	     <div>
+	       <h1 style="text-align: center;">캠핑장 등록</h1>
+	       <br>
+	       <div class="form-group">
+	         <label for="campsiteName">캠핑장 지역:</label>
+	         <select name="cgRegion" id="" style=" margin-right: 10px; height:30px; ">
+	              <option value=>시/도 선택</option>
+	              <option>강원도</option>
+	              <option>경기도</option>
+	              <option>경상남도</option>
+	              <option>경상북도</option>
+	              <option>광주</option>
+	              <option>대구</option>
+	              <option>대전</option>
+	              <option>부산</option>
+	              <option>서울</option>
+	              <option>울산</option>
+	              <option>인천</option>
+	              <option >전라남도</option>
+	              <option>전라북도</option>
+	              <option>제주도</option>
+	              <option>충청남도</option>
+	              <option>충청북도</option>
+	           </select>
+	       </div><br>
+	       <div class="form-group">
+	            <label for="campsiteName">캠핑장 이름:</label>
+	            <input type="text" id="campsiteName" name="cgName" required>
+	        </div><br>
+	        <div class="form-group">
+	            <label for="rating">별점 :</label>
+	            <input type="number" step="0.1" min="0" max="5"  name="cgStarPoint" required >
+	        </div><br>
+	        <div class="form-group" id="fileInputs">
+			    <label for="facilities">캠핑장 이미지:</label>
+			    <button type="button" id="addfile">추가버튼</button>
+			    <div id="fileArea">
+			      <div class="mb-3">
+			        <input type="file" id="campImg" name="campImg" accept="image/*" style=" width:200px;" onchange="previewImage3()">
+			        <div class="infoImgs" style="display:inline-block"></div> 
+			      </div>
+				</div>		
+		    </div>
+		    <br>
+			<div style="width:750px; margin-left: 10px;">
+			         <table class="table" >
+					   <tr>
+					     <td>주소</td>
+					     <td><input text="text" style="width:500px;" name="cgAddress"></td>
+					   </tr>
+					   <tr>
+					     <td>문의처</td>
+					     <td><input text="text" style="width:500px;" name="cgPhone"></td>
+					   </tr>
+					   <tr>
+					     <td>캠핑장 유형</td>
+					     <td><input text="text" style="width:500px;" name="cgType"></td>
+					   </tr>
+					   <tr>
+					     <td>캠핑장 환경</td>
+					     <td><input text="text" style="width:500px;" name="cgArea"></td>
+					   </tr>
+					   <tr>
+					     <td>운영기간</td>
+					     <td><input text="text" style="width:500px;" name="cgSeason"></td>
+					   </tr>
+					   <tr>
+					     <td>운영일</td>
+					     <td><input text="text" style="width:500px;" name="cgManageDate"></td>
+					   </tr>
+					   <tr>
+					     <td>홈페이지</td>
+					     <td><input text="text" style="width:500px;" name="cgPage"></td>
+					   </tr>
+					   <tr>
+					     <td>예약방법</td>
+					     <td><input text="text" style="width:500px;" name="cgBooking"></td>
+					   </tr>
+					   <tr>
+					     <td>주변이용가능시설</td>
+					     <td><input text="text" style="width:500px;" name="cgInfo"></td>
+					   </tr>
+					  <tr>
+					     <td>캠핑장 소개</td>
+					     <td><textarea style="width:500px;height:200px;" name="cgAmenity"></textarea></td>
+					  </tr> 
+					  <tr>
+					     <td>시설안내</td>
+					     <td><input text="text" style="width:500px;" name="cgImgInfo"></td>
+					  </tr> 
+					  <tr>
+					     <td>추천여부</td>
+					     <td><input text="text" style="width:100px;" name="cgRecomendation"></td>
+					  </tr>    
+				  </table>	  
+	          </div>
+	        
+		      <button type="submit">등록</button>
+		      <button style="background-color: red; margin-left: 10px;">취소</button>  
+	     </div>
+	   </div>
+	</form> 
+   <script th:lnline="javascript">
+	window.onload = () => {
+		const fileArea = document.querySelector('#fileArea');
+		document.getElementById('addfile').addEventListener('click', ()=> {
+			const newDiv = document.createElement('div');
+			newDiv.classList.add('mb-3');
+			newDiv.innerHTML = '<input type="file" name="campImg" accept="image/*" style=" width:200px;" onchange="previewImage4()"><div class="infoImgs" style="display:inline-block"></div><button type="button" class="deleteInput">삭제</button>';
+			
+			fileArea.append(newDiv);
+			
+			 // 삭제 버튼에 클릭 이벤트 추가
+	        const deleteButton = newDiv.querySelector('.deleteInput');
+	        deleteButton.addEventListener('click', () => {
+	            newDiv.remove(); // 해당 div를 삭제
+	        });
+		});	
+		
+     }
+	function previewImage3() {
+		const input = document.getElementById('campImg');
+        const infoImgs = input.parentElement.querySelector('.infoImgs');
+
+        while (infoImgs.firstChild) {
+            infoImgs.removeChild(infoImgs.firstChild);
+        }
+
+        const files = input.files;
+        for (const file of files) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.width = '150px'; // 미리보기 이미지의 너비를 조절할 수 있습니다.
+                infoImgs.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+	
+	function previewImage4() {
+		const input = event.target;
+        const infoImgs = input.parentElement.querySelector('.infoImgs');
+
+        while (infoImgs.firstChild) {
+            infoImgs.removeChild(infoImgs.firstChild);
+        }
+
+        const files = input.files;
+        for (const file of files) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.width = '150px'; // 미리보기 이미지의 너비를 조절할 수 있습니다.
+                infoImgs.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+	}
+	
+	
+</script>
+
+</body>
+</html>

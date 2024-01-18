@@ -54,7 +54,7 @@ public interface secondHandService {
 
 	int updateAdminInfo(secondHandProduct sp);
 
-	secondHandProduct selectSeconHand(PageInfo pi, String id, int spNo);
+	ArrayList<secondHandProduct> selectSeconHand(PageInfo pi, int i);
 
 	int searchSpCount(HashMap<String, String> map);
 
@@ -67,8 +67,6 @@ public interface secondHandService {
 	int updateCount(int spNo);
 
 	ArrayList<Chatter> chatterList(String roomName);
-
-	
 
 
 
