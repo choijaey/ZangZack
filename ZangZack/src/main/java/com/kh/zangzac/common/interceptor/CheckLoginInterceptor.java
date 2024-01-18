@@ -30,7 +30,7 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
 				msg = "로그인 세션이 만료되어 로그인 화면으로 넘깁니다";
 			}
 			response.setContentType("text/html; charset=UTF-8");
-			response.getWriter().write("<script>alert('"+msg+"'); location.href='login.me';</script>");
+			response.getWriter().write("<script>alert('"+msg+"'); location.href='home.me';</script>");
 			
 			return false; // 못 넘어가게 막기
 		}
