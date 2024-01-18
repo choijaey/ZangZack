@@ -170,7 +170,10 @@ public class SocketHandler extends TextWebSocketHandler {
     	  
     	  if(count>0) {
     		  // 채팅방에 이미 있는 상태라면
+    		  
     		  boolean check = cFileManager.updateUnreadChatter(roomName,myId);
+    		  System.out.println(myId);
+    		  System.out.println(check);
     		  
     		  //입장한 채팅방에 메시지를 보내 갱신시키게 만들거.
     		  
@@ -193,6 +196,7 @@ public class SocketHandler extends TextWebSocketHandler {
 	    	            }
 	    	            
 	    	            obj.put("type", "reset");
+	    	            System.out.println("오나요??");
 	    	            //각 세션에 보내기
 	    	            WebSocketSession wss = (WebSocketSession)((ChatSession)(temp.get(k))).getSession();
 	    	            if(wss != null) {
