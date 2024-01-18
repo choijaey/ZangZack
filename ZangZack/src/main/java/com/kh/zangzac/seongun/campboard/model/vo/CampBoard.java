@@ -1,6 +1,6 @@
 package com.kh.zangzac.seongun.campboard.model.vo;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,8 +18,8 @@ public class CampBoard {
 	private String cbTitle;
 	private String cbContent;
 	private int cbCount;
-	private Date cbCreateDate;
-	private Date cbModifyDate;
+	private LocalDateTime cbCreateDate;
+	private LocalDateTime cbModifyDate;
 	private String cbStatus;
 	private String memberId;
 	private String memberProfilePath;
@@ -27,7 +27,9 @@ public class CampBoard {
 	private String memberName;
 	private String categoryName;
 	private int heartCount;
+	private boolean heartCheck;
 	private String photoPath;
 	private String photoRename;
 	private int replyCount;
+	private String formatDate;
 }

@@ -5,7 +5,7 @@
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <style>
-* {
+*{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -155,9 +155,6 @@ a {
       cursor: pointer;
   }
   .img-style{
-  	width: 2000px;
-  	height: 1000px;
-  	background-color:#F2ECE3;
   }
   
   .chat-list {
@@ -261,8 +258,7 @@ a {
 	.wrap .ch1 .time{
 		 position: absolute;
 		 text-align: left; /* 닉네임을 왼쪽 정렬 */
-		 top:75px;
-	   	 left: 85px; /* 왼쪽 정렬 */
+		 top:56px;
 	   	 width:100px;
 	   	 font-size: 10px;
 	  	 color: #fff;
@@ -270,8 +266,8 @@ a {
 	.wrap .ch1 .count{
 		 position: absolute;
 		 text-align: left; /* 닉네임을 왼쪽 정렬 */
-		 top:78px;
-	   	 left: 145px; /* 왼쪽 정렬 */
+		 top:59px;
+		 left:65px;
 	   	 width:100px;
 	   	 font-size: 10px;
 	  	 color: yellow;
@@ -279,18 +275,18 @@ a {
 	
 	.wrap .ch2 .time{
 		 position: absolute;
-		 text-align: left; /* 닉네임을 왼쪽 정렬 */
-		 top:52px;
-	   	 right: 35px; /* 왼쪽 정렬 */
+		 text-align: right; /* 닉네임을 왼쪽 정렬 */
+		 top:56px;
+		 right:10;
 	   	 width:100px;
 	   	 font-size: 10px;
 	  	 color: #fff;
 	}
 	.wrap .ch2 .count{
 		 position: absolute;
-		 text-align: left; /* 닉네임을 왼쪽 정렬 */
-		 top:55px;
-	   	 right: 60px; /* 왼쪽 정렬 */
+		 text-align: right; /* 닉네임을 왼쪽 정렬 */
+		 right:65px;
+		 top:59px;
 	   	 width:100px;
 	   	 font-size: 10px;
 	  	 color: yellow;
@@ -307,7 +303,7 @@ a {
 	<div class="move_test">
 		<div class="chat-title">
 			<img src="image/chat/icon1.png">
-            <div class="chat-list-title">GLAMPING</div>
+            <div class="chat-list-title">[[${chatName}]]</div>
         </div>
 		<div class="test">
 			<img src="image/chat/back2.gif"/>
@@ -315,67 +311,45 @@ a {
 		
 		<!-- 채팅 목록 -->
         <div class="chat-list">
-            <div class="chat-list-item">채팅자1</div>
-            <div class="chat-list-item">채팅자2</div>
-            <div class="chat-list-item">채팅자3</div>
-            <div class="chat-list-item">채팅자1</div>
-            <div class="chat-list-item">채팅자2</div>
-            <div class="chat-list-item">채팅자3</div>
-            <div class="chat-list-item">채팅자1</div>
-            <div class="chat-list-item">채팅자2</div>
-            <div class="chat-list-item">채팅자3</div>
-            <div class="chat-list-item">채팅자1</div>
-            <div class="chat-list-item">채팅자2</div>
-            <div class="chat-list-item">채팅자3</div>
-            <div class="chat-list-item">채팅자1</div>
-            <div class="chat-list-item">채팅자2</div>
-            <div class="chat-list-item">채팅자3</div>
-            <div class="chat-list-item">채팅자1</div>
-            <div class="chat-list-item">채팅자2</div>
-            <div class="chat-list-item">채팅자3</div>
-            <div class="chat-list-item">채팅자1</div>
-            <div class="chat-list-item">채팅자2</div>
-            <div class="chat-list-item">채팅자3</div>
-            <div class="chat-list-item">채팅자1</div>
-            <div class="chat-list-item">채팅자2</div>
-            <div class="chat-list-item">채팅자3</div>
-            <!-- 원하는 만큼 채팅자 목록을 추가할 수 있습니다. -->
+        	<th:block th:each="chatter:${list}">
+            	<div class="chat-list-item">[[${chatter.memberNickName}]]</div>
+            </th:block>
         </div>
 	
-	    <div class="wrap">
-	    	<div class="chat ch1">	
-                <div class="nickname">${nickName}</div>
-                <div class="icon"><img src="${profile}" class="fa-solid fa-user" style="width:100%; height:100%; background-size: cover;"></img></div>
-                <div class="textbox">나는 행복합니다. 나는 행복합니다~~~ 나는 행복합니다 행복행복 합니다??</div>
-            	<div class="time">PM 12:34</div>
-	            <div class="count">23</div>
-             </div>
-             <div class="chat ch2">	
-                <div class="nickname">${nickName}</div>
-                <div class="icon"><img src="${profile}" class="fa-solid fa-user" style="width:100%; height:100%; background-size: cover;"></img></div>
-                <div class="textbox">${message}</div>
-                <div class="time">PM 12:34</div>
-	            <div class="count">23</div>
-             </div>
+	    <div class="wrap" id="wrap">
+	    
+	    	<th:block th:each="chatLog : ${chatLogs}">
+			    <div th:class="|chat ${chatLog.memberId != session.loginUser.MemberId ? 'ch1' : 'ch2'}|">
+			        <div class="nickname" th:text="${chatLog['nickName']}"></div>
+			        <div class="icon">
+			            <img th:src="${chatLog.profile}" class="fa-solid fa-user" style="width:100%; height:100%; background-size: cover;">
+			        </div>
+			        <div class="textbox" th:text="${chatLog.msg}"></div>
+			        <div class="time" th:text="${chatLog.time}"></div>
+			        <div class="count" th:text="${chatLog.unReadChatterCount}"></div>
+			    </div>
+			</th:block>
 	  
   	 	</div>
 	    
 	     <div class="chat-input">
-	     	<input type="hidden" id="roomName">
+	     	<input type="hidden" id="roomName" th:value="${roomName}">
             <input type="hidden" id="sessionId">
-            <input type="hidden" id="nickName" value="nickName">
-            <input type="hidden" id="memberId" value="12345a">
-            <input type="hidden" id="profile" value="https://storage.googleapis.com/zangzac/image/ming/BasicProfile.png">
+            <input type="hidden" id="nickName" th:value="${session.loginUser.memberNickName}">
+            <input type="hidden" id="memberId" th:value="${session.loginUser.memberId}">
+            <input type="hidden" id="profile" th:value="${session.loginUser.memberProfilePath}">
             <input type="text" placeholder="메시지를 입력하세요..." id="chatting">
             <button id="sendBtn" onclick="send()">전송</button>
         </div>
     </div>
     <script type="text/javascript">
 		let ws;
-	
+		
 		function wsOpen(){
 			//웹소켓 전송시 현재 방의 번호를 넘겨서 보낸다.
-			ws = new WebSocket("ws://" + location.host + "/chating/choi0000/1/1");
+			let id =$("#memberId").val();
+			let roomName = $("#roomName").val();
+			ws = new WebSocket("ws://" + location.host + "/chating/"+id+"/"+roomName+"/1");
 			wsEvt();
 		}
 		
@@ -410,6 +384,9 @@ a {
 							addChat(d.msg,d.userName,1,d.profile,d.nickName,d.time,d.unReadChatter);
 						}
 							
+					}else if(d.type == "reset"){
+						// 오면 카운트 부분 이너텍스트 줄이기
+						countDown();
 					}else{
 						console.warn("unknown type!")
 					}
@@ -445,6 +422,13 @@ a {
         
         function addChat(message, id,type,profile,nickName,time,count) {
             var wrap = document.querySelector(".wrap");
+            let countText;
+            
+            if(count!=0){
+            	countText = `<div class="count">${count}</div>`;
+            }else{
+            	countText = `<div class="count"></div>`;
+            }
 
             // innerHTML을 사용하여 문자열로 직접 HTML을 추가
             wrap.innerHTML += `
@@ -453,12 +437,39 @@ a {
                 <div class="icon"><img src="${profile}" class="fa-solid fa-user" style="width:100%; height:100%; background-size: cover;"></img></div>
                     <div class="textbox">${message}</div>
                     <div class="time">${time}</div>
-    	            <div class="count">${count}</div>
+    	            ${countText}
                 </div>
             `;
             
             wrap.scrollTop = wrap.scrollHeight;
         }
+        
+        function countDown(){
+        	const countElement = document.getElementsByClassName('count')
+        	
+        	for(count of countElement){
+        		 let num = parseInt(count.innerText, 10);
+        		 num--; 
+        		 if(num != 0){
+        		 	count.innerText = num;
+        		 }else{
+        			 count.innerText = "";
+        		 }
+        	}
+        }
+	</script>
+	
+	<script >
+		window.addEventListener('load', () => {
+			  // 특정 div 요소 선택
+			  const div = document.getElementById('wrap'); // 'yourDivId'를 해당 div의 ID로 변경하세요.
+	
+			  // div의 스크롤 가능한 높이 계산
+			  const scrollHeight = div.scrollHeight;
+	
+			  // div의 스크롤을 하단으로 이동
+			  div.scrollTop = scrollHeight;
+			});
 	</script>
     
     

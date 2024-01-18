@@ -51,4 +51,71 @@
 		set cb_count = cb_count + 1
 		where cb_no = #{cbNo}
 	</update>
+	
+	<select id="searchListCount" resultType="_int">
+		select count(*)
+		FROM camp_board_view
+		<where>
+		    cb_status = 'N'
+		    <if test="searchText != null and searchText != ''">
+		        <choose>
+		            <when test="searchCategory == 0">
+		                and (cb_title like #{searchText} or cb_content like #{searchText} or member_Name like #{searchText})
+		            </when>
+		            <when test="searchCategory == 1">
+		                and cb_title like #{searchText}
+		            </when>
+		            <when test="searchCategory == 2">
+		                and cb_content like #{searchText}
+		            </when>
+		            <when test="searchCategory == 3">
+		                and member_Name like #{searchText}
+		            </when>
+		        </choose>
+	    	</if>
+	    	<if test="searchCategoryNo != 0">
+	            and category_no = #{searchCategoryNo}
+	        </if>
+    	</where>
+	</select>
+	
+	<select id="searchBoardList" resultType="CampBoard">
+		select *
+		FROM camp_board_view
+		<where>
+		    cb_status = 'N'
+		    <if test="searchText != null and searchText != ''">
+		        <choose>
+		            <when test="searchCategory == 0">
+		                and (cb_title like #{searchText} or cb_content like #{searchText} or member_Name like #{searchText})
+		            </when>
+		            <when test="searchCategory == 1">
+		                and cb_title like #{searchText}
+		            </when>
+		            <when test="searchCategory == 2">
+		                and cb_content like #{searchText}
+		            </when>
+		            <when test="searchCategory == 3">
+		                and member_Name like #{searchText}
+		            </when>
+		        </choose>
+	    	</if>
+	    	<if test="searchCategoryNo != 0">
+	            and category_no = #{searchCategoryNo}
+	        </if>
+    	</where>
+	    order by cb_no desc
+	</select>
+	
+	<update id="deleteCampBoard">
+		update camp_board 
+		set cb_status = 'Y'
+		where cb_no = #{cbNo}
+	</update>
+	
+	<update id="updateCampBoard">
+		update camp_board
+		set cb_title = #{cbTitle}, category_no=#{categoryNo}, cb_content=#{cbContent}
+		where cb_no = #{cbNo}
+	</update>
 </mapper>

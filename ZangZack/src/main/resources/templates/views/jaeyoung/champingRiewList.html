@@ -80,6 +80,80 @@
 			    background-image: linear-gradient(to right, #fc6076, #ff9a44, #ef9d43, #e75516);
 			    box-shadow: 0 4px 15px 0 rgba(252, 104, 110, 0.75);
 			}
+			
+			#pagenation {
+			   text-align: center;
+			}
+			
+			#pagenation ul {
+			   list-style: none;
+			   padding: 0;
+			   display: inline-block; /* 중앙 정렬을 위해 inline-block으로 변경 */
+			   margin: 0; /* 기본 마진 제거 */
+			}
+			
+			#pagenation ul li {
+			   display: inline;
+			   margin: 0 5px;
+			}
+			
+			#pagenation ul li a {
+			   text-decoration: none;
+			    text-align: center;
+			    color: #333;
+			    font-size: 14px;
+			    width: 30px; /* 정사각형의 너비 */
+			    height: 30px; /* 정사각형의 높이 */
+			    line-height: 30px; /* 텍스트를 수직 중앙에 위치시킴 */
+			    padding: 0; /* 패딩을 제거하거나 조정 */
+			    border-radius: 5px; /* 모서리를 둥글게 */
+			    display: inline-block; /* 블록 레벨 요소처럼 너비와 높이를 적용 */
+			    transition: background-color 0.3s, color 0.3s;
+			}
+			
+			#pagenation ul li a:hover {
+			   background-color: #5cb85c;
+			   color: #e6e6e6;
+			}
+			
+			#pagenation ul li a#check_page {
+			   background-color: #5cb85c;
+			   color: #e6e6e6;
+			}
+			.search_area {
+			   display: flex;
+			   justify-content: center;
+			   align-items: center;
+			   padding: 20px 0;
+			}
+			
+			.search_select {
+			   padding: 5px 10px;
+			   margin-right: 10px;
+			   border: 1px solid #ccc;
+			   border-radius: 5px;
+			}
+			
+			.search_input {
+			   padding: 5px 10px;
+			   border: 1px solid #ccc;
+			   border-radius: 5px;
+			   width: 300px;
+			   margin-right: 10px;
+			}
+			
+			.search_button {
+			   padding: 5px 15px;
+			   border: none;
+			   background-color: #5cb85c;
+			   color: white;
+			   border-radius: 5px;
+			   cursor: pointer;
+			}
+			.divClick{
+				cursor: pointer;
+			}
+			
     </style>
 </head>
 <body>
@@ -87,62 +161,83 @@
     <div class="max-w-7xl mx-auto my-10">
         <header class="flex justify-between items-center mb-6 ">
             <h1 class="text-2xl font-bold ml-12">캠핑장 후기</h1>
-            <button class="btn-hover color-2 text-white px-4 py-2 rounded">글쓰기</button>
+            <button class="btn-hover color-2 text-white px-4 py-2 rounded" onclick="campingReviewRightView()">글쓰기</button>
         </header>
 	      <div class="bg-gray-50 shadow rounded-lg p-6 w-100">
-		    <div class="mb-4"> 
-		        <input type="text" placeholder="검색어를 입력하세요" class="w-full p-3 border border-gray-300 rounded-lg">
-		    </div>
+		    <div class="search_area">
+                  <div class="bg-white border p-3 w-full" style="border-radius: 50px;">
+              		<form action="champingReviewListView.jy">
+					    <div class="flex items-center space-x-4 text-center">
+							<input type="text" name="searchText" class="bg-white w-full p-2 border-none outline-none" placeholder="검색어를 입력하세요." th:value="${searchText}" />
+						    <button type="submit" class="p-2 border-none">
+						        <img src="image/jaeyoung/search.png" alt="검색" class="w-8 h-8" />
+						    </button>
+						</div>
+               		</form>
+				</div>
+            </div>
 		    <div class="grid grid-cols-1 gap-4">
-		       <div class="flex gap-2">
-		       		<img src="https://source.unsplash.com/featured/?house" alt="House" class="w-44 h-44 mr-4 rounded-lg ">
+		       	<div class="flex gap-2 divClick" th:each="cr:${list}" th:id="${cr.crNo}" th:onclick="|campingReviewDetail(${cr.crNo})|">
+		       		<img th:src="${cr.thumnail.photoPath}" class="w-44 h-44 mr-4 rounded-lg ">
 				    <div>
-				        <span class="oval-tag mb-8">오토캠핑</span>
-				        <h2 class="text-lg font-semibold mb-2">xx캠핑장 후기</h2>
-				        <p class="text-gray-600 mb-5">노을이 아름다운 곳 이였습니다.</p>
-				        <div class="text-gray-500 text-sm">작성자 : 최재영 / 날짜 : 2023-12-21 / 조회수 : 99</div>
+				        <span class="oval-tag mb-8">[[${cr.categoryName}]]</span>
+				        <h2 class="text-lg font-semibold mb-2">[[${cr.crTitle}]]</h2>
+				        <p class="text-gray-600 mb-5">[[${cr.crContent}]]</p>
+				        <div class="text-gray-500 text-sm">[[|작성자 : ${cr.memberNickName} / 날짜 : ${cr.crModifydate} / 조회수 : ${cr.crCount}|]]</div>
 				    </div>
 				    <div style="margin-left: auto; margin-top:85px;">
-					    <div class="foreground" style="float: left;">
-					        <span class="background" style="width:50%;"></span><!-- 4.8 x 100 / 5 = 96 퍼센트 계산 식.-->
-					   </div>
-					   
+						<div class="foreground" style="float: left;">
+					        <span class="background" th:style="'width: ' + (${cr.crStar} * 100 / 5) + '%;'"></span>
+					   	</div>
 				    </div>
-				    
 				</div>
-		        <div class="flex gap-2">
-		       		<img src="https://source.unsplash.com/featured/?fire" alt="House" class="w-44 h-44 mr-4 rounded-lg ">
-				    <div>
-				        <span class="oval-tag mb-8">글램핑</span>
-				        <h2 class="text-lg font-semibold mb-2">xx글램핑 후기</h2>
-				        <p class="text-gray-600 mb-5">화장실 시설이 별로였네요.</p>
-				        <div class="text-gray-500 text-sm">작성자 : 박성운 / 날짜 : 2023-11-01 / 조회수 : 3</div>
-				    </div>
-				    <div style="margin-left: auto; margin-top:85px;">
-					    <div class="foreground" style="float: left;">
-					        <span class="background" style="width:15%;"></span><!-- 4.8 x 100 / 5 = 96 퍼센트 계산 식.-->
-					   </div>
-					   
-				    </div>
-				    
-				</div>
-		         <div class="flex gap-2">
-		       		<img src="https://source.unsplash.com/featured/?camp" alt="House" class="w-44 h-44 mr-4 rounded-lg ">
-				    <div>
-				        <span class="oval-tag mb-8">차박</span>
-				        <h2 class="text-lg font-semibold mb-2">xx캠핑장 후기</h2>
-				        <p class="text-gray-600 mb-5">너무 추웠어요.</p>
-				        <div class="text-gray-500 text-sm">작성자 : 김민경 / 날짜 : 2022-10-11 / 조회수 : 998</div>
-				    </div>
-				    <div style="margin-left: auto; margin-top:85px;">
-					    <div class="foreground" style="float: left;">
-					        <span class="background" style="width:70%;"></span><!-- 4.8 x 100 / 5 = 96 퍼센트 계산 식.-->
-					   </div>
-					   
-				    </div>
+		       	<div class="flex gap-2" th:if="${list == null || list.size() == 0}">
+					<h2 class="text-lg font-semibold mb-2" style="text-align:center; margin:auto; padding:100px;">검색된 결과가 없습니다.</h2>
 				</div>
 		    </div>
 		</div>
     </div>
+    
+    <div id="pagenation" th:with="loc=${loc}" th:if="${list == null || !list.isEmpty}">
+            <ul>
+               <!-- 이전 버튼 -->
+               <li th:if="${pi.currentPage > 10}">
+                  <a th:href="@{${loc}(page=${pi.currentPage-10})}">&lt; 이전</a>
+               </li>
+                   <!-- 페이지 번호 -->
+                   <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+                     
+                      <a th:href="@{${loc}(page=${p}, searchText=${searchText})}" th:id="${p == pi.currentPage} ? 'check_page'">
+                         [[${p}]]
+                     </a>
+                   
+               </li>
+                   <!-- 다음 버튼 -->
+                   <li th:if="${pi.maxPage >= 10 && pi.maxPage - pi.currentPage > 10}">
+                      <a th:href="@{${loc}(page=${pi.currentPage+10})}">다음 &gt;</a>
+                   </li>
+                 </ul>
+         </div>
+    
+ 	<script th:inline="javascript">
+ 		function campingReviewRightView(){
+ 			/*<![CDATA[*/
+	        let User = /*[[${session.loginUser}]]*/null;
+	        /*]]>*/
+		 	if(User != null){ //로그인된 유저만 넘어가게
+		 		
+		 		window.location.href="campingReviewRightView.jy";
+		 	}else{
+		 		alert("로그인 후 이용해주세요!")
+		 	}
+		 	
+ 		}
+ 		
+ 		function campingReviewDetail(no){
+ 			crNo = no;
+ 			window.location.href="campingReviewDetail.jy?crNo="+crNo;
+ 			
+ 		}
+ 	</script>
 </body>
 </html>

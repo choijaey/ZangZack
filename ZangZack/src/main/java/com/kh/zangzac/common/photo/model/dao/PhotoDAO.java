@@ -13,4 +13,10 @@ public interface PhotoDAO {
 	
 	int insertPhotoCampBoard(ArrayList<Photo> fileList);
 
+	int deletePhoto(Photo temp);
+
+	int deletePhotoName(String deletePhotoName);
+
+	int updatePhoto(int photoNo);
+
 }

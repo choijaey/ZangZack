@@ -1,5 +1,7 @@
 package com.kh.zangzac.ming.member.model.vo;
 
+
+
 import java.sql.Date;
 
 import lombok.AllArgsConstructor;
@@ -28,4 +30,5 @@ public class Member {
 	private String memberStatus;
 	private String memberProfileRename;
 	private String memberProfilePath;
+	private int memberLoginType; 
 }

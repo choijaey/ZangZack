@@ -15,4 +15,11 @@ public interface ChatService {
 
 	ArrayList<ChatRoom> chatRoomList();
 
+	ArrayList<Chatter> chatterList(String roomName);
+
+	int insertChat(ChatRoom cr);
+
+	void deleteChat(String no);
+
+
 }

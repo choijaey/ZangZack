@@ -56,6 +56,8 @@
     </div>
 
     <script th:inline="javascript">
+    	/*<![CDATA[*/
+    	let memeber = /*[[${session.loginUser}]]*/null;
         document.addEventListener('DOMContentLoaded', function() {
             var addUploadButton = document.getElementById('add-upload-container');
             var originalUploadContainer = document.querySelector('.upload-container');
@@ -109,15 +111,21 @@
         
         window.onload = function() {
             // 서버로부터 전달받은 오류 메시지 확인
-            /*<![CDATA[*/
+            
             var msg = /*[[${msg}]]*/'';
-            /*]]>*/
+            
             
             // errorMessage가 비어있지 않은 경우에만 알림 표시
             if(msg && msg.trim().length > 0) {
                 alert(msg);
             }
+            
+            if(memeber == null){
+        		alert("로그인 후 이용 해주세요.");
+        		history.back();
+        	}
         };
+        /*]]>*/
     </script>
 </body>
 </html>

@@ -22,8 +22,22 @@ public class PhotoServiceImpl implements PhotoService{
 
 	@Override
 	public int insertPhotoCampBoard(ArrayList<Photo> fileList) {
-		
 		return pDAO.insertPhotoCampBoard(fileList);
+	}
+
+	@Override
+	public int deletePhoto(Photo temp) {
+		return pDAO.deletePhoto(temp);
+	}
+
+	@Override
+	public int deletePhotoName(String deletePhotoName) {
+		return pDAO.deletePhotoName(deletePhotoName);
+	}
+
+	@Override
+	public int updatePhoto(int photoNo) {
+		return pDAO.updatePhoto(photoNo);
 	}
 	
 	

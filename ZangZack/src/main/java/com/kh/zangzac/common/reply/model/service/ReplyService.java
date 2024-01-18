@@ -16,5 +16,11 @@ public interface ReplyService {
 	ArrayList<Reply> selectReply(SelectCondition b);
 
 	ArrayList<Reply> replyLimitList(SelectCondition b, PageInfo pi);
+	
+	Reply selectReplyOne(Reply reply);
+
+	int updateReply(Reply r);
+
+	int deleteReply(Reply r);
 
 }

@@ -19,5 +19,11 @@ public interface ReplyDAO {
 	int countReply(SelectCondition b);
 
 	ArrayList<Reply> replyLimitList(SelectCondition b, RowBounds rowBounds);
+	
+	Reply selectReplyOne(Reply reply);
+
+	int updateReply(Reply r);
+
+	int deleteReply(Reply r);
 
 }

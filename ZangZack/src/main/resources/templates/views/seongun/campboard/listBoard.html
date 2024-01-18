@@ -75,7 +75,7 @@
                                 </td>
                                 <td>[[${b.cbCount}]]</td>
                                 <td>추천수</td>
-                                <td>[[${#dates.format(b.cbCreateDate, 'YYYY MM-dd')}]]</td>
+                                <td>[[${b.formatDate}]]</td>
                             </tr>
                         </tbody>
                     </table>
@@ -94,42 +94,62 @@
             <button type="button" id="write_btn" onclick="writeBtn()">글쓰기</button>
         </div>
         <div class="board_bottom_area">
-            <div id="pagenation">
-              <ul>
-                <!-- 이전 버튼 -->
-                <li><a href="#">&lt; 이전</a></li>
-                <!-- 페이지 번호 -->
-                <li><a href="#" id="check_page">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">6</a></li>
-                <li><a href="#">7</a></li>
-                <li><a href="#">8</a></li>
-                <li><a href="#">9</a></li>
-                <li><a href="#">10</a></li>
-                <!-- 다음 버튼 -->
-                <li><a href="#">다음 &gt;</a></li>
-              </ul>
-            </div>
+			<div id="pagenation" th:with="loc=${loc}" th:if="${!list.isEmpty}">
+				<ul>
+					<!-- 이전 버튼 -->
+					<li th:if="${pi.currentPage > 10}">
+						<a th:href="@{${loc}(page=${pi.currentPage-10})}">&lt; 이전</a>
+					</li>
+	                <!-- 페이지 번호 -->
+	                <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+	                	<th:block th:if="${search.searchText == null}">
+							<a th:href="@{${loc}(page=${p})}" th:id="${p == pi.currentPage} ? 'check_page'">
+						        [[${p}]] 
+						    </a>
+					    </th:block>
+					    <th:block th:if="${search.searchText != null}">
+						    <a th:href="@{${loc}(page=${p}, searchCategory=${search.searchCategory}, searchText=${search.searchText})}" th:id="${p == pi.currentPage} ? 'check_page'">
+							    [[${p}]]
+							</a>
+					    </th:block>
+					</li>
+	                <!-- 다음 버튼 -->
+	                <li th:if="${pi.maxPage >= 10 && pi.maxPage - pi.currentPage > 10}">
+	                	<a th:href="@{${loc}(page=${pi.currentPage+10})}">다음 &gt;</a>
+	                </li>
+              	</ul>
+			</div>
             <hr/>
-              <!-- 검색 필터 영역 -->
+              <!-- 검색 필터 영역 -->	
             <div class="search_area">
-                <select name="search_type" class="search_select">
-                    <option value="all">전체</option>
-                    <option value="title">제목</option>
-                    <option value="content">내용</option>
-                    <option value="author">글쓴이</option>
-                </select>
-                <input type="text" class="search_input" placeholder="검색어를 입력하세요." />
-                <button type="submit" class="search_button">검색</button>
+	            <form action="campBoard.su">
+		            <select name="searchCategoryNo" class="search_select">
+			            <option value="0">전체보기</option>
+			            <option value="1">백패킹</option>
+			            <option value="2">오토캠핑</option>
+			            <option value="3">장박</option>
+			            <option value="4">글램핑</option>
+			        </select>
+	                <select name="searchCategory" class="search_select">
+	                    <option value="0">전체</option>
+	                    <option value="1">제목</option>
+	                    <option value="2">내용</option>
+	                    <option value="3">글쓴이</option>
+	                </select>
+	                <input type="text" name="searchText" class="search_input" placeholder="검색어를 입력하세요." />
+	                <button type="submit" class="search_button">검색</button>
+                </form>
             </div>
         </div>
     </div>
     
-    <script th:inline="javascript">
+     <script th:inline="javascript">
 		/*<![CDATA[*/
+		let member = /*[[${session.loginUser}]]*/[];
+		let categoryNo= /*[[${selectedCategory}]]*/ 0;
+		let list = /*[[${list}]]*/null;
+		
+		
         document.addEventListener('DOMContentLoaded', function() {
             // 스크롤이 끝으로 이동 시 이벤트 발생
             window.addEventListener('scroll', function() {
@@ -158,27 +178,60 @@
             });
         });
         
-        const tbody = document.querySelector('tbody');
-        const tds = tbody.querySelectorAll('td');
-        for(const td of tds){
-           td.addEventListener('click', function(){
-              const trTds = this.parentElement.querySelectorAll('td');
-              const boardId = trTds[0].innerText;
-              location.href='selectBoard.su?cbNo=' + boardId + "&page=" +/*[[${pi.currentPage}]]*/1;
-           });
+        if (!list.isEmpty && list.length > 0) {
+            const tbody = document.querySelector('tbody');
+            const tds = tbody.querySelectorAll('td');
+            for (const td of tds) {
+                td.addEventListener('click', function () {
+                    const trTds = this.parentElement.querySelectorAll('td');
+                    const boardId = trTds[0].innerText;
+                    location.href = 'selectBoard.su?cbNo=' + boardId + "&page=" + /*[[${pi.currentPage}]]*/1;
+                });
+            }
         }
         
         function writeBtn(){
-        	window.location.href="writeCampBoardView.su";
+        	if(member != null){
+        		window.location.href="writeCampBoard.su";
+        	}else{
+        		alert("로그인 후 이용해주세요.");
+        		window.location.href="signUp.me";
+        	}
+        }
+        
+        function setCategory(category) {
+            document.querySelector('input[name="category"]').value = category;
+            document.querySelector('form').submit();
         }
         
         window.onload = function() {
-            var msg = /*[[${msg}]]*/'';
+			let msg = /*[[${msg}]]*/'';
             
             // errorMessage가 비어있지 않은 경우에만 알림 표시
             if(msg && msg.trim().length > 0) {
                 alert(msg);
             }
+            var categoryValue = document.getElementsByName('category')[0].value;
+
+            // categoryValue에 따라 해당 링크에 id를 추가합니다.
+            switch (categoryValue) {
+                case '0':
+                    document.querySelector('a[onclick="setCategory(\'0\')"]').id = 'select-category';
+                    break;
+                case '1':
+                    document.querySelector('a[onclick="setCategory(\'1\')"]').id = 'select-category';
+                    break;
+                case '2':
+                    document.querySelector('a[onclick="setCategory(\'2\')"]').id = 'select-category';
+                    break;
+                case '3':
+                    document.querySelector('a[onclick="setCategory(\'3\')"]').id = 'select-category';
+                    break;
+                case '4':
+                    document.querySelector('a[onclick="setCategory(\'4\')"]').id = 'select-category';
+                    break;
+            }
+            
         };
 		/*]]>*/
     </script>

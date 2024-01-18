@@ -2,10 +2,14 @@ package com.kh.zangzac.ming.member.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -21,15 +25,34 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.zangzac.common.ImageStorage;
+import com.kh.zangzac.common.Pagination;
+import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.common.photo.model.vo.Photo;
+import com.kh.zangzac.ming.member.model.exception.MemberException;
 import com.kh.zangzac.ming.member.model.service.MemberService;
 import com.kh.zangzac.ming.member.model.vo.Member;
+import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
+import com.kh.zangzac.sohwa.product.model.vo.Product;
+import com.kh.zangzac.sohwa.product.model.vo.Review;
+import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
 import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @SessionAttributes("loginUser")
 @Controller
 public class MemberController {
+	
+	private final ImageStorage imageStorage;
+
+	@Autowired
+	public MemberController(ImageStorage imageStorage) {
+		this.imageStorage = imageStorage;
+    }
 	
 	@Autowired
 	private MemberService mService;
@@ -38,7 +61,7 @@ public class MemberController {
 	@Autowired
 	private BCryptPasswordEncoder bcrypt;
 	
-	//private Logger logger = LoggerFactory.getLogger(MemberController.class); 왜인지 오류가 남 나중에 해야지 
+	private Logger logger = LoggerFactory.getLogger(MemberController.class);
 	
 	//메일 인증
 	@Autowired
@@ -56,7 +79,11 @@ public class MemberController {
 		return "index";
 	}
 	
-	
+	//심리테스트 메인화면
+	@GetMapping("psychologicalTestMain.me")
+	public String psychologicalTest() {
+		return "views/ming/psychologicalTest/psychologicalTestMain";
+	}
 	
 	//회원가입
 	@PostMapping("/insertMember.me")
@@ -72,7 +99,9 @@ public class MemberController {
 		
 		m.setMemberNickName(existingNickname + "#" + generateRandomNumbers()); // 랜덤닉네임
 		m.setMemberPwd(bcrypt.encode(m.getMemberPwd()));
+		m.setMemberLoginType(1); // 일반 회원가입
 		m.getMemberId();
+		
 		
 		int result = mService.insertMember(m);
 		if(result > 0) {
@@ -121,25 +150,31 @@ public class MemberController {
 	
 	//로그인
 	@PostMapping("login.me")
-	public String loginUser(@ModelAttribute Member m , Model model) {
+	public String loginUser(@ModelAttribute Member m , Model model, @RequestParam("beforeURL") String beforeURL) {
 		Member loginUser = mService.login(m);
 		
 		if(loginUser != null) {
 			if(bcrypt.matches(m.getMemberPwd(), loginUser.getMemberPwd())) {
 				model.addAttribute("loginUser",loginUser);
-				return "index";
 				
+				if(!beforeURL.equals("http://localhost:8080/logout.me") && !beforeURL.equals("http://localhost:8080/signUp.me"))
+				{
+					return "redirect:" + beforeURL;
+				}else {
+					return "redirect:home.me";
+				}
 			}else {
 				model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
+				model.addAttribute("searchUrl","views/ming/member/sign");
 				return "views/ming/member/sign";
+				
 			}
 			
 		}else {
 			model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
+			model.addAttribute("searchUrl","views/ming/member/sign");
 			return "views/ming/member/sign";
 		}
-		
-		
 	}
 	
 	//로그아웃
@@ -223,8 +258,8 @@ public class MemberController {
         String encPwd = bcrypt.encode(str);
         m.setMemberId(m.getMemberId());
         m.setMemberPwd(encPwd);
-        System.out.println(encPwd);
-        System.out.println(m);
+        //System.out.println(encPwd);
+        //System.out.println(m);
         
         int result = mService.updateNewPwd(m);
         
@@ -265,6 +300,523 @@ public class MemberController {
 		return "views/ming/member/myPage";
 	}
 	
+	//회원탈퇴
+	@GetMapping("deleteMember.me")
+	public String deleteMember(Model model) {
+		Member m = (Member)model.getAttribute("loginUser");
+		
+		String memberId = m.getMemberId();
+		int result = mService.deleteMember(memberId);
+		
+		if(result > 0) {
+			return "index";
+		}else {
+			model.addAttribute("msg","회원탈퇴실패");
+			return "views/ming/member/myPage";
+		}
+		
+	}
 	
 	
-}
+	//비밀번호 변경
+	@GetMapping("updatePwd.me")
+	public String updatePwdView() {
+		return "views/ming/member/updatePwd";
+	}
+	
+	@PostMapping("changePwd.me")
+	public String changePwd(@RequestParam("currentPwd")String currentPwd, @RequestParam("newMemberPwd")String newMemberPwd, Model model) {
+		
+		Member m = (Member)model.getAttribute("loginUser");
+		
+		if(bcrypt.matches(currentPwd, m.getMemberPwd())) {
+			 HashMap<String, String> map = new HashMap<String, String>();
+			 
+			 map.put("memberId", m.getMemberId());
+			 map.put("memberPwd", bcrypt.encode(newMemberPwd));
+			 
+			 
+			 int result = mService.changePwd(map);
+			 System.out.println("test1 : " +map);
+			 
+			 if(result > 0) {
+				 model.addAttribute("loginUser", mService.login(m));
+				 System.out.println("test2 : " + m);
+				 return "redirect:myPage.me";
+			 } else {
+				 model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
+				 model.addAttribute("searchUrl","views/ming/member/updatePwd");
+				 return "views/ming/member/updatePwd";
+			 }
+		 }else {
+			 model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
+			 model.addAttribute("searchUrl","views/ming/member/updatePwd");
+			 return "views/ming/member/updatePwd";
+		 }
+		 
+	}
+	
+	// 마이페이지 수정
+	@PostMapping("updateMemberName.me")
+	public String updateName(@RequestParam("memberName")String memberName, Model model) {
+		Member m = (Member)model.getAttribute("loginUser");
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("memberId", m.getMemberId());
+		map.put("memberName", memberName);
+		
+		int result = mService.updateMemberName(map);
+		
+		if(result > 0) {
+			model.addAttribute("loginUser", mService.login(m));
+			return "redirect:myPage.me";
+		}else {
+			model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
+			model.addAttribute("searchUrl","views/ming/member/updatePwd");
+			return "redirect:myPage.me";
+		}
+		
+	}
+	
+	@PostMapping("updateMemberNickName.me")
+	public String updateNickName(@RequestParam("existingNickname")String existingNickname, Model model) {
+		Member m = (Member)model.getAttribute("loginUser");
+		String memberNickName = null;
+		memberNickName = existingNickname + "#" + generateRandomNumbers();
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("memberId", m.getMemberId());
+		map.put("memberNickname", memberNickName);
+		
+		int result = mService.updateMemberNickname(map);
+		
+		if(result > 0) {
+			model.addAttribute("loginUser", mService.login(m));
+			return "redirect:myPage.me";
+		}else {
+			model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
+			model.addAttribute("searchUrl","views/ming/member/updatePwd");
+			return "redirect:myPage.me";
+		}
+		
+	}
+	
+	@PostMapping("updateMemberPhone.me")
+	public String updatePhone(@RequestParam("memberPhone")String memberPhone, Model model) {
+		Member m = (Member)model.getAttribute("loginUser");
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("memberId", m.getMemberId());
+		map.put("memberPhone", memberPhone);
+		
+		int result = mService.updatememberPhone(map);
+		if(result > 0) {
+			model.addAttribute("loginUser", mService.login(m));
+			return "redirect:myPage.me";
+		}else {
+			model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
+			model.addAttribute("searchUrl","views/ming/member/updatePwd");
+			return "redirect:myPage.me";
+		}
+	}
+	
+	@PostMapping("updateMemberEmail.me")
+	public String updateEmail(@RequestParam("memberEmail") String memberEmail, Model model) {
+		Member m = (Member)model.getAttribute("loginUser");
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("memberId", m.getMemberId());
+		map.put("memberEmail", memberEmail);
+		
+		int result = mService.updatememberEmail(map);
+		if(result > 0) {
+			model.addAttribute("loginUser", mService.login(m));
+			return "redirect:myPage.me";
+		}else {
+			model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
+			model.addAttribute("searchUrl","views/ming/member/updatePwd");
+			return "redirect:myPage.me";
+		}
+	}
+	
+	@PostMapping("updateMemberAddress.me")
+	public String updateAddress(@RequestParam("sample6_postcode") String sample6_postcode, Model model,
+								@RequestParam("sample6_address") String sample6_address,@RequestParam("sample6_detailAddress") String sample6_detailAddress,
+								@RequestParam("sample6_extraAddress") String sample6_extraAddress) {
+		
+		Member m = (Member)model.getAttribute("loginUser");
+		String address = null;
+		if(!sample6_postcode.trim().equals("")) {
+			 address = sample6_postcode + "@" + sample6_address + "@" + sample6_detailAddress + "@" + sample6_extraAddress;
+		}
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("memberId", m.getMemberId());
+		map.put("memberAddress", address);
+		
+		int result = mService.updatememberAddress(map);
+		if(result > 0) {
+			model.addAttribute("loginUser", mService.login(m));
+			return "redirect:myPage.me";
+		}else {
+			model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
+			model.addAttribute("searchUrl","views/ming/member/updatePwd");
+			return "redirect:myPage.me";
+		}
+		
+	}
+	
+	//프로필 등록
+	@PostMapping("updateProfile.me")
+	public String updateProfile(@RequestParam("memberProfile") MultipartFile file, @ModelAttribute Member m, Model model) {
+		Member user = ((Member)model.getAttribute("loginUser"));
+		String defaultProfile = "https://storage.googleapis.com/zangzac/image/ming/BasicProfile.png";
+		String[] profileResult = null;
+		int result = 0;
+		
+		profileResult = imageStorage.saveImage(file, "ming");
+		m.setMemberProfileRename(profileResult[0]);
+		m.setMemberProfilePath(profileResult[1]);
+		m.setMemberId(user.getMemberId());
+		
+		
+		if (profileResult[1] != defaultProfile) {
+		    imageStorage.deleteImage(user.getMemberProfilePath(),"ming");
+		}
+		
+		result = mService.updateMemberProfile(m);
+		
+		if(result > 0) {
+			model.addAttribute("loginUser", mService.login(m));
+			return "redirect:myPage.me";
+		}else {
+			model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
+			model.addAttribute("searchUrl","views/ming/member/updatePwd");
+			return "redirect:myPage.me";
+		}
+
+	}
+	
+	// 프로필 삭제
+	@GetMapping("deleteProfile.me")
+	public String deleteProfile(Model model) {
+		
+		
+		Member user = ((Member)model.getAttribute("loginUser"));
+		String defaultProfile = "https://storage.googleapis.com/zangzac/image/ming/BasicProfile.png";
+		
+		user.setMemberProfileRename("");
+		user.setMemberProfilePath(defaultProfile);
+		
+		int result = mService.updateMemberProfile(user);
+		
+		return "redirect:myPage.me";
+	}
+	
+	//관리자 페이지
+	@GetMapping("/adminPage.me")
+	public String adminPage(Model model, HttpServletRequest request, @RequestParam(value="page", defaultValue="1") int page) {
+		
+		int listCount = mService.getListCount();
+		int currentPage = page;
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
+		ArrayList<Member> list = mService.selectMembers(1, pi);
+		
+		System.out.println(list);
+		if(list != null) {
+			model.addAttribute("pi", pi);
+			model.addAttribute("list", list);
+			model.addAttribute("loc", request.getRequestURI()); // url 다 가져옴 / uri 뒤에만 가져옴
+			return "views/ming/admin/allMemberList";
+		} else {
+			throw new MemberException("게시글 목록 조회에 실패하였습니다.");
+		}
+	}
+	
+	@GetMapping("selectMemberList.me")
+	@ResponseBody
+	public HashMap<String, Object> selectMemberList(@RequestParam("memberId")String memberId, Model model) {
+		
+		Member m = new Member();
+		m.setMemberId(memberId);
+		Member member = mService.login(m);
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("m", member);
+		
+		return map;
+	}
+	
+	@GetMapping("updateInfo.me")
+	@ResponseBody
+	public String updateInfo(@RequestParam("column") String column, @RequestParam("data") String data, @RequestParam("id") String id) {
+		Properties prop = new Properties();
+		
+		prop.setProperty("column", column);
+		prop.setProperty("data", data);
+		prop.setProperty("id", id);
+		
+		int result = mService.updateInfo(prop);
+		return result == 1? "success" : "fail";
+	}
+	
+	@GetMapping("adminUpdateNickName.me")
+	@ResponseBody
+	public String adminUpdateNickName(@ModelAttribute Member m) {
+		String memberNickName = null;
+		memberNickName = m.getMemberNickName() + "#" + generateRandomNumbers();
+		System.out.println(memberNickName);
+		
+		
+		m.setMemberNickName(memberNickName);
+		/*
+		 * HashMap<String,String>map = new HashMap<String, String>();
+		 * map.put("memberId", memberId); map.put("memberNickName", memberNickName);
+		 */
+		
+		int result = mService.adminUpdateNickName(m);
+		System.out.println(result);
+		
+		return result == 1? "success" : "fail";
+	}
+	
+	@GetMapping("adminUpdateName.me")
+	@ResponseBody
+	public String adminUpdateName(@ModelAttribute Member m) {
+		String memberName = m.getMemberName();
+		System.out.println(memberName);
+		
+		int result = mService.adminUpdateName(m);
+		return result == 1? "success" : "fail";
+	}
+	
+	
+	//회원 검색
+	@PostMapping("search.me")
+	public String searchId(@RequestParam(value = "page", defaultValue = "1") int page,
+							@RequestParam(value = "searchType", defaultValue = "") String searchType,
+							@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
+							HttpServletRequest request) {
+		
+		HashMap<String, String>map = new HashMap<>();
+		map.put("keyword", keyword);
+		map.put("searchType", searchType);
+		
+		int currentPage = page;
+		int listCount = mService.searchList(map);
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
+		ArrayList<Member> list = mService.searchtNoticeList(pi, map);
+		
+		if(list != null) {
+			model.addAttribute("pi", pi);
+			model.addAttribute("list", list);
+			model.addAttribute("loc", request.getRequestURI()); // url 다 가져옴 / uri 뒤에만 가져옴
+			return "views/ming/admin/allMemberList";
+		} else {
+			throw new MemberException("게시글 목록 조회에 실패하였습니다.");
+		}
+	}
+	//카카오로그인
+	@GetMapping("kakaoLogin")
+	public String kakaoLogin(
+	        @RequestParam(value = "code", required = false) String code,
+	        HttpSession session,
+	        Model model,
+	        @RequestParam(value = "beforeURL", required = false) String beforeURL) throws Exception {
+	    // 카카오에서 받은 코드를 이용하여 access token을 얻어옴
+	    String access_Token = mService.getAccessToken(code);
+	    HashMap<String, Object> userInfo = mService.getUserInfo(access_Token);
+	    Member kakaoMemberInfo = (Member) userInfo.get("userInfo");
+	    // System.out.println("kakaoMemberInfo: " + kakaoMemberInfo);
+	    
+	    // 이메일 중복 체크
+	    boolean isEmailDuplicate = mService.isEmailDuplicate(kakaoMemberInfo.getMemberEmail());
+	    Member loginUser = mService.login(kakaoMemberInfo);
+	    
+	    if (isEmailDuplicate) {
+	        // 중복된 이메일이 있는 경우
+	    	session.setAttribute("loginUser", loginUser);
+	    	
+	        if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me"))) {
+	            return "redirect:" + beforeURL;
+	        } else {
+	            return "redirect:home.me";
+	        }
+	        // 여기서 로그인 처리 등을 수행
+	        // 로그인만 가능하게끔 수정
+	    } else {
+	        // 중복된 이메일이 없는 경우
+	        int result = mService.kakaoLogin(kakaoMemberInfo);
+	        if (result > 0) {
+	            // 로그인 성공
+	        	System.out.println("로그인성공: " + kakaoMemberInfo);
+	            session.setAttribute("loginUser", kakaoMemberInfo);
+	            if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me"))) {
+	                return "redirect:" + beforeURL;
+	            } else {
+	                return "redirect:home.me";
+	            }
+	        } else {
+	        	System.out.println("로그인 실패");
+	            // 회원가입에 실패한 경우에 대한 처리
+	            session.setAttribute("msg", "회원가입에 실패했습니다.");
+	        }
+	    }
+
+	    return "views/ming/member/sign";
+	}
+	
+	
+	//리뷰 불러오기
+	@GetMapping("review.me")
+	public String review(@RequestParam(value = "page", defaultValue = "1") int page, Model model,
+										@ModelAttribute Review r,@ModelAttribute Product p, HttpServletRequest request) {
+		Member loginUser = (Member) model.getAttribute("loginUser");
+		String memberId = loginUser.getMemberId();
+		int listCount = mService.getReviewListCount(6);
+		PageInfo pi = Pagination.getPageInfo(page, listCount, 3);
+		ArrayList<Review>rList = mService.selectReview(memberId,pi);
+		ArrayList<Product>pList = mService.selectAllProduct();
+		ArrayList<Photo>phList = mService.selectAllPotoProduct();
+		r.setMemberId(memberId);
+		
+		if(rList != null) {
+			model.addAttribute("pList",pList);
+			model.addAttribute("rList",rList);
+			model.addAttribute("phList",phList);
+			model.addAttribute("pi",pi);
+			model.addAttribute("memberId", memberId);
+			model.addAttribute("loc", request.getRequestURI());
+			return "views/ming/member/review";
+		}else {
+			throw new MemberException("게시글 목록 조회에 실패하였습니다.");
+		}
+		
+	}
+	
+	//리뷰삭제
+	   @PostMapping("deleteReview.me")
+	   public String deleteReview(@RequestParam("reviewNo") int reviewNo) {
+	      
+	      String name="sohwa";
+	      int result = mService.deleteReview(reviewNo);
+	      String deleteRename = mService.deleteSelectReview(reviewNo);
+	      System.out.println("deleteRename" + deleteRename);
+	      
+	      if(deleteRename != null) {
+	    	  Boolean sf = imageStorage.deleteImage(deleteRename, name);
+	    	  
+	      }
+	      
+	      if(result > 0) {
+	         return "redirect:review.me";
+	      }else {
+	         throw new MemberException("리뷰 삭제 실패");
+	      }
+	   }
+	   
+	   // 게시글 가져오기
+	   @GetMapping("myBoardList.me")
+	   public String myBoardList(@RequestParam(value = "page", defaultValue = "1") int page, Model model,
+									 @ModelAttribute CampBoard cb, HttpServletRequest request) {
+		   
+		   Member loginUser = (Member) model.getAttribute("loginUser");
+		   String memberId = loginUser.getMemberId();
+		   
+		   Map<String, Object> paramMap = new HashMap<>();
+		   paramMap.put("memberId", memberId);
+		   paramMap.put("1", 1);
+		   int listCount = mService.getmyBoardListCount(paramMap);
+
+		   PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
+		   
+		   ArrayList<CampBoard> cbList = mService.selectCampBoard(memberId,pi); 
+		   if(cbList != null) {
+			   model.addAttribute("cbList",cbList);
+			   model.addAttribute("pi",pi);
+			   model.addAttribute("memberId", memberId);
+			   model.addAttribute("loc", request.getRequestURI());
+		   }
+		   
+		   return "views/ming/member/myBoardList";
+	   }
+	   
+	   //게시글 검색
+	   @GetMapping("searchCbList.me")
+	   public String searchCbList(@RequestParam(value = "page", defaultValue = "1") int page,
+									@RequestParam(value = "searchType", defaultValue = "") String searchType,
+									@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
+									HttpServletRequest request){
+		    HashMap<String, String>map = new HashMap<>();
+			map.put("keyword", keyword);
+			map.put("searchType", searchType);
+			
+			int currentPage = page;
+			int listCount = mService.searchCbListCount(map);
+			
+			PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
+			ArrayList<CampBoard> cbList = mService.searchCbList(pi, map);
+			
+			if(cbList != null) {
+				model.addAttribute("pi", pi);
+				model.addAttribute("cbList",cbList);
+				model.addAttribute("loc", request.getRequestURI());
+				return "views/ming/member/myBoardList";
+			} else {
+				throw new MemberException("게시글 목록 조회에 실패하였습니다.");
+			}
+		}
+	   
+	   //중고게시글 가져오기
+	   @GetMapping("mySecondHandProductList.me")
+	   public String secondHandProductList(@RequestParam(value = "page", defaultValue = "1") int page, Model model,
+			   								@ModelAttribute secondHandProduct sp,HttpServletRequest request) {
+		   Member loginUser = (Member) model.getAttribute("loginUser");
+		   String memberId = loginUser.getMemberId();
+		   
+		   Map<String, Object> paramMap = new HashMap<>();
+		   paramMap.put("memberId", memberId);
+		   paramMap.put("4", 4);
+		   int listCount = mService.getmySecondHandProductListCount(paramMap);
+		   System.out.println(listCount);
+		   
+		   PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
+		   ArrayList<secondHandProduct> spList = mService.selectsecondHandProduct(memberId,pi); 
+		   
+		   if(spList != null) {
+			   model.addAttribute("spList",spList);
+			   model.addAttribute("pi",pi);
+			   model.addAttribute("memberId", memberId);
+			   model.addAttribute("loc", request.getRequestURI());
+		   }
+		   return "views/ming/member/mySecondHandProductList";
+	   }
+	   
+	   //중고 검색
+	   @GetMapping("searchSpList.me")
+	   public String searchSpList(@RequestParam(value = "page", defaultValue = "1") int page,
+									@RequestParam(value = "searchType", defaultValue = "") String searchType,
+									@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
+									HttpServletRequest request){
+		    HashMap<String, String>map = new HashMap<>();
+			map.put("keyword", keyword);
+			map.put("searchType", searchType);
+			
+			int currentPage = page;
+			int listCount = mService.searchSPListCount(map);
+			
+			PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
+			ArrayList<secondHandProduct> spList = mService.searchSpList(pi, map);
+			
+			if(spList != null) {
+				model.addAttribute("pi", pi);
+				model.addAttribute("spList", spList);
+				model.addAttribute("loc", request.getRequestURI()); // url 다 가져옴 / uri 뒤에만 가져옴
+				System.out.println("spList: " + spList);
+				return "views/ming/member/mySecondHandProductList";
+			} else {
+				throw new MemberException("게시글 목록 조회에 실패하였습니다.");
+			}
+		}
+	   
+	
+   }
