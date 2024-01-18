@@ -308,6 +308,8 @@ public class CampController {
 			}
 		}
 		
+		System.out.println(delLevel);
+		
 		int deleteFileResult = 0;
 		int updateCampResult = 0;
 		boolean existBeforeAttm = true;

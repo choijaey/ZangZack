@@ -42,6 +42,8 @@ public class BoardCondition {
 		
  		ArrayList<CampingGround> photoList = cService.selectMainPhoto(intArrayList);
  		
+ 		System.out.println(photoList);
+ 		
 		if(list != null) {
 			model.addAttribute("photoList", photoList);
 			return"index";
