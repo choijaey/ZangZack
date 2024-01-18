@@ -56,6 +56,7 @@ public class RecipeController {
 	    
 	    ArrayList<Recipe> list = rService.recipeList(pi);
 	    
+	    
 	    String msg = null; 
 	    sWork.addRec(list, msg, pi , model,request.getRequestURI());
 		return "views/seongun/recipe/recipe";
@@ -128,6 +129,8 @@ public class RecipeController {
 		
 		SelectCondition b = sWork.selectBoard(recipeNo, 2);
 		ArrayList<Photo> pList = pService.selectBoardPhoto(b);
+		
+		System.out.println(r.toString());
 		
 		sWork.recipeDetatil(model, r, pList);
 		return "views/seongun/recipe/recipeDetail";

@@ -28,7 +28,19 @@ public class RecipeServiceImpl implements RecipeService {
 
 	@Override
 	public ArrayList<Recipe> recipeList(PageInfo pi) {
-		return rDAO.recipeList(pi);
+		ArrayList<Recipe> list = rDAO.recipeList(pi);
+		int temp =list.size();
+		for(int i = 0; i < temp; i++) {
+			ArrayList<CookwareList> cl = rDAO.selectCookwareList(list.get(i).getRecipeNo());
+			String[] clNames = new String[cl.size()];
+			
+			for (int j = 0; j < cl.size(); j++) {
+			    clNames[j] = cl.get(j).getCookCategoryName();
+			}
+			
+			list.get(i).setCookCategoryName(clNames);
+		}
+		return list;
 	}
 
 	@Override
@@ -38,7 +50,19 @@ public class RecipeServiceImpl implements RecipeService {
 
 	@Override
 	public Recipe selectRecipe(int recipeNo) {
-		return rDAO.selectRecipe(recipeNo);
+		Recipe r = rDAO.selectRecipe(recipeNo);
+		ArrayList<CookwareList> cl = rDAO.selectCookwareList(recipeNo);
+
+		String[] clNames = new String[cl.size()];
+
+		for (int i = 0; i < cl.size(); i++) {
+		    clNames[i] = cl.get(i).getCookCategoryName();
+		    System.out.println(cl.get(i).getCookCategoryName());
+		}
+
+		r.setCookCategoryName(clNames);
+
+		return r;
 	}
 
 }

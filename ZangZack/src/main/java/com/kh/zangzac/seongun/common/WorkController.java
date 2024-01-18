@@ -36,7 +36,9 @@ public class WorkController {
 		model.addAttribute("list", list);
 		model.addAttribute("msg", msg);
 		model.addAttribute("category", category);
-		model.addAttribute("search", search);
+		if(search.getSearchText() != null) {
+			model.addAttribute("search", search);
+		}
 		model.addAttribute("loc", loc);
 	}
 

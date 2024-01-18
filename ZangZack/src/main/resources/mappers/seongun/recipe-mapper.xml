@@ -26,7 +26,7 @@
 		insert all<!-- insert all 안에서는 nextval이라고 적어놓고 여러번 들어간다하더라도 딱 1번 nextval이 되고 나머지는 같은 값이 들어간다 -->
 		<foreach collection="list" item="item">
 			into COOKWARE_LIST
-			values (new_aid, #{item.cwRecipeNo}, #{item.cookCategoryNo})
+			values (cw_aid, #{item.cwRecipeNo}, #{item.cookCategoryNo})
 		</foreach>
 		select * from dual
    </insert>
@@ -35,5 +35,11 @@
    		select *
    		from recipe_view
    		where recipe_status = 'N' and recipe_no = #{recipeNo}
+   </select>
+   
+   <select id="selectCookwareList" resultType="CookwareList">
+   		select *
+   		from Cookware_list left JOIN cookware_category using(cook_category_no)
+   		where CW_RECIPE_NO = #{recipeNo}
    </select>
 </mapper>

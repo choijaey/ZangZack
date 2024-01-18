@@ -21,4 +21,6 @@ public interface RecipeDAO {
 
 	Recipe selectRecipe(int recipeNo);
 
+	ArrayList<CookwareList> selectCookwareList(int recipeNo);
+
 }

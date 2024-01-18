@@ -32,7 +32,7 @@
             </tr>
             <tr>
                 <td>[[${r.recipeIngredients}]]</td>
-                <td>[[${r.cookCategoryName}]]</td>
+                <td>[[${#strings.arrayJoin(r.cookCategoryName, ', ')}]]</td>
                 <td>[[${r.recipeTaste}]]</td>
             </tr>
             <!-- 추가 정보 -->

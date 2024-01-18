@@ -16,4 +16,5 @@ public class CookwareList {
 	private int cwListNo;
 	private int cwRecipeNo;
 	private int cookCategoryNo;
+	private String cookCategoryName;
 }
