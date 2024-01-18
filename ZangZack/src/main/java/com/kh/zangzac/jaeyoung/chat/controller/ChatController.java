@@ -60,7 +60,6 @@ public class ChatController {
     	//예시: "1" 방의 채팅 로그 읽어오기
     	//unReadChatterCount
     	Member loginUser = (Member)session.getAttribute("loginUser");
-    	cFileManager.updateUnreadChatter(roomName,loginUser.getMemberId());
         JSONArray chatLogs = cFileManager.readChatLog(roomName);
         String chatName="";
         
@@ -76,7 +75,6 @@ public class ChatController {
         	chatName="야영장";
         }
         
-        System.out.println(list);
         
         model.addAttribute("chatName", chatName);
     	model.addAttribute("roomName", roomName);

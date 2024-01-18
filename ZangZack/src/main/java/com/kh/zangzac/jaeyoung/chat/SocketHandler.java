@@ -158,7 +158,7 @@ public class SocketHandler extends TextWebSocketHandler {
           } 
     	  
       }
-      
+      boolean check =false;
       //DB, 파일 채팅 설정
       // 1. 단체 채팅인 경우 채팅방에 입장 했는지 DB에서 확인하기
       if(chatType == 1) {
@@ -171,9 +171,7 @@ public class SocketHandler extends TextWebSocketHandler {
     	  if(count>0) {
     		  // 채팅방에 이미 있는 상태라면
     		  
-    		  boolean check = cFileManager.updateUnreadChatter(roomName,myId);
-    		  System.out.println(myId);
-    		  System.out.println(check);
+    		  check = cFileManager.updateUnreadChatter(roomName,myId);
     		  
     		  //입장한 채팅방에 메시지를 보내 갱신시키게 만들거.
     		  
@@ -196,8 +194,6 @@ public class SocketHandler extends TextWebSocketHandler {
 	    	            }
 	    	            
 	    	            obj.put("type", "reset");
-	    	            System.out.println("오나요??");
-	    	            //각 세션에 보내기
 	    	            WebSocketSession wss = (WebSocketSession)((ChatSession)(temp.get(k))).getSession();
 	    	            if(wss != null) {
 	    	               try {
@@ -222,10 +218,6 @@ public class SocketHandler extends TextWebSocketHandler {
       }else if(chatType == 2) {
     	  
       }
-      
-      
-      
-      // 2. 개인 채팅인 경우
       
       
       //컨트롤러 세션 방 설정
@@ -262,6 +254,8 @@ public class SocketHandler extends TextWebSocketHandler {
       obj.put("type", "getId");
       obj.put("sessionId", session.getId());
       obj.put("roomName", roomName);
+      obj.put("sub", check);
+     
       
       session.sendMessage(new TextMessage(obj.toJSONString()));
    }

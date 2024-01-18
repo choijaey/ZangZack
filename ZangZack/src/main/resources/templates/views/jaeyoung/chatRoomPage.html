@@ -376,6 +376,10 @@ a {
 							$("#roomName").val(rm);
 							
 						}
+						if(d.sub == true){
+							countDown();
+						}
+						
 					}else if(d.type == "message"){
 						console.log(d.msg);
 						if(d.sessionId == $("#sessionId").val()){
