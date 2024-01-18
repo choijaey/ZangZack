@@ -12,8 +12,9 @@
 <body>
    <div th:replace="~{common/navbar :: navbar}"></div>
    <br><br>
-   <h1 style="text-align:center; font-size: 30px; margin: 50px">중고 거래 매물 상세페이지</h1>
+   
    <th:block th:each="s : ${slist}">
+   <h1 style="text-align:center; font-size: 40px; margin: 50px">[[${s.spTitle}]]</h1>
    <form id="showDetail" name="showDetail" method="POST">
    
       <input type="hidden" th:value="${s.spNo}" name="spNo" id="spNo"/>
@@ -71,13 +72,13 @@
                    <!-- 프로필 창 -->
                   <span class="container_profile">
                      <span id="profile">
-                        <img alt="img" src="image/yoonahrim/user.png"> <!-- 프로필 가져오기 -->
+                        <img alt="img" th:src="${s.memberProfilePath}"> <!-- 프로필 가져오기 -->
                            <p><b>윤아림</b></p>
                            <p>[[${#strings.arraySplit(s.spAddress, ',')[0]}]]</p>
                         	<div class="container2 text-end">
-                        		<input type="hidden" id="userId" th:value="${session.loginUser.memberId}"/>
-                        		<input type="hidden" id="memberId" th:value="${s.memberId}"/>
-                          		<button type="button" class="btn_booked" onclick="goChating()" th:if="${session.loginUser != null}">1 : 1 채팅방</button>
+	                        		<input type="hidden" id="userId" th:if="${session.loginUser != null}" th:value="${session.loginUser.memberId}"/>
+	                        		<input type="hidden" id="memberId" th:value="${s.memberId}"/>
+	                          		<button type="button" class="btn_booked" onclick="goChating()" th:if="${session.loginUser != null}">1 : 1 채팅방</button>
                         	</div>   
                      </span>
                   </span>   
@@ -109,7 +110,7 @@
                         <img class="d-flex rounded-circle" alt="reply_profile" th:src="${r.memberProfilePath}" style="position:absolute; width:50px; height:50px">
                         <div class="media-body" style="position:relative; left:60px">
                            <input type="hidden" id="replyNo" th:value="${r.replyNo}"/>
-                              <h6 class="mt-0">[[${r.memberId}]]</h6>
+                              <h6 class="mt-0">[[${r.memberId}]]  [[${#temporals.format(r.replyCreateDate, 'yyyy-MM-dd HH:mm')}]]</h6> 
                               <p>[[${r.replyContent}]]</p>
 	                           <!-- 수정 input type="text" 창 -->
 	                             <div class="modal" tabindex="-1" th:id="'modal-' + ${r.replyNo}">
@@ -117,22 +118,24 @@
 	                                <div class="modal-dialog modal-dialog-centered">
 	                                  <div class="modal-content">
 	                                    <div class="modal-header">
-	                                      <h6 class="modal-title">댓글 수정 [[${r.replyNo}]]</h6>
-	                                      <button type="button" class="btn-close" id="mymodal" data-bs-dismiss="modal" aria-label="Close" onclick="CloseModal()"></button>
+	                                      <h6 class="modal-title">댓글 수정</h6>
+	                                      <button type="button" class="close" data-dismiss="modal" id="'closeModal-' + ${r.replyNo}" aria-label="Close"></button>
 	                                    </div>
 	                                    <div class="modal-body">
 	                                      <input type="text" th:id="'replyUpdateContent-' + ${r.replyNo}" class="replyUpdateContent" th:value="${r.replyContent}"/>
 	                                    </div>
 	                                    <div class="modal-footer">
-	                                      <h6>[[${r.replyCreateDate}]]</h6>
-	                                      <button type="button" class="editReply btn btn-primary" th:id="'editReply-' + ${r.replyNo}">수정</button>
+	                                      <h6>[[${r.formatDate}]]</h6>
+		                                     <button type="button" class="editReply btn btn-primary" th:id="'editReply-' + ${r.replyNo}">수정</button>
 	                                    </div>
 	                                  </div>
 	                                </div>
 	                              </div>
                               <input type="hidden" id="replyNo" th:value="${r.replyNo}"/>
-                           <span id="insert_reply" class="insert_reply" style="cursor: pointer;" th:onclick="'showUpdateModal(' + ${r.replyNo} + ')'" >수정</span>&nbsp;&nbsp;
-                           <span th:id="deleteReply" class="delete_reply" style="cursor: pointer;" th:onclick="'deleteComment(' + ${r.replyNo} + ')'">삭제</span>
+                              <th:block th:if="${session.loginUser != null && session.loginUser.memberId == r.memberId}">
+		                           <span id="insert_reply" class="insert_reply" style="cursor: pointer;" th:onclick="'showUpdateModal(' + ${r.replyNo} + ')'" >수정</span>&nbsp;&nbsp;
+		                           <span th:id="deleteReply" class="delete_reply" style="cursor: pointer;" th:onclick="'deleteComment(' + ${r.replyNo} + ')'">삭제</span>
+                        	</th:block>
                         </div>
                         <br>
                      </div>
@@ -238,6 +241,7 @@
          }
          
          //댓글 insert
+         
          document.getElementById('button-addon2').addEventListener('click', () => {
              
              const content = document.getElementById("replyContent").value;
@@ -266,6 +270,13 @@
 		    // 추가된 부분: 모달 창이 열릴 때 replyNo를 전역 변수로 설정
 		    window.currentReplyNo = replyNo;
 		}
+         
+         $(function () {
+             $('.close').on('click', function () {
+                 $('.modal').hide();
+             })
+         })
+         
          
          //댓글 update
         var editReplys = document.getElementsByClassName('editReply');
@@ -373,6 +384,7 @@
 			var userId = document.getElementById('userId').value;
 			window.location.href='chating.ah?memberId=' + chatId + '&userId=' + userId;
 		}
+		
 		
 </script>
 </body>

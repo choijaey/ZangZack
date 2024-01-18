@@ -36,8 +36,6 @@ public interface secondHandDAO {
 
 	ArrayList<secondHandProduct> selectSeconHand(secondHandProduct sp);
 
-	ArrayList<Reply> selectReply(int spNo);
-
 	ArrayList<Photo> selectPhotoSeconHand(Integer spNo);
 
 	int updateAttmSecondHand(ArrayList<Photo> detailList);

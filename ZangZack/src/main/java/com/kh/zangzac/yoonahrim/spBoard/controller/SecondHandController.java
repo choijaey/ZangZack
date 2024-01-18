@@ -20,12 +20,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.common.model.vo.SelectCondition;
 import com.kh.zangzac.common.photo.model.vo.Photo;
+import com.kh.zangzac.common.reply.model.service.ReplyService;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.jaeyoung.chat.ChatFileManager;
 import com.kh.zangzac.jaeyoung.chat.model.vo.Chatter;
 import com.kh.zangzac.ming.member.model.exception.MemberException;
 import com.kh.zangzac.ming.member.model.vo.Member;
+import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
 import com.kh.zangzac.yoonahrim.spBoard.model.service.secondHandService;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandException;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
@@ -49,8 +52,11 @@ public class SecondHandController {
         this.imageStorage = imageStorage;
     }
     
- @Autowired
+    @Autowired
     ChatFileManager cFileManager;
+    
+    @Autowired
+    ReplyService rService;
 
 	//중고 메인 페이지로 이동
 	@GetMapping("secondHand.ah")
@@ -217,13 +223,16 @@ public class SecondHandController {
 			String id = ((Member)session.getAttribute("loginUser")).getMemberId();
 			sp.setMemberId(id);
 		}
-			int spNo = sp.getSpNo();
+		
+		int spNo = sp.getSpNo();
 		
 		ArrayList<secondHandProduct> sList=  spService.selectMyList(sp);
 		ArrayList<Photo> aList = spService.selectAttachmentList(spNo);
 		
-		ArrayList<Reply> rList = spService.selectReply(spNo);
-		System.out.println(rList);
+		SelectCondition b = new SelectCondition();
+	      b.setBoardNo(spNo);
+	      b.setBoardType(4);
+		ArrayList<Reply> rList = rService.selectReply(b);
 		
 		 // aList를 spNo의 순서로 정렬
 	    Collections.sort(aList, Comparator.comparingInt(Photo::getPhotoNo));
@@ -468,7 +477,8 @@ public class SecondHandController {
 	      ArrayList<Photo> aList = spService.selectPhotoSeconHand(null);
 	      
 	      if(spList != null) {
-	    	 model.addAttribute("aList", aList);
+	  
+	    	  model.addAttribute("aList", aList);
 	         model.addAttribute("result", result);
 	         model.addAttribute("spList", spList);
 	         model.addAttribute("region", region);
