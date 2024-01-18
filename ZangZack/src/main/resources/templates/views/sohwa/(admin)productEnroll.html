@@ -53,13 +53,13 @@
 			<br><br><br><br>
 			
 			<label for="productCompany" style="font-size: 20px;">▸▸상품 업체 : </label>
-			<input type="text" name="productCompany" id="productCompany">
+			<input type="text" name="productCompany" id="productCompany" required>
 			
 			
 			<br><br><br>
 			
 			<label for="productName" style="font-size: 20px;">▸▸상품명 : </label>
-			<input type="text" name="productName" id="productName">
+			<input type="text" name="productName" id="productName" required>
 			
 			<br><br><br>
 			
@@ -77,7 +77,7 @@
 		    <br><br><br>
 		  
 		    <label for="productPrice" style="font-size: 20px;">▸▸상품가격 : </label>
-		    <input type="number" name="productPrice" id="productPrice"> 원
+		    <input type="number" name="productPrice" id="productPrice" required> 원
 		  
 		    <br><br><br>
 		  
@@ -87,9 +87,9 @@
 		  	<br><br>
 		  	<div id="optionDiv">
 		  		<div class="optionDiv-content">
-			  		옵션 : &nbsp;<input type="text" name="option"><button type="button" class="addOption">옵션 추가</button>
+			  		옵션 : &nbsp;<input required type="text" name="option"><button type="button" class="addOption">옵션 추가</button>
 			  		<label for="productEno" style="font-size: 20px;">▸▸상품수량 : </label>
-			    	<input type="number" name="productEno"> 개
+			    	<input required type="number" name="productEno"> 개
 			  		<br>
 		  		</div>
 		  		
@@ -98,7 +98,7 @@
 		  	<br><br><br>
 		  	
 		  	<label for="deliveryPrice" style="font-size: 20px;">▸▸배송비 : </label>
-			<input type="text" name="deliveryPrice" id="deliveryPrice">원
+			<input type="text" name="deliveryPrice" id="deliveryPrice" required>원
 		  
 		   <br><br><br>
 		  
@@ -182,7 +182,6 @@
 	    
 	    
 	    
-	    
 	      // 취소 버튼 클릭 시 해당 파일 인풋(input) 리셋
 		  function resetFileInput(button) {
 		    const parentDiv = button.parentNode; // 클릭된 버튼이 속한 div
@@ -216,56 +215,55 @@
 		  
 		  
 		  
-		  //첨부파일 비워져있으면 alert
-		  const form = document.getElementById('enrollForm');
-			document.getElementById('enrollBtn').addEventListener('click', ()=>{
-				const files = document.getElementsByName('coreFile');
-				let isEmpty = true;
-				
-				//첨부파일 비어져있는지 확인
-				for(const f of files){
-					if(f.value != ''){
-						isEmpty = false;
-					}
-				}
-				
-				//첨부파일 비어있으면 일반게시글로 옮겨진다는 모달 뜨게함.
-				if(isEmpty){
-					alert('대표사진이 등록되지 않았습니다.\n다시 확인해주세요');
-					event.preventDefault();
-				}else{
-					//첨부파일 안 비워져있으면 form태그로 제출
-					// 대표 사진이 입력된 경우 옵션 값을 가져옴
-			        const option1 = document.getElementById('option1');
-			        const optionValue = option1.checked ? null : document.querySelector('input[name="option"]').value;
-			        
-			        // 선택된 옵션 값을 input 태그로 추가
-			        if (optionValue !== null) {
-			            const hiddenOptionInput = document.createElement('input');
-			            hiddenOptionInput.type = 'hidden';
-			            hiddenOptionInput.name = 'option';
-			            hiddenOptionInput.value = optionValue;
-			            document.getElementById('enrollForm').appendChild(hiddenOptionInput);
-			        }
+			const form = document.getElementById('enrollForm');
+				document.getElementById('enrollBtn').addEventListener('click', ()=>{
+					const files = document.getElementsByName('coreFile');
+					let isEmpty = true;
 					
-					const files2 = document.getElementsByName('detailFile');
-					let detailIsEmpty = true;
-					for(const f of files2){
+					//첨부파일 비어져있는지 확인
+					for(const f of files){
 						if(f.value != ''){
-							detailIsEmpty = false;
+							isEmpty = false;
 						}
 					}
-					console.log(isEmpty);
-					console.log(detailIsEmpty);
-					if(detailIsEmpty){
+					
+					//첨부파일 비어있으면 일반게시글로 옮겨진다는 모달 뜨게함.
+					if(isEmpty){
 						event.preventDefault();
-						alert('상세사진이 등록되지 않았습니다. \n다시 확인해주세요.');
+						alert('대표사진이 등록되지 않았습니다.\n다시 확인해주세요');
 						event.preventDefault();
 					}else{
-						form.submit();
+							
+				            var isEmpty2 = false;
+				            var requiredInputs = document.querySelectorAll('input[required], select[required]');
+				            for (var i = 0; i < requiredInputs.length; i++) {
+				                if (requiredInputs[i].value == '') {
+				                    isEmpty2 = true;
+				                }
+				            }
+						
+						
+						const files2 = document.getElementsByName('detailFile');
+						let detailIsEmpty = true;
+						for(const f2 of files2){
+							if(f2.value != ''){
+								detailIsEmpty = false;
+							}
+						}
+						console.log(isEmpty);
+						console.log(detailIsEmpty);
+						if(detailIsEmpty){
+							event.preventDefault();
+							alert('상세사진이 등록되지 않았습니다. \n다시 확인해주세요.');
+							event.preventDefault();
+						}else if (isEmpty2) {
+			                event.preventDefault(); // 폼 제출을 막음
+			                alert('입력되지 않은 항목이 있습니다. 모든 필수 항목을 입력해주세요.');
+			                event.preventDefault(); // 폼 제출을 막음
+			            }else{
+							form.submit();
+						}
 					}
-				}
-				
 				
 				
 				
