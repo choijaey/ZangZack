@@ -128,4 +128,21 @@ td {
 .cateBtn.active {
     border-bottom: 4px solid #F9612B; /* 선택한 버튼의 아래쪽 테두리 색상 */
   }
-  
+.foreground{
+        background: url(https://aldo814.github.io/jobcloud/html/images/user/star_bg02.png) no-repeat;
+        width: 121px;
+        height: 20px;
+        position: relative;
+      }
+ .foreground span{
+    position: absolute;
+    background: url(https://aldo814.github.io/jobcloud/html/images/user/star02.png);
+    filter: invert(90%) sepia(10%) saturate(7000%) hue-rotate(570deg) brightness(115%) contrast(120%);
+    height: 20px;
+
+ }
+ 
+ .buttonStyle{
+    background: #F9612B;
+ }
+ 
