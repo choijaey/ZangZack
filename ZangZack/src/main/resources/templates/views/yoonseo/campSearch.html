@@ -119,6 +119,9 @@
 						     <th class="table-th" style="cursor:pointer;">
 						         <h5 style="display: inline;" th:text="|[${list.cgRegion}]|"></h5>
 						         <h5 style="display: inline;">[[${list.cgName}]]</h5>
+						         <th:block th:if="${list.cgRecomendation == 'Y'}">
+						           <img style="width:40px;" src="image/yoonseo/img/icons8-medal-48 (1).png">
+						         </th:block>
 						         <h6>[[${list.cgAddress}]]</h6>
 						         <h6>[[${list.cgPhone}]]</h6>
 						         <input type="hidden" th:value="${list.cgNo}" name ="cgNo">

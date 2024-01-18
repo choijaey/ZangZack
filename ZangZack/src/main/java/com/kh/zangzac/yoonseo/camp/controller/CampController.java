@@ -64,7 +64,7 @@ public class CampController {
 			
 			return "views/yoonseo/campSearch";
 		}else {
-			throw new CampException("캠프 목록 조회 실패");
+			return "redirect:/";
 		}
 	}
 	
@@ -95,7 +95,7 @@ public class CampController {
 			return "views/yoonseo/campList";
 			
 		}else {
-			throw new CampException("추천 목록 조회 실패");
+			return "redirect:/";
 		}
 				
 	}
@@ -136,7 +136,7 @@ public class CampController {
 		   
 		   return"views/yoonseo/campDetail";   
 		}else {
-			throw new CampException("상세보기를 실패했습니다");
+			return "redirect:/";
 		}
 	}
 	
@@ -147,7 +147,9 @@ public class CampController {
 	
 	@PostMapping("campInsert.ys")
 	public String campInsert(@ModelAttribute CampingGround camp,
-			                 @RequestParam("campImg") ArrayList<MultipartFile> campFiles
+			                 @RequestParam("campImg") ArrayList<MultipartFile> campFiles,
+			                 @RequestParam("nowURL") String nowURL,
+			                 Model model
 			                
 			                 ) {
 		
@@ -198,8 +200,10 @@ public class CampController {
 				
 		if(result1 + result2  == campList.size()+ 1) {
 			return "redirect:campUpdate.ys";
+			
 		}else {
-			throw new CampException("캠핑장 등록 실패");
+			model.addAttribute("msg", "캠핑장 등록에 실패하였습니다.");
+			return "views/yoonseo/detailWrite";
 		}
 	}
 	
@@ -219,7 +223,9 @@ public class CampController {
 			
 			return "views/yoonseo/campUpdate";
 		}else {
-			throw new CampException("게시글 조회 실패");
+			
+			model.addAttribute("msg", "캠핑장 목록 조회에 실패하였습니다.");
+			return "views/yoonseo/campUpdate";
 		}
 		
 	}
@@ -262,7 +268,7 @@ public class CampController {
 			
 			return "views/yoonseo/campEdit";
 		}else {
-			throw new CampException("삭제 되었거나 없는 캠핑장입니다");
+			return "redirect:/";
 		}
 	}
 	
@@ -360,7 +366,7 @@ public class CampController {
 			redirectAttributes.addAttribute("page", page);
 			return "redirect:campUpdate.ys";
 		}else {
-			throw new CampException("캠핑장 수정에 실패");
+			return "redirect:/";
 		}
 		
 	}
@@ -389,7 +395,7 @@ public class CampController {
 			
 			return "views/yoonseo/campSearchList";
 		}else {
-			throw new CampException("캠핑장 검색에 실패하였습니다");
+			return "redirect:/";
 		}
 		
 	}

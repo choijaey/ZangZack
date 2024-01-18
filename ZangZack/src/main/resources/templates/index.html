@@ -221,7 +221,7 @@
    
    
    <div class="section">
-        <div class="news-section" style="height:350px;width:500px;padding: 0;">
+        <div id="yoonSilder" class="news-section" style="height:350px;width:500px;padding: 0;">
 		  <div class="section-header" style="margin-bottom: 0; margin-left: 10px;">추천 캠핑장</div>
 			<div id="carouselExampleFade" class="carousel slide carousel-fade carousel-dark" data-bs-ride="carousel"
 			    style="overflow: hidden; width: 100%;">
@@ -310,6 +310,14 @@
                 console.log('이동할 페이지:', this.textContent);
             });
         });
+        
+        
+        $('#yoonSlider').carousel({
+            interval: 2000,  
+            pause: false 
+        });
+   
+        
     </script>
    
    

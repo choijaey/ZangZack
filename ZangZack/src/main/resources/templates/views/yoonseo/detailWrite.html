@@ -125,7 +125,7 @@ button:hover {
 				</div>		
 		    </div>
 		    <br>
-			<div style="width:750px; margin-left: 10px;">
+			<div class="form-group" style="width:750px; margin-left: 10px;">
 			         <table class="table">
 					   <tr>
 					     <td>주소</td>
@@ -200,9 +200,18 @@ button:hover {
 		      <button style="background-color: red; margin-left: 10px;">취소</button>  
 	     </div>
 	   </div>
+	   <input type="hidden" name="nowURL">
+	   <input type="hidden" id="msg" th:value="${msg}">
 	</form> 
    <script th:lnline="javascript">
-	window.onload = () => {
+	 window.onload = () => {
+		 
+		 const msg = document.getElementById('msg').value;
+		 if(msg.trim().length > 0){
+			 alert(msg);
+		 }
+		 
+	 }
 		const fileArea = document.querySelector('#fileArea');
 		document.getElementById('addfile').addEventListener('click', ()=> {
 			const newDiv = document.createElement('div');
@@ -217,8 +226,7 @@ button:hover {
 	            newDiv.remove(); // 해당 div를 삭제
 	        });
 		});	
-		
-     }
+
 	function previewImage3() {
 		const input = document.getElementById('campImg');
         const infoImgs = input.parentElement.querySelector('.infoImgs');
@@ -260,6 +268,7 @@ button:hover {
             reader.readAsDataURL(file);
         }
 	}
+	
 	
 	
 </script>
