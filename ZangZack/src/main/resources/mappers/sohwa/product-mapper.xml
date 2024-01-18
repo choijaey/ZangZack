@@ -719,9 +719,10 @@
 	</select>
 	
 	<select id="selectOrderNo" resultType="_int">
-		SELECT order_no
-		FROM (select * from payment order by order_key_no desc)
+		SELECT MAX(order_no) AS order_no
+		FROM payment
 		GROUP BY order_no
+		ORDER BY MAX(order_key_no) DESC
 	</select>
 	
 	<select id="selectPayment" resultType="Payment">
