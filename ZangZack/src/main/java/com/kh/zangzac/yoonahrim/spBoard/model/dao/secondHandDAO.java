@@ -8,6 +8,7 @@ import org.apache.ibatis.session.RowBounds;
 
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.common.reply.model.vo.Reply;
+import com.kh.zangzac.jaeyoung.chat.model.vo.Chatter;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
 @Mapper
@@ -66,6 +67,8 @@ public interface secondHandDAO {
 	ArrayList<secondHandProduct> searchtAdminList(HashMap<String, String> map, RowBounds rowBounds);
 
 	int updateCount(int spNo);
+
+	ArrayList<Chatter> chatterList(String roomName);
 
 	
 

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>캠핑장 방문 후기</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .oval-tag {
+            display: inline-block;
+            background-color: #5cb85c;
+            color: #fff;
+            padding: 0.25rem 1rem;
+            border-radius: 9999px;
+            font-weight: 700;
+        }
+        .image-container {
+            max-width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+        .image-slideshow {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .image-slide {
+            min-width: 100%;
+            box-sizing: border-box;
+        }
+        .slider-buttons {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+        }
+        .slider-button {
+            background-color: rgba(255, 255, 255, 0.0);
+            padding: 0.5rem;
+            cursor: pointer;
+            color : #fff;
+            transition: background-color 0.3s;
+        }
+        .slider-button:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        
+        
+        .foreground{
+		     background: url(https://aldo814.github.io/jobcloud/html/images/user/star_bg02.png) no-repeat;
+		     width: 121px;
+		     height: 20px;
+		     position: relative;
+		   }
+		  .foreground span{
+		     position: absolute;
+		     background: url(https://aldo814.github.io/jobcloud/html/images/user/star02.png);
+		     filter: invert(90%) sepia(10%) saturate(7000%) hue-rotate(570deg) brightness(115%) contrast(120%);
+		     height: 20px;
+		
+		  }
+		  
+		  .buttonStyle{
+		  	background: #F9612B;
+		  }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-2xl mx-auto my-10 p-6 bg-white shadow rounded-lg">
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center gap-2">
+                <h1 class="text-2xl font-bold">캠핑장 방문 후기</h1>
+                <span class="oval-tag">오토캠핑</span>
+            </div>
+            <button class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300">글수정</button>
+        </div>
+        <div class="image-container">
+            <div class="image-slideshow">
+                <!-- 이미지 슬라이드를 추가하세요 -->
+                <div class="image-slide">
+                    <img src="https://source.unsplash.com/random/650x400" alt="Slide 1" class="rounded-lg">
+                </div>
+                <div class="image-slide">
+                    <img src="https://source.unsplash.com/random/650x400" alt="Slide 2" class="rounded-lg">
+                </div>
+                <!-- 추가적인 슬라이드를 필요에 따라 계속해서 추가하세요 -->
+            </div>
+            <div class="slider-buttons">
+                <button class=" slider-button" onclick="prevSlide()">&#9664;</button>
+                <button class=" slider-button" style="transform: translateX(1750%);" onclick="nextSlide()">▶</button>
+            </div>
+        </div>
+        <div style="margin-left: auto; margin-top:10px;">
+		    <div class="foreground mt-1" style="float: left;">
+		        <span class="background" style="width:70%;"></span><!-- 4.8 x 100 / 5 = 96 퍼센트 계산 식.-->
+		   </div>
+		   <span class="ml-4 font-bold text-lg ">4.8</span>
+	    </div><br>
+        <div class="mt-4">
+            <p class="mt-2">이번 휴일을 맞아 캠핑장에 다녀왔습니다.</p>
+            <p class="mt-1">가족들과 즐거운 시간을 보내 행복했습니다.</p>
+            <p class="mt-1">다른 분들도 꼭 가보세요.</p>
+        </div>
+    </div>
+    <script>
+        const imageSlideshow = document.querySelector('.image-slideshow');
+        let imageIndex = 0;
+
+        function showNextImage() {
+            imageIndex = (imageIndex + 1) % imageSlideshow.children.length;
+            updateImageSlider();
+        }
+
+        function showPrevImage() {
+            imageIndex = (imageIndex - 1 + imageSlideshow.children.length) % imageSlideshow.children.length;
+            updateImageSlider();
+        }
+
+        function updateImageSlider() {
+            const translateValue = -imageIndex * 100;
+            imageSlideshow.style.transform = `translateX(${translateValue}%)`;
+        }
+
+        function nextSlide() {
+            showNextImage();
+        }
+
+        function prevSlide() {
+            showPrevImage();
+        }
+
+        setInterval(showNextImage, 3000);
+    </script>
+</body>
+</html>

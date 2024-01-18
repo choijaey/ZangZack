@@ -74,7 +74,9 @@
                            <p><b>윤아림</b></p>
                            <p>[[${#strings.arraySplit(s.spAddress, ',')[0]}]]</p>
                         	<div class="container2 text-end">
-                          		<button type="button" class="btn_booked" th:onclick="location.href='chating.ah?memberId=' + '${session.loginUser}'" th:if="${session.loginUser != null && session.loginUser != s.memberId}">1 : 1 채팅방</button>
+                        		<input type="hidden" id="userId" th:value="${session.loginUser.memberId}">
+                        		<input type="hidden" id="memberId" th:value="${s.memberId}">
+                          		<button type="button" class="btn_booked" onclick="goChating()" th:if="${session.loginUser != null && session.loginUser.memberId != s.memberId}">1 : 1 채팅방</button>
                         	</div>   
                      </span>
                   </span>   
@@ -97,7 +99,7 @@
             <div class="reply" style="margin:30px">
                   <!-- 댓글 카운트가 보이는 부분 -->
                   <div class="reply_count">
-                     <p style="margin:20px">댓글 n</p>
+                     <p style="margin:20px">댓글 [[${s.replyCount}]]</p>
                   </div>
                   <hr id="hr_count">
                   <!-- 작성한 댓글이 보이는 부분 -->
@@ -365,6 +367,11 @@
                 });
 		}
 		
+		function goChating(){
+			var chatId = document.getElementById('memberId').value;
+			var userId = document.getElementById('userId').value;
+			window.location.href='chating.ah?memberId=' + chatId + '&userId=' + userId;
+		}
 		
 </script>
 </body>

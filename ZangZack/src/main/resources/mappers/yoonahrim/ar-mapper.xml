@@ -29,10 +29,21 @@
 	</insert>
 	  
 	<select id="selectMyList" resultType="secondHandProduct">
-	    SELECT s.*, c.category_name
-		FROM SECONDHAND_PRODUCT s
-		     JOIN camping_category c ON s.category_no = c.category_no
-		WHERE s.SP_NO = #{spNo} and s.SP_STATUS = 'N'
+		SELECT
+	        s.*,
+	        c.category_name,
+	        (
+	            SELECT COUNT(*)
+	            FROM reply
+	            WHERE board_type = 4 AND board_no = s.SP_NO AND reply_status = 'N'
+	        ) AS reply_count
+	    FROM
+	        SECONDHAND_PRODUCT s
+	        LEFT JOIN camping_category c ON s.category_no = c.category_no
+	    WHERE
+	        s.SP_STATUS = 'N' and s.SP_NO = #{spNo}
+	    ORDER BY
+	        s.SP_NO DESC 
 	</select>
 	
 	<delete id="deleteAttmSecondHand">
@@ -192,30 +203,39 @@
 		ORDER BY SP_NO DESC
 	</select>
 	
-	<select id="searchSpList" resultType="secondHandProduct">
-	    SELECT *
-	    FROM SECONDHAND_PRODUCT
-	    WHERE sp_status = 'N'
+	<select id="searchSpList" parameterType="hashMap" resultType="secondHandProduct">
+	    SELECT
+	        s.*,
+	        c.category_name,
+	        (
+	            SELECT COUNT(*)
+	            FROM reply
+	            WHERE board_type = 4 AND board_no = s.SP_NO AND reply_status = 'N'
+	        ) AS reply_count
+	    FROM
+	        SECONDHAND_PRODUCT s
+	        LEFT JOIN camping_category c ON s.category_no = c.category_no
+	    WHERE s.sp_status = 'N'
 	        <if test="region != null and region != ''">
-	           AND sp_address LIKE '%${region}%'
+	           AND s.sp_address LIKE '%${region}%'
 	       </if>
 	       <if test="type != null and type != ''">
-	           AND category_no LIKE '%${type}'
+	           AND s.category_no LIKE '%${type}'
 	       </if>
-	    ORDER BY SP_NO DESC
+	    ORDER BY s.SP_NO DESC
    </select>
    
    <select id="searchAdminList" resultType="_int">
    	select count(*)
    	from SECONDHAND_PRODUCT
    	where sp_status = 'N'
-   		<if test="searchType == spNo">
+   		<if test="searchType == 'spNo'">
    			and sp_no like '%' || #{keyword} || '%'
    		</if>
-   		<if test="searchType == spTitle">
+   		<if test="searchType == 'spTitle'">
    			and sp_title like '%' || #{keyword} || '%'
    		</if>
-   		<if test="searchType == memberId">
+   		<if test="searchType == 'memberId'">
    			and member_id like '%' || #{keyword} || '%'
    		</if>
    </select>
@@ -224,13 +244,13 @@
    	select *
    	from SECONDHAND_PRODUCT
    	where sp_status = 'N'
-   		<if test="searchType == spNo">
+   		<if test="searchType == 'spNo'">
    			and sp_no like '%${keyword}%'
    		</if>
-   		<if test="searchType == spTitle">
+   		<if test="searchType == 'spTitle'">
    			and sp_title like '%${keyword}%'
    		</if>
-   		<if test="searchType == memberId">
+   		<if test="searchType == 'memberId'">
    			and member_id like '%${keyword}%'
    		</if>
    </select>
@@ -240,4 +260,6 @@
 	   	set sp_count = sp_count + 1
 	   	where sp_no = #{spNo}
    </update>
+   
+   <select id="chatterList" resultType="Member"> select * from member </select>
 </mapper>
