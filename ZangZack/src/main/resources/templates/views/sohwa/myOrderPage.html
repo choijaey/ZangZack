@@ -39,7 +39,8 @@
 		         </div>
 		         <!--같은 날짜 일때 반복-->
 		            <div class="products" th:each="pa:${paList}" th:if="${pa.orderNo == on}">
-		            	<span style="margin-left:10px; font-size:13px;color:darkolivegreen; width:80px;">[[${pa.orderDate}]]<br>[[${pa.deliveryStatus}]]</span>
+		            	<th:block th:unless="${pa.deliveryStatus=='환불요청'}"><span style="margin-left:10px; font-size:13px;color:darkolivegreen; width:80px;">[[${pa.orderDate}]]<br>[[${pa.deliveryStatus}]]</span></th:block>
+		            	<th:block th:if="${pa.deliveryStatus=='환불요청'}"><span style="margin-left:10px; font-size:13px;color:red; width:80px;">[[${pa.orderDate}]]<br>[[${pa.deliveryStatus}]]</span></th:block>
 		                <div class="left" th:each="p:${pList}" th:if="${pa.productNo == p.productNo}">
 		                <!-- 왼쪽 컨테이너 내용 -->
 			                <table>

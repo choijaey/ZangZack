@@ -11,7 +11,7 @@
 	
 	<div id="orderListWrapped">
 		<h1>결제 관리</h1>
-		
+		<input type="hidden" th:value="${status}" id="orderStatus">
 		<button class="cateBtn active" id="allBtn" onclick="toggleTable('allOrder', 'refundOrder')">전체 내역</button><button id="cateBtn" class="cateBtn" style="margin-left:40px;">환불요청내역</button>
 		<div style="float:right;">
 			<div class="dropdown">
@@ -65,32 +65,31 @@
 		</table>
 		
 		
+		<!-- 페이지네이션 -->
+				<div id="pagenation" th:with="loc=${loc}" th:if="${!paList.isEmpty}">
+		            <ul>
+		               <!-- 이전 버튼 -->
+		               <li th:if="${pi.currentPage > 10}">
+		                  <a th:href="@{${loc}(status=${status},searchType=${searchType},keyword=${keyword},page=${pi.currentPage-10})}">&lt; 이전</a>
+		               </li>
+		                   <!-- 페이지 번호 -->
+                       <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+		                    <a th:href="@{${loc}(status=${status},searchType=${searchType},keyword=${keyword},page=${p})}" th:id="${p == pi.currentPage ? 'check_page' : ''}">
+		                       [[${p}]] 
+		                    </a>
+                       </li>
+
+		                   <!-- 다음 버튼 -->
+		               <li th:if="${pi.maxPage >= 10 && pi.maxPage - pi.currentPage > 10}">
+		                  <a th:href="@{${loc}(status=${status},searchType=${searchType},keyword=${keyword},page=${pi.currentPage+10})}">다음 &gt;</a>
+		               </li>
+		            </ul>
+		        </div>
 		
 		
 		
 		
 		
-		<div id="pagination">
-			<nav aria-label="Page navigation example">
-			    <ul class="pagination">
-			       <li class="page-item">
-			         <a class="page-link" href="#" aria-label="Previous">
-			           <span aria-hidden="true">&laquo;</span>
-			         </a>
-			       </li>
-			       <li class="page-item"><a class="page-link" href="#">1</a></li>
-			       <li class="page-item"><a class="page-link" href="#">2</a></li>
-			       <li class="page-item"><a class="page-link" href="#">3</a></li>
-			       <li class="page-item"><a class="page-link" href="#">4</a></li>
-			       <li class="page-item"><a class="page-link" href="#">5</a></li>
-			       <li class="page-item">
-			       <a class="page-link" href="#" aria-label="Next">
-			           <span aria-hidden="true">&raquo;</span>
-			       </a>
-			       </li>
-			    </ul>
-			</nav>
-		</div>
 	</div>
 
 
@@ -106,21 +105,21 @@
 		var searchLink1 = document.getElementById('searchLink1');
 		var searchLink2 = document.getElementById('searchLink2');
 		var searchLink3 = document.getElementById('searchLink3');
-	    
-	
+		let status = document.getElementById('orderStatus').value;
+		console.log(status);
 	    searchImg1.addEventListener("click", function() {
 	        var keyword = searchInput1.value;
-	        location.href= 'adminOrderListView.so?searchType=1&keyword=' + keyword;
+	        location.href= 'adminOrderListView.so?status='+ status+ '&searchType=1&keyword=' + keyword;
 	    });
 	    
 	    searchImg2.addEventListener("click", function() {
 	        var keyword = searchInput2.value;
-	        location.href= 'adminOrderListView.so?searchType=2&keyword=' + keyword;
+	        location.href= 'adminOrderListView.so?status='+ status+ '&searchType=2&keyword=' + keyword;
 	    });
 	    
 	    searchImg3.addEventListener("click", function() {
 	        var keyword = searchInput3.value;
-	        location.href= 'adminOrderListView.so?searchType=3&keyword=' + keyword;
+	        location.href= 'adminOrderListView.so?status='+ status+ '&searchType=3&keyword=' + keyword;
 	    });
 	
 	
@@ -136,9 +135,6 @@
 	      });
 	  }
       
-		let status = /*[[${status}]]*/1;
-        allBtn.style.borderBottom = status === '1' ? "4px solid #F9612B" : "none";
-        cateBtn.style.borderBottom = status === '2' ? "4px solid #F9612B" : "none";
       
 		
 		
@@ -162,14 +158,14 @@
 		
 		document.getElementById('allBtn').addEventListener('click', ()=>{
 			
-			location.href='adminOrderListView.so?status=1';
+			location.href='adminOrderListView.so?status=1&searchType=0&keyword=';
 			document.getElementById('allBtn').style.borderBottom = "4px solid #F9612B";
 			document.getElementById('cateBtn').style.border = "none";
 		})
 		
 		document.getElementById('cateBtn').addEventListener('click', ()=>{
 			
-			location.href='adminOrderListView.so?status=2';
+			location.href='adminOrderListView.so?status=2&searchType=0&keyword=';
 			document.getElementById('cateBtn').style.borderBottom = "4px solid #F9612B";
 			document.getElementById('allBtn').style.border = "none";
 		})

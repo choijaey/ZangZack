@@ -425,9 +425,6 @@ public class ProductServiceImpl implements ProductService{
 	
 	
 	
-	
-	
-	
 	@Override
 	public ArrayList<Product> selectAdminProduct(HashMap<String, String> map, PageInfo pi) {
 		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();

@@ -715,14 +715,12 @@
 	<select id="selectMyOrder" resultType="Payment">
 		select *
 		from payment
-		where order_status = 'N'
 		order by order_key_no
 	</select>
 	
 	<select id="selectOrderNo" resultType="_int">
 		SELECT order_no
-		FROM (select * from payment order by order_key_no)
-		where order_status = 'N'
+		FROM (select * from payment order by order_key_no desc)
 		GROUP BY order_no
 	</select>
 	
@@ -730,7 +728,7 @@
 		select *
 		FROM PAYMENT
 		WHERE order_no = #{orderNo}
-		order by order_key_no
+		order by order_key_no desc
 	</select>
 	
 	<select id="selectBuyerInfo" resultType="Payment">
@@ -740,16 +738,11 @@
 		group by order_no , member_id, order_Address, ORDER_PHONE, ORDER_NAME, order_price, order_date, delivery_date, order_Content
 	</select>
 	
-	<select id="selectAllPayment" resultType="Payment">
-		select *
-		from payment
-		where order_status = 'N'
-	</select>
 	
 	<select id="selectOrderDetail" resultType="Payment">
 		select *
 		from payment
-		where order_key_no = #{orderKeyNo} and order_status = 'N'
+		where order_key_no = #{orderKeyNo}
 	</select>
 	
 	<update id="updateDeliveryStatus">
@@ -766,13 +759,69 @@
 	
 	<update id="refundOrder">
 		update payment
-		set order_status = 'Y'
+		set order_status = 'Y' , delivery_status = '환불요청'
 		where order_key_no = #{orderKeyNo}
 	</update>
+	
+	<select id="getListCountOrder" resultType="_int">
+		select count(*)
+		from payment
+		<if test="searchType==1">
+			where order_no like '%${keyword}%'
+		</if>
+		<if test="searchType==2">
+			where order_name like '%${keyword}%'
+		</if>
+		<if test="searchType==3">
+			where delivery_status like '%${keyword}%'
+		</if>
+	</select>
+	
+	<select id="getListCountOrderN" resultType="_int">
+		select count(*)
+		from payment
+		where order_status='Y'
+		<if test="searchType==1">
+			and order_no like '%${keyword}%'
+		</if>
+		<if test="searchType==2">
+			and order_name like '%${keyword}%'
+		</if>
+		<if test="searchType==3">
+			and delivery_status like '%${keyword}%'
+		</if>
+	</select>
+	
+	
+	<select id="selectAllPayment" resultType="Payment">
+		select *
+		from payment
+		
+		<if test="searchType==1">
+			where order_no like '%${keyword}%'
+		</if>
+		<if test="searchType==2">
+			where order_name like '%${keyword}%'
+		</if>
+		<if test="searchType==3">
+			where delivery_status like '%${keyword}%'
+		</if>
+	</select>
 	
 	<select id="selectNPayment" resultType="Payment">
 		select *
 		from payment
 		where order_status = 'Y'
-	</select>
+		<if test="searchType==1">
+			and order_no like '%${keyword}%'
+		</if>
+		<if test="searchType==2">
+			and order_name like '%${keyword}%'
+		</if>
+		<if test="searchType==3">
+			and delivery_status like '%${keyword}%'
+		</if>
+	</select>	
+	
+	
 </mapper>

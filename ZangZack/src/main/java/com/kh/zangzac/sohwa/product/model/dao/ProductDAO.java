@@ -175,6 +175,12 @@ public interface ProductDAO {
 
 	ArrayList<Payment> selectNPayment();
 
+	ArrayList<Payment> selectNPayment(HashMap<String, String> map, RowBounds rowBounds);
+
+	int getListCountOrder(HashMap<String, String> map);
+
+	int getListCountOrderN(HashMap<String, String> map);
+
 
 
 
