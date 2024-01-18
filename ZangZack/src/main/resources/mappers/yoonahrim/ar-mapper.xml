@@ -262,8 +262,6 @@
 	   	where sp_no = #{spNo}
    </update>
    
-   <select id="chatterList" resultType="Member"> select * from member </select>
-
    <select id="chatterList" resultType="Member">
    		select *
 	 	from member
