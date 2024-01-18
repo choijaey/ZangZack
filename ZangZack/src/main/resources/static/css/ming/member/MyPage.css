@@ -31,18 +31,12 @@
     width: 280px;
 }
 
-.sidebar .logo-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 25px 10px 15px;
-}
 
 .logo img{
 	width: 250px;
 	position: relative;
 	top: 50px;
-	left: 920px;
+	left: 905px;
 	margin-bottom: -100px;
 }
 
@@ -51,12 +45,14 @@
 }
 
 .user{
-	padding-top: 100px;
+	padding-top: 60px;
 }
 .user p {
     display: block; /* 변경: 초기에는 보이도록 설정 */
     opacity: 0; /* 변경: 초기에는 투명도를 1로 설정하여 보이도록 설정 */
     transition: opacity 0.3s ease;
+    position:relative;
+    left: 12px;
 }
 
 .sidebar:hover .user p {
@@ -90,7 +86,7 @@
 }
 
 .links hr {
-    margin: 10px 8px;
+    margin: 8px 8px;
 }
 
 .sidebar:hover .links hr {
@@ -103,7 +99,7 @@
 
 .links li a {
     color: black;
-    padding: 30px;
+    padding: 20px;
     font-weight: 500;
     white-space: nowrap;
     text-decoration: none;
@@ -122,7 +118,7 @@
 #border{
 	position: relative;
     top: 200px;
-    left: 25%;
+    left: 27%;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.2),
@@ -150,7 +146,10 @@
     object-fit:cover;
 }
 
-
+.deleteMemberBtn{
+	position: relative;
+	top:100px;
+}
 /*프로필 사진 수정 버튼*/
 .input-file-button{
   z-index:0;
@@ -331,7 +330,7 @@ input::file-selector-button{
     width: 200px;
     font-size: 16px;
     font-weight: 600;
-    color: #fff;
+    color: rgb(0, 0, 0);
     cursor: pointer;
     margin: 20px;
     height: 55px;

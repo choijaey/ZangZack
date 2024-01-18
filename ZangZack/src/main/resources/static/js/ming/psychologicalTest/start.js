@@ -26,6 +26,8 @@ function setResult(){
 
   const resultDesc = document.querySelector('.resultDesc');
   resultDesc.innerHTML = infoList[point].desc;
+  
+  
 }
 
 function goResult(){
@@ -95,20 +97,6 @@ function addAnswer(answerText, qIdx, idx) {
       children[i].style.animation = "fadeOut 0.5s";
     }
 
-    // 건너뛰기 버튼 추가
-    var skipButton = document.createElement('button');
-    skipButton.classList.add('answerList');
-    skipButton.classList.add('my-3');
-    skipButton.classList.add('py-3');
-    skipButton.classList.add('mx-auto');
-    skipButton.classList.add('fadeIn');
-    a.appendChild(skipButton);
-    skipButton.innerHTML = '건너뛰기';
-
-    // 건너뛰기 버튼 클릭 이벤트
-    skipButton.addEventListener("click", function () {
-      goNext(++qIdx);
-    }, false);
 
     setTimeout(() => {
       var target = qnaList[qIdx].a[idx].type;
