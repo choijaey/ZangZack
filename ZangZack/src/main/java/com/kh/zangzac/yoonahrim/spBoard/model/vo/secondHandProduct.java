@@ -34,4 +34,5 @@ public class secondHandProduct {
 	private String memberProfilePath;
 	private int replyCount;
 	private int spCount;
+	private String formatDate;
 }

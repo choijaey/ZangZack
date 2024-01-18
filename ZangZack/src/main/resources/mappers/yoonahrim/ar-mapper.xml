@@ -119,7 +119,7 @@
 	
 	<select id="selectReply" resultType="Reply">
 		select *
-		from Reply
+		from reply 
 		where BOARD_TYPE = '4' and BOARD_NO = #{spNo}
 	</select>
 	

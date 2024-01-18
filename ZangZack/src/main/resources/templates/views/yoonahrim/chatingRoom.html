@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -9,73 +10,73 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
-   <div th:replace="~{common/navbar :: navbar}"></div>
-   <input type="hidden" th:value="${id}" id="chatId"/>
-   <input type="hidden" th:value="${session.loginUser.memberId}" id="userId"/>
-   <div class="container">
-     <div class="row justify-content-start">
-       <div class="col-5">
-       <div class="chatList">
-        <br>
-        <div class="scrollBar">
-           <th:block th:each="list : ${list}" th:if="${session.loginUser.memberId != list.memberId}">
-            <input type="hidden" th:value="${list.memberId}"/>
-               <div class="chat-content" th:id="${list.memberId}" th:onclick="get(event)">
-                  <th:block th:if="session.loginUser != null">
-                  <div class="chat-content-image">
-                     <img alt="profile" src="image/yoonahrim/채팅방_귀막는 애기.jpg">
-                     <div class="p-line" style="display:inline-block;">
-                        <p id="chatId">[[${list.memberId}]]</p>
-                     </div>
-                  </div>
-               </div><br>
-            </th:block>
-         </div>
-       </div>
-       </div>
-       <div class="col-5">
-         <div class="chating">
-            <div class="chating-content">
-               <div class="chating-content-image">
-                     <img alt="profile" src="image/yoonahrim/user.png">
-                     <p id="chatId">i_want_go_home</p>
-               </div>
-            </div>
-            <hr style="margin: 0px;">
-            <div class="chat-gpt" id="chat-gpt">
-               <th:block th:each="chatLogs : ${chatLogs}">
-                  <!-- 채팅 보내는 사람(타로그인 대상자) -->
-                  <th:block th:if="session.loginUser.memberId == chatLogs.memberId">
-                     <div class="send-chat">
-                        <p>[[${chatLogs.msg}]]<p>
-                     </div>
-                  </th:block>
-                  
-                  <!-- 채팅 받는 사람(로그인 대상자) -->
-                  <th:block th:if="session.loginUser.memberId != chatLogs.memberId">
-                     <div class="recieve-chat">
-                        <p>[[${chatLogs.msg}]]<p>
-                     </div>
-               </th:block>
-            </th:block>
-            </div>
-            <!-- 채팅 작성하는 칸 -->
-            <div>
-            <input type="hidden" id="sessionId"/>
-            <input type="hidden" id="roomName" th:value="${roomName}"/>
-            
-            <input type="text" class="form-control" style="width:400px" id="chatting">
-               <button class="btn_reply btn-outline-secondary" type="button" onclick="send()">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cursor-fill" viewBox="0 0 16 16">
-                      <path d="M14.082 2.182a.5.5 0 0 1 .103.557L8.528 15.467a.5.5 0 0 1-.917-.007L5.57 10.694.803 8.652a.5.5 0 0 1-.006-.916l12.728-5.657a.5.5 0 0 1 .556.103z"/>
-               </svg>
-              </button>
-            </div>
-            
-            </div>
-         </div>
-       </div>
-     </div>
+	<div th:replace="~{common/navbar :: navbar}"></div>
+	<input type="hidden" th:value="${id}" id="chatId"/>
+	<input type="hidden" th:value="${session.loginUser.memberId}" id="userId"/>
+	<div class="container">
+	  <div class="row justify-content-start">
+	    <div class="col-5">
+	    <div class="chatList">
+	     <br>
+	     <div class="scrollBar">
+	     	<th:block th:each="list : ${list}" th:if="${session.loginUser.memberId != list.memberId}">
+	     	 <input type="hidden" th:value="${list.memberId}"/>
+		      	<div class="chat-content" th:id="${list.memberId}" th:onclick="get(event)">
+		      		<th:block th:if="session.loginUser != null">
+		      		<div class="chat-content-image">
+		      			<img alt="profile" src="image/yoonahrim/채팅방_귀막는 애기.jpg">
+		      			<div class="p-line" style="display:inline-block;">
+		      				<p id="chatId">[[${list.memberId}]]</p>
+		      			</div>
+		      		</div>
+		      	</div><br>
+	      	</th:block>
+	      </div>
+	    </div>
+	    </div>
+	    <div class="col-5">
+	      <div class="chating">
+	      	<div class="chating-content">
+	      		<div class="chating-content-image">
+	      				<img alt="profile" src="image/yoonahrim/user.png">
+	      				<p id="chatId">i_want_go_home</p>
+	      		</div>
+	      	</div>
+	      	<hr style="margin: 0px;">
+	      	<div class="chat-gpt" id="chat-gpt">
+	      		<th:block th:each="chatLogs : ${chatLogs}">
+			      	<!-- 채팅 보내는 사람(타로그인 대상자) -->
+			      	<th:block th:if="session.loginUser.memberId == chatLogs.memberId">
+				      	<div class="send-chat">
+				      		<p>[[${chatLogs.msg}]]<p>
+				      	</div>
+			      	</th:block>
+			      	
+			      	<!-- 채팅 받는 사람(로그인 대상자) -->
+			      	<th:block th:if="session.loginUser.memberId != chatLogs.memberId">
+				      	<div class="recieve-chat">
+				      		<p>[[${chatLogs.msg}]]<p>
+				      	</div>
+					</th:block>
+				</th:block>
+	      	</div>
+	      	<!-- 채팅 작성하는 칸 -->
+	      	<div>
+	      	<input type="hidden" id="sessionId"/>
+	      	<input type="hidden" id="roomName" th:value="${roomName}"/>
+	      	
+	      	<input type="text" class="form-control" style="width:400px" id="chatting">
+	      		<button class="btn_reply btn-outline-secondary" type="button" onclick="send()">
+			  		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cursor-fill" viewBox="0 0 16 16">
+							 <path d="M14.082 2.182a.5.5 0 0 1 .103.557L8.528 15.467a.5.5 0 0 1-.917-.007L5.57 10.694.803 8.652a.5.5 0 0 1-.006-.916l12.728-5.657a.5.5 0 0 1 .556.103z"/>
+					</svg>
+		  		</button>
+	      	</div>
+	      	
+	      	</div>
+	      </div>
+	    </div>
+	  </div>
 </div>
  <script type="text/javascript">
       let ws;
@@ -159,9 +160,9 @@
 
             // innerHTML을 사용하여 문자열로 직접 HTML을 추가
             wrap.innerHTML += `
-               <div class="send-chat">
-               <p>${message}<p>
-               </div>
+            	<div class="send-chat">
+	      		<p>${message}<p>
+	      		</div>
             `;
             
             wrap.scrollTop = wrap.scrollHeight;
@@ -173,9 +174,9 @@
 
             // innerHTML을 사용하여 문자열로 직접 HTML을 추가
             wrap.innerHTML += `
-               <div class="recieve-chat">
-               <p>${message}<p>
-               </div>
+            	<div class="recieve-chat">
+	      		<p>${message}<p>
+	      		</div>
             `;
             
             wrap.scrollTop = wrap.scrollHeight;
@@ -198,7 +199,7 @@
         
         
         function get(event) {
-           let memberId = event.currentTarget.id;
+        	let memberId = event.currentTarget.id;
             var userId = document.getElementById("userId").value;
             location.href = 'chating.ah?memberId=' + memberId + '&userId=' + userId;
         }

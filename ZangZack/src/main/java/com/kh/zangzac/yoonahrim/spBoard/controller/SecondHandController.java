@@ -212,6 +212,7 @@ public class SecondHandController {
 	@GetMapping("detail.ah")
 	public String detailPage(@ModelAttribute secondHandProduct sp, HttpSession session, Model model) {
 		// 사용자가 로그인한 경우에만 세션 정보를 활용하도록 처리
+		
 		if (session.getAttribute("loginUser") != null) {
 			String id = ((Member)session.getAttribute("loginUser")).getMemberId();
 			sp.setMemberId(id);
@@ -220,9 +221,9 @@ public class SecondHandController {
 		
 		ArrayList<secondHandProduct> sList=  spService.selectMyList(sp);
 		ArrayList<Photo> aList = spService.selectAttachmentList(spNo);
+		
 		ArrayList<Reply> rList = spService.selectReply(spNo);
-		//댓글 개수를 가져오는 로직
-	    //int replyCount = replyService.getReplyCountByPostId(postId);
+		System.out.println(rList);
 		
 		 // aList를 spNo의 순서로 정렬
 	    Collections.sort(aList, Comparator.comparingInt(Photo::getPhotoNo));

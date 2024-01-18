@@ -13,7 +13,7 @@
    <div th:replace="~{common/navbar :: navbar}"></div>
    <br><br>
    <h1 style="text-align:center; font-size: 30px; margin: 50px">중고 거래 매물 상세페이지</h1>
-   <th:block th:each="s : ${slist}" th:if="${true}">
+   <th:block th:each="s : ${slist}">
    <form id="showDetail" name="showDetail" method="POST">
    
       <input type="hidden" th:value="${s.spNo}" name="spNo" id="spNo"/>
@@ -75,7 +75,9 @@
                            <p><b>윤아림</b></p>
                            <p>[[${#strings.arraySplit(s.spAddress, ',')[0]}]]</p>
                         	<div class="container2 text-end">
-                          		<button type="button" class="btn_booked" th:onclick="location.href='chating.ah?memberId=' + '${session.loginUser}'" th:if="${session.loginUser != null && session.loginUser != s.memberId}">1 : 1 채팅방</button>
+                        		<input type="hidden" id="userId" th:value="${session.loginUser.memberId}"/>
+                        		<input type="hidden" id="memberId" th:value="${s.memberId}"/>
+                          		<button type="button" class="btn_booked" onclick="goChating()" th:if="${session.loginUser != null}">1 : 1 채팅방</button>
                         	</div>   
                      </span>
                   </span>   
@@ -366,6 +368,11 @@
                 });
 		}
 		
+		function goChating(){
+			var chatId = document.getElementById('memberId').value;
+			var userId = document.getElementById('userId').value;
+			window.location.href='chating.ah?memberId=' + chatId + '&userId=' + userId;
+		}
 		
 </script>
 </body>
