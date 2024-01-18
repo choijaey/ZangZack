@@ -52,10 +52,10 @@ public class RecipeController {
 		
 		int currentPage = page;
 	    
-	    PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 15);
+	    PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 3);
 	    
 	    ArrayList<Recipe> list = rService.recipeList(pi);
-	    
+	    System.out.println(list);
 	    
 	    String msg = null; 
 	    sWork.addRec(list, msg, pi , model,request.getRequestURI());

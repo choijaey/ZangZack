@@ -33,7 +33,7 @@
             </div>
             <div id="point_zone">
                 <div id="category">
-                    <form method="get">
+                    <form method="post">
                         <input type="hidden" name="boardId" value="free">
                         <input type="hidden" name="category_no" value="">
                         <a href="#none" onclick="setCategory('')" class="on" id="select-category">전체보기</a>
@@ -102,17 +102,17 @@
 					</li>
 	                <!-- 페이지 번호 -->
 	                <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
-	                	<th:block th:if="${search.searchText == null}">
-							<a th:href="@{${loc}(page=${p})}" th:id="${p == pi.currentPage} ? 'check_page'">
-						        [[${p}]] 
-						    </a>
-					    </th:block>
-					    <th:block th:if="${search.searchText != null}">
-						    <a th:href="@{${loc}(page=${p}, searchCategory=${search.searchCategory}, searchText=${search.searchText})}" th:id="${p == pi.currentPage} ? 'check_page'">
-							    [[${p}]]
-							</a>
-					    </th:block>
-					</li>
+			            <th:block th:if="${search != null && search.searchText == null}">
+			                <a th:href="@{${loc}(page=${p})}" th:id="${p == pi.currentPage} ? 'check_page'">
+			                    [[${p}]] 
+			                </a>
+			            </th:block>
+			            <th:block th:if="${search != null && search.searchText != null}">
+			                <a th:href="@{${loc}(page=${p}, searchCategory=${search.searchCategory}, searchText=${search.searchText})}" th:id="${p == pi.currentPage} ? 'check_page'">
+			                    [[${p}]]
+			                </a>
+			            </th:block>
+			        </li>
 	                <!-- 다음 버튼 -->
 	                <li th:if="${pi.maxPage >= 10 && pi.maxPage - pi.currentPage > 10}">
 	                	<a th:href="@{${loc}(page=${pi.currentPage+10})}">다음 &gt;</a>

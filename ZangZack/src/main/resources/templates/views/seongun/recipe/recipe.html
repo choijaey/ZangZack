@@ -64,7 +64,7 @@
 			                  		</tr>
 			                  		<tr>
 			                    		<td class="info-content" style="max-width:138.08px;">[[${l.recipeIngredients}]]</td>
-			                    		<td class="info-content" style="max-width:138.08px;">팬</td>
+			                    		<td class="info-content" style="max-width:138.08px;">[[${#strings.arrayJoin(l.cookCategoryName, ', ')}]]</td>
 			                  		</tr>
 			                  	</table>
 			                	<span class="card-text">[[${l.recipeContent}]]</span>
@@ -115,22 +115,21 @@
         }
         
         document.addEventListener('DOMContentLoaded', function() {
-            // 모든 'card' 클래스를 가진 div 요소에 대한 클릭 이벤트 리스너 추가
             var cards = document.querySelectorAll('.card');
             cards.forEach(function(card) {
-                card.addEventListener('click', function() {
-                    // card의 첫 번째 자식 요소인 숨겨진 input 요소 찾기
+                card.addEventListener('click', function(event) {
+                    if (event.target.closest('.update-btn') || event.target.closest('.editDropMenu')) {
+                        return;
+                    }
+
                     var boardId = card.querySelector('input[type="hidden"]:first-child').value;
                     if (boardId) {
-                        // input 요소의 값 출력
                         location.href="selectRecipe.su?recipeNo="+boardId;
                     }
                 });
             });
-        });
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            var editButtons = document.querySelectorAll('.boardEditBtn');
+
+            var editButtons = document.querySelectorAll('.update-btn');
             editButtons.forEach(function(btn) {
                 btn.addEventListener('click', function(event) {
                     var dropdown = this.nextElementSibling;
@@ -149,6 +148,36 @@
                 });
             });
         });
+		
+        boardEditBtn = () =>{
+        	var card = event.target.closest('.card');
+            if (card) {
+                // 'card' 요소 내의 첫 번째 숨겨진 input 요소에서 recipeNo 값 가져오기
+                var recipeNo = card.querySelector('input[type="hidden"]').value;
+                if (recipeNo) {
+                    // recipeNo를 사용하여 URL 이동
+                    location.href = "selectRecipe.su?recipeNo=" + recipeNo;
+                }
+            }
+            event.stopPropagation(); 
+        }
+        
+        boardDeleteBtn = () =>{
+        	var card = event.target.closest('.card');
+            if (card) {
+                // 'card' 요소 내의 첫 번째 숨겨진 input 요소에서 recipeNo 값 가져오기
+                var recipeNo = card.querySelector('input[type="hidden"]').value;
+                if (recipeNo) {
+                	if(confirm("test용")){
+                		
+                	}
+                    location.href = "selectRecipe.su?recipeNo=" + recipeNo;
+                }
+            }
+            event.stopPropagation(); 
+        }
+        
+        
 
         /*]]>*/
     </script>

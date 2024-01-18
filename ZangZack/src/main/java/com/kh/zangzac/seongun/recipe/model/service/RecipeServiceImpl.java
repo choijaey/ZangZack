@@ -57,7 +57,6 @@ public class RecipeServiceImpl implements RecipeService {
 
 		for (int i = 0; i < cl.size(); i++) {
 		    clNames[i] = cl.get(i).getCookCategoryName();
-		    System.out.println(cl.get(i).getCookCategoryName());
 		}
 
 		r.setCookCategoryName(clNames);

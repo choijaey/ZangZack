@@ -68,11 +68,9 @@ public class CampBoardController {
 	            search.setSearchText("%" + search.getSearchText() + "%");
 	        }
 	        listCount = cService.searchListCount(search);
-	        category = search.getSearchCategoryNo();
 	    } else {
 	        listCount = cService.getListCount(category);
 	    }
-	    
 	    
 	    int currentPage = page;
 	    
@@ -202,7 +200,7 @@ public class CampBoardController {
 			for(Photo a : fileList) {
 				a.setBoardNo(board.getCbNo());
 			}
-			resultA = pService.insertPhotoCampBoard(fileList);
+			resultA = cService.insertAttmCampBoard(fileList);
 		}
 		
 		if(fileList.isEmpty()) {
@@ -230,6 +228,23 @@ public class CampBoardController {
 		return "views/seongun/campboard/writeBoard";
 	}
 	
+	//검색기능
+	@GetMapping("searchCampBoard.su")
+	public String searchCampBoard(@RequestParam(value="page", defaultValue="1") int page,@RequestParam(value="category", defaultValue="0") int category,@ModelAttribute SearchBoard search, Model model,HttpServletRequest request) {
+		search.setSearchText("%" +search.getSearchText() + "%");
+		
+		int listCount = cService.searchListCount(search);
+		
+		int currentPage = page;
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 15);
+		ArrayList<CampBoard> list = cService.searchBoardList(pi, search);
+		
+		String msg = list.isEmpty() ? "검색된 게시판이 없습니다!" : null;
+		sWork.searchModel(model, pi, list, msg, category, search,request.getRequestURI());
+	    
+		return "views/seongun/campboard/listBoard";
+	}
+	
 	@PostMapping("deleteCampBoard.su")
 	@ResponseBody
 	public String deleteBoard(@RequestParam("cbNo") int cbNo,Model model) {
@@ -252,9 +267,8 @@ public class CampBoardController {
 	
 	@PostMapping("updateCampBoard.su")
 	public String updateCbBoard(@RequestParam("deletePhoto")String[] deleteFile, @ModelAttribute CampBoard b, @RequestParam("file") ArrayList<MultipartFile> files,HttpServletRequest request, Model model) {
-		int resultA = 0;
 		int resultB = 0;
-		int resultD = 0;
+		int resultA = 0;
 		int x = 0;
 		ArrayList<Photo> fileList = new ArrayList<>();
 		
@@ -265,7 +279,7 @@ public class CampBoardController {
 			for(int i=0; i < deleteFile.length; i++) {
 				if(deleteFile[i].split("#")[1].equals("isdel")) {
 					imageStorage.deleteImage(deleteFile[i].split("#")[0], "seongun");
-					resultD = pService.deletePhotoName(deleteFile[i].split("#")[0]);
+					pService.deletePhotoName(deleteFile[i].split("#")[0]);
 				}
 			}
 			
@@ -298,8 +312,10 @@ public class CampBoardController {
 			}
 		}
 		
-		resultB = cService.updateCampBoard(b);
-		if(!fileList.isEmpty()) {
+		if(fileList.isEmpty()) {
+			resultB = cService.updateCampBoard(b);
+		}else {
+			resultB = cService.updateCampBoard(b);
 			for(Photo a : fileList) {
 				a.setBoardNo(b.getCbNo());
 			}
@@ -314,7 +330,7 @@ public class CampBoardController {
 			}
 		}
 		if(x < 1) {
-			int temp = pService.updatePhoto(pList.get(0).getPhotoNo());
+			int test = pService.updatePhoto(pList.get(0).getPhotoNo());
 		}
 		
 		if(fileList.isEmpty()) {
