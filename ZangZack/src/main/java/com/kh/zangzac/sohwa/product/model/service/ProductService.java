@@ -9,6 +9,7 @@ import com.kh.zangzac.ming.member.model.vo.Member;
 import com.kh.zangzac.sohwa.product.model.vo.Attachment;
 import com.kh.zangzac.sohwa.product.model.vo.Cart;
 import com.kh.zangzac.sohwa.product.model.vo.Option;
+import com.kh.zangzac.sohwa.product.model.vo.Payment;
 import com.kh.zangzac.sohwa.product.model.vo.Product;
 import com.kh.zangzac.sohwa.product.model.vo.Qna;
 import com.kh.zangzac.sohwa.product.model.vo.Review;
@@ -65,7 +66,7 @@ public interface ProductService {
 
 	ArrayList<Qna> selectMyQna(String id);
 
-	int getListQnaCount();
+	int getListQnaCount(HashMap<String, String> map);
 
 	ArrayList<Qna> selectQna();
 
@@ -75,13 +76,13 @@ public interface ProductService {
 
 	int deleteQna(int questionNo);
 
-	int getListQnaYCount();
+	int getListQnaYCount(HashMap<String, String> map);
 
 	ArrayList<Qna> selectQnaY();
 
-	ArrayList<Qna> searchKeyword(HashMap<String, String> map);
+	ArrayList<Qna> searchKeyword(HashMap<String, String> map, PageInfo pi);
 
-	ArrayList<Qna> searchYKeyword(HashMap<String, String> map);
+	ArrayList<Qna> searchYKeyword(HashMap<String, String> map, PageInfo pi);
 
 	int insertReview(Review r);
 
@@ -121,7 +122,7 @@ public interface ProductService {
 
 	void updateYPhoto(ArrayList<String> checkBoxArr);
 
-	void deleteOption(int productNo);
+	int deleteOption(int productNo);
 
 	int deleteProductPhoto(ArrayList<String> delRename);
 
@@ -129,7 +130,51 @@ public interface ProductService {
 
 	int updateProduct(Product p);
 
-	void updatePhotoLevel(int productNo);
+	int updatePhotoLevel(int productNo);
+
+	ArrayList<Product> selectAllNProduct();
+
+	int deleteQuestion(int questionNo);
+
+	int updateYOption(ArrayList<String> checkBoxArr);
+
+	int updateYCart(ArrayList<String> checkBoxArr);
+
+	int updateYQna(ArrayList<String> checkBoxArr);
+
+	int updateYReview(ArrayList<String> checkBoxArr);
+
+	ArrayList<Cart> selectCart(String id);
+
+	int insertPayment(ArrayList<Payment> paList);
+
+	ArrayList<Payment> selectMyOrder(String id);
+
+	ArrayList<Integer> selectOrderNo();
+
+	ArrayList<Payment> selectPayment(int orderNo);
+
+	Payment selectBuyerInfo(int orderNo);
+	
+	Payment selectOrderDetail(int orderKeyNo);
+
+	int updateDeliveryStatus(HashMap<String, String> map);
+
+	int deleteOrder(int orderNo);
+
+	int getListCountProduct(HashMap<String, String> map);
+
+	ArrayList<Product> selectAdminProduct(HashMap<String, String> map, PageInfo pi);
+
+	int refundOrder(int orderKeyNo);
+
+	ArrayList<Payment> selectAllPayment(HashMap<String, String> map, PageInfo pi);
+	
+	ArrayList<Payment> selectNPayment(HashMap<String, String> map, PageInfo pi);
+
+	int getListCountOrder(HashMap<String, String> map);
+
+	int getListCountOrderN(HashMap<String, String> map);
 
 
 

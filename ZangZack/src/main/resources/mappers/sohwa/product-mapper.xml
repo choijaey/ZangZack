@@ -86,7 +86,7 @@
 		insert all
 		<foreach collection="list" item="item">
 			into product_option
-			values(option_aid, #{item.productOptionColor}, #{item.productOptionEno}, #{item.productNo})
+			values(option_aid, #{item.productOptionColor}, #{item.productOptionEno}, #{item.productNo}, default)
 		</foreach>
 		select * from dual
 		
@@ -236,7 +236,7 @@
 		select *
 		from photo
 			  join product on (product_no = board_no)
-		where product_no = #{productNo} and photo_status='N'
+		where product_no = #{productNo} and photo_status='N' and board_type=5
 	</select>
 	
 	<select id="selectPhotoReview" resultType="Attachment">
@@ -249,7 +249,7 @@
 	<select id="optionDetail" resultType="Option">
 		select *
 		from product_option
-		where product_no = #{productNo}
+		where product_no = #{productNo} AND OPTION_STATUS = 'N'
 	</select>
 	
 	
@@ -270,6 +270,11 @@
 		select *
 		from product
 		where product_status = 'N'
+	</select>
+	
+	<select id="selectAllNProduct" resultType="Product">
+		select *
+		from product
 	</select>
 	
 	
@@ -312,7 +317,7 @@
       from cart 
           join product using (product_no)
           join photo on (board_no=product_no)
-      where member_id=#{id} and photo_level=0 and photo_status='N'
+      where member_id=#{id} and photo_level= 0 and photo_status='N' and board_type=5
    </select>
    
    <select id="selectAllOption">
@@ -347,6 +352,11 @@
 		values(question_seq.nextval, #{questionContent}, sysdate, null, null, default, #{memberId} ,#{productNo})
 	</insert>
 	
+	<update id="deleteQuestion">
+		update qna
+		set qna_status = 'Y'
+		where question_no = #{questionNo}
+	</update>
 	
 	<select id="selectMyQna" resultType="Qna">
 		select *
@@ -359,14 +369,100 @@
 	<select id="getListQnaCount" resultType="_int">
 		select count(*)
 		from qna
+			 join product using (product_no)
 		where qna_status='N' and answer_content is null
+		<if test="searchType==1">
+			and product_name like '%${keyword}%'
+		</if>
+		<if test="searchType==2">
+			and question_content like '%${keyword}%'
+		</if>
+		<if test="searchType==3">
+			and product_no like '%${keyword}%'
+		</if>
 	</select>
 	
 	<select id="getListQnaYCount" resultType="_int">
 		select count(*)
 		from qna
+		 	 join product using (product_no)
 		where qna_status='N' and answer_content is not null
+		<if test="searchType==1">
+			and product_name like '%${keyword}%'
+		</if>
+		<if test="searchType==2">
+			and question_content like '%${keyword}%'
+		</if>
+		<if test="searchType==3">
+			and product_no like '%${keyword}%'
+		</if>
 	</select>
+	
+	<select id="getListCountProduct" resultType="_int">
+		select count(*)
+		from product
+		where product_status = 'N'
+		<if test="searchType==1">
+			and product_no like '%${keyword}%'
+		</if>
+		<if test="searchType==2">
+			and product_name like '%${keyword}%'
+		</if>
+		<if test="searchType==3">
+			<if test="keyword=='텐트'">
+				and category_no = 11
+			</if>
+			<if test="keyword=='취침용품'">
+				and category_no = 12
+			</if>
+			<if test="keyword=='조리도구'">
+				and category_no = 13
+			</if>
+			<if test="keyword=='발화용품'">
+				and category_no = 14
+			</if>
+			<if test="keyword=='백팩'">
+				and category_no = 15
+			</if>
+			<if test="keyword=='기타'">
+				and category_no = 16
+			</if>
+		</if>
+	</select>
+	
+	
+	<select id="selectAdminProduct" resultType="Product">
+		select *
+		from product
+		where product_status = 'N'
+		<if test="searchType==1">
+			and product_no like '%${keyword}%'
+		</if>
+		<if test="searchType==2">
+			and product_name like '%${keyword}%'
+		</if>
+		<if test="searchType==3">
+			<if test="keyword=='텐트'">
+				and category_no = 11
+			</if>
+			<if test="keyword=='취침용품'">
+				and category_no = 12
+			</if>
+			<if test="keyword=='조리도구'">
+				and category_no = 13
+			</if>
+			<if test="keyword=='발화용품'">
+				and category_no = 14
+			</if>
+			<if test="keyword=='백팩'">
+				and category_no = 15
+			</if>
+			<if test="keyword=='기타'">
+				and category_no = 16
+			</if>
+		</if>
+	</select>
+
 	
 	
 	<select id="selectQna" resultType="Qna">
@@ -420,7 +516,7 @@
 	<update id="updateAnswer">
 		update qna
 		set answer_content=#{answerContent}, answer_date = sysdate
-		where question_no = #{questionNo} and question_status ='N'
+		where question_no = #{questionNo} and qna_status ='N'
 	</update>
 	
 	<select id="selectProductQna" resultType="Qna">
@@ -432,7 +528,7 @@
 	
 	<update id="deleteQna">
 		update qna
-		set qna_status = 'Y'
+		set answer_content = null
 		where question_no = #{questionNo}
 	</update>
 	
@@ -505,6 +601,41 @@
 		</foreach>
 	</update>
 	
+	<update id="updateYOption">
+		update product_option
+		set option_status='Y'
+		where product_no in
+		<foreach item="productNo" collection="list" open="(" separator="," close=")">
+			#{productNo}
+		</foreach>
+	</update>
+	
+	<delete id="updateYCart">
+		delete from cart
+		where product_no in
+		<foreach item="productNo" collection="list" open="(" separator="," close=")">
+			#{productNo}
+		</foreach>
+	</delete>
+	
+	<update id="updateYQna">
+		update qna
+		set qna_status='Y'
+		where product_no in
+		<foreach item="productNo" collection="list" open="(" separator="," close=")">
+			#{productNo}
+		</foreach>
+	</update>
+	
+	<delete id="updateYReview">
+		delete from review
+		where product_no in
+		<foreach item="productNo" collection="list" open="(" separator="," close=")">
+			#{productNo}
+		</foreach>
+	</delete>
+	
+	
 	<select id="selectYPhoto" resultType="string">
 		select photo_rename
 		from photo
@@ -523,19 +654,20 @@
 		</foreach>
 	</update>
 	
-	<delete id="deleteOption">
-		delete from product_option
+	<update id="deleteOption">
+		update product_option
+		set option_status = 'Y'
 		where product_no = #{productNo}
-	</delete>
+	</update>
 	
 	
-	<update id="deleteProductPhoto">
+	<delete id="deleteProductPhoto">
 		delete from photo
 		where photo_rename in
 		<foreach item="rename" collection="list" open="(" separator="," close=")">
 			#{rename}
 		</foreach>
-	</update>
+	</delete>
 	
 	<update id="updateProductPhotoY">
 		update photo
@@ -549,7 +681,7 @@
 	<update id="updateProduct">
 		update product
 		set product_name = #{productName} , product_price= #{productPrice}, category_no = #{categoryNo}, product_company=#{productCompany}, delivery_price = #{deliveryPrice}
-		where product_no = #{productNo} and product_status = 'Y'
+		where product_no = #{productNo} and product_status = 'N'
 	</update>
 	
 	
@@ -558,8 +690,138 @@
 		set photo_level = 0
 		where photo_no = (select min(photo_no)
 						 from photo
-						 where board_no = #{productNo} and board_type=5)
+						 where board_no = #{productNo} and board_type=5 and photo_level = 1)
 	</update>
+	
+	
+	<select id="selectCart" resultType="Cart">
+		select *
+		from cart
+		where member_id = #{id}
+	</select>
+	
+	
+	
+	<insert id="insertPayment">
+		insert all
+		
+		<foreach collection="list" item="item">
+			into payment
+			values (order_aid,  #{ item.orderPrice }, sysdate,  #{item.orderNo}, default, #{item.memberId}, #{item.orderAddress}, #{item.orderProductEno},#{item.deliveryStatus},#{item.productOption}, #{item.productNo}, #{item.orderPhone}, #{item.orderName}, sysdate + 3, #{item.orderContent})
+		</foreach>
+		select * from dual
+	</insert>
+	
+	<select id="selectMyOrder" resultType="Payment">
+		select *
+		from payment
+		order by order_key_no
+	</select>
+	
+	<select id="selectOrderNo" resultType="_int">
+		SELECT order_no
+		FROM (select * from payment order by order_key_no desc)
+		GROUP BY order_no
+	</select>
+	
+	<select id="selectPayment" resultType="Payment">
+		select *
+		FROM PAYMENT
+		WHERE order_no = #{orderNo}
+		order by order_key_no desc
+	</select>
+	
+	<select id="selectBuyerInfo" resultType="Payment">
+		select order_no, member_id , order_Address, ORDER_PHONE, ORDER_NAME, order_price, order_date, delivery_date, order_content
+		from payment 
+		where order_no = #{orderNo}
+		group by order_no , member_id, order_Address, ORDER_PHONE, ORDER_NAME, order_price, order_date, delivery_date, order_Content
+	</select>
+	
+	
+	<select id="selectOrderDetail" resultType="Payment">
+		select *
+		from payment
+		where order_key_no = #{orderKeyNo}
+	</select>
+	
+	<update id="updateDeliveryStatus">
+		update payment
+		set delivery_status = #{deliveryStatus}
+		where order_no = #{orderNo}
+	</update>
+	
+	<update id="deleteOrder">
+		update payment
+		set order_status = 'Y'
+		where order_no = #{orderNo}
+	</update>
+	
+	<update id="refundOrder">
+		update payment
+		set order_status = 'Y' , delivery_status = '환불요청'
+		where order_key_no = #{orderKeyNo}
+	</update>
+	
+	<select id="getListCountOrder" resultType="_int">
+		select count(*)
+		from payment
+		<if test="searchType==1">
+			where order_no like '%${keyword}%'
+		</if>
+		<if test="searchType==2">
+			where order_name like '%${keyword}%'
+		</if>
+		<if test="searchType==3">
+			where delivery_status like '%${keyword}%'
+		</if>
+	</select>
+	
+	<select id="getListCountOrderN" resultType="_int">
+		select count(*)
+		from payment
+		where order_status='Y'
+		<if test="searchType==1">
+			and order_no like '%${keyword}%'
+		</if>
+		<if test="searchType==2">
+			and order_name like '%${keyword}%'
+		</if>
+		<if test="searchType==3">
+			and delivery_status like '%${keyword}%'
+		</if>
+	</select>
+	
+	
+	<select id="selectAllPayment" resultType="Payment">
+		select *
+		from payment
+		
+		<if test="searchType==1">
+			where order_no like '%${keyword}%'
+		</if>
+		<if test="searchType==2">
+			where order_name like '%${keyword}%'
+		</if>
+		<if test="searchType==3">
+			where delivery_status like '%${keyword}%'
+		</if>
+	</select>
+	
+	<select id="selectNPayment" resultType="Payment">
+		select *
+		from payment
+		where order_status = 'Y'
+		<if test="searchType==1">
+			and order_no like '%${keyword}%'
+		</if>
+		<if test="searchType==2">
+			and order_name like '%${keyword}%'
+		</if>
+		<if test="searchType==3">
+			and delivery_status like '%${keyword}%'
+		</if>
+	</select>	
 	
 	
 </mapper>

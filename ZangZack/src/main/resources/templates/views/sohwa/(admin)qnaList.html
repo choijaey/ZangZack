@@ -66,7 +66,6 @@
 		                    </td>
 		                    <td>
 		                    	<th:block th:if="${q.answerContent ==null}">
-		                    		<button class="btn-hover color-1" th:onclick="'deleteQna(' + ${q.questionNo} + ');'">삭제</button>
 		                    		<button class="btn-hover color-2 openModalButton">답변</button>
 		                    	</th:block>
 		                    	<th:block th:unless="${q.answerContent ==null}">
@@ -145,38 +144,41 @@
 				
 				
 				
-				
-				
-				
-			</div>
-			
-			
-			
-			
-			
-			
-			
-			<nav aria-label="Page navigation example" id="nav">
-			    <ul class="pagination">
-			       <li class="page-item">
-			         <a class="page-link" href="#" aria-label="Previous">
-			           <span aria-hidden="true">&laquo;</span>
-			         </a>
-			       </li>
-			       <li class="page-item"><a class="page-link" href="#">1</a></li>
-			       <li class="page-item"><a class="page-link" href="#">2</a></li>
-			       <li class="page-item"><a class="page-link" href="#">3</a></li>
-			       <li class="page-item"><a class="page-link" href="#">4</a></li>
-			       <li class="page-item"><a class="page-link" href="#">5</a></li>
-			       <li class="page-item">
-			       <a class="page-link" href="#" aria-label="Next">
-			           <span aria-hidden="true">&raquo;</span>
-			       </a>
-			       </li>
-			    </ul>
-			</nav>
+				<!-- 페이지네이션 -->
+				<div id="pagenation" th:with="loc=${loc}" th:if="${!qList.isEmpty}">
+		            <ul>
+		               <!-- 이전 버튼 -->
+		               <li th:if="${pi.currentPage > 10}">
+		                  <a th:href="@{${loc}(status=${status},searchType=${searchType},keyword=${keyword},page=${pi.currentPage-10})}">&lt; 이전</a>
+		               </li>
+		                   <!-- 페이지 번호 -->
+                       <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+		                    <a th:href="@{${loc}(status=${status},searchType=${searchType},keyword=${keyword},page=${p})}" th:id="${p == pi.currentPage ? 'check_page' : ''}">
+		                       [[${p}]] 
+		                    </a>
+                       </li>
+
+		                   <!-- 다음 버튼 -->
+		               <li th:if="${pi.maxPage >= 10 && pi.maxPage - pi.currentPage > 10}">
+		                  <a th:href="@{${loc}(status=${status},searchType=${searchType},keyword=${keyword},page=${pi.currentPage+10})}">다음 &gt;</a>
+		               </li>
+		            </ul>
+		        </div>
 		
+		</div>
+				
+				
+				
+				
 	</div>
+			
+			
+			
+			
+			
+			
+			
+		
 	
 	
 	
@@ -244,9 +246,7 @@
 
 	    searchImg1.addEventListener("click", function() {
 	        var keyword = searchInput1.value;
-	        
 	        location.href= 'adminQnaListView.so?status=' + status + '&searchType=1&keyword=' + keyword;
-	        console.log(keyword);
 	    });
 	    
 	    searchImg2.addEventListener("click", function() {
@@ -289,7 +289,7 @@
 	
 	    
 		function deleteQna(questionNo){
-        	var confirmation = confirm('해당 문의를 삭제하시겠습니까?');
+        	var confirmation = confirm('해당 문의의 답변을 삭제하시겠습니까?');
         	
         	if(confirmation){
         		 location.href='deleteQna.so?questionNo='+questionNo;
