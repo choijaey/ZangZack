@@ -1,33 +1,41 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>글쓰기 페이지</title>
+    <title>레시피 작성</title>
     <link href="css/seongun/writeboard.css" rel="stylesheet">
 </head>
 <body>
+	<div th:replace="~{common/navbar :: navbar}"></div>
     <div class="head-container">
-        <h1>캠핑게시판 등록</h1>
+        <h1>레시피 작성</h1>
     </div>
     <div class="write-container">
-        <form method="post" action="insertCampBoard.su" enctype="multipart/form-data">
+        <form method="post" action="insertRecipe.su" enctype="multipart/form-data">
             <!-- 제목 입력 -->
             <div class="write-row">
-                <input type="text" id="title" name="cbTitle" placeholder="제목을 입력하세요." />
+                <input type="text" id="title" name="recipeName" placeholder="요리 이름" />
             </div>
             <!-- 카테고리 선택 -->
             <div class="write-row">
-                <select name="categoryNo" id="category">
-                    <option value="1">백패킹</option>
-                    <option value="2">오토캠핑</option>
-                    <option value="3">장박</option>
-                    <option value="4">글램핑</option>
-                </select>
+            	<h4>조리도구를 선택해 주세요</h4>
+            	<div id="category">
+                    <label><input type="checkbox" name="cookCategoryNo" value="1"> 후라이팬</label>
+				    <label><input type="checkbox" name="cookCategoryNo" value="2"> 가위</label>
+				    <label><input type="checkbox" name="cookCategoryNo" value="3"> 칼</label>
+				    <label><input type="checkbox" name="cookCategoryNo" value="4"> 버너</label>
+				    <label><input type="checkbox" name="cookCategoryNo" value="5"> 버너</label>
+				    <label><input type="checkbox" name="cookCategoryNo" value="6"> 그릴</label>
+				</div>
             </div>
+            <input type="text" name="recipeTaste"/>
             <!-- 내용 입력 -->
             <div class="write-row">
-                <textarea id="content" name="cbContent" placeholder="내용을 입력하세요."></textarea>
+                <textarea id="content" name="recipeIngredients" placeholder="요리 재료를 입력하세요."></textarea>
+            </div>
+            <div class="write-row">
+                <textarea id="content" name="recipeContent" placeholder="조리 법을 입력하세요."></textarea>
             </div>
             <!-- 파일 첨부 -->
             <div class="upload-container">

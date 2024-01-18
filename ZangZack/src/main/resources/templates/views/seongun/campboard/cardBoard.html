@@ -51,10 +51,11 @@
             <ul class="board_list_card" th:if="${!list.isEmpty}">
                 <li class="card_list" th:each="b : ${list}">
                     <div class="card_area">
+                    	<input type="hidden" th:value="${b.cbNo}">
                         <div class="con">
                             <div class="con_top">
                                 <div class="title_area">
-                                    <a href="#" class="title">
+                                    <a  class="title">
                                         <span class="inner">
                                             <strong>
                                                 [[${b.cbTitle}]]
@@ -65,7 +66,7 @@
                                         </span>
                                     </a>
                                 </div>
-                                <a href="#" class="txt">
+                                <a  class="txt">
                                     [[${b.cbContent}]]
                                 </a>
                             </div>
@@ -76,14 +77,14 @@
                                             <tbody>
                                                 <tr>
                                                     <td class="p-nick">
-                                                        <a href="#" class="u-tcol-k">[[${b.memberName}]]</a>
+                                                        <a  class="u-tcol-k">[[${b.memberName}]]</a>
                                                     </td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="date_num">
-                                        <span class="date">[[${b.cbCreateDate}]]</span>
+                                        <span class="date">[[${b.formatDate}]]</span>
                                         <span class="num">조회 : [[${b.cbCount}]]</span>
                                         <div class="like_area">
                                             <div class="comment_area">
@@ -108,7 +109,7 @@
                             </div>
                         </div>
                         <div class="movie_img">
-                            <a href="#">
+                            <a>
                             	<th:block th:if="${b.photoPath != null}">
                                 	<img th:src="${b.photoPath}" width="120" height="120" alt="썸네일 이미지">
                                 </th:block>
@@ -130,40 +131,57 @@
             <button type="button" id="write_btn" onclick="writeBtn()">글쓰기</button>
         </div>
         <div class="board_bottom_area">
-			<div id="pagenation">
+			<div id="pagenation" th:with="loc=${loc}" th:if="${!list.isEmpty}">
 				<ul>
-	                <!-- 이전 버튼 -->
-	                <li><a href="#">&lt; 이전</a></li>
+					<!-- 이전 버튼 -->
+					<li th:if="${pi.currentPage > 10}">
+						<a th:href="@{${loc}(page=${pi.currentPage-10})}">&lt; 이전</a>
+					</li>
 	                <!-- 페이지 번호 -->
-	                <li><a href="#" id="check_page">1</a></li>
-	                <li><a href="#">2</a></li>
-	                <li><a href="#">3</a></li>
-	                <li><a href="#">4</a></li>
-	                <li><a href="#">5</a></li>
-	                <li><a href="#">6</a></li>
-	                <li><a href="#">7</a></li>
-	                <li><a href="#">8</a></li>
-	                <li><a href="#">9</a></li>
-	                <li><a href="#">10</a></li>
+	                <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+	                	<th:block th:if="${search.searchText == null}">
+							<a th:href="@{${loc}(page=${p})}" th:id="${p == pi.currentPage} ? 'check_page'">
+						        [[${p}]] 
+						    </a>
+					    </th:block>
+					    <th:block th:if="${search.searchText != null}">
+						    <a th:href="@{${loc}(page=${p}, searchCategory=${search.searchCategory}, searchText=${search.searchText})}" th:id="${p == pi.currentPage} ? 'check_page'">
+							    [[${p}]]
+							</a>
+					    </th:block>
+					</li>
 	                <!-- 다음 버튼 -->
-					<li><a href="#">다음 &gt;</a></li>
-				</ul>
-            </div>
+	                <li th:if="${pi.maxPage >= 10 && pi.maxPage - pi.currentPage > 10}">
+	                	<a th:href="@{${loc}(page=${pi.currentPage+10})}">다음 &gt;</a>
+	                </li>
+              	</ul>
+			</div>
             <hr/>
-              <!-- 검색 필터 영역 -->
+              <!-- 검색 필터 영역 -->	
             <div class="search_area">
-                <select name="search_type" class="search_select">
-                    <option value="all">전체</option>
-                    <option value="title">제목</option>
-                    <option value="content">내용</option>
-                    <option value="author">글쓴이</option>
-                </select>
-                <input type="text" class="search_input" placeholder="검색어를 입력하세요." />
-                <button type="submit" class="search_button">검색</button>
+	            <form action="cardBoard.su">
+		            <select name="searchCategoryNo" class="search_select">
+			            <option value="0">전체보기</option>
+			            <option value="1">백패킹</option>
+			            <option value="2">오토캠핑</option>
+			            <option value="3">장박</option>
+			            <option value="4">글램핑</option>
+			        </select>
+	                <select name="searchCategory" class="search_select">
+	                    <option value="0">전체</option>
+	                    <option value="1">제목</option>
+	                    <option value="2">내용</option>
+	                    <option value="3">글쓴이</option>
+	                </select>
+	                <input type="text" name="searchText" class="search_input" placeholder="검색어를 입력하세요." />
+	                <button type="submit" class="search_button">검색</button>
+                </form>
             </div>
         </div>
 	</div>
-    <script>
+    <script th:inline="javascript">
+		/*<![CDATA[*/
+    	let member = /*[[${session.loginUser}]]*/
         document.addEventListener('DOMContentLoaded', function() {
             // 스크롤이 끝으로 이동 시 이벤트 발생
             window.addEventListener('scroll', function() {
@@ -193,8 +211,24 @@
         });
         
         function writeBtn(){
-        	window.location.href="writeCampBoardView.su";
+        	if(member != null){
+        		window.location.href="writeCampBoard.su";
+        	}else{
+        		alert("로그인 후 이용해주세요.");
+        		window.location.href="signUp.me";
+        	}
         }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // 모든 card_area 클래스를 가진 요소에 대한 클릭 이벤트 리스너 추가
+            document.querySelectorAll('.card_area').forEach(function(card) {
+                card.addEventListener('click', function() {
+                    var boardId = this.querySelector('input[type="hidden"]').value;
+                    location.href = 'selectBoard.su?cbNo=' + boardId + "&page=" + /*[[${pi.currentPage}]]*/1;
+                });
+            });
+        });
+        /*]]>*/
     </script>
 </body>
 </html>
