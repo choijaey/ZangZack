@@ -157,8 +157,8 @@ public class MemberController {
 			if(bcrypt.matches(m.getMemberPwd(), loginUser.getMemberPwd())) {
 				model.addAttribute("loginUser",loginUser);
 				
-				if(!beforeURL.equals("http://localhost:8080/logout.me") && !beforeURL.equals("http://localhost:8080/signUp.me"))
-				{
+				if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me") ||
+										beforeURL.equals("http://192.168.20.207:8080/logout.me") || beforeURL.equals("http://192.168.20.207:8080/signUp.me"))) {
 					return "redirect:" + beforeURL;
 				}else {
 					return "redirect:home.me";
@@ -636,13 +636,14 @@ public class MemberController {
 	        // 중복된 이메일이 있는 경우
 	    	session.setAttribute("loginUser", loginUser);
 	    	
-	        if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me"))) {
+	        if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me") ||
+	        							beforeURL.equals("http://192.168.20.207:8080/logout.me") || beforeURL.equals("http://192.168.20.207:8080/signUp.me"))) {
 	            return "redirect:" + beforeURL;
 	        } else {
 	            return "redirect:home.me";
 	        }
 	        // 여기서 로그인 처리 등을 수행
-	        // 로그인만 가능하게끔 수정
+	        // 로그인만 가능하게끔 수정 http://192.168.20.207:8080/
 	    } else {
 	        // 중복된 이메일이 없는 경우
 	        int result = mService.kakaoLogin(kakaoMemberInfo);
@@ -650,7 +651,8 @@ public class MemberController {
 	            // 로그인 성공
 	        	System.out.println("로그인성공: " + kakaoMemberInfo);
 	            session.setAttribute("loginUser", kakaoMemberInfo);
-	            if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me"))) {
+	            if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me") ||
+											beforeURL.equals("http://192.168.20.207:8080/logout.me") || beforeURL.equals("http://192.168.20.207:8080/signUp.me"))) {
 	                return "redirect:" + beforeURL;
 	            } else {
 	                return "redirect:home.me";
