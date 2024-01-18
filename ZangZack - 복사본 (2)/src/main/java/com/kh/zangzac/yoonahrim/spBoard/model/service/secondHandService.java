@@ -65,6 +65,8 @@ public interface secondHandService {
 
 	int updateCount(int spNo);
 
+	ArrayList<Chatter> chatterList(String roomName);
+
 
 
 
