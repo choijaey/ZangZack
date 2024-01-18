@@ -90,6 +90,7 @@ button {
   flex-direction: column;
   height: 100%;
   overflow: auto; /* Enable scrollbar */
+  overflow-y:auto;
 }
 
 .slider-container {

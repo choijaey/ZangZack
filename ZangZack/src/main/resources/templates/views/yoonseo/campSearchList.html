@@ -6,90 +6,145 @@
 <title>Insert title here</title>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<style>
+  #pagenation {
+   text-align: center;
+}
 
+#pagenation ul {
+   list-style: none;
+   padding: 0;
+   display: inline-block; /* 중앙 정렬을 위해 inline-block으로 변경 */
+   margin: 0; /* 기본 마진 제거 */
+}
+
+#pagenation ul li {
+   display: inline;
+   margin: 0 5px;
+}
+
+#pagenation ul li a {
+   text-decoration: none;
+    text-align: center;
+    color: #333;
+    font-size: 14px;
+    width: 30px; /* 정사각형의 너비 */
+    height: 30px; /* 정사각형의 높이 */
+    line-height: 30px; /* 텍스트를 수직 중앙에 위치시킴 */
+    padding: 0; /* 패딩을 제거하거나 조정 */
+    border-radius: 5px; /* 모서리를 둥글게 */
+    display: inline-block; /* 블록 레벨 요소처럼 너비와 높이를 적용 */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#pagenation ul li a:hover {
+   background-color:#F9612B;
+   color: #e6e6e6;
+}
+
+#pagenation ul li a#check_page {
+   background-color:#F9612B;
+   color: #e6e6e6;
+}
+</style>
  
 </head>
 <body>
        <div th:replace="~{common/navbar :: navbar}"></div>
        
 		 <div class="container">
-		   <div class="mb-4 rounded-3 " style="height:200px; margin-top: 100px; background-color: #F3F4F6;">
-		       <img src="image/yoonseo/img/icons8-camping-94.png" style="float: left; margin: 13px;">
-		       <div class="container-fluid" style="padding-top:50px;">
-		       	  <h2 class="display-8 fw-bold" style="float: left;" >캠핑장 검색</h2>
-		       	  <h4 class="display-15" style="margin-left: 50px;">검색 된 캠핑장은 총 개 입니다.</h4>
-		       	  <hr style="width:90%;">
-		       </div>
-		        <div>
-		         <input type="text" placeholder="키워드 검색" style="margin-left: 20px; width:250px; height:40px; float: left; margin-right: 20px; ">
-		         <div class="search_boxes">
-		          <div class="search_box">
-		            <select name="city" id="" onchange="categoryChange(this)" style="float: left; margin-right: 10px; height:40px;">
-		              <option value=>시/도 선택</option>
-		              <option value="general01">강원도</option>
-		              <option value="general02">경기도</option>
-		              <option value="general03">경상남도</option>
-		              <option value="general04">경상북도</option>
-		              <option value="general05">광주</option>
-		              <option value="general06">대구</option>
-		              <option value="general07">대전</option>
-		              <option value="general08">부산</option>
-		              <option value="general09">서울</option>
-		              <option value="general10">울산</option>
-		              <option value="general11">인천</option>
-		              <option value="general12">전라남도</option>
-		              <option value="general13">전라북도</option>
-		              <option value="general14">제주도</option>
-		              <option value="general15">충청남도</option>
-		              <option value="general16">충청북도</option>
-		            </select>
-		          </div>
-		          
-		          <div class="search_box">
-		            <select name="country" id="state"  style="height:40px; float: left; margin-right: 10px; ">
-		              <option>군/구 선택</option>
-		            </select>
-		          </div>
-		          <div>
-		            <select style="height:40px; float: left;">
-		               <option>선택</option>
-		               <option value="오토캠핑장">오토캠핑장</option>
-		               <option value="일반야영장">일반야영장</option>
-		               <option value="장박">장박</option>
-		               <option value="글램핑">글램핑</option>
-		               <option value="카라반">카라반</option>
-		            </select>   
-		          </div>
-		          <button class="btn btn-primary" type="submit" style="background-color: #F9612B; border-color: #F9612B; margin-left: 10px; height:40px;">검색</button>
-		       </div>
-		     </div>
-		  </div>
-	
-		 <button style="border-radius: 5px; border: 1px solid #F3F4F6;background-color: #F3F4F6;">전체 보기</button>
+			 <form action="campSearchList.ys">
+			   <div class="mb-4 rounded-3 " style="height:200px; margin-top: 100px; background-color: #F3F4F6;">
+			       <img src="image/yoonseo/img/icons8-camping-94.png" style="float: left; margin: 15px;">
+			       <div class="container-fluid" style="padding-top:50px;">
+			       	  <h2 class="display-8 fw-bold" style="display: inline-block;" >캠핑장 검색</h2>
+			       	  <h4 class="display-15" style="margin-left: 10px; margin-top:10px; display: inline-block;">검색 된 캠핑장 [[${result}]]개</h4>
+			       	  <hr style="width:90%;">
+			       </div>
+			        <div>
+			         <input type="text" name="keyword" th:value="${keyword}" style="margin-left: 20px; width:250px; height:40px; float: left; margin-right: 20px; ">
+			         <div class="search_boxes">
+			          <div class="search_box">
+			            <select name="city" id="" onchange="categoryChange(this)" style="float: left; margin-right: 10px; height:40px;">
+			              <option value=''>시/도 선택</option>
+			              <option th:selected="${city} == '강원도'">강원도</option>
+			              <option th:selected="${city} == '경기도'">경기도</option>
+			              <option th:selected="${city} == '경상남도'">경상남도</option>
+			              <option th:selected="${city} == '경상북도'">경상북도</option>
+			              <option th:selected="${city} == '광주'">광주</option>
+			              <option th:selected="${city} == '대구'">대구</option>
+			              <option th:selected="${city} == '대전'">대전</option>
+			              <option th:selected="${city} == '부산'">부산</option>
+			              <option th:selected="${city} == '서울'">서울</option>
+			              <option th:selected="${city} == '울산'">울산</option>
+			              <option th:selected="${city} == '인천'">인천</option>
+			              <option th:selected="${city} == '전라남도'">전라남도</option>
+			              <option th:selected="${city} == '전라북도'">전라북도</option>
+			              <option th:selected="${city} == '제주도'">제주도</option>
+			              <option th:selected="${city} == '충청남도'">충청남도</option>
+			              <option th:selected="${city} == '충청북도'">충청북도</option>
+			            </select>
+			          </div>
+			          <div>
+			            <select style="height:40px; float: left;" name ="type">
+			               <option value=''>선택</option>
+			               <option th:selected="${type} == '일반야영'">일반야영</option>
+			               <option th:selected="${type} == '오토캠핑'">오토캠핑</option>
+			               <option th:selected="${type} == '장박'">장박</option>
+			               <option th:selected="${type} == '글램핑'">글램핑</option>
+			               <option th:selected="${type} == '카라반'">카라반</option>
+			               <option th:selected="${type} == '차박'">차박</option>
+			            </select>   
+			          </div>
+			          <button class="btn btn-primary" type="submit" style="background-color: #F9612B; border-color: #F9612B; margin-left: 10px; height:40px;">검색</button>
+			       </div>
+			     </div>
+			  </div>
+		     </form>
+		 <button onclick="location.href='campSearch.ys'" style="border-radius: 5px; border: 1px solid #F3F4F6; background-color: #F3F4F6;">캠핑장 전체 보기</button>
 		  <div class="container" style="border:1px solid #F3F4F6; width:100%; height:850px; border-radius: 10px;"> 
 		     
-            <div id="map" style="width:900px; height: 800px; margin-left:5px; float:left; margin-top: 10px;position:relative;"></div>
+            <div id="map" style="width:900px; height: 800px; margin-left:5px; float:left; margin-top: 10px; position:relative;"></div>
                 
 		        <div style="float:right; width:350px; font-size: 15px;">
 			        <table class="table table-hover" id="campingTable" style="margin-right: 10px; margin-top: 20px;">
 					  <tbody> 
-						  <tr>
+						  <tr th:each="list : ${campList}">
 						     <th class="table-th" style="cursor:pointer;">
-						         <h5 style="display: inline;" ></h5>
-						         <h5 style="display: inline;"></h5>
-						         <h6></h6>
-						         <h6></h6>
-						         <input type="hidden"  name ="cgNo">
+						         <h5 style="display: inline;" th:text ="|[${list.cgRegion}]|"></h5>
+						         <h5 style="display: inline;">[[${list.cgName}]]</h5>
+						         <h6>[[${list.cgAddress}]]</h6>
+						         <h6>[[${list.cgPhone}]]</h6>
+						         <input type="hidden" th:value="${list.cgNo}" name ="cgNo">
 						     </th>
 						  </tr>
 					  </tbody>  
 			       </table>
-			      
+			      <div id="pagenation" th:with="loc=${loc}" >
+		             <ul>
+		               <!-- 이전 버튼 -->
+		               <li th:if="${pi.currentPage > 10}">
+		                  <a th:href="@{${loc}(page=${pi.currentPage-10},keyword=${keyword},city=${city},type=${type})}">&lt; 이전</a>
+		               </li>
+		                <!-- 페이지 번호 -->
+		               <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+					     <a th:href="@{${loc}(page=${p},keyword=${keyword},city=${city},type=${type})}" th:id="${p == pi.currentPage ? 'check_page' : ''}">
+					        [[${p}]] 
+					     </a>
+					 
+		
+		               </li>
+	                   <!-- 다음 버튼 -->
+	                   <li th:if="${pi.maxPage >= 10 && pi.maxPage - pi.currentPage > 10}">
+	                      <a th:href="@{${loc}(page=${pi.currentPage+10},keyword=${keyword},city=${city},type=${type})}">다음 &gt;</a>
+	                   </li>
+		              </ul>
+                   </div>   	     		
 		       </div>
 		  </div> 
 	 </div>
 	
-<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=69cc558a57d626f42a3847099725a144&libraries=services"></script>
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=05e8d2c4c29ae529836d63161c0d1ef1&libraries=services"></script>
  <script th:inline="javascript">
  
 		const mapContainer = document.getElementById('map'), // 지도를 표시할 div
@@ -103,14 +158,14 @@
 		
 		
 		// 주소-좌표 변환 객체를 생성합니다
-	//	const geocoder = new kakao.maps.services.Geocoder();
+		const geocoder = new kakao.maps.services.Geocoder();
 		
-		/*<![CDATA[*/
-		//const mapList = /*[[${mapList}]]*/1;
+		/*<![CDATA*/
+		const mapList = /*[[${campList}]]*/1;
 		/*]]>*/ 
-		//console.log(mapList);
 		
-		/* const positions = [];
+		
+		 const positions = [];
 		for(let i = 0; i < mapList.length; i++){
 			positions.push({
 				name:mapList[i].cgName,
@@ -118,10 +173,9 @@
 				phone : mapList[i].cgPhone,
 				no: mapList[i].cgNo,
 				region: mapList[i].cgRegion
-				
 			});
 		}
-		console.log(positions); */
+		console.log(positions); 
 		
 		
 		/* const positions = [
@@ -146,12 +200,13 @@
 		
 		
 		
-		// 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
-		/*   const bounds = new kakao.maps.LatLngBounds(); //추가한 코드
+	// 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
+		   const bounds = new kakao.maps.LatLngBounds(); //추가한 코드
+		   let testPage = /*[[${pi.currentPage}]]*/1;
 		 
 		
 		  // 마커를 담을 배열입니다
-		  /* const markers = [];
+		  const markers = [];
 
 		 function firstMarkers(){
 			 
@@ -209,7 +264,7 @@
 	
 			       
 			        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-			        // map.setCenter(coords); //제거한 코드
+			        map.setCenter(coords); //제거한 코드
 			        setBounds();  //추가한 코드
 			        
 			     // 마커와 인포윈도우를 배열에 추가
@@ -276,6 +331,10 @@
 		                // 정상적으로 검색이 완료됐으면
 		                if (status === kakao.maps.services.Status.OK) {
 		                    const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+		                    
+		                    // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+					        map.setCenter(coords); //제거한 코드
+					        setBounds();  //추가한 코드
 
 		                    // 결과값으로 받은 위치를 마커로 표시합니다
 		                    const marker = new kakao.maps.Marker({
@@ -345,7 +404,7 @@
 		        	firstMarkers();
 		        }
 		        
- */
+
 		       
 
 

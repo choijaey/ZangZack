@@ -15,7 +15,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		// 일반 계정
 		registry.addInterceptor(new CheckLoginInterceptor()) // 매개변수 : HandleInterceptor 상속/ 다형성 적용
+
 				.addPathPatterns("/adminPage.me", "/selectMemberList.me", "/review.me", "/updatePassword.me", "/deleteMember.me","/adminChatroom.jy");
+
 		
 	}
 	
