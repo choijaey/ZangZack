@@ -197,6 +197,4 @@
     where cg_no = #{no}
    </update>
    
-   
-
 </mapper>
