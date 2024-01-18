@@ -29,6 +29,11 @@ public class PhotoServiceImpl implements PhotoService{
 	public int deletePhoto(Photo temp) {
 		return pDAO.deletePhoto(temp);
 	}
+
+	@Override
+	public int deletePhotoName(String deletePhotoName) {
+		return pDAO.deletePhotoName(deletePhotoName);
+	}
 	
 	
 
