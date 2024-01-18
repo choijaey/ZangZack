@@ -14,128 +14,142 @@
 	<br><br>
 	<div id="orderDetailWrapped">
 		<h1>주문상세</h1>
-		<span style="font-weight: bold;">2023.12.18 주문</span> <span style="color:gray; margin-left:20px;">주문번호 001234442</span>
+		<br>
+		<span style="font-weight: bold;">[[${buyerInfo.orderDate}]] 주문</span> <span style="color:gray; margin-left:20px;">주문번호 [[${buyerInfo.orderNo}]]</span>
 		<br><br>
-		<h4 style="color:darkolivegreen;">2023.12.21 배송 예정</h4>
+		<h4 style="color:darkolivegreen;">[[${buyerInfo.deliveryDate}]] 배송 예정</h4>
 		
 		<!--같은 날짜 일때 반복-->
-			<div class="products">
-			    <div class="left">
-			    <!-- 왼쪽 컨테이너 내용 -->
-			    <table>
-					<tr class="cart-row">
-	                    <td class="td1">
-							<img src="image/sohwa/tent1core1.png">
-							<div>
-								<div>모비가든</div>
-								캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br>
-								410,000원
-							</div>
-	                    </td>
-	                    <td class="td2">
-	                        <div class="quantity-input">&nbsp;&nbsp;&nbsp;
-	                            <input type="text" class="quantity" value="1" min="1" readonly>개
-	                        </div>
-	                    </td>
-	                    <td class="td3">
-	                        410,000원
-	                    </td>
-	                </tr>	
-				</table>
-			    </div>
-			    
-			    <div class="line"></div>
-			    
-			    <div class="right">
-			    <!-- 오른쪽 컨테이너 내용 -->
-			    	<button>환불신청</button><br>
-			    	<button>리뷰작성</button><br>
-			    	<button>문의작성</button>
-			    </div>
-			</div>
-			
-			<div class="products">
-			    <div class="left">
-			    <!-- 왼쪽 컨테이너 내용 -->
-			    <table>
-					<tr class="cart-row">
-	                    <td class="td1">
-							<img src="image/sohwa/tent1core1.png">
-							<div>
-								<div>모비가든</div>
-								캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br>
-								410,000원
-							</div>
-	                    </td>
-	                    <td class="td2">
-	                        <div class="quantity-input">&nbsp;&nbsp;&nbsp;
-	                            <input type="text" class="quantity" value="1" min="1" readonly>개
-	                        </div>
-	                    </td>
-	                    <td class="td3">
-	                        410,000원
-	                    </td>
-	                </tr>	
-				</table>
-			    </div>
-			    
-			    <div class="line"></div>
-			    
-			    <div class="right">
-			    <!-- 오른쪽 컨테이너 내용 -->
-			    	<button>환불신청</button><br>
-			    	<button>리뷰작성</button><br>
-			    	<button>문의작성</button>
-			    </div>
-			</div>
-			
-			<br><br>
-			
-			<h3>받는 사람 정보</h3>
-			<hr style="border:2px solid black;">
+		<div th:each="pa:${paList}">
+			<th:block th:each="p:${pList}" th:if="${pa.productNo == p.productNo}">
+				<div class="products">
+				    <div class="left">
+				    <!-- 왼쪽 컨테이너 내용 -->
+				    <table>
+						<tr class="cart-row">
+		                    <td class="td1">
+								<img th:each="a:${aList}" th:if="${a.boardType==5 && a.boardNo == p.productNo && a.photoLevel ==0}" th:src="${a.photoPath}">
+								<div>
+									<div>[[${p.productCompany}]]</div>
+									[[${p.productName}]]<br>
+									[[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]
+								</div>
+		                    </td>
+		                    <td class="td2">
+		                        <div class="quantity-input">&nbsp;&nbsp;&nbsp;
+		                        	<input type="hidden" class="productPrice" th:value="${p.productPrice}">
+		                            <input type="text" class="quantity" th:value="${pa.orderProductEno}" min="1" readonly>개
+		                        </div>
+		                    </td>
+		                    <td style="width:150px;">[[${pa.productOption}]]</td>
+		                    <td class="td3">
+		                        
+		                    </td>
+		                </tr>	
+					</table>
+				    </div>
+				    
+				    <div class="line"></div>
+				    
+				    <div class="right">
+				    <!-- 오른쪽 컨테이너 내용 -->
+				    	<button>환불신청</button><br>
+				    </div>
+				</div>
+				
+<!-- 				<div class="products"> -->
+<!-- 				    <div class="left"> -->
+<!-- 				    왼쪽 컨테이너 내용 -->
+<!-- 				    <table> -->
+<!-- 						<tr class="cart-row"> -->
+<!-- 		                    <td class="td1"> -->
+<!-- 								<img src="image/sohwa/tent1core1.png"> -->
+<!-- 								<div> -->
+<!-- 									<div>모비가든</div> -->
+<!-- 									캠스존 오르딘 글램핑 리빙쉘 대형 거실형텐트 5-6인용<br> -->
+<!-- 									410,000원 -->
+<!-- 								</div> -->
+<!-- 		                    </td> -->
+<!-- 		                    <td class="td2"> -->
+<!-- 		                        <div class="quantity-input">&nbsp;&nbsp;&nbsp; -->
+<!-- 		                            <input type="text" class="quantity" value="1" min="1" readonly>개 -->
+<!-- 		                        </div> -->
+<!-- 		                    </td> -->
+<!-- 		                    <td class="td3"> -->
+<!-- 		                        410,000원 -->
+<!-- 		                    </td> -->
+<!-- 		                </tr>	 -->
+<!-- 					</table> -->
+<!-- 				    </div> -->
+				    
+<!-- 				    <div class="line"></div> -->
+				    
+<!-- 				    <div class="right"> -->
+<!-- 				    오른쪽 컨테이너 내용 -->
+<!-- 				    	<button>환불신청</button><br> -->
+<!-- 				    	<button>리뷰작성</button><br> -->
+<!-- 				    </div> -->
+<!-- 				</div> -->
+			</th:block>
+		</div>
+		<br><br>
+		
+		<h3>받는 사람 정보</h3>
+		<hr style="border:2px solid black;">
 			<div>
 				<span class="infoName">받는 사람</span>
-				<span class="info">신소화</span>
+				<span class="info">[[${buyerInfo.orderName}]]</span>
 			</div>
 			<div>
 				<span class="infoName">연락처</span>
-				<span class="info">010-9145-7175</span>
+				<span class="info">[[${buyerInfo.orderPhone.substring(0, 3) + '-' + buyerInfo.orderPhone.substring(3, 7) + '-' + buyerInfo.orderPhone.substring(7)}]]</span>
 			</div>
 			<div>
 				<span class="infoName">배송주소</span>
-				<span class="info">경기도 남양주시 진접읍 해밀예당 1로 어쩌구 1층 어쩌구호</span>
+				<span class="info">[[${buyerInfo.orderAddress.split('@')[1]}]] [[${buyerInfo.orderAddress.split('@')[2]}]]</span>
 			</div>
 			<div>
 				<span class="infoName">배송 요청사항</span>
-				<span class="info">배송 전 연락바랍니다.</span>
+				<span class="info">[[${buyerInfo.orderContent}]]</span>
 			</div>
-			
-			<br><br>
-			
-			<h3>결제 정보</h3>
-			<table id="payInfo">
-				<tr>
-					<td style="border-bottom: 1px solid lightgray; width:50%;"><div style="color:#F9612B">결제수단</div> <div>국민카드 / 일시불</div></td>
-					<td style="background-color: rgb(235, 235, 235);"><div>총 상품 가격 <span>820,000원</span></div> <div>배송비<span>0원</span></div></td>
-				</tr>
-				<tr>
-					<td style="border-bottom: 1px solid lightgray;"></td>
-					<td style="background-color: rgb(236, 236, 236);"><div>국민카드 일시불 <span>820,000원</span></div><div style="color:#F9612B">총 결제 금액 <span>820,000원</span></div></td>
-				</tr>
-			</table>
-			
-			<br><br>
-			
-			<div id="underBtns">
-				<button>< 주문목록 돌아가기</button> 
-				<button style="float:right;">주문내역 삭제</button>
-			</div>
+			<hr style="border:2px solid black;">
+		<br><br>
+		
+<!-- 		<h3>결제 정보</h3> -->
+<!-- 		<table id="payInfo"> -->
+<!-- 			<tr> -->
+<!-- 				<td style="background-color: rgb(235, 235, 235);"><div>총 상품 가격 <span>[[|${#numbers.formatDecimal(buyerInfo.orderPrice, 0, 'COMMA', 0, 'POINT')}원|]]</span></div></div></td> -->
+<!-- 			</tr> -->
+<!-- 			<tr> -->
+<!-- 				<td style="background-color: rgb(236, 236, 236);"><div style="color:#F9612B">총 결제 금액 <span>[[|${#numbers.formatDecimal(buyerInfo.orderPrice, 0, 'COMMA', 0, 'POINT')}원|]]</span></div></td> -->
+<!-- 			</tr> -->
+<!-- 		</table> -->
+		
+		<br><br>
+		
+		<div id="underBtns">
+			<a href="myOrderPageView.so"><button><< 주문목록 돌아가기</button></a> 
+			<a th:href="@{'deleteOrder.so?orderNo=' + ${buyerInfo.orderNo}}" onclick="return confirm('정말 삭제하시겠습니까?')"><button style="float:right;">주문내역 삭제</button></a>
+		</div>
 			
 	</div>
 	
 	
 	
 	<br><br><br><br><!--footer--><br><br><br><br>
+	
+	<script th:inline="javascript">
+	window.onload=()=>{
+	   const inputs = document.querySelectorAll('.quantity-input');
+	   
+	   for (let i = 0; i < inputs.length; i++) {
+		   const price = inputs[i].querySelector('.productPrice').value;
+		   const eno = inputs[i].querySelector('.quantity').value;
+		   inputs[i].parentNode.nextElementSibling.nextElementSibling.innerText=(price * eno).toLocaleString() + '원';
+		   console.log(inputs[i].parentNode.nextElementSibling);
+	   }
+	 }
+	</script>
 
 </body>
 </html>

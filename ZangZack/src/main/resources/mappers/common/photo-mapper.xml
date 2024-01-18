@@ -5,6 +5,7 @@
 		select *
 		from photo
 		where photo_status = 'N' and board_type = #{boardType} and board_no = #{boardNo}
+		order by photo_no asc
 	</select>
 	
 	<insert id="insertPhotoCampBoard">
@@ -27,4 +28,9 @@
          WHERE photo_rename = #{photoName}
    </delete>
    
+   <update id="updatePhoto">
+   		update photo
+   		set photo_level = '0'
+   		where photo_no = #{photoNo} 
+   </update>
 </mapper>

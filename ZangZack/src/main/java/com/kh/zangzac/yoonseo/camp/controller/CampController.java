@@ -1,8 +1,7 @@
 package com.kh.zangzac.yoonseo.camp.controller;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -20,12 +20,15 @@ import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.photo.model.vo.Photo;
+import com.kh.zangzac.ming.member.model.vo.Member;
 import com.kh.zangzac.yoonseo.camp.model.exception.CampException;
 import com.kh.zangzac.yoonseo.camp.model.service.CampService;
 import com.kh.zangzac.yoonseo.camp.model.vo.CampingGround;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
+@SessionAttributes("loginUser")
 @Controller
 public class CampController {
 	
@@ -52,12 +55,12 @@ public class CampController {
 		ArrayList<CampingGround> mapList = cService.selectMapList(3);
 		
 		
-		
 		if(cList != null) {
 			model.addAttribute("loc", request.getRequestURI());
 			model.addAttribute("cList", cList);
 			model.addAttribute("pi", pi);
 			model.addAttribute("mapList", mapList);
+			model.addAttribute("listCount", listCount);
 			
 			return "views/yoonseo/campSearch";
 		}else {
@@ -100,11 +103,19 @@ public class CampController {
 	@GetMapping("campDetail.ys")
 	public String selectCampDetail(@RequestParam("no") int no,
 			                       @RequestParam("page") int page,
-			                       Model model) {
+			                       Model model,HttpSession session) {
 		
-		System.out.println("dd"+no);
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		String id = null;
+		if(loginUser != null) {
+			id = loginUser.getMemberId();
+		}
+		
 		CampingGround camp = cService.selectCampingDetail(no);
-		System.out.println(camp.getCgImgInfo());
+		int count = cService.updateCount(no);
+		if(count > 0) {
+			camp.setCgCount(camp.getCgCount() + 1);
+		}
 		
 		ArrayList<Photo> campList = cService.selectPhoto(no); //캠핑장 사진
 		
@@ -120,6 +131,7 @@ public class CampController {
 		   model.addAttribute("page", page);
 		   model.addAttribute("infoArray", infoArray);
 		   model.addAttribute("point", point);
+		   model.addAttribute("id", id);
 		  
 		   
 		   return"views/yoonseo/campDetail";   
@@ -139,6 +151,8 @@ public class CampController {
 			                
 			                 ) {
 		
+		
+		
 		ArrayList<Photo> campList = new ArrayList<>();
 		
 		String name = "yoonseo";
@@ -155,11 +169,18 @@ public class CampController {
 				Photo a = new Photo();
 				if(i == 0) {
 					a.setPhotoLevel(0);
+					
+					a.setPhotoRename(returnArr[0]);
+					a.setPhotoPath(returnArr[1]);
+					
+				
 				}else {
 					a.setPhotoLevel(1);
+					
+					a.setPhotoRename(returnArr[0]);
+					a.setPhotoPath(returnArr[1]);
+					
 				}
-				a.setPhotoRename(returnArr[0]);
-				a.setPhotoPath(returnArr[1]);
 				
 				campList.add(a);
 			}
@@ -174,11 +195,9 @@ public class CampController {
 			a.setBoardNo(camp.getCgNo());
 		}
 		result2 = cService.insertCampImg(campList);
-		
-	
-		
+				
 		if(result1 + result2  == campList.size()+ 1) {
-			return "views/yoonseo/campDetail";
+			return "redirect:campUpdate.ys";
 		}else {
 			throw new CampException("캠핑장 등록 실패");
 		}
@@ -211,7 +230,7 @@ public class CampController {
 			                  @RequestParam("state") String state,
 			                  @RequestParam("no") String no) {
 		
-		System.out.println(column);
+		
 		Properties prop = new Properties();//map형식으로 key와 value로 이루어져있음.문자열만 받아줌.
 		prop.setProperty("column",column);
 		prop.setProperty("state", state);
@@ -230,10 +249,16 @@ public class CampController {
 		CampingGround campList = cService.selectAllCamping(no);
 		ArrayList<Photo> photoList = cService.selectPhoto(no);
 		
+		String info = campList.getCgImgInfo();
+	    String recomendation = campList.getCgRecomendation();
+	    
+		
 		if(campList != null) {
 			model.addAttribute("campList", campList);
 			model.addAttribute("photoList", photoList);
 			model.addAttribute("page", page);
+			model.addAttribute("info", info);
+			model.addAttribute("recomendation", recomendation);
 			
 			return "views/yoonseo/campEdit";
 		}else {
@@ -250,7 +275,6 @@ public class CampController {
 			               RedirectAttributes redirectAttributes) {
 		
 		String name = "yoonseo";
-		System.out.println("캠핑장번호"+camp.getCgNo());
 		
 		ArrayList<Photo> list = new ArrayList<>();
 		//files 새로 추가한 파일들이 들어가 있는곳
@@ -283,6 +307,8 @@ public class CampController {
 				delLevel.add(Integer.parseInt(split[1]));//level은 여기 담음.
 			}
 		}
+		
+		System.out.println(delLevel);
 		
 		int deleteFileResult = 0;
 		int updateCampResult = 0;
@@ -332,38 +358,45 @@ public class CampController {
 			//추가한 사진 길이에 +1 한 것이 같으면.
 			redirectAttributes.addAttribute("no", camp.getCgNo());
 			redirectAttributes.addAttribute("page", page);
-			return "redirect:campDetail.ys";
+			return "redirect:campUpdate.ys";
 		}else {
 			throw new CampException("캠핑장 수정에 실패");
 		}
 		
 	}
 	
-	@PostMapping("campSearchList.ys")
+	@GetMapping("campSearchList.ys")
 	public String campSerchList(@RequestParam("keyword") String keyword,
 			                    @RequestParam("city") String city,
-			                    @RequestParam("country") String country,
 			                    @RequestParam("type") String type,
 			                    @RequestParam(value="page", defaultValue="1") int page,
 			                    Model model) {
 		
-		int result = cService.searchCampCount(keyword,city,country,type);
+		
+		int result = cService.searchCampCount(keyword,city,type);
+		ArrayList<CampingGround> campList = cService.searchCampList(keyword,city,type);
 		
 		int currentPage = page;
-		PageInfo pi = Pagination.getPageInfo(currentPage, page,6);
+		PageInfo pi = Pagination.getPageInfo(currentPage,result,6);
 		
-		return "views/yoonseo/campSearchList";
+		if(campList != null) {
+			model.addAttribute("result", result);
+			model.addAttribute("campList", campList);
+			model.addAttribute("type", type);
+			model.addAttribute("keyword", keyword);
+			model.addAttribute("city", city);
+			model.addAttribute("pi", pi);
+			
+			return "views/yoonseo/campSearchList";
+		}else {
+			throw new CampException("캠핑장 검색에 실패하였습니다");
+		}
+		
 	}
-
-
 	
-
-	
-
-	
-
 	
 	
 	
 
+	
 }

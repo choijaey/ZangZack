@@ -58,13 +58,13 @@
 			<br><br><br><br>
 			
 			<label for="productCompany" style="font-size: 20px;">▸▸상품 업체 : </label>
-			<input type="text" name="productCompany" id="productCompany" th:value="${p.productCompany}">
+			<input type="text" name="productCompany" id="productCompany" th:value="${p.productCompany}" required>
 			
 			
 			<br><br><br>
 			
 			<label for="productName" style="font-size: 20px;">▸▸상품명 : </label>
-			<input type="text" name="productName" id="productName" th:value="${p.productName}">
+			<input type="text" name="productName" id="productName" th:value="${p.productName}" required>
 			
 			<br><br><br>
 			
@@ -82,7 +82,7 @@
 		    <br><br><br>
 		  
 		    <label for="productPrice" style="font-size: 20px;">▸▸상품가격 : </label>
-		    <input type="number" name="productPrice" id="productPrice" th:value="${p.productPrice}"> 원
+		    <input type="number" name="productPrice" id="productPrice" th:value="${p.productPrice}" required> 원
 		  
 		    
 		  	<br><br><br>
@@ -91,9 +91,9 @@
 		  	<br><br>
 		  	<div id="optionDiv">
 		  		<div class="optionDiv-content"  th:each="o:${oList}">
-			  		옵션 : &nbsp;<input type="text" name="option" th:value="${o.productOptionColor}"><button type="button" class="addOption">옵션 추가</button>
+			  		옵션 : &nbsp;<input required type="text" name="option" th:value="${o.productOptionColor}"><button type="button" class="addOption">옵션 추가</button>
 			  		<label for="productEno" style="font-size: 20px;">▸▸상품수량 : </label>
-			    	<input type="number" name="productEno" th:value="${o.productOptionEno}"> 개
+			    	<input type="number" name="productEno" th:value="${o.productOptionEno}" required> 개
 			  		<br>
 		  		</div>
 		  		
@@ -102,7 +102,7 @@
 		  	<br><br><br>
 		  	
 		  	<label for="deliveryPrice" style="font-size: 20px;">▸▸배송비 : </label>
-			<input type="text" name="deliveryPrice" id="deliveryPrice" th:value="${p.deliveryPrice}">원
+			<input type="text" name="deliveryPrice" id="deliveryPrice" th:value="${p.deliveryPrice}" required>원
 		  
 		   <br><br><br>
 		  
@@ -257,62 +257,7 @@
 			  
 			  
 			  
-			//첨부파일 비워져있으면 alert
-			  const form = document.getElementById('updateForm');
-				document.getElementById('enrollBtn').addEventListener('click', ()=>{
-					const files = document.getElementsByName('coreFile');
-					let isEmpty = true;
-					
-					//첨부파일 비어져있는지 확인
-					for(const f of files){
-						if(f.value != ''){
-							isEmpty = false;
-						}
-					}
-					
-					//첨부파일 비어있으면 일반게시글로 옮겨진다는 모달 뜨게함.
-					if(isEmpty){
-						alert('대표사진이 등록되지 않았습니다.\n다시 확인해주세요');
-						event.preventDefault();
-					}else{
-						//첨부파일 안 비워져있으면 form태그로 제출
-						// 대표 사진이 입력된 경우 옵션 값을 가져옴
-// 				        const option1 = document.getElementById('option1');
-// 				        const optionValue = option1.checked ? null : document.querySelector('input[name="option"]').value;
-				        
-// 				        // 선택된 옵션 값을 input 태그로 추가
-// 				        if (optionValue !== null) {
-// 				            const hiddenOptionInput = document.createElement('input');
-// 				            hiddenOptionInput.type = 'hidden';
-// 				            hiddenOptionInput.name = 'option';
-// 				            hiddenOptionInput.value = optionValue;
-// 				            document.getElementById('enrollForm').appendChild(hiddenOptionInput);
-// 				        }
-						
-						const files2 = document.getElementsByName('detailFile');
-						let detailIsEmpty = true;
-						for(const f of files2){
-							if(f.value != ''){
-								detailIsEmpty = false;
-							}
-						}
-						console.log(isEmpty);
-						console.log(detailIsEmpty);
-						if(detailIsEmpty){
-							event.preventDefault();
-							alert('상세사진이 등록되지 않았습니다. \n다시 확인해주세요.');
-							event.preventDefault();
-						}else{
-							form.submit();
-						}
-					}
-					
-					
-					
-					
-					
-				});
-			  
+			
 			  
 			  
 			  
@@ -569,6 +514,73 @@
 			
 			
 		}
+		  
+		  
+		  
+		  
+		//첨부파일 비워져있으면 alert
+		  const form = document.getElementById('updateForm');
+			document.getElementById('enrollBtn').addEventListener('click', ()=>{
+				const files = document.getElementsByName('coreFile');
+				let isEmpty = true;
+				
+				//첨부파일 비어져있는지 확인
+				for(const f of files){
+					if(f.value != ''){
+						isEmpty = false;
+					}
+				}
+				
+				const deleteAttmButtons = document.querySelectorAll('.deleteAttm');
+			    let isDeleteOffSelected = false;
+
+			    deleteAttmButtons.forEach((deleteButton) => {
+			        if (deleteButton.innerText.trim() === '삭제 OFF') {
+			            isDeleteOffSelected = true;
+			        }
+			    });
+			    
+			    const deleteAttmButtons2 = document.querySelectorAll('.deleteAttm2');
+			    let isDeleteOffSelected2 = false;
+
+			    deleteAttmButtons2.forEach((deleteButton2) => {
+			        if (deleteButton2.innerText.trim() === '삭제 OFF') {
+			            isDeleteOffSelected2 = true;
+			        }
+			    });
+			    
+				if(isEmpty && !isDeleteOffSelected){
+					event.preventDefault();
+					alert('대표사진이 등록되지 않았습니다.\n다시 확인해주세요');
+					event.preventDefault();
+				}else{
+					const files2 = document.getElementsByName('detailFile');
+					let detailIsEmpty = true;
+					for(const f2 of files2){
+						if(f2.value != ''){
+							detailIsEmpty = false;
+						}
+					}
+					console.log(isEmpty);
+					console.log(detailIsEmpty);
+					if(detailIsEmpty && !isDeleteOffSelected2){
+						event.preventDefault();
+						alert('상세사진이 등록되지 않았습니다. \n다시 확인해주세요.');
+						event.preventDefault();
+					}else if (isEmpty2) {
+		                event.preventDefault(); // 폼 제출을 막음
+		                alert('입력되지 않은 항목이 있습니다. 모든 필수 항목을 입력해주세요.');
+		                event.preventDefault(); // 폼 제출을 막음
+		            }else{
+						form.submit();
+					}
+				}
+			
+			
+			
+			
+		});
+		  
 		  
 		  
 		  

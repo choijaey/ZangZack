@@ -188,8 +188,8 @@ p {
 #pagenation ul {
 	list-style: none;
 	padding: 0;
-	display: inline-block; /* 중앙 정렬을 위해 inline-block으로 변경 */
-	margin: 0; /* 기본 마진 제거 */
+	display: inline-block;
+	margin: 0;
 }
 
 #pagenation ul li {
@@ -199,20 +199,25 @@ p {
 
 #pagenation ul li a {
 	text-decoration: none;
-	color: #464D0F;
-	font-size: 14px;
-	padding: 5px 10px;
-	border-radius: 5px; /* 모서리를 둥글게 */
-	transition: background-color 0.3s, color 0.3s;
+    text-align: center;
+    color: #333;
+    font-size: 14px;
+    width: 30px; 
+    height: 30px;
+    line-height: 30px;
+    padding: 0;
+    border-radius: 5px;
+    display: inline-block;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 #pagenation ul li a:hover {
-	background-color: #464D0F;
+	background-color: #5cb85c;
 	color: #e6e6e6;
 }
 
 #pagenation ul li a#check_page {
-	background-color: #464D0F;
+	background-color: #5cb85c;
 	color: #e6e6e6;
 }
 
@@ -241,12 +246,12 @@ p {
 .search_button {
 	padding: 5px 15px;
 	border: none;
-	background-color: #464D0F;
+	background-color: #5cb85c;
 	color: white;
 	border-radius: 5px;
 	cursor: pointer;
 }
 
 .search_button:hover {
-	background-color: #363D0F;
+	background-color: #5cb85c;
 }

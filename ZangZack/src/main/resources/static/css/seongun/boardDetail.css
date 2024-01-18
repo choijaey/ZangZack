@@ -20,6 +20,7 @@ body {
 }
 
 .container {
+	position: relative;
 	width: 800px;
 	margin: 50px auto;
 	background: #fff;
@@ -98,12 +99,73 @@ body {
 }
 
 /* 보드 수정 버튼 */
-#board_edit_btn{
+#boardEditContainer {
+	position: absolute;
+    top: 10px; /* 상단에서의 거리 */
+    right: 10px; /* 우측에서의 거리 */
+}
+
+#boardEditBtn {
 	background-color: none;
 	background-image: url("../../image/seongun/boardAdd.png");
 	width: 15px;
 	height: 15px;
+	background: none;
+	border: none;
+	width: 35px;
+	height: auto;
+	float: right;
+	display: flex;
+	position: relative;
 }
+
+#boardEditBtn img#settingBtn {
+	width: 30px;
+	position: relative;
+}
+
+#editDropDown {
+	position: absolute;
+	top: -20px;
+	right: 29.7%;
+}
+
+#boardEditBtn :hover {
+	cursor: pointer;
+}
+
+#editDropDown {
+	position: absolute;
+	left: -10px;
+	top: -12px;
+	background-color: #f9f9f9;
+	min-width: 50px;
+	height: 30px;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+	border-radius: 4px;
+	padding: 0;
+	align-content: center;
+	align-items: center;
+	background: #5cb85c;
+}
+
+#editDropDown li {
+	list-style: none;
+}
+
+#editDropDown .editDropMenu {
+	margin: auto;
+	padding: 10px;
+	cursor: pointer;
+	display: block;
+	color: #fff;
+	background: #5cb85c;
+	border: none;
+	text-align: center;
+	width: 100%;
+}
+
 /* 좋아요 버튼과 댓글 카운트 스타일링 */
 .post-like-comment {
 	display: flex;
@@ -378,28 +440,28 @@ body {
 /*댓글 수정*/
 .comment-edit-form {
 	display: flex;
-	align-items: center; 
+	align-items: center;
 	width: 95%;
 }
 
 .comment-input {
-	flex: 1; 
-	min-height: 60px; 
+	flex: 1;
+	min-height: 60px;
 	padding: 10px;
 	border: 1px solid #ddd;
 	border-radius: 4px;
-	margin-right: 10px; 
+	margin-right: 10px;
 }
 
 .buttons-container {
-	display: flex; 
-	flex-direction: column; 
-	align-items: center; 
-	margin-left: 10px; 
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-left: 10px;
 }
 
 .update-submit, .comment-cancel {
-	width: 80px; 
+	width: 80px;
 	padding: 10px;
 	border: none;
 	border-radius: 4px;
@@ -407,13 +469,13 @@ body {
 }
 
 .update-submit {
-	background-color: #5cb85c; 
-	color: white; 
+	background-color: #5cb85c;
+	color: white;
 }
 
 .comment-cancel {
-	background-color: #f44336; 
-	color: white; 
+	background-color: #f44336;
+	color: white;
 	margin-top: 5px;
 }
 

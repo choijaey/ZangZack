@@ -34,6 +34,11 @@ public class PhotoServiceImpl implements PhotoService{
 	public int deletePhotoName(String deletePhotoName) {
 		return pDAO.deletePhotoName(deletePhotoName);
 	}
+
+	@Override
+	public int updatePhoto(int photoNo) {
+		return pDAO.updatePhoto(photoNo);
+	}
 	
 	
 

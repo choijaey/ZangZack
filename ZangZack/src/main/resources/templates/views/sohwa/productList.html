@@ -6,6 +6,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 <title>Insert title here</title>
 </head>
 <body>
@@ -179,34 +180,10 @@
 		  
 		   <main>
 			  <h1>PRODUCT ></h1>
-		  	  <section class="products">
-		  	  <th:block th:each="p:${pList}">
-		  	  	<article class="product" th:each="th:${thList}" th:if="${ p.productNo eq th.boardNo && th.boardType==5 && th.photoLevel==0}" onclick="redirectToProductDetail(this)">
-		  	  		<input type="hidden" th:value="${p.productNo}">
-				    <div class="thumbnails"><a href="#"><img th:each="th:${thList}" th:if="${ p.productNo eq th.boardNo && th.boardType==5}" th:src="${th.photoPath}"></a></div>
-			        <p>[[${p.productName}]]</p>
-			        <p class="price" th:text="|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|"></p>
-			        <span class="starImage" th:each="r : ${rList}" th:if="${p.productNo == r.productNo }">
-						<img src="image/sohwa/icons8-star.gif" style="height: 10px;">[[${p.productScore}]] <span style="color:gray;">평점</span></img>
-					</span><br>
-			        <th:block th:if="${p.eno == 0}"><span class="badge rounded-pill text-bg-dark">일시품절</span></th:block>
-			        <th:block th:if="${p.deliveryPrice == 0}"><span class="badge text-bg-secondary">무료배송</span></th:block>
-		      	</article>
-		  	  </th:block>
+		  	  <section id="products" class="products">
+			  	  
 	  	  		
 		      	
-<!-- 			      반복 샘플 -->
-<!-- 			      <article class="product"> -->
-<!-- 				    <a href="#"><img src="image/sohwa/cook2core1.jpg"></a> -->
-<!-- 			        <p>상품 설명이 들어가는 곳입니다. 상품에 대한 간략한 설명을 여기에 작성합니다.</p> -->
-<!-- 			        <p class="price">￦ 10,000</p> -->
-<!-- 			        <span class="starImage"> -->
-<!-- 						<img src="image/sohwa/icons8-star.gif" style="height: 10px;">4.5 <span style="color:gray;">리뷰 20개</span></img> -->
-<!-- 					</span><br> -->
-<!-- 			        <span class="badge rounded-pill text-bg-dark">일시품절</span> -->
-<!-- 			        <span class="badge text-bg-secondary">무료배송</span> -->
-<!-- 			        <span class="badge text-bg-success">특가</span> -->
-<!-- 			      </article> -->
 			      
 		    </section>
 		  </main>
@@ -217,106 +194,190 @@
 	
 	
 	
-	<nav aria-label="Standard pagination example" style="float: right;" th:with="loc=${loc}">
-		<ul class="pagination">
-			<li class="page-item">
-				
-				<!-- 이전 페이지 장애  -->
-				<th:block th:if="${pi.currentPage<=1}">
-					<a class="page-link" aria-label="Previous">
-						<span aria-hidden="true">&laquo;</span>
- 						</a>
-				</th:block>
-			
-			
-				<!-- 이전 페이지 -->
-				<th:block th:if="${pi.currentPage>1}">
-					<a class="page-link" th:href="@{${loc}(page=${pi.currentPage-1})}" aria-label="Previous">
-						<span aria-hidden="true">&laquo;</span>
- 						</a>
-				</th:block>
-  				</li>
-       				
-       				
-       				<!-- 숫자 페이지 -->
-				<li class="page-item" th:each="p: ${#numbers.sequence(pi.startPage, pi.endPage)}">
-					<a class="page-link" th:href="@{${loc}(page=${p})}">
-						[[${ p }]]
-					</a>
-				</li>
-      					
-      					
-      					
-				<li class="page-item">
-					<!-- 다음 페이지 장애 -->
-					<th:block th:if="${pi.currentPage>=pi.maxPage}">
-						<a class="page-link" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span>
-						</a>
-					</th:block>
-					
-					<!-- 다음 페이지 -->
-					<th:block th:if="${pi.currentPage<pi.maxPage}">
-						<a class="page-link" th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span>
-						</a>
-					</th:block>
-				</li>
-    		</ul>
-       	</nav>
+	
 	</div>
 	
 	
     
     
-    <script>
+    <script th:inline="javascript">
     
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    function changeImages() {
-    	  const thumbnails = document.querySelectorAll('.thumbnails');
-    	  
-    	  thumbnails.forEach(thumbnail => {
-    	    const images = thumbnail.querySelectorAll('img');
-    	    let currentIndex = 0;
+    // 무한 스크롤 부분
+    // 현재 페이지와 한 번에 로드되는 아이템 수
+       let currentPage = 1;
+       const itemsPerPage = 3; 
+       let scrollflag=true;
+       /*<![CDATA[*/
+        let maxPages = /*[[${pi.maxPage}]]*/2;
+        /*]]>*/
+   		const wrapper = document.getElementById('wrapper');
+       // 스크롤 이벤트 리스너 등록
 
-    	    // 이미지 숨기는 함수
-    	    const hideImages = () => {
-    	      images.forEach(image => {
-    	        image.style.display = 'none';
-    	      });
-    	    };
+    	// 스크롤 이벤트를 추가
+	    wrapper.addEventListener('scroll', function() {
+	        // 현재 스크롤 위치
+	        var scrollPosition = wrapper.scrollTop;
+		if(scrollflag){
+			// 스크롤이 80% 이상인 경우
+	        if (scrollPosition >= 0.8 * (wrapper.scrollHeight - wrapper.clientHeight)) {
+	            loadMoreItems();
+	            scrollflag = false;
+	            console.log(currentPage, maxPages);
+	        }
+		}
+	        
+	    });
+   
+       // 추가 데이터 로드 함수
+       function loadMoreItems() {
+    	   
+    
+          if(currentPage <= maxPages){
+             //ajax 부분 추가 예정
+              $.ajax({
+                    url: 'infiniteScroll.so', // 서버의 댓글 목록 불러오기 URL   -------------------------------------------------------------------------------
+                    method: 'GET',
+                    data: { 
+                       page : currentPage,  //----------------------------------------------------------------------------------------
+                       keyword: /*[[${keyword}]]*/'',
+                       categoryNo: /*[[${categoryNo}]]*/0,
+                       status: /*[[${status}]]*/1
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        // 리스트 가져와서 만들기
+                        const newItems = createItems(data);  
+                        
+                        // 뿌리기
+                        appendItemsToDOM(newItems);  
+                        
+                        currentPage=1+currentPage;  
+                        scrollflag = true;
+                    },
+                    error: function(data) {
+                        console.log(data);
+                    }
+                });
+   
+             }
+          }
+   
+       // 가상의 데이터 생성 함수
+       function createItems(data) {
+             const newItems = [];
+             /*<![CDATA[*/
+              let User = /*[[${session.loginUser}]]*/null;
+              /*]]>*/
+             
+              const rList = /*[[rList]]*/null;
+              
+              
+              
+              
+          for (let p of data.pList) {
+              for(let th of data.thList){
+            	  if (p.productNo == th.boardNo && th.boardType == 5 && th.photoLevel == 0) {
+            		  let imgHTML ='';
+            		  
+            		  if (p.productNo == th.boardNo && th.boardType == 5) {
+            			  imgHTML = `<img src="${th.photoPath}">`;
+            		  }
+            		  const productPrice = `${p.productPrice.toLocaleString()}원`;
+           		      
+            		  
+            		  let starImageDiv='';
+            		  if (rList && rList.length > 0) {
+            			  starImageDiv = `
+            				  <span class="starImage">
+		      			            <img src="image/sohwa/icons8-star.gif" style="height: 10px;">
+		      			            ${p.productScore}
+		      			            <span style="color: gray;">평점</span>
+		      			            <input type="hidden" class="productScore">
+		      			      </span><br>`
+            		  }
+            		  
+            		  
+            		  let noEno ='';
+            		  if (p.eno === 0) {
+            			  noEno = `<span class="badge rounded-pill text-bg-dark">일시품절</span>`
+            		  }
+            		  
+            		  let noDeliveryPrice = '';
+            		  if(p.deliveryPrice == 0){
+            			  noDeliveryPrice = `<span class="badge text-bg-secondary">무료배송</span>`
+            		  }
+            		  
+            		  const newItemHTML = `
+                    	  <article class="product" onclick="redirectToProductDetail(this)">
+        			        <input type="hidden" value="${p.productNo}">
+        			        <div class="thumbnails">
+        			            <a href="#">${imgHTML}</a>
+        			        </div>
+        			        <p>${p.productName}</p>
+        			        <p class="price">${productPrice}</p>
+        			        
+        			        
+        			        ${starImageDiv}
+        			        ${noEno}
+        			        ${noDeliveryPrice}
+        			    </article>
+                      `;
+                      newItems.push(newItemHTML);
+                  }
+            	 }
+              
+          }
+          return newItems;
+      }
+   
+       // DOM에 아이템 추가 함수
+       function appendItemsToDOM(newItems) {
+           const container = document.getElementById('products'); // 실제로 사용하는 컨테이너의 ID로 변경
+           container.innerHTML += newItems.join('');
+       }
 
-    	    // 초기에 모든 이미지를 숨기고 첫 번째 이미지만 보이도록 설정
-    	    hideImages();
-    	    images[0].style.display = 'block';
+    
+    
+       
+    
+    
+       function changeImages() {
+           const thumbnails = document.querySelectorAll('.thumbnails');
+           
+           thumbnails.forEach(thumbnail => {
+             const images = thumbnail.querySelectorAll('img');
+             let currentIndex = 0;
 
-    	    // setInterval 내부 함수에서 hideImages와 currentIndex를 사용하도록 수정
-    	    const changeImage = () => {
-    	      hideImages();
-    	      currentIndex = (currentIndex + 1) % images.length;
-    	      images[currentIndex].style.display = 'block';
-    	    };
+             // 이미지 숨기는 함수
+             const hideImages = () => {
+               images.forEach(image => {
+                 image.style.display = 'none';
+               });
+             };
 
-    	    // 초기 이미지 변경 후 2초마다 이미지 변경 함수 실행
-    	    setInterval(changeImage, 2000);
-    	  });
-    	}
+             // 초기에 모든 이미지를 숨기고 첫 번째 이미지만 보이도록 설정
+             hideImages();
+             images[0].style.display = 'block';
 
-    	window.onload = function() {
-    	  changeImages();
-    	};
+             // setInterval 내부 함수에서 hideImages와 currentIndex를 사용하도록 수정
+             const changeImage = () => {
+               hideImages();
+               currentIndex = (currentIndex + 1) % images.length;
+               images[currentIndex].style.display = 'block';
+             };
+
+             // 초기 이미지 변경 후 2초마다 이미지 변경 함수 실행
+             setInterval(changeImage, 2000);
+           });
+         }
+
+         window.onload = function() {
+           changeImages();
+         };
+
     
     
     
