@@ -59,90 +59,75 @@ public class CampBoardController {
 	private HeartService hService;
 	
 	@GetMapping("campBoard.su")
-	public String campBoardListView(@RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="category", defaultValue="0") int category, @ModelAttribute SearchBoard search, Model model, HttpServletRequest request) {
-	    int listCount = 0;
+	public String campBoardListView(@RequestParam(value="page", defaultValue="1") int page, @ModelAttribute CampBoard b, Model model, HttpServletRequest request) {
 	    String msg = null;
-
-	    if(search.getSearchText() != null) {
-	        if(search.getSearchText() != null) {
-	            search.setSearchText("%" + search.getSearchText() + "%");
-	        }
-	        listCount = cService.searchListCount(search);
-	    } else {
-	        listCount = cService.getListCount(category);
+	    String text = b.getSearchText();
+	    if(text != null && !text.trim().equals("")) {
+	    	b.setSearchText("%" + b.getSearchText() + "%");
 	    }
 	    
 	    int currentPage = page;
-	    
+	    int listCount = cService.searchListCount(b);
 	    PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 15);
 	    
-	    ArrayList<CampBoard> list = cService.searchBoardList(pi, search);
-
+	    ArrayList<CampBoard> list = cService.searchBoardList(pi, b);
 	    
-	    if(search != null && search.getSearchText() != null) {
+	    if(text != null && !text.trim().equals("")) {
 	    	msg = list.isEmpty() ? "검색된 게시판이 없습니다!" : null;
-	    	category = search.getSearchCategoryNo();
+	    	if(b.getSearchText().charAt(0) == '%' && text.trim().equals("")) {
+	    		b.setSearchText("");
+	    	}
 	    }
-	    sWork.searchModel(model, pi, list, msg, category, search, request.getRequestURI());
+	    sWork.searchModel(model, pi, list, msg, b, request.getRequestURI());
 	    return "views/seongun/campboard/listBoard";
 	}
 
 	
 	@GetMapping("cardBoard.su")
-	public String campBoardCardView(@RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="category", defaultValue="0") int category, @ModelAttribute SearchBoard search, Model model, HttpServletRequest request) {
-		int listCount = 0;
+	public String campBoardCardView(@RequestParam(value="page", defaultValue="1") int page, @ModelAttribute CampBoard b, Model model, HttpServletRequest request) {
 	    String msg = null;
-
-	    if(search.getSearchText() != null) {
-	        if(search.getSearchText() != null) {
-	            search.setSearchText("%" + search.getSearchText() + "%");
-	        }
-	        listCount = cService.searchListCount(search);
-	    } else {
-	        listCount = cService.getListCount(category);
+	    String text = b.getSearchText();
+	    if(text != null && !text.trim().equals("")) {
+	    	b.setSearchText("%" + b.getSearchText() + "%");
 	    }
 	    
 	    int currentPage = page;
+	    int listCount = cService.searchListCount(b);
+	    PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 	    
-	    PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 15);
+	    ArrayList<CampBoard> list = cService.searchBoardList(pi, b);
 	    
-	    ArrayList<CampBoard> list = cService.searchBoardList(pi, search);
-
-	    
-	    if(search != null && search.getSearchText() != null) {
+	    if(text != null && !text.trim().equals("")) {
 	    	msg = list.isEmpty() ? "검색된 게시판이 없습니다!" : null;
-	    	category = search.getSearchCategoryNo();
+	    	if(b.getSearchText().charAt(0) == '%' && text.trim().equals("")) {
+	    		b.setSearchText("");
+	    	}
 	    }
-	    sWork.searchModel(model, pi, list, msg, category, search, request.getRequestURI());
-		return "views/seongun/campboard/cardBoard";
+	    sWork.searchModel(model, pi, list, msg, b, request.getRequestURI());
+	    return "views/seongun/campboard/cardBoard";
 	}
 	
 	@GetMapping("albumBoard.su")
-	public String campBoardAlbumView(@RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="category", defaultValue="0") int category, @ModelAttribute SearchBoard search, Model model, HttpServletRequest request) {
-		int listCount = 0;
+	public String campBoardAlbumView(@RequestParam(value="page", defaultValue="1") int page, @ModelAttribute CampBoard b, Model model, HttpServletRequest request) {
 	    String msg = null;
-
-	    if(search.getSearchText() != null) {
-	        if(search.getSearchText() != null) {
-	            search.setSearchText("%" + search.getSearchText() + "%");
-	        }
-	        listCount = cService.searchListCount(search);
-	    } else {
-	        listCount = cService.getListCount(category);
+	    String text = b.getSearchText();
+	    if(text != null && !text.trim().equals("")) {
+	    	b.setSearchText("%" + b.getSearchText() + "%");
 	    }
 	    
 	    int currentPage = page;
+	    int listCount = cService.searchListCount(b);
+	    PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 20);
 	    
-	    PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 40);
+	    ArrayList<CampBoard> list = cService.searchBoardList(pi, b);
 	    
-	    ArrayList<CampBoard> list = cService.searchBoardList(pi, search);
-
-	    
-	    if(search != null && search.getSearchText() != null) {
+	    if(text != null && !text.trim().equals("")) {
 	    	msg = list.isEmpty() ? "검색된 게시판이 없습니다!" : null;
-	    	category = search.getSearchCategoryNo();
+	    	if(b.getSearchText().charAt(0) == '%' && text.trim().equals("")) {
+	    		b.setSearchText("");
+	    	}
 	    }
-	    sWork.searchModel(model, pi, list, msg, category, search, request.getRequestURI());
+	    sWork.searchModel(model, pi, list, msg, b, request.getRequestURI());
 	    return "views/seongun/campboard/albumBoard";
 	}
 	
@@ -188,7 +173,7 @@ public class CampBoardController {
 			String[] returnArr = imageStorage.saveImage(upload, "seongun");
 			
 			if(returnArr != null) {
-				Photo a = sWork.setAttachment(returnArr, i, 1);
+				Photo a = sWork.haventMain(returnArr, i, 1);
 				fileList.add(a);
 			}
 			
@@ -200,7 +185,7 @@ public class CampBoardController {
 			for(Photo a : fileList) {
 				a.setBoardNo(board.getCbNo());
 			}
-			resultA = cService.insertAttmCampBoard(fileList);
+			resultA = pService.insertPhotoCampBoard(fileList);
 		}
 		
 		if(fileList.isEmpty()) {
@@ -226,23 +211,6 @@ public class CampBoardController {
 	@GetMapping("writeCampBoard.su")
 	public String writeCampBoard() {
 		return "views/seongun/campboard/writeBoard";
-	}
-	
-	//검색기능
-	@GetMapping("searchCampBoard.su")
-	public String searchCampBoard(@RequestParam(value="page", defaultValue="1") int page,@RequestParam(value="category", defaultValue="0") int category,@ModelAttribute SearchBoard search, Model model,HttpServletRequest request) {
-		search.setSearchText("%" +search.getSearchText() + "%");
-		
-		int listCount = cService.searchListCount(search);
-		
-		int currentPage = page;
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 15);
-		ArrayList<CampBoard> list = cService.searchBoardList(pi, search);
-		
-		String msg = list.isEmpty() ? "검색된 게시판이 없습니다!" : null;
-		sWork.searchModel(model, pi, list, msg, category, search,request.getRequestURI());
-	    
-		return "views/seongun/campboard/listBoard";
 	}
 	
 	@PostMapping("deleteCampBoard.su")
@@ -272,8 +240,6 @@ public class CampBoardController {
 		int x = 0;
 		ArrayList<Photo> fileList = new ArrayList<>();
 		
-		
-		
 		//썸네일이 변경되었을때
 		if((deleteFile[0].split("#")[1]).equals("isdel")) {
 			for(int i=0; i < deleteFile.length; i++) {
@@ -289,7 +255,7 @@ public class CampBoardController {
 				String[] returnArr = imageStorage.saveImage(upload, "seongun");
 				
 				if(returnArr != null) {
-					Photo a = sWork.setAttachment(returnArr, i, 1);
+					Photo a = sWork.haventMain(returnArr, i, 1);
 					fileList.add(a);
 				}
 			}
@@ -306,7 +272,7 @@ public class CampBoardController {
 				String[] returnArr = imageStorage.saveImage(upload, "seongun");
 				
 				if(returnArr != null) {
-					Photo a = sWork.setAttachment(returnArr);
+					Photo a = sWork.haveMain(returnArr,1);
 					fileList.add(a);
 				}
 			}
@@ -324,13 +290,15 @@ public class CampBoardController {
 		
 		ArrayList<Photo> pList = pService.selectBoardPhoto(sWork.selectBoard(b.getCbNo(), 1));
 		
-		for(Photo p : pList) {
-			if(p.getPhotoLevel() == 0) {
-				x++;
-			}
-		}
-		if(x < 1) {
-			int test = pService.updatePhoto(pList.get(0).getPhotoNo());
+		if (!pList.isEmpty()) {
+		    for (Photo p : pList) {
+		        if (p.getPhotoLevel() == 0) {
+		            x++;
+		        }
+		    }
+		    if (x < 1) {
+		        int test = pService.updatePhoto(pList.get(0).getPhotoNo());
+		    }
 		}
 		
 		if(fileList.isEmpty()) {

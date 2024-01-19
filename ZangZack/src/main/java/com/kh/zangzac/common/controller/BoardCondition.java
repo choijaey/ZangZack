@@ -14,6 +14,8 @@ import com.kh.zangzac.common.photo.model.service.PhotoService;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.jaeyoung.eventBoard.model.service.EventBoardService;
 import com.kh.zangzac.jaeyoung.eventBoard.model.vo.EventBoard;
+import com.kh.zangzac.seongun.campboard.model.service.CampBoardService;
+import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
 import com.kh.zangzac.yoonseo.camp.model.service.CampService;
 import com.kh.zangzac.yoonseo.camp.model.vo.CampingGround;
 
@@ -28,6 +30,9 @@ public class BoardCondition {
 	
 	@Autowired
 	private PhotoService pService;
+	
+	@Autowired
+	private CampBoardService cbService;
 	
 	public SelectCondition selectBoard(int x, int y) {
 		SelectCondition b = new SelectCondition();
@@ -68,13 +73,20 @@ public class BoardCondition {
 			
 		}
  		
+		
+		//seongun
+		
+		int cbCount = cbService.listCount();
+		PageInfo cbPi = Pagination.getPageInfo(currentPage, cbCount, 5);
+		ArrayList<CampBoard> cbList = cbService.popularList(cbPi);
+		
 		if(list != null) {
 			model.addAttribute("photoList", photoList);
 			model.addAttribute("ebList", eblist);
+			model.addAttribute("cbList", cbList);
 			return"index";
 		}else {
 			return"index";
 		}
-	
 	}
 }

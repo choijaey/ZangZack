@@ -23,10 +23,10 @@
 	</insert>
 	
 	<insert id="insertCookList">
-		insert all<!-- insert all 안에서는 nextval이라고 적어놓고 여러번 들어간다하더라도 딱 1번 nextval이 되고 나머지는 같은 값이 들어간다 -->
+		insert all
 		<foreach collection="list" item="item">
 			into COOKWARE_LIST
-			values (new_aid, #{item.cwRecipeNo}, #{item.cookCategoryNo})
+			values (cw_aid, #{item.cwRecipeNo}, #{item.cookCategoryNo})
 		</foreach>
 		select * from dual
    </insert>
@@ -36,4 +36,36 @@
    		from recipe_view
    		where recipe_status = 'N' and recipe_no = #{recipeNo}
    </select>
+   
+   <select id="selectCookwareList" resultType="CookwareList">
+   		select *
+   		from Cookware_list left JOIN cookware_category using(cook_category_no)
+   		where CW_RECIPE_NO = #{recipeNo}
+   </select>
+   
+   <update id="deleteRecipe">
+   		update recipe
+   		set recipe_status = 'Y'
+   		where recipe_no = #{recipeNo}
+   </update>
+   
+   <update id="updateRecipe">
+   		UPDATE RECIPE
+   		SET RECIPE_NAME = #{recipeName}, RECIPE_TASTE = #{recipeTaste}, RECIPE_INGREDIENTS = #{recipeIngredients}, RECIPE_CONTENT = #{recipeContent}
+   		WHERE RECIPE_NO = #{recipeNo}
+   </update>
+   
+   <update id="updataeCookList">
+   		insert all
+		<foreach collection="list" item="item">
+			into COOKWARE_LIST
+			values (cw_aid, #{item.cwRecipeNo}, #{item.cookCategoryNo})
+		</foreach>
+		select * from dual
+   </update>
+   
+   <delete id="deleteCookList">
+   		delete from COOKWARE_LIST
+   		where cw_recipe_no = #{recipeNo}
+   </delete>
 </mapper>

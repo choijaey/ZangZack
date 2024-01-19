@@ -26,6 +26,9 @@
 	padding-bottom: 20px; /* 하단 테두리 아래에 여백을 줌 */
 }
 /* cardList */
+li.card_list :hover{
+	cursor: pointer;
+}
 .board_list_card {
 	display: block;
 	list-style: none;
