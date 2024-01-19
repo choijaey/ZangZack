@@ -247,7 +247,8 @@
 	                    	const modalContent = document.querySelector('.modal-content');
 	                    	const spanContainer = modalContent.querySelector('span');
 	                    	spanContainer.innerHTML = ''; 
-	                    	if(data != null){
+	                    	if(data.length !== 0){
+	                    		console.log(data);
 		                    	for (const item of data) {
 		                    	    const ulItem = document.createElement('ul'); 
 		                    	    const liItem = document.createElement('li'); 

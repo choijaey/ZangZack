@@ -31,7 +31,7 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
 			}
 			response.setContentType("text/html; charset=UTF-8");
 
-			response.getWriter().write("<script>alert('"+msg+"'); location.href='home.me';</script>");
+			response.getWriter().write("<script>alert('"+msg+"'); location.href='/';</script>");
 
 			
 			return false; // 못 넘어가게 막기
