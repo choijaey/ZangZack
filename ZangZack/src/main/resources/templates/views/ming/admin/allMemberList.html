@@ -102,7 +102,7 @@
 	            <td class="td1" style="display: none;"><input type="checkbox"></td>
 	            <td class="td2">[[${m.memberId}]]</td>
 	            <td class="td3">[[${m.memberName}]]</td>
-	            <td class="td4" th:text="${#strings.substringBefore(m.memberNickName, '#')}"></td>
+	            <td class="td4">[[${m.memberNickName}]]</td><!-- th:text="${#strings.substringBefore(m.memberNickName, '#')}"  -->
 	            <td class="td5">[[${m.memberAddress.replace('@', ' ')}]]</td>
 	            <td class="td6">[[${m.memberPhone}]]</td>
 	            <td class="td7"> 

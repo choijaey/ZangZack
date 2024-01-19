@@ -567,10 +567,6 @@ public class MemberController {
 		
 		
 		m.setMemberNickName(memberNickName);
-		/*
-		 * HashMap<String,String>map = new HashMap<String, String>();
-		 * map.put("memberId", memberId); map.put("memberNickName", memberNickName);
-		 */
 		
 		int result = mService.adminUpdateNickName(m);
 		System.out.println(result);
