@@ -5,22 +5,10 @@
 		SELECT count(*) 
 		FROM camp_board_view
 		<where>
-			<if test="i != 0">
-				and category_no = #{i}
+			<if test="categoryNo != 0">
+				and category_no = #{categoryNo}
 			</if>
 		</where>
-	</select>
-	
-	<select id="selectBoardList" resultType="CampBoard">
-		select * 	
-		from camp_board_view
-		<where> 
-			cb_status = 'N'
-			<if test="i != 0">
-	            and category_no = #{i}
-	        </if> 
-        </where>
-		order by cb_no desc
 	</select>
 	
 	<insert id="insertCampBoard">
@@ -29,15 +17,6 @@
 		</selectKey>
 		insert into camp_board
 		values(#{cbNo}, #{cbTitle}, #{cbContent},default, default, default, default, #{memberId}, #{categoryNo})
-	</insert>
-	
-	<insert id="insertAttmCampBoard">
-		insert all<!-- insert all 안에서는 nextval이라고 적어놓고 여러번 들어간다하더라도 딱 1번 nextval이 되고 나머지는 같은 값이 들어간다 -->
-		<foreach collection="list" item="item">
-			into photo
-			values (new_aid, #{item.photoRename}, #{item.photoPath}, #{item.photoLevel}, 1, #{item.boardNo}, default)
-		</foreach>
-		select * from dual
 	</insert>
 	
 	<select id="selectBoard" resultType="CampBoard">
@@ -73,8 +52,8 @@
 		            </when>
 		        </choose>
 	    	</if>
-	    	<if test="searchCategoryNo != 0">
-	            and category_no = #{searchCategoryNo}
+	    	<if test="categoryNo != 0">
+	            and category_no = #{categoryNo}
 	        </if>
     	</where>
 	</select>
@@ -100,8 +79,8 @@
 		            </when>
 		        </choose>
 	    	</if>
-	    	<if test="searchCategoryNo != 0">
-	            and category_no = #{searchCategoryNo}
+	    	<if test="categoryNo != 0">
+	            and category_no = #{categoryNo}
 	        </if>
     	</where>
 	    order by cb_no desc

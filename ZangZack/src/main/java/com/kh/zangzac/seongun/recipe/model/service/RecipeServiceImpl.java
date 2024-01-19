@@ -32,13 +32,17 @@ public class RecipeServiceImpl implements RecipeService {
 		int temp =list.size();
 		for(int i = 0; i < temp; i++) {
 			ArrayList<CookwareList> cl = rDAO.selectCookwareList(list.get(i).getRecipeNo());
-			String[] clNames = new String[cl.size()];
+			int temp2 = cl.size();
+			String[] clNames = new String[temp2];
+			Integer[] clNo = new Integer[temp2];
 			
-			for (int j = 0; j < cl.size(); j++) {
+			for (int j = 0; j < temp2; j++) {
 			    clNames[j] = cl.get(j).getCookCategoryName();
+			    clNo[j] = cl.get(j).getCookCategoryNo();
 			}
 			
 			list.get(i).setCookCategoryName(clNames);
+			list.get(i).setCookCategoryNo(clNo);
 		}
 		return list;
 	}
@@ -52,16 +56,29 @@ public class RecipeServiceImpl implements RecipeService {
 	public Recipe selectRecipe(int recipeNo) {
 		Recipe r = rDAO.selectRecipe(recipeNo);
 		ArrayList<CookwareList> cl = rDAO.selectCookwareList(recipeNo);
-
-		String[] clNames = new String[cl.size()];
-
-		for (int i = 0; i < cl.size(); i++) {
+		int temp = cl.size();
+		String[] clNames = new String[temp];
+		Integer[] clNo = new Integer[temp];
+		
+		for (int i = 0; i < temp; i++) {
 		    clNames[i] = cl.get(i).getCookCategoryName();
+		    clNo[i] = cl.get(i).getCookCategoryNo();
 		}
 
 		r.setCookCategoryName(clNames);
+		r.setCookCategoryNo(clNo);
 
 		return r;
+	}
+
+	@Override
+	public int deleteRecipe(int recipeNo) {
+		return rDAO.deleteRecipe(recipeNo);
+	}
+
+	@Override
+	public int updateRecipe(Recipe recipe) {
+		return rDAO.updateRecipe(recipe);
 	}
 
 }

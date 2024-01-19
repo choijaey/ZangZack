@@ -23,7 +23,7 @@ public class Recipe {
 	private Date recipeModifyDate;
 	private String recipeStatus;
 	private String[] cookCategoryName;
-	private int cookCategoryNo;
+	private Integer[] cookCategoryNo;
 	private String photoPath;
 	private String photoRename;
 }

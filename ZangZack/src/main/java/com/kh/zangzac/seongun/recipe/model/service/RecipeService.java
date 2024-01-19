@@ -18,4 +18,9 @@ public interface RecipeService {
 
 	Recipe selectRecipe(int recipeNo);
 
+	int deleteRecipe(int recipeNo);
+
+	int updateRecipe(Recipe recipe);
+
+
 }

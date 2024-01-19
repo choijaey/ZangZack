@@ -9,15 +9,16 @@
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
     <div class="recipe-detail">
-        <!-- 이미지 슬라이더 -->
         <h1>[[${r.recipeName}]]</h1>
+        <!-- 이미지 슬라이더 -->
         <th:block th:if="${pList != null && !pList.isEmpty}">
 	        <div class="image-slider">
 	            <button class="slide-btn prev-btn"></button>
-	            <div class="image-container" th:each="p : ${pList}">>
-	                <img th:src="${p.photoPath}" th:alt="${p.photoRename}">
-	                <!-- 추가 이미지 -->
-	            </div>
+		            <div class="image-container">
+					    <th:block th:each="p : ${pList}">
+					        <img th:src="${p.photoPath}" th:alt="${p.photoRename}" style="max-height: 600px;"/>
+					    </th:block>
+					</div>
 	            <button class="slide-btn next-btn"></button>
 	            <div class="slider-pagination"></div>
 	        </div>
@@ -94,6 +95,6 @@
 		    updatePaginationButtons(); // 초기 페이징 버튼 설정
 		});
 
-    </script> <!-- JavaScript 파일 링크 -->
+    </script> 
 </body>
 </html>

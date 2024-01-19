@@ -7,6 +7,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/seongun/commonBoard.css">
     <link rel="stylesheet" href="css/seongun/recipe.css">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 </head>
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
@@ -38,8 +39,8 @@
 						<div class="card">
 							<input type="hidden" th:value="${l.recipeNo}">
 							<div class="">
-							    <button class="update-btn">
-							        <img style="width:100%; margin-top:10px;" src="image/seongun/boardAdd.png" alt="게시판 설정 버튼">
+							    <button class="update-btn" th:if="${session.loginUser != null && session.loginUser.memberIsAdmin == 'Y'}">
+							        <img style="width:100%; margin-top:10px;" src="image/seongun/boardAdd.png" alt="게시판 설정 버튼" >
 							    </button>
 							    <ul class="editDropDown" style="display: none;">
 							        <li>
@@ -56,7 +57,7 @@
 		                	<div class="card-body">
 			                  	<table class="card-info">
 			                  		<tr>
-			                    		<th colspan="2" class="title-text">[[${l.recipeContent}]]</th>
+			                    		<th colspan="2" class="title-text">[[${l.recipeName}]]</th>
 			                  		</tr>
 			                  		<tr>
 			                    		<td class="info-title">메인재료</td>
@@ -121,7 +122,6 @@
                     if (event.target.closest('.update-btn') || event.target.closest('.editDropMenu')) {
                         return;
                     }
-
                     var boardId = card.querySelector('input[type="hidden"]:first-child').value;
                     if (boardId) {
                         location.href="selectRecipe.su?recipeNo="+boardId;
@@ -152,11 +152,9 @@
         boardEditBtn = () =>{
         	var card = event.target.closest('.card');
             if (card) {
-                // 'card' 요소 내의 첫 번째 숨겨진 input 요소에서 recipeNo 값 가져오기
                 var recipeNo = card.querySelector('input[type="hidden"]').value;
                 if (recipeNo) {
-                    // recipeNo를 사용하여 URL 이동
-                    location.href = "selectRecipe.su?recipeNo=" + recipeNo;
+                    location.href = "updateRecipeView.su?recipeNo=" + recipeNo;
                 }
             }
             event.stopPropagation(); 
@@ -168,10 +166,27 @@
                 // 'card' 요소 내의 첫 번째 숨겨진 input 요소에서 recipeNo 값 가져오기
                 var recipeNo = card.querySelector('input[type="hidden"]').value;
                 if (recipeNo) {
-                	if(confirm("test용")){
-                		
+                	
+                	if(confirm("삭제 하시겠습니까?")){
+                		$.ajax({
+            				url: 'deleteRecipe.su',
+            				method: 'POST',
+            				data: {
+            					recipeNo:  recipeNo
+            				},
+            				success: function(data) {
+            					if(data >= 0){
+            						alert("레시피가 삭제되었습니다.")
+            						location.reload();
+            					}else{
+            						alert("레시피가 삭제를 실패했습니다. 다시 시도해주세요.");
+            					}
+            				},
+            				error: function(error) {
+            					console.error('Error adding comment:', error);
+            				}
+            			});
                 	}
-                    location.href = "selectRecipe.su?recipeNo=" + recipeNo;
                 }
             }
             event.stopPropagation(); 

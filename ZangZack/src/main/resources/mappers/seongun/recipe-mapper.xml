@@ -42,4 +42,16 @@
    		from Cookware_list left JOIN cookware_category using(cook_category_no)
    		where CW_RECIPE_NO = #{recipeNo}
    </select>
+   
+   <update id="deleteRecipe">
+   		update recipe
+   		set recipe_status = 'Y'
+   		where recipe_no = #{recipeNo}
+   </update>
+   
+   <update id="updateRecipe">
+   		UPDATE RECIPE
+   		SET RECIPE_NAME = #{recipeName}, RECIPE_TASTE = #{recipeTaste}, RECIPE_INGREDIENTS = #{recipeIngredients}, RECIPE_CONTENT = #{recipeContent}
+   		WHERE RECIPE_NO = #{recipeNo}
+   </update>
 </mapper>

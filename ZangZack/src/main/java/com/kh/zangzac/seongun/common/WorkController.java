@@ -41,7 +41,7 @@ public class WorkController {
 		model.addAttribute("loc", loc);
 	}
 
-	public Photo setAttachment(String[] returnArr, int i, int j) {
+	public Photo haventMain(String[] returnArr, int i, int j) {
 		Photo a = new Photo();
 		if(i==0) {
 			a.setPhotoRename(returnArr[0]);
@@ -59,11 +59,11 @@ public class WorkController {
 	}
 	
 	//썸네일 삭제 X
-	public Photo setAttachment(String[] returnArr) {
+	public Photo haveMain (String[] returnArr, int i) {
 		Photo a = new Photo();
 		a.setPhotoRename(returnArr[0]);
 		a.setPhotoPath(returnArr[1]);
-		a.setBoardType(1);
+		a.setBoardType(i);
 		a.setPhotoLevel(1);
 		
 		return a;
@@ -134,7 +134,19 @@ public class WorkController {
 
 	public void recipeDetatil(Model model, Recipe r, ArrayList<Photo> pList) {
 		model.addAttribute("r", r);
-		model.addAttribute("pLIst", pList);
+		model.addAttribute("pList", pList);
 	}
 
+	public void editRecipe(Recipe r, ArrayList<Photo> pList, Model model) {
+		model.addAttribute("r", r);
+		model.addAttribute("pList", pList);
+	}
+
+	public void searchModel(Model model, PageInfo pi, ArrayList<CampBoard> list, String msg, CampBoard b, String requestURI) {
+		model.addAttribute("pi", pi);
+		model.addAttribute("list", list);
+		model.addAttribute("msg", msg);
+		model.addAttribute("loc", requestURI);
+		model.addAttribute("b",b);
+	}
 }
