@@ -1070,7 +1070,12 @@ public class ProductController {
       } catch (InterruptedException e) {
          e.printStackTrace();
       }
-      return "redirect:myOrderPageView.so";
+      model.addAttribute("orderNo", orderId);
+      model.addAttribute("address", address.split("@")[1] + " " + address.split("@")[2]);
+      model.addAttribute("phone", phone);
+      model.addAttribute("name", name);
+      model.addAttribute("price", amount);
+      return "views/sohwa/success";
     }
     
      
