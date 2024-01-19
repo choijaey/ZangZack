@@ -10,7 +10,7 @@
      	 </selectKey>
 		<!-- 이미 시퀀스로 하나 올려진 글번호를 prodcutNo필드에 대입을 했으므로 시퀀스 돌려주는게(product_seq.nextval) 아니라 productNo 넣어주면 된다. -->
 		insert into SECONDHAND_PRODUCT
-		values (#{spNo}, #{spTitle}, #{spPrice}, #{spContent}, #{spAddress}, default, default, #{memberId}, #{categoryNo}, default, sysdate, sysdate, 0) 
+		values (#{spNo}, #{spTitle}, #{spPrice}, #{spContent}, #{spAddress}, default, default, #{memberId}, #{categoryNo}, default, sysdate, sysdate) 
 	</insert>
 	
 	<update id="updateSecondHand">

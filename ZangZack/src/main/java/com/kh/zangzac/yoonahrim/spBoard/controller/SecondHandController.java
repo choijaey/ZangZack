@@ -28,7 +28,6 @@ import com.kh.zangzac.jaeyoung.chat.ChatFileManager;
 import com.kh.zangzac.jaeyoung.chat.model.vo.Chatter;
 import com.kh.zangzac.ming.member.model.exception.MemberException;
 import com.kh.zangzac.ming.member.model.vo.Member;
-import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
 import com.kh.zangzac.yoonahrim.spBoard.model.service.secondHandService;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandException;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
