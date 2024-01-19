@@ -22,7 +22,6 @@ public interface ProductService {
 
 	int insertOption(ArrayList<Option> list);
 
-	int getListCount(String categoryNo);
 
 	ArrayList<Product> selectProductList(PageInfo pi, HashMap<String, String> categoryMap);
 
@@ -34,7 +33,6 @@ public interface ProductService {
 
 	ArrayList<Option> optionDetail(int productNo);
 
-	int getListCountKeyword(String keyword);
 
 	ArrayList<Product> searchProduct(PageInfo pi, HashMap<String, String> map);
 
@@ -112,7 +110,6 @@ public interface ProductService {
 
 	void deleteReviewPhoto(int reviewNo);
 
-	ArrayList<Attachment> selectPhotothList(String categoryNo);
 
 	ArrayList<Attachment> searchPhototh(HashMap<String, String> searchMap);
 
@@ -175,6 +172,16 @@ public interface ProductService {
 	int getListCountOrder(HashMap<String, String> map);
 
 	int getListCountOrderN(HashMap<String, String> map);
+
+	int getListCount(HashMap<String, String> map);
+
+	ArrayList<Product> selectProductMap(PageInfo pi, HashMap<String, String> map);
+
+	ArrayList<Attachment> selectPhotoMap(HashMap<String, String> map);
+
+	ArrayList<Attachment> selectPhotoTHMap(HashMap<String, String> map);
+
+	ArrayList<Product> selectRecommendProduct();
 
 
 

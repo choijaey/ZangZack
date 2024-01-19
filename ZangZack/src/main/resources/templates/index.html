@@ -237,18 +237,24 @@
             </div>
             <a href="campList.ys" class="btn btn-primary" style="margin-top: 10px; cursor: pointer; margin-left: 120px;">추천 캠핑장으로 이동</a>
 		</div>
-        <div class="review-section" style="width:100%;">
-            <div class="section-header">배송토피아 선택</div>
-            <!-- 리뷰 아이템들 -->
-            <div class="review-item">
-                <h3>리뷰 제목 1</h3>
-                <p>리뷰 설명 1</p>
-            </div>
-            <div class="review-item">
-                <h3>리뷰 제목 2</h3>
-                <p>리뷰 설명 2</p>
-            </div>
-        </div>
+		
+		<!-- 소화 -->
+		
+		<div class="slideshow-container" style="max-width: 1000px; position: relative; margin: auto;">
+		    <div class="mySlides" style="display: none;">
+		        <a href="productDetail.so?productNo=263"><img style="width: 100%;" src="image/sohwa/main3 (2).png"></a>
+		    </div>
+		
+		    <div class="mySlides" style="display: none;">
+		        <a href="productDetail.so?productNo=262"><img style="width: 100%;"src="image/sohwa/제목 없는 디자인.gif"></a>
+		    </div>
+		
+		    <div class="mySlides" style="display: none;">
+		        <a href="productDetail.so?productNo=261"><img style="width: 100%;"src="image/sohwa/main5.png"></a>
+		    </div>
+		</div>
+		    
+            
         
     </div>
     <img style="width:100%; height:300px;" src="image/main/center/checkList.png">
@@ -310,6 +316,34 @@
                 console.log('이동할 페이지:', this.textContent);
             });
         });
+        
+        
+        
+        
+        
+        window.onload=()=>{
+        	var slideIndex = 0;
+            showSlides();
+
+            function showSlides() {
+                var i;
+                var slides = document.getElementsByClassName("mySlides");
+
+                for (i = 0; i < slides.length; i++) {
+                    slides[i].style.display = "none";
+                }
+
+                slideIndex++;
+
+                if (slideIndex > slides.length) {
+                    slideIndex = 1;
+                }
+
+                slides[slideIndex - 1].style.display = "block";
+                setTimeout(showSlides, 2000); // 2초마다 변경
+            }
+        }
+        
     </script>
    
    
