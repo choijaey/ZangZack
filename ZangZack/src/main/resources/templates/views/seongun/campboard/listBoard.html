@@ -35,6 +35,8 @@
                 <div id="category">
                     <form method="get">
                         <input type="hidden" name="categoryNo" value="">
+                        <input type="hidden" name="searchText" th:value="${b.searchText == null ? null : b.searchText}">
+                        <input type="hidden" name="searchCategory" th:value="${b.searchText == null ? 0 : b.searchCategory}">
                         <a onclick="setCategory('0')" class="on" th:id="${b.categoryNo == 0 ? 'select-category' : ''}">전체보기</a>
                         <a onclick="setCategory('1')" class="on" th:id="${b.categoryNo == 1 ? 'select-category' : ''}">백패킹</a>
                         <a onclick="setCategory('2')" class="on" th:id="${b.categoryNo == 2 ? 'select-category' : ''}">오토캠핑</a>
@@ -107,7 +109,8 @@
 			                </a>
 			            </th:block>
 			            <th:block th:if="${b.searchText != null && b.searchText.trim != ''}">
-			                <a th:href="@{${loc}(page=${p}, searchCategory=${b.searchCategory}, searchText=${b.searchText != null ? b.searchText : ''})}" th:id="${p == pi.currentPage} ? 'check_page'" >
+			                <a th:href="@{${loc}(page=${p}, searchCategory=${b.searchCategory},
+			                	searchText=${b.searchText != null ? b.searchText : ''})}" th:id="${p == pi.currentPage} ? 'check_page'">
 			                    [[${p}]]
 			                </a>
 			            </th:block>
@@ -142,95 +145,94 @@
         </div>
     </div>
     
-     <script th:inline="javascript">
-    /*<![CDATA[*/
-    let member = /*[[${session.loginUser}]]*/ 'null';
-    let categoryNo = /*[[${selectedCategory}]]*/ '0';
-    let list = /*[[${list}]]*/ 'null';
-
-    // 문서 로드 시 실행되는 함수들
-    document.addEventListener('DOMContentLoaded', function() {
-        setupScrollEvent();
-        setupBackToTopButton();
-        setupBoardListClickEvent();
-    });
-
-    // 스크롤 이벤트 설정 함수
-    function setupScrollEvent() {
-        window.addEventListener('scroll', toggleBackToTopButton);
-        window.addEventListener('touchmove', toggleBackToTopButton);
-    }
-
-    // 맨 위로 가기 버튼 설정 함수
-    function setupBackToTopButton() {
-        document.getElementById('back-to-top').addEventListener('click', scrollToTop);
-    }
-
-    // 맨 위로 가기 버튼 표시/숨김 함수
-    function toggleBackToTopButton() {
-        let backToTopButton = document.getElementById('back-to-top');
-        backToTopButton.classList.toggle('show', window.pageYOffset > 0);
-    }
-
-    // 맨 위로 스크롤하는 함수
-    function scrollToTop() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        toggleBackToTopButton();
-    }
-
-    // 게시글 목록 클릭 이벤트 설정 함수
-    function setupBoardListClickEvent() {
-        const tbody = document.querySelector('tbody');
-        if (tbody) {
-            tbody.addEventListener('click', navigateToBoard);
-        }
-    }
-
-    // 게시글로 이동하는 함수
-    function navigateToBoard(event) {
-        const target = event.target.closest('td');
-        if (!target) return;
-
-        const boardId = target.closest('tr').querySelector('.board_num').innerText;
-        location.href = `selectBoard.su?cbNo=${boardId}&page=${/*[[${pi.currentPage}]]*/ '1'}`;
-    }
-
-    // 글쓰기 버튼 클릭 이벤트
-    function writeBtn() {
-        if (member !== 'null') {
-            window.location.href = "writeCampBoard.su";
-        } else {
-            alert("로그인 후 이용해주세요.");
-            window.location.href = "signUp.me";
-        }
-    }
-
-    // 카테고리 설정 및 폼 제출 함수
-    function setCategory(category) {
-        document.querySelector('input[name="categoryNo"]').value = category;
-        document.querySelector('form').submit();
-    }
-
-    // 페이지 로드 시 실행되는 함수
-    window.onload = function() {
-        let msg = /*[[${msg}]]*/'null';
-        if (msg !== 'null' && msg.trim().length > 0) {
-            alert(msg);
-        }
-
-        highlightSelectedCategory();
-    };
-
-    // 선택된 카테고리 하이라이트 함수
-    function highlightSelectedCategory() {
-        let categoryValue = document.querySelector('input[name="categoryNo"]').value;
-        if (categoryValue) {
-            let selectedLink = document.querySelector(`a[onclick="setCategory('${categoryValue}')"]`);
-            if (selectedLink) selectedLink.id = 'select-category';
-        }
-    }
-    /*]]>*/
-</script>
+	<script th:inline="javascript">
+	    /*<![CDATA[*/
+	    let member = /*[[${session.loginUser}]]*/ 'null';
+	    let categoryNo = /*[[${selectedCategory}]]*/ '0';
+	    let list = /*[[${list}]]*/ 'null';
+	
+	    // 문서 로드 시 실행되는 함수들
+	    document.addEventListener('DOMContentLoaded', function() {
+	        setupScrollEvent();
+	        setupBackToTopButton();
+	        setupBoardListClickEvent();
+	    });
+	
+	    // 스크롤 이벤트 설정 함수
+	    function setupScrollEvent() {
+	        window.addEventListener('scroll', toggleBackToTopButton);
+	        window.addEventListener('touchmove', toggleBackToTopButton);
+	    }
+	
+	    // 맨 위로 가기 버튼 설정 함수
+	    function setupBackToTopButton() {
+	        document.getElementById('back-to-top').addEventListener('click', scrollToTop);
+	    }
+	
+	    // 맨 위로 가기 버튼 표시/숨김 함수
+	    function toggleBackToTopButton() {
+	        let backToTopButton = document.getElementById('back-to-top');
+	        backToTopButton.classList.toggle('show', window.pageYOffset > 0);
+	    }
+	
+	    // 맨 위로 스크롤하는 함수
+	    function scrollToTop() {
+	        window.scrollTo({ top: 0, behavior: 'smooth' });
+	        toggleBackToTopButton();
+	    }
+	
+	    // 게시글 목록 클릭 이벤트 설정 함수
+	    function setupBoardListClickEvent() {
+	        const tbody = document.querySelector('tbody');
+	        if (tbody) {
+	            tbody.addEventListener('click', navigateToBoard);
+	        }
+	    }
+	
+	    // 게시글로 이동하는 함수
+	    function navigateToBoard(event) {
+	        const target = event.target.closest('td');
+	        if (!target) return;
+	
+	        const boardId = target.closest('tr').querySelector('.board_num').innerText;
+	        location.href = `selectBoard.su?cbNo=${boardId}&page=${/*[[${pi.currentPage}]]*/ '1'}`;
+	    }
+	
+	    // 글쓰기 버튼 클릭 이벤트
+	    function writeBtn() {
+	        if (member !== 'null') {
+	            window.location.href = "writeCampBoard.su";
+	        } else {
+	            alert("로그인 후 이용해주세요.");
+	            window.location.href = "signUp.me";
+	        }
+	    }
+	
+	    // 카테고리 설정 및 폼 제출 함수
+	    function setCategory(category) {
+	        document.querySelector('input[name="categoryNo"]').value = category;
+	        document.querySelector('form').submit();
+	    }
+	
+	    // 페이지 로드 시 실행되는 함수
+	    window.onload = function() {
+	        let msg = /*[[${msg}]]*/'null';
+	        if (msg != null && msg.trim().length > 0) {
+	            alert(msg);
+	        }
+	
+	        highlightSelectedCategory();
+	    };
+	
+	    function highlightSelectedCategory() {
+	        let categoryValue = document.querySelector('input[name="categoryNo"]').value;
+	        if (categoryValue) {
+	            let selectedLink = document.querySelector(`a[onclick="setCategory('${categoryValue}')"]`);
+	            if (selectedLink) selectedLink.id = 'select-category';
+	        }
+	    }
+	    /*]]>*/
+	</script>
 
 
 </body>

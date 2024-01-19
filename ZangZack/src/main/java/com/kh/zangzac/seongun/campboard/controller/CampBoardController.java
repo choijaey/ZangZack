@@ -60,23 +60,23 @@ public class CampBoardController {
 	
 	@GetMapping("campBoard.su")
 	public String campBoardListView(@RequestParam(value="page", defaultValue="1") int page, @ModelAttribute CampBoard b, Model model, HttpServletRequest request) {
-	    int listCount = 0;
 	    String msg = null;
-	    
-	    if(b.getSearchText() != null) {
+	    String text = b.getSearchText();
+	    if(text != null && !text.trim().equals("")) {
 	    	b.setSearchText("%" + b.getSearchText() + "%");
 	    }
 	    
-	    System.out.println(b.getSearchText());
-	    
 	    int currentPage = page;
-	    listCount = cService.searchListCount(b);
+	    int listCount = cService.searchListCount(b);
 	    PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 15);
 	    
 	    ArrayList<CampBoard> list = cService.searchBoardList(pi, b);
 	    
-	    if(b.getSearchText() != null) {
+	    if(text != null && !text.trim().equals("")) {
 	    	msg = list.isEmpty() ? "검색된 게시판이 없습니다!" : null;
+	    	if(b.getSearchText().charAt(0) == '%' && text.trim().equals("")) {
+	    		b.setSearchText("");
+	    	}
 	    }
 	    sWork.searchModel(model, pi, list, msg, b, request.getRequestURI());
 	    return "views/seongun/campboard/listBoard";
@@ -85,23 +85,23 @@ public class CampBoardController {
 	
 	@GetMapping("cardBoard.su")
 	public String campBoardCardView(@RequestParam(value="page", defaultValue="1") int page, @ModelAttribute CampBoard b, Model model, HttpServletRequest request) {
-		int listCount = 0;
 	    String msg = null;
-	    
-	    if(b.getSearchText() != null) {
+	    String text = b.getSearchText();
+	    if(text != null && !text.trim().equals("")) {
 	    	b.setSearchText("%" + b.getSearchText() + "%");
 	    }
 	    
-	    System.out.println(b.getSearchText());
-	    
 	    int currentPage = page;
-	    listCount = cService.searchListCount(b);
+	    int listCount = cService.searchListCount(b);
 	    PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 	    
 	    ArrayList<CampBoard> list = cService.searchBoardList(pi, b);
 	    
-	    if(b.getSearchText() != null) {
+	    if(text != null && !text.trim().equals("")) {
 	    	msg = list.isEmpty() ? "검색된 게시판이 없습니다!" : null;
+	    	if(b.getSearchText().charAt(0) == '%' && text.trim().equals("")) {
+	    		b.setSearchText("");
+	    	}
 	    }
 	    sWork.searchModel(model, pi, list, msg, b, request.getRequestURI());
 	    return "views/seongun/campboard/cardBoard";
@@ -109,21 +109,23 @@ public class CampBoardController {
 	
 	@GetMapping("albumBoard.su")
 	public String campBoardAlbumView(@RequestParam(value="page", defaultValue="1") int page, @ModelAttribute CampBoard b, Model model, HttpServletRequest request) {
-		int listCount = 0;
 	    String msg = null;
-	    
-	    if(b.getSearchText() != null) {
+	    String text = b.getSearchText();
+	    if(text != null && !text.trim().equals("")) {
 	    	b.setSearchText("%" + b.getSearchText() + "%");
 	    }
 	    
 	    int currentPage = page;
-	    listCount = cService.searchListCount(b);
+	    int listCount = cService.searchListCount(b);
 	    PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 20);
 	    
 	    ArrayList<CampBoard> list = cService.searchBoardList(pi, b);
 	    
-	    if(b.getSearchText() != null) {
+	    if(text != null && !text.trim().equals("")) {
 	    	msg = list.isEmpty() ? "검색된 게시판이 없습니다!" : null;
+	    	if(b.getSearchText().charAt(0) == '%' && text.trim().equals("")) {
+	    		b.setSearchText("");
+	    	}
 	    }
 	    sWork.searchModel(model, pi, list, msg, b, request.getRequestURI());
 	    return "views/seongun/campboard/albumBoard";

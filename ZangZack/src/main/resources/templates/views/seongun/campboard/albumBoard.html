@@ -223,7 +223,7 @@
 	    // 페이지 로드 시 실행되는 함수
 	    window.onload = function() {
 	        let msg = /*[[${msg}]]*/'null';
-	        if (msg !== 'null' && msg.trim().length > 0) {
+	        if (msg != null && msg.trim().length > 0) {
 	            alert(msg);
 	        }
 	

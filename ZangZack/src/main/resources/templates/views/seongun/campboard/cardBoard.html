@@ -34,6 +34,8 @@
                 <div id="category">
                     <form method="get">
                         <input type="hidden" name="categoryNo" value="">
+                        <input type="hidden" name="searchText" th:value="${b.searchText == null ? null : b.searchText}">
+                        <input type="hidden" name="searchCategory" th:value="${b.searchText == null ? 0 : b.searchCategory}">
                         <a onclick="setCategory('0')" class="on" th:id="${b.categoryNo == 0 ? 'select-category' : ''}">전체보기</a>
                         <a onclick="setCategory('1')" class="on" th:id="${b.categoryNo == 1 ? 'select-category' : ''}">백패킹</a>
                         <a onclick="setCategory('2')" class="on" th:id="${b.categoryNo == 2 ? 'select-category' : ''}">오토캠핑</a>
@@ -131,30 +133,30 @@
         </div>
         <div class="board_bottom_area">
 		<div id="pagenation" th:with="loc=${loc}" th:if="${!list.isEmpty}">
-					<ul>
-						<!-- 이전 버튼 -->
-						<li th:if="${pi.currentPage > 10}">
-							<a th:href="@{${loc}(page=${pi.currentPage-10})}">&lt; 이전</a>
-						</li>
-		                <!-- 페이지 번호 -->
-		                <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
-				            <th:block th:if="${b.searchText == null}">
-				                <a th:href="@{${loc}(page=${p})}" th:id="${p == pi.currentPage} ? 'check_page'" >
-				                    [[${p}]] 
-				                </a>
-				            </th:block>
-				            <th:block th:if="${b.searchText != null && b.searchText.trim != ''}">
-				                <a th:href="@{${loc}(page=${p}, searchCategory=${b.searchCategory}, searchText=${b.searchText != null ? b.searchText : ''})}" th:id="${p == pi.currentPage} ? 'check_page'" >
-				                    [[${p}]]
-				                </a>
-				            </th:block>
-				        </li>
-		                <!-- 다음 버튼 -->
-		                <li th:if="${pi.maxPage >= 10 && pi.maxPage - pi.currentPage > 10}">
-		                	<a th:href="@{${loc}(page=${pi.currentPage+10})}">다음 &gt;</a>
-		                </li>
-	              	</ul>
-				</div>
+			<ul>
+				<!-- 이전 버튼 -->
+				<li th:if="${pi.currentPage > 10}">
+					<a th:href="@{${loc}(page=${pi.currentPage-10})}">&lt; 이전</a>
+				</li>
+				<!-- 페이지 번호 -->
+				<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+					<th:block th:if="${b.searchText == null}">
+						<a th:href="@{${loc}(page=${p})}" th:id="${p == pi.currentPage} ? 'check_page'" >
+							[[${p}]] 
+						</a>
+					</th:block>
+					<th:block th:if="${b.searchText != null && b.searchText.trim != ''}">
+						<a th:href="@{${loc}(page=${p}, searchCategory=${b.searchCategory}, searchText=${b.searchText != null ? b.searchText : ''})}" th:id="${p == pi.currentPage} ? 'check_page'" >
+							[[${p}]]
+						</a>
+					</th:block>
+				</li>
+				<!-- 다음 버튼 -->
+				<li th:if="${pi.maxPage >= 10 && pi.maxPage - pi.currentPage > 10}">
+					<a th:href="@{${loc}(page=${pi.currentPage+10})}">다음 &gt;</a>
+				</li>
+			</ul>
+			</div>
             <hr/>
               <!-- 검색 필터 영역 -->	
             <div class="search_area">
@@ -179,7 +181,7 @@
         </div>
 	</div>
     <script th:inline="javascript">
-        /*<![CDATA[*/
+	    /*<![CDATA[*/
 	    let member = /*[[${session.loginUser}]]*/ 'null';
 	    let categoryNo = /*[[${selectedCategory}]]*/ '0';
 	    let list = /*[[${list}]]*/ 'null';
@@ -221,16 +223,18 @@
 	            tbody.addEventListener('click', navigateToBoard);
 	        }
 	    }
-	
-		// 카드 클릭 이벤트 설정 함수
-	       function setupCardClickEvent() {
-	           document.querySelectorAll('.card_area').forEach(function(card) {
-	               card.addEventListener('click', function() {
-	                   const boardId = this.querySelector('input[type="hidden"]').value;
-	                   location.href = `selectBoard.su?cbNo=${boardId}&page=${/*[[${pi.currentPage}]]*/ '1'}`;
-	               });
-	           });
-	       }
+		
+	 	// 카드 클릭 이벤트 설정 함수
+		document.addEventListener('DOMContentLoaded', function() {
+            // 모든 card_area 클래스를 가진 요소에 대한 클릭 이벤트 리스너 추가
+            document.querySelectorAll('.card_area').forEach(function(card) {
+                card.addEventListener('click', function() {
+                    var boardId = this.querySelector('input[type="hidden"]').value;
+                    location.href = 'selectBoard.su?cbNo=' + boardId + "&page=" + /*[[${pi.currentPage}]]*/1;
+                });
+            });
+        });
+		
 	    // 글쓰기 버튼 클릭 이벤트
 	    function writeBtn() {
 	        if (member !== 'null') {
@@ -250,7 +254,7 @@
 	    // 페이지 로드 시 실행되는 함수
 	    window.onload = function() {
 	        let msg = /*[[${msg}]]*/'null';
-	        if (msg !== 'null' && msg.trim().length > 0) {
+	        if (msg != null && msg.trim().length > 0) {
 	            alert(msg);
 	        }
 	
@@ -266,6 +270,6 @@
 	        }
 	    }
 	    /*]]>*/
-    </script>
+	</script>
 </body>
 </html>
