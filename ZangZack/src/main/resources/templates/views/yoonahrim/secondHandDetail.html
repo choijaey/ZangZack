@@ -19,7 +19,7 @@
    
       <input type="hidden" th:value="${s.spNo}" name="spNo" id="spNo"/>
       <div class="d-grid gap-2 d-md-block">
-          <div class="container text-end mt-n2">
+          <div class="container text-center mt-n2">
               <button type="button" class="btn btn-outline-success" th:onclick="|location.href='edit.ah?spNo=' + ${s.spNo}|" th:if="${session.loginUser != null && session.loginUser.memberId == s.memberId}">수정하기</button>&nbsp;&nbsp;
               <!-- 예약 여부 -->
                   <button type="button" id="bookButton" th:value="${s.spNo}" class="btn btn-outline-success" th:onclick="booking();" th:if="${s.spIsBook == 'N' && session.loginUser != null && session.loginUser.memberId == s.memberId}">예약 중</button>&nbsp;&nbsp;
@@ -29,7 +29,7 @@
                   <button type="button" id="soldoutButton" th:value="${s.spNo}" class="btn btn-outline-success" th:onclick="markDelete();" th:if="${s.spIsSell == 'Y' && session.loginUser != null && session.loginUser.memberId == s.memberId}">삭제</button>
           </div>
           <th:block th:if="${s.spIsBook == 'Y'}">
-              <h2 class="reservation" style="text-align:center; margin: 50px;">현재 이 페이지는 예약 중입니다.</h2>
+              <h2 class="reservation" style="text-align:center; margin: 50px; font-size:30px;">현재 이 물품은 예약 중입니다.</h2>
           </th:block>
       </div>
       
@@ -73,7 +73,7 @@
                   <span class="container_profile">
                      <span id="profile">
                         <img alt="img" th:src="${s.memberProfilePath}"> <!-- 프로필 가져오기 -->
-                           <p><b>윤아림</b></p>
+                           <p><b>[[${s.memberId}]]</b></p>
                            <p>[[${#strings.arraySplit(s.spAddress, ',')[0]}]]</p>
                         	<div class="container2 text-end">
 	                        		<input type="hidden" id="userId" th:if="${session.loginUser != null}" th:value="${session.loginUser.memberId}"/>
@@ -85,10 +85,10 @@
                    
                   <div id="content">
                      <div style="margin:50px">
-                        <p style="margin:10px"><b>[[${s.spTitle}]]</b></p><br>
-                        <p style="margin:10px"><b>[[${#numbers.formatInteger(s.spPrice, 0, 'COMMA')}]]원</b></p><hr><br>
+                        <br><br><br>
+                        <p style="margin:20px"><b>[[${#numbers.formatInteger(s.spPrice, 0, 'COMMA')}]]원</b></p><hr><br>
                         <div class="content-line">
-                           <pre style="margin:10px; overflow: hidden;">[[${s.spContent}]]</pre>
+                           <textarea style="margin:10px; overflow-x: hidden; resize: none; border:none;" rows="13" cols="75" th:utext="${#strings.replace(s.spContent, '\n', '<br>')}" readonly></textarea>
                         </div>
                      </div>
                   </div>
@@ -97,7 +97,7 @@
             <hr id="hr_line">
             
          <!-- 댓글 창 -->
-         <div class="container_reply" style="position:absolute; top: 2050px; left: 520px; width: 770px; height: 400px;">
+         <div class="container_reply" style="position:absolute; top: 2000px; left: 520px; width: 770px; height: 400px;">
             <div class="reply" style="margin:30px">
                   <!-- 댓글 카운트가 보이는 부분 -->
                   <div class="reply_count">
@@ -160,7 +160,7 @@
             </div>
          </div>
     </th:block>
-      
+     
 <script th:inline="javascript">
          function booking() {
             

@@ -65,9 +65,14 @@
                <label>가격
                      <input class="form-control" type="number" name="spPrice" placeholder="Default input" aria-label="default input example" style="width: 800px;" th:value="${s.spPrice}">
                   </label><br><br>
+                  <!--  
                   <label>자세한 설명
-                     <input class="form-control" type="text" name="spContent" placeholder="Default input" aria-label="default input example" style="width: 800px; height:500px;" th:value="${s.spContent}">
+                     <textarea class="form-control" name="spContent" placeholder="내용을 입력해주세요" style="width: 800px; height: 500px;" required th:value="${s.spContent}"></textarea>
                   </label><br><br>
+                  -->
+                 <label for="exampleFormControlTextarea1" class="form-label">
+  					 <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" cols="75" name="spContent" th:utext="${#strings.replace(s.spContent, '\n', '<br>')}"></textarea>
+  				</label><br><br>
                   <label>주소
                      <p>
                      <input type="text" id="zip-code" placeholder="우편번호">

@@ -263,5 +263,15 @@
    		select *
 	 	from member
    </select>
-
+	
+	<select id="getSpList" resultType="secondHandProduct">
+		select *
+		from SECONDHAND_PRODUCT
+	</select>
+	
+	<select id="selectSpPhoto" resultType="Photo">
+		select *
+		from photo
+		where BOARD_NO = #{spNo} and board_type = '4' and PHOTO_STATUS = 'N'
+	</select>
 </mapper>

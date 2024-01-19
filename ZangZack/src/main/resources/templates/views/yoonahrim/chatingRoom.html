@@ -17,14 +17,14 @@
 	  <div class="row justify-content-start">
 	    <div class="col-5">
 	    <div class="chatList">
-	     <br>
-	     <div class="scrollBar">
+	     <br><br>
+	     <div class="scrollBar" >
 	     	<th:block th:each="list : ${list}" th:if="${session.loginUser.memberId != list.memberId}">
 	     	 <input type="hidden" th:value="${list.memberId}"/>
 		      	<div class="chat-content" th:id="${list.memberId}" th:onclick="get(event)">
 		      		<th:block th:if="session.loginUser != null">
 		      		<div class="chat-content-image">
-		      			<img alt="profile" src="image/yoonahrim/채팅방_귀막는 애기.jpg">
+		      			<img alt="profile" th:src="${list.memberProfilePath}">
 		      			<div class="p-line" style="display:inline-block;">
 		      				<p id="chatId">[[${list.memberId}]]</p>
 		      			</div>
@@ -34,11 +34,12 @@
 	      </div>
 	    </div>
 	    </div>
-	    <div class="col-5">
+	   
+	    <div class="col-5"  >
 	      <div class="chating">
 	      	<div class="chating-content">
-	      		<div class="chating-content-image">
-	      				<img alt="profile" src="image/yoonahrim/user.png">
+	      		<div class="chating-content-image" >
+	      				<img alt="profile" th:src="${session.loginUser.memberProfilePath}">
 	      				<p id="chatId">[[${session.loginUser.memberId}]]</p>
 	      		</div>
 	      	</div>

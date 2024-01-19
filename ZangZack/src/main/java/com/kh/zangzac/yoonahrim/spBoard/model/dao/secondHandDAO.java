@@ -68,6 +68,10 @@ public interface secondHandDAO {
 
 	ArrayList<Chatter> chatterList(String roomName);
 
+	ArrayList<secondHandProduct> getSpList(String recomendation);
+
+	ArrayList<secondHandProduct> selectSpPhoto(ArrayList<Integer> spArrayList);
+
 
 	
 

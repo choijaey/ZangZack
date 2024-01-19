@@ -57,6 +57,7 @@ public class SecondHandController {
     @Autowired
     ReplyService rService;
 
+    
 	//중고 메인 페이지로 이동
 	@GetMapping("secondHand.ah")
 	public String secondHand(@ModelAttribute secondHandProduct sp, Model model,
@@ -66,7 +67,7 @@ public class SecondHandController {
 		int listCount = spService.getListCount();
 		
 		int currentPage = page;
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 8);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 12);
 		ArrayList<Photo> aList = spService.selectPhotoSeconHand(null);
 		
 		int spNo = sp.getSpNo();
@@ -80,6 +81,42 @@ public class SecondHandController {
 		
 		return "views/yoonahrim/secondHandList";
 	}
+	
+	@GetMapping("searchSecondHand.ah")
+	   public String campSerchList(@ModelAttribute secondHandProduct sp,
+			   					  @RequestParam("region") String region,
+	                              @RequestParam("type") String type,
+	                              @RequestParam(value="page", defaultValue="1") int page,
+	                              Model model) {
+	      
+		  HashMap<String, String> map = new HashMap<>();
+		  map.put("region", region);
+		  map.put("type", type);
+		  int result = spService.searchSpCount(map);
+		  
+		  int currentPage = page;
+	      PageInfo pi = Pagination.getPageInfo(currentPage, result, 12);
+		  
+	      ArrayList<secondHandProduct> spList = spService.searchSpList(map);
+	      ArrayList<Photo> aList = spService.selectPhotoSeconHand(null);
+	      
+	      if(spList != null) {
+	  
+	    	 model.addAttribute("aList", aList);
+	         model.addAttribute("result", result);
+	         model.addAttribute("spList", spList);
+	         model.addAttribute("region", region);
+	         model.addAttribute("type", type);
+	         model.addAttribute("pi", pi);
+	         
+	         return "views/yoonahrim/searchSecondHand";
+	      }else {
+	         throw new secondHandException("검색에 실패하였습니다");
+	      }
+	      
+	   }
+	
+	
 	
 	//중고 게시글 불러오기
 	@GetMapping("edit.ah")
@@ -430,7 +467,7 @@ public class SecondHandController {
 		int listCount = spService.getListCount();
 		int currentPage = page;
 		
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 8);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 12);
 		ArrayList<secondHandProduct> list = spService.selectBoardList(pi, 4);
 		ArrayList<Photo> aList = spService.selectAttachmentList(sp.getSpNo());
 		
@@ -458,7 +495,7 @@ public class SecondHandController {
 	    map.put("searchType", searchType);
 	    int currentPage = page;
 	    int listCount = spService.searchAdminList(map);
-	    PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 8);
+	    PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 12);
 	    ArrayList<secondHandProduct> slist = spService.searchtAdminList(pi, map);
 
 	    if (slist != null) {
@@ -487,39 +524,6 @@ public class SecondHandController {
 		
 	}
 	
-	@GetMapping("searchSecondHand.ah")
-	   public String campSerchList(@ModelAttribute secondHandProduct sp,
-			   					  @RequestParam("region") String region,
-	                              @RequestParam("type") String type,
-	                              @RequestParam(value="page", defaultValue="1") int page,
-	                              Model model) {
-	      
-		  HashMap<String, String> map = new HashMap<>();
-		  map.put("region", region);
-		  map.put("type", type);
-		  int result = spService.searchSpCount(map);
-		  
-		  int currentPage = page;
-	      PageInfo pi = Pagination.getPageInfo(currentPage, result, 8);
-		  
-	      ArrayList<secondHandProduct> spList = spService.searchSpList(map);
-	      ArrayList<Photo> aList = spService.selectPhotoSeconHand(null);
-	      
-	      if(spList != null) {
-	  
-	    	 model.addAttribute("aList", aList);
-	         model.addAttribute("result", result);
-	         model.addAttribute("spList", spList);
-	         model.addAttribute("region", region);
-	         model.addAttribute("type", type);
-	         model.addAttribute("pi", pi);
-	         
-	         return "views/yoonahrim/searchSecondHand";
-	      }else {
-	         throw new secondHandException("검색에 실패하였습니다");
-	      }
-	      
-	   }
 	
 	/*
 		@PostMapping("searchAdmin.ah")

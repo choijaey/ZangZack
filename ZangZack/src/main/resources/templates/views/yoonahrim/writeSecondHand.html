@@ -51,9 +51,14 @@
 	   		<label>가격
 	   			<input class="form-control" type="number" id="spPrice" name="spPrice" placeholder="Default input" aria-label="default input example" style="width: 800px;" required>
 	   		</label><br><br>
+	   		<!--  
 	   		<label>자세한 설명
-	   			<input class="form-control" type="text" name="spContent" placeholder="내용을 입력해주세요" aria-label="default input example" style="width: 800px; height:500px;" required>
+	   			<textarea class="form-control" name="spContent" placeholder="내용을 입력해주세요" style="width: 800px; height: 500px;" required th:value="${s.spContent}"></textarea>
 	   		</label><br><br>
+	   		-->
+	   		<label for="exampleFormControlTextarea1" class="form-label">
+  					 <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" cols="75" name="spContent" placeholder="내용을 입력해주세요" required></textarea>
+  			</label><br><br>
 	   		<label>주소
 		   		<p>
 			      <input type="text" id="zip-code" placeholder="우편번호">
@@ -69,56 +74,55 @@
 		    </label>
 	   	</div>
 		   <div class="pointerBtn">
-		  		<button type="button" class="btn-hover color-1" onClick="checkPhotoNum()">작성 완료</button>
+		  		<button type="submit" class="btn-hover color-1" onClick="checkPhotoNum()">작성 완료</button>
 		   </div>
     </form>
    
    <script th:line="javascript">
-       function previewImage(event, previewId,photoId){
-    	   const fReader1 = new FileReader();
-    	   
-           const output = document.getElementById(photoId);
-    	   fReader1.readAsDataURL(event.target.files[0]);
-           fReader1.onloadend = function(event){
-           output.src = event.target.result;
-           }
-    	   
+   /*
+   function previewImage(event, previewId,photoId){
+	   const fReader1 = new FileReader();
+	   
+       const output = document.getElementById(photoId);
+	   fReader1.readAsDataURL(event.target.files[0]);
+       fReader1.onloadend = function(event){
+       output.src = event.target.result;
        }
-       
-       let maxCopies = 4;
-       let fileCount = 0;
+	   
+   }
+   document.getElementById('plus').addEventListener('click', addPhoto);
+   
+   // '+'버튼을 눌렀을 때 .photoNum이 복제되는 코드 
+   let numOfCopies = 1;  
 
-       document.getElementById('plus').addEventListener('click', addPhoto);
+   function addPhoto() {
+	   const maxCopies = 4;
+	   console.log('??');
+	   if (numOfCopies <= maxCopies) {
+	     // 새로운 이미지 업로드 영역 생성
+	     const newImageUpload = document.createElement('div');
+	     newImageUpload.className = 'photoNum';
+	     newImageUpload.innerHTML = `
+	       <div class="photoUploads" style="">
+	         <img src="image/yoonahrim/istockphoto.jpg" id="photoUpload${numOfCopies}" style="width:200px; height:200px; border-radius:20%;"/>
+	       </div>
+	       <br>
+	       <div class="input-group mb-3" style="left:55px">
+	         <label class="input-group-text" for="inputGroupFile${numOfCopies}" Multiple>upload</label>
+	         <input type="file" class="form-control" id="inputGroupFile${numOfCopies}" name ="inputGroupFile" style="display:none;" onchange="previewImage(event, 'inputGroupFile${numOfCopies}','photoUpload${numOfCopies}')" />
+	       </div>
+	     `;
 
-       function addPhoto() {
-           if (fileCount < maxCopies) {
-               const newImageUpload = document.createElement('div');
-               newImageUpload.className = 'photoNum';
-               newImageUpload.innerHTML = `
-                   <div class="photoUploads">
-                       <img src="image/yoonahrim/istockphoto.jpg" id="photoUpload" style="width:200px; height:200px; border-radius:20%;"/>
-                   </div>
-                   <br>
-                   <div class="input-group mb-3" style="left:55px">
-                       <label class="input-group-text" for="inputGroupFile" Multiple>upload</label>
-                       <input type="file" class="form-control" name="inputGroupFile" id="inputGroupFile" style="display:none;" onchange="previewImage(event, 'inputGroupFile', 'photoUpload')"/>
-                   </div>
-               `;
+	     // 새로운 이미지 업로드 영역을 화면에 추가
+	     document.getElementById('upfileAddArea').appendChild(newImageUpload);
 
-               document.getElementById('upfileAddArea').appendChild(newImageUpload);
-
-               document.getElementById('inputGroupFile').addEventListener('change', function(event) {
-                   const selectedFiles = event.target.files;
-                   if (selectedFiles && selectedFiles.length > 0 && fileCount < maxCopies) {
-                       fileCount += selectedFiles.length;
-                       alert(`현재 파일 개수: ${fileCount}`);
-                   }
-               });
-           } else {
-               alert('최대 4개까지만 추가할 수 있습니다.');
-           }
-       }
-       
+	     // id 중복을 피하기 위해 numOfCopies를 증가시킴
+	     numOfCopies++;
+	     console.log(numOfCopies);
+	   } else {
+	     alert('최대 4개까지만 추가할 수 있습니다.');
+	   }
+	 }
 		
        function checkPhotoNum() {
     	    console.log("checkPhotoNum 함수 호출 확인");
@@ -128,10 +132,69 @@
     	    console.log("사진 개수:", photoNum);
 
     	    // 사진이 없거나 한 장 미만이면 alert 창 표시
-    	    if (photoNum < 1) {
+    	    if (photoNum <= 1) {
     	        alert("한 장 이상의 사진을 첨부해주세요.");
     	    }
     	}
+		*/
+		
+		let numOfCopies = 1;  
+		let fileCount = 0;
+		document.getElementById('plus').addEventListener('click', addPhoto);
+
+		function addPhoto() {
+		    const maxCopies = 4;
+		    if (numOfCopies <= maxCopies) {
+		        // 새로운 이미지 업로드 영역 생성
+		        const newImageUpload = document.createElement('div');
+		        newImageUpload.className = 'photoNum';
+		        newImageUpload.innerHTML = `
+		            <div class="photoUploads">
+		                <img src="image/yoonahrim/istockphoto.jpg" id="photoUpload${numOfCopies}" style="width:200px; height:200px; border-radius:20%;"/>
+		            </div>
+		            <br>
+		            <div class="input-group mb-3" style="left:55px">
+		                <label class="input-group-text" for="inputGroupFile${numOfCopies}" Multiple>upload</label>
+		                <input type="file" class="form-control" id="inputGroupFile${numOfCopies}" name="inputGroupFile" style="display:none;" onchange="previewImage(event, 'inputGroupFile${numOfCopies}','photoUpload${numOfCopies}')" />
+		            </div>
+		        `;
+
+		        // 새로운 이미지 업로드 영역을 화면에 추가
+		        document.getElementById('upfileAddArea').appendChild(newImageUpload);
+
+		        // id 중복을 피하기 위해 numOfCopies를 증가시킴
+		        numOfCopies++;
+		        console.log(numOfCopies);
+		    } else {
+		        alert('최대 4개까지만 추가할 수 있습니다.');
+		    }
+		}
+
+		function previewImage(event, previewId, photoId) {
+		    const fReader1 = new FileReader();
+		    const output = document.getElementById(photoId);
+		    fReader1.readAsDataURL(event.target.files[0]);
+		    fReader1.onloadend = function (event) {
+		        output.src = event.target.result;
+		    }
+		    
+		    // 파일이 선택되면 fileCount 증가
+		    fileCount++;
+		}
+
+		function checkPhotoNum() {
+		    console.log("checkPhotoNum 함수 호출 확인");
+
+		    // 첨부된 사진 개수 확인
+		    console.log("사진 개수:", fileCount);
+
+		    // 사진이 없거나 한 장 미만이면 alert 창 표시
+		    if (fileCount < 1 || fileCount > 4) {
+		        alert("1장에서 4장까지의 사진을 첨부해주세요.");
+		        event.preventDefault();
+		    }
+		}
+		
 		
        function execDaumPostcode() {
            new daum.Postcode( {
@@ -141,19 +204,6 @@
              }
            } ).open();
          }
-       
-       /*
-       function checkPhotoNum() {
-    	   console.log("checkPhotoNum 함수 호출 확인");
-           // 첨부된 사진 개수 확인
-           var photoNum = document.querySelectorAll('.photo-file[type="file"]').length;
-           console.log("사진 개수:", photoNum);
-           // 사진이 없거나 한 장 미만이면 alert 창 표시
-           if (photoNum == 0) {
-               alert("한 장 이상의 사진을 첨부해주세요.");
-           }
-       }
-       */
         
        var priceInput = document.getElementById('spPrice');
 

@@ -160,6 +160,16 @@ public class secondHandServiceImpl implements secondHandService{
 		return spDAO.chatterList(roomName);
 	}
 
+	@Override
+	public ArrayList<secondHandProduct> getSpList(String recomendation) {
+		return spDAO.getSpList(recomendation);
+	}
+
+	@Override
+	public ArrayList<secondHandProduct> selectSpPhoto(ArrayList<Integer> spArrayList) {
+		return spDAO.selectSpPhoto(spArrayList);
+	}
+
 	
 
 

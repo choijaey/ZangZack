@@ -55,7 +55,8 @@
 	border-radius: 30px;
 	display:inline-block;
 	position: relative;
-	left: 50px;
+	left: 20px;
+	margin-top: 20px;
 	background-color: #FFC8C3;
 }
 
@@ -67,7 +68,7 @@
 	
 	position: relative;
 	right: 5px;
-	bottom: 30px;
+	bottom: 12px;
 	display:inline-block;
 }
 
@@ -81,7 +82,7 @@
 
 .p-line p {
     line-height: 1;
-    margin: 10px;
+    margin: 15px;
 }
 
 .chating{
@@ -142,8 +143,8 @@
     border: none;
     background-size: 300% 100%;
 	position: relative;
-	top: 15px;
-	
+	top: -55px;
+	left: 400px;
     border-radius: 50px;
     -moz-transition: all .4s ease-in-out;
     -o-transition: all .4s ease-in-out;
@@ -175,9 +176,9 @@
 }
 
 #button-addon2{
-	position:relative;
-	top: -50px;
-	left: 400px;
+	position:absolute;
+	top: 50px;
+	left: 800px;
 	height: 35px;
 }
 
