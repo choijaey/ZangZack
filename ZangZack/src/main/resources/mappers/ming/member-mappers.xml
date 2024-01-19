@@ -258,7 +258,7 @@
 	<select id="searchCbListCount" resultType="_int">
 		SELECT COUNT(*)
 	    FROM CAMP_BOARD_VIEW
-	    where CB_STATUS = 'N'
+	    where CB_STATUS = 'N' AND member_id=#{memberId}
 	    <if test="searchType == 'cbTitle'">
 	       	and CB_TITLE LIKE '%'|| #{keyword} ||'%'
 	    </if>
@@ -271,7 +271,7 @@
 	<select id="searchCbList" resultType="CampBoard">
 		SELECT *
 	    FROM CAMP_BOARD_VIEW
-	    where CB_STATUS = 'N'
+	    where CB_STATUS = 'N' AND member_id=#{memberId}
 	    <if test="searchType == 'cbTitle'">
 	       	and CB_TITLE LIKE '%'|| #{keyword} ||'%'
 	    </if>
