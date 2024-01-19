@@ -103,14 +103,9 @@ public class CampController {
 	@GetMapping("campDetail.ys")
 	public String selectCampDetail(@RequestParam("no") int no,
 			                       @RequestParam("page") int page,
-			                       Model model,HttpSession session) {
+			                       Model model) {
 		
-		Member loginUser = (Member)session.getAttribute("loginUser");
-		String id = null;
-		if(loginUser != null) {
-			id = loginUser.getMemberId();
-		}
-		
+	
 		CampingGround camp = cService.selectCampingDetail(no);
 		int count = cService.updateCount(no);
 		if(count > 0) {
@@ -119,7 +114,7 @@ public class CampController {
 		
 		ArrayList<Photo> campList = cService.selectPhoto(no); //캠핑장 사진
 		
-		
+		System.out.println(camp.getCgImgInfo());
 	    String info = camp.getCgImgInfo();
 	    String[] infoArray = info.split(",");
 	  
@@ -131,12 +126,10 @@ public class CampController {
 		   model.addAttribute("page", page);
 		   model.addAttribute("infoArray", infoArray);
 		   model.addAttribute("point", point);
-		   model.addAttribute("id", id);
-		  
 		   
 		   return"views/yoonseo/campDetail";   
 		}else {
-			return "redirect:/";
+			return"redirect:/";
 		}
 	}
 	
@@ -153,7 +146,7 @@ public class CampController {
 			                
 			                 ) {
 		
-		
+		System.out.println(camp.getCgAddress());
 		
 		ArrayList<Photo> campList = new ArrayList<>();
 		
@@ -380,10 +373,10 @@ public class CampController {
 		
 		
 		int result = cService.searchCampCount(keyword,city,type);
-		ArrayList<CampingGround> campList = cService.searchCampList(keyword,city,type);
 		
 		int currentPage = page;
 		PageInfo pi = Pagination.getPageInfo(currentPage,result,6);
+		ArrayList<CampingGround> campList = cService.searchCampList(pi,keyword,city,type);
 		
 		if(campList != null) {
 			model.addAttribute("result", result);
