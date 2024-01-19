@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
 
+import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.ming.member.model.vo.Member;
 import com.kh.zangzac.sohwa.product.model.vo.Attachment;
 import com.kh.zangzac.sohwa.product.model.vo.Cart;
@@ -25,7 +26,6 @@ public interface ProductDAO {
 
 	int insertOption(ArrayList<Option> list);
 
-	int getListCount(String categoryNo);
 
 	ArrayList<Product> selectProductList(HashMap<String, String> map, RowBounds rowBounds);
 
@@ -37,7 +37,6 @@ public interface ProductDAO {
 
 	ArrayList<Option> optionDetail(int productNo);
 
-	int getListCountKeyword(String keyword);
 
 	ArrayList<Product> searchProduct(HashMap<String, String> map, RowBounds rowBounds);
 
@@ -115,7 +114,6 @@ public interface ProductDAO {
 
 	void deleteReviewPhoto(int reviewNo);
 
-	ArrayList<Attachment> selectPhotothList(String categoryNo);
 
 	ArrayList<Attachment> searchPhototh(HashMap<String, String> searchMap);
 
@@ -180,6 +178,14 @@ public interface ProductDAO {
 	int getListCountOrder(HashMap<String, String> map);
 
 	int getListCountOrderN(HashMap<String, String> map);
+
+	int getListCount(HashMap<String, String> map);
+
+	ArrayList<Product> selectProductMap(HashMap<String, String> map, RowBounds rowBounds);
+
+	ArrayList<Attachment> selectPhotoMap(HashMap<String, String> map);
+
+	ArrayList<Attachment> selectPhotoTHMap(HashMap<String, String> map);
 
 
 

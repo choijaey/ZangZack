@@ -31,7 +31,7 @@
 	        </div>
 	      </div>
 	    </div>
-	  
+	  	
 	    
 	     <div class="additional-section">
 			 <div class="category">
@@ -43,7 +43,7 @@
 			     <div onclick="sendCategoryNo(15)"><img src="image/sohwa/bag.png">백팩</div>
 			     <div onclick="sendCategoryNo(16)"><img src="image/sohwa/other.png">기타용품</div>
 			 </div>
-			
+			<input type="hidden" th:value="${categoryNo}" id="categoryNo">
 			
 			<form id="categoryForm" action="productListView.so">
 			    <input type="hidden" name="categoryNo" id="categoryNoInput" value="0">
@@ -175,8 +175,8 @@
 			        <input type="radio" name="slide" id="nextBtn">
 				</div>
 		       
-		       
-		   </main>
+		       <input type="hidden" th:value="${standard}" id="standard">
+		   </main>>
 		  
 		   <main>
 			  <h1>PRODUCT ></h1>
@@ -192,6 +192,7 @@
 	
 	
 	
+	<a id="back-to-top"><img src="image/sohwa/icons8-scroll-up-64 (1).png"></a>
 	
 	
 	
@@ -234,7 +235,10 @@
        // 추가 데이터 로드 함수
        function loadMoreItems() {
     	   
-    
+    	  const keyword = document.getElementById('searchInput').value;
+    	  const categoryNo = document.getElementById("categoryNo").value;
+    	  const standard = document.getElementById('standard').value;
+    	  console.log("standard : "+standard);
           if(currentPage <= maxPages){
              //ajax 부분 추가 예정
               $.ajax({
@@ -242,14 +246,16 @@
                     method: 'GET',
                     data: { 
                        page : currentPage,  //----------------------------------------------------------------------------------------
-                       keyword: /*[[${keyword}]]*/'',
-                       categoryNo: /*[[${categoryNo}]]*/0,
-                       status: /*[[${status}]]*/1
+                       keyword: keyword,
+                       categoryNo: categoryNo,
+                       standard : standard
                     },
                     success: function(data) {
                         console.log(data);
                         // 리스트 가져와서 만들기
-                        const newItems = createItems(data);  
+                        const newItems = createItems(data);
+                        document.getElementById("categoryNo").value = data.categoryNo;
+                        document.getElementById("standard").value = data.standard;
                         
                         // 뿌리기
                         appendItemsToDOM(newItems);  
@@ -278,58 +284,51 @@
               
               
           for (let p of data.pList) {
-              for(let th of data.thList){
-            	  if (p.productNo == th.boardNo && th.boardType == 5 && th.photoLevel == 0) {
-            		  let imgHTML ='';
-            		  
-            		  if (p.productNo == th.boardNo && th.boardType == 5) {
-            			  imgHTML = `<img src="${th.photoPath}">`;
-            		  }
-            		  const productPrice = `${p.productPrice.toLocaleString()}원`;
-           		      
-            		  
-            		  let starImageDiv='';
-            		  if (rList && rList.length > 0) {
-            			  starImageDiv = `
-            				  <span class="starImage">
-		      			            <img src="image/sohwa/icons8-star.gif" style="height: 10px;">
-		      			            ${p.productScore}
-		      			            <span style="color: gray;">평점</span>
-		      			            <input type="hidden" class="productScore">
-		      			      </span><br>`
-            		  }
-            		  
-            		  
-            		  let noEno ='';
-            		  if (p.eno === 0) {
-            			  noEno = `<span class="badge rounded-pill text-bg-dark">일시품절</span>`
-            		  }
-            		  
-            		  let noDeliveryPrice = '';
-            		  if(p.deliveryPrice == 0){
-            			  noDeliveryPrice = `<span class="badge text-bg-secondary">무료배송</span>`
-            		  }
-            		  
-            		  const newItemHTML = `
-                    	  <article class="product" onclick="redirectToProductDetail(this)">
-        			        <input type="hidden" value="${p.productNo}">
-        			        <div class="thumbnails">
-        			            <a href="#">${imgHTML}</a>
-        			        </div>
-        			        <p>${p.productName}</p>
-        			        <p class="price">${productPrice}</p>
-        			        
-        			        
-        			        ${starImageDiv}
-        			        ${noEno}
-        			        ${noDeliveryPrice}
-        			    </article>
-                      `;
-                      newItems.push(newItemHTML);
-                  }
-            	 }
+           		  let imgHTML ='';
+           		  imgHTML = `<img src="${p.photoPath}">`;
+           		  const productPrice = `${p.productPrice.toLocaleString()}원`;
+          		      
+           		  
+           		  let starImageDiv='';
+           		  if (rList && rList.length > 0) {
+           			  starImageDiv = `
+           				  <span class="starImage">
+	      			            <img src="image/sohwa/icons8-star.gif" style="height: 10px;">
+	      			            ${p.productScore}
+	      			            <span style="color: gray;">평점</span>
+	      			            <input type="hidden" class="productScore">
+	      			      </span><br>`
+           		  }
+           		  
+           		  
+           		  let noEno ='';
+           		  if (p.eno === 0) {
+           			  noEno = `<span class="badge rounded-pill text-bg-dark">일시품절</span>`
+           		  }
+           		  
+           		  let noDeliveryPrice = '';
+           		  if(p.deliveryPrice == 0){
+           			  noDeliveryPrice = `<span class="badge text-bg-secondary">무료배송</span>`
+           		  }
+           		  
+           		  const newItemHTML = `
+                   	  <article class="product" onclick="redirectToProductDetail(this)">
+       			        <input type="hidden" value="${p.productNo}">
+       			        <div class="thumbnails">
+       			            <a href="#">${imgHTML}</a>
+       			        </div>
+       			        <p>${p.productName}</p>
+       			        <p class="price">${productPrice}</p>
+       			        
+       			        
+       			        ${starImageDiv}
+       			        ${noEno}
+       			        ${noDeliveryPrice}
+       			    </article>
+                     `;
+                     newItems.push(newItemHTML);
+                 }
               
-          }
           return newItems;
       }
    
@@ -379,7 +378,20 @@
          };
 
     
-    
+         document.addEventListener('DOMContentLoaded', function() {
+        	  const backToTop = document.getElementById('back-to-top');
+			  const wrapper = document.getElementById("wrapper");
+        	  // 페이지가 로드됐을 때 스크롤 위치에 상관없이 항상 버튼을 보이게 설정
+        	  backToTop.classList.add('show');
+
+        	  backToTop.addEventListener('click', function(e) {
+        	    e.preventDefault();
+        	    wrapper.scrollTo({
+        	      top: 0,
+        	      behavior: 'smooth'
+        	    });
+        	  });
+        	});
     
     
     
@@ -595,8 +607,9 @@
 		
 		//검색
 		document.getElementById('searchImg').addEventListener('click', ()=>{
+			var categoryNo = document.getElementById('categoryNo').value;
 			var searchInputValue = document.getElementById('searchInput').value;
-		    var url = 'productListView.so?categoryNo=0&keyword=' + searchInputValue + '&standard=1' ;
+		    var url = 'productListView.so?categoryNo=' + categoryNo + '&keyword=' + searchInputValue + '&standard=1' ;
 		    window.location.href = url;
 		})
 

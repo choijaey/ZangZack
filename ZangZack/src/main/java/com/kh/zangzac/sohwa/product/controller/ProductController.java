@@ -37,6 +37,7 @@ import com.kh.zangzac.sohwa.product.model.vo.Product;
 import com.kh.zangzac.sohwa.product.model.vo.Qna;
 import com.kh.zangzac.sohwa.product.model.vo.Review;
 
+import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 
 @SessionAttributes("loginUser")
@@ -175,41 +176,30 @@ public class ProductController {
       
       
       
-      int listCount = 0;
-      HashMap<String, String> categoryMap = new HashMap<>();
-      HashMap<String, String> searchMap = new HashMap<>();
-      ArrayList<Product> pList = new ArrayList<>();
-      ArrayList<Attachment> aList = new ArrayList<>();
-      ArrayList<Attachment> thList = new ArrayList<>();
-      ArrayList<Option> oList = new ArrayList<>();
-      PageInfo pi = new PageInfo();
+      HashMap<String, String> map = new HashMap<>();
       
-      //categoryNo가 0일때는 keyword가져가기
-      //keyword가 ""일때는 categoryNo가져가기
-      if(!categoryNo.equals("0")) {
-         listCount = pService.getListCount(categoryNo);
-         int currentPage = page;
-         pi = Pagination.getPageInfo(currentPage, listCount, 12);
-         categoryMap.put("categoryNo", categoryNo);
-         categoryMap.put("standard", standard);
-         pList = pService.selectProductList(pi, categoryMap);
-         aList = pService.selectPhotoList(categoryNo);
-         thList = pService.selectPhotothList(categoryNo);
-      }else {
-         listCount = pService.getListCountKeyword(keyword);
-         int currentPage = page;
-         pi = Pagination.getPageInfo(currentPage, listCount, 12);
-         
-         searchMap.put("keyword", keyword);
-         searchMap.put("standard", standard);
-         
-         pList = pService.searchProduct(pi, searchMap);
-         aList = pService.searchPhoto(searchMap);
-         thList = pService.searchPhototh(searchMap);
-      }
-      System.out.println(categoryNo);
-      System.out.println("pi:" + pi);
+      
+      map.put("keyword", keyword);
+      map.put("categoryNo", categoryNo);
+      map.put("standard", standard);
+      
+      int listCount = pService.getListCount(map);
+      int currentPage = page;
+      PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 12);
+      ArrayList<Product> pList = pService.selectProductMap(pi, map);
+      ArrayList<Attachment> aList = pService.selectPhotoMap(map);
+      ArrayList<Attachment> thList = pService.selectPhotoTHMap(map);
       ArrayList<Review> rList = pService.selectproductAllReview();
+      
+      for(int i=0; i<pList.size(); i++) {
+    	  for(int j=0; j<thList.size(); j++) {
+    		  if(pList.get(i).getProductNo()==thList.get(j).getBoardNo() && thList.get(j).getPhotoLevel()==0) {
+    			  pList.get(i).setPhotoPath(thList.get(j).getPhotoPath());
+    		  }
+    	  }
+      }
+      
+      
       System.out.println(pi.getMaxPage());
       if(aList != null) {
          model.addAttribute("thList", thList);
@@ -218,6 +208,7 @@ public class ProductController {
          model.addAttribute("keyword", keyword);
          model.addAttribute("aList", aList);
          model.addAttribute("pList", pList);
+         model.addAttribute("standard", standard);
          model.addAttribute("pi", pi);
          model.addAttribute("loc", request.getRequestURI());
          return "views/sohwa/productList";
@@ -259,40 +250,30 @@ public class ProductController {
    @ResponseBody
    public HashMap<String, Object> infiniteScroll(@RequestParam(value="keyword", defaultValue="") String keyword, @RequestParam(value="standard", defaultValue="1") String standard, @RequestParam(value="categoryNo", defaultValue="0") String categoryNo, @RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
 	   
-	   int listCount = 0;
-	      HashMap<String, String> categoryMap = new HashMap<>();
-	      HashMap<String, String> searchMap = new HashMap<>();
-	      ArrayList<Product> pList = new ArrayList<>();
-	      ArrayList<Attachment> aList = new ArrayList<>();
-	      ArrayList<Attachment> thList = new ArrayList<>();
-	      ArrayList<Option> oList = new ArrayList<>();
-	      PageInfo pi = new PageInfo();
-	      int currentPage = 0;
-	      //categoryNo가 0일때는 keyword가져가기
-	      //keyword가 ""일때는 categoryNo가져가기
-	      if(!categoryNo.equals("0")) {
-	         listCount = pService.getListCount(categoryNo);
-	         currentPage = page;
-	         pi = Pagination.getPageInfo(currentPage, listCount, 12);
-	         categoryMap.put("categoryNo", categoryNo);
-	         categoryMap.put("standard", standard);
-	         pList = pService.selectProductList(pi, categoryMap);
-	         aList = pService.selectPhotoList(categoryNo);
-	         thList = pService.selectPhotothList(categoryNo);
-	      }else {
-	         listCount = pService.getListCountKeyword(keyword);
-	         currentPage = page;
-	         pi = Pagination.getPageInfo(currentPage, listCount, 12);
-	         
-	         searchMap.put("keyword", keyword);
-	         searchMap.put("standard", standard);
-	         
-	         pList = pService.searchProduct(pi, searchMap);
-	         aList = pService.searchPhoto(searchMap);
-	         thList = pService.searchPhototh(searchMap);
+	   HashMap<String, String> map1 = new HashMap<>();
+	      System.out.printf("standard = %s", standard);
+	      
+	      map1.put("keyword", keyword);
+	      map1.put("categoryNo", categoryNo);
+	      map1.put("standard", standard);
+	      
+	      int listCount = pService.getListCount(map1);
+	      int currentPage = page;
+	      PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 12);
+	      ArrayList<Product> pList = pService.selectProductMap(pi, map1);
+	      ArrayList<Attachment> aList = pService.selectPhotoMap(map1);
+	      ArrayList<Attachment> thList = pService.selectPhotoTHMap(map1);
+	      ArrayList<Option> oList = pService.selectAllOption();
+	      
+	      for(int i=0; i<pList.size(); i++) {
+	    	  for(int j=0; j<thList.size(); j++) {
+	    		  if(pList.get(i).getProductNo()==thList.get(j).getBoardNo() && thList.get(j).getPhotoLevel()==0 && thList.get(j).getBoardType()==5) {
+	    			  pList.get(i).setPhotoPath(thList.get(j).getPhotoPath());
+	    		  }
+	    	  }
 	      }
-	      System.out.println(categoryNo);
-	      System.out.println(pi.getMaxPage());
+	      
+	      System.out.println(pList);
 	      ArrayList<Review> rList = pService.selectproductAllReview();
 	      HashMap<String, Object> map = new HashMap<>();
 	      
@@ -302,6 +283,8 @@ public class ProductController {
 	         map.put("rList", rList);
 	         map.put("categoryNo", categoryNo);
 	         map.put("keyword", keyword);
+	         map.put("standard", standard);
+	         
 	         map.put("aList", aList);
 	         map.put("pList", pList);
 	         map.put("pi", pi);
