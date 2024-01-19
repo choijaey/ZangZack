@@ -240,8 +240,6 @@ public class CampBoardController {
 		int x = 0;
 		ArrayList<Photo> fileList = new ArrayList<>();
 		
-		
-		
 		//썸네일이 변경되었을때
 		if((deleteFile[0].split("#")[1]).equals("isdel")) {
 			for(int i=0; i < deleteFile.length; i++) {
@@ -292,13 +290,15 @@ public class CampBoardController {
 		
 		ArrayList<Photo> pList = pService.selectBoardPhoto(sWork.selectBoard(b.getCbNo(), 1));
 		
-		for(Photo p : pList) {
-			if(p.getPhotoLevel() == 0) {
-				x++;
-			}
-		}
-		if(x < 1) {
-			int test = pService.updatePhoto(pList.get(0).getPhotoNo());
+		if (!pList.isEmpty()) {
+		    for (Photo p : pList) {
+		        if (p.getPhotoLevel() == 0) {
+		            x++;
+		        }
+		    }
+		    if (x < 1) {
+		        int test = pService.updatePhoto(pList.get(0).getPhotoNo());
+		    }
 		}
 		
 		if(fileList.isEmpty()) {

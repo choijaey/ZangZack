@@ -24,4 +24,8 @@ public interface CampBoardService {
 	int deleteCampBoard(int cbNo);
 
 	int updateCampBoard(CampBoard b);
+
+	int listCount();
+
+	ArrayList<CampBoard> popularList(PageInfo cbPi);
 }

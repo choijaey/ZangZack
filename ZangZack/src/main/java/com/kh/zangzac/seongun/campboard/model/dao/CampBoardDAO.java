@@ -27,4 +27,8 @@ public interface CampBoardDAO {
 	int deleteCampBoard(int cbNo);
 
 	int updateCampBoard(CampBoard b);
+
+	int listCount();
+
+	ArrayList<CampBoard> popularList(RowBounds rowBounds);
 }

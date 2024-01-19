@@ -94,7 +94,20 @@
 	
 	<update id="updateCampBoard">
 		update camp_board
-		set cb_title = #{cbTitle}, category_no=#{categoryNo}, cb_content=#{cbContent}
+		set cb_title = #{cbTitle}, category_no=#{categoryNo}, cb_content=#{cbContent}, CB_MODIFY_DATE = sysdate
 		where cb_no = #{cbNo}
 	</update>
+	
+	<select id="listCount" resultType="_int">
+		SELECT count(*) 
+		FROM camp_board_view
+		WHERE cb_status = 'N'
+	</select>
+	
+	<select id="popularList" resultType="CampBoard">
+		SELECT *
+		FROM CAMP_BOARD_VIEW
+		WHERE cb_status = 'N'
+		ORDER BY heart_count DESC,CB_COUNT DESC,reply_count DESC
+	</select>
 </mapper>

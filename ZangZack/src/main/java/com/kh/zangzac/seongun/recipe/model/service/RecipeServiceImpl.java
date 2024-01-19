@@ -81,4 +81,14 @@ public class RecipeServiceImpl implements RecipeService {
 		return rDAO.updateRecipe(recipe);
 	}
 
+	@Override
+	public int updataeCookList(ArrayList<CookwareList> cookList) {
+		return rDAO.updataeCookList(cookList);
+	}
+
+	@Override
+	public void deleteCookList(int recipeNo) {
+		rDAO.deleteCookList(recipeNo);
+	}
+
 }

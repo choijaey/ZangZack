@@ -7,6 +7,11 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/seongun/commonBoard.css">
     <link rel="stylesheet" href="css/seongun/listBoard.css">
+    <style>
+    	img{
+    		vertical-align: middle;
+    	}
+    </style>
 </head>
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
@@ -75,7 +80,7 @@
                                 	</th:block>
                                 </td>
                                 <td>[[${b.cbCount}]]</td>
-                                <td>추천수</td>
+                                <td>[[${b.heartCount}]]</td>
                                 <td>[[${b.formatDate}]]</td>
                             </tr>
                         </tbody>
@@ -191,12 +196,18 @@
 	
 	    // 게시글로 이동하는 함수
 	    function navigateToBoard(event) {
-	        const target = event.target.closest('td');
-	        if (!target) return;
-	
-	        const boardId = target.closest('tr').querySelector('.board_num').innerText;
-	        location.href = `selectBoard.su?cbNo=${boardId}&page=${/*[[${pi.currentPage}]]*/ '1'}`;
-	    }
+		    let target = event.target;
+		
+		    if (target.tagName !== 'TD') {
+		        target = target.closest('td');
+		    }
+		
+		    if (!target) return;
+		
+		    const boardId = target.parentElement.querySelector('.board_num').innerText;
+		    location.href = "selectBoard.su?cbNo=" + boardId + "&page=" + /*[[${pi.currentPage}]]*/ '1';
+		}
+
 	
 	    // 글쓰기 버튼 클릭 이벤트
 	    function writeBtn() {
@@ -233,7 +244,5 @@
 	    }
 	    /*]]>*/
 	</script>
-
-
 </body>
 </html>

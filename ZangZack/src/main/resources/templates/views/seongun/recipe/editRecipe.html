@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>레시피 작성</title>
     <link href="css/seongun/writeboard.css" rel="stylesheet">
+    <style>
+    	img{
+    		vertical-align: middle;
+    	}
+    </style>
 </head>
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
@@ -26,7 +31,7 @@
 				    <label><input type="checkbox" name="cookCategoryNo" value="2" th:checked="${#arrays.contains(r.cookCategoryNo, 2)}"> 가위</label>
 				    <label><input type="checkbox" name="cookCategoryNo" value="3" th:checked="${#arrays.contains(r.cookCategoryNo, 3)}"> 칼</label>
 				    <label><input type="checkbox" name="cookCategoryNo" value="4" th:checked="${#arrays.contains(r.cookCategoryNo, 4)}"> 버너</label>
-				    <label><input type="checkbox" name="cookCategoryNo" value="5" th:checked="${#arrays.contains(r.cookCategoryNo, 5)}"> 다른 버너</label>
+				    <label><input type="checkbox" name="cookCategoryNo" value="5" th:checked="${#arrays.contains(r.cookCategoryNo, 5)}"> 에어프라이어</label>
 				    <label><input type="checkbox" name="cookCategoryNo" value="6" th:checked="${#arrays.contains(r.cookCategoryNo, 6)}"> 그릴</label>
 				</div>
             </div>
@@ -91,7 +96,7 @@
             </div>
         </label>
     </div>
-</th:block>
+	</th:block>
             <div class="write-row">
                 <button type="submit" class="submit-btn">등록</button>
             </div>

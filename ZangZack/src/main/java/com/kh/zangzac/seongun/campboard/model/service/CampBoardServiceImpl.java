@@ -56,7 +56,7 @@ public class CampBoardServiceImpl implements CampBoardService{
 		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
 		ArrayList<CampBoard> list = cDAO.searchBoardList(b, rowBounds);
 		for(CampBoard board : list) {
-			format(board);
+			listFormat(board);
 		}
 		return list;
 	}
@@ -83,4 +83,29 @@ public class CampBoardServiceImpl implements CampBoardService{
         	b.setFormatDate("(수정)"+modify);
         }
     }
+	
+	public void listFormat(CampBoard b) {
+		String DATE_TIME_FORMAT = "YYYY MM-dd";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+        String create = b.getCbCreateDate().format(formatter);
+        String modify = b.getCbModifyDate().format(formatter);
+        
+        if(create.equals(modify)) {
+        	b.setFormatDate(create);
+        }else {
+        	b.setFormatDate(create);
+        }
+    }
+
+	@Override
+	public int listCount() {
+		return cDAO.listCount();
+	}
+
+	@Override
+	public ArrayList<CampBoard> popularList(PageInfo pi) {
+		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
+		ArrayList<CampBoard> list = cDAO.popularList(rowBounds);
+		return list;
+	}
 }

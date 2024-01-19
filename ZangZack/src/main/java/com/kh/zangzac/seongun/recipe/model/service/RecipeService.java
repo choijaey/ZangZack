@@ -22,5 +22,9 @@ public interface RecipeService {
 
 	int updateRecipe(Recipe recipe);
 
+	int updataeCookList(ArrayList<CookwareList> cookList);
+
+	void deleteCookList(int recipeNo);
+
 
 }

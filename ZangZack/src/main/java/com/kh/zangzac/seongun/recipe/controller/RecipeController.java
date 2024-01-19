@@ -154,8 +154,20 @@ public class RecipeController {
 	public String updateRecipe(@ModelAttribute Recipe recipe, @RequestParam(value = "cookCategoryNo", required = false) int[] categoryNo,@RequestParam("deletePhoto")String[] deleteFile, @RequestParam("file") ArrayList<MultipartFile> files,HttpServletRequest request, Model model) {
 		int resultB = 0;
 		int resultA = 0;
+		int resultC = 0;
 		int x = 0;
+		int max = categoryNo.length;
 		ArrayList<Photo> fileList = new ArrayList<>();
+		ArrayList<CookwareList> cookList = new ArrayList<>();
+		
+		if(max > 0) {
+			for(int i = 0; i < max; i++) {
+				CookwareList c = sWork.setCook(recipe.getRecipeNo(), categoryNo[i]);
+				cookList.add(c);
+			}
+			rService.deleteCookList(recipe.getRecipeNo());
+			resultC = rService.updataeCookList(cookList);
+		}
 		
 		//썸네일이 변경되었을때
 		if((deleteFile[0].split("#")[1]).equals("isdel")) {
@@ -173,7 +185,6 @@ public class RecipeController {
 				
 				if(returnArr != null) {
 					Photo a = sWork.haventMain(returnArr, i, 2);
-					System.out.println("1번 : " +a);
 					fileList.add(a);
 				}
 			}
@@ -191,7 +202,6 @@ public class RecipeController {
 				
 				if(returnArr != null) {
 					Photo a = sWork.haveMain(returnArr, 2);
-					System.out.println("2번 : " + a);
 					fileList.add(a);
 				}
 			}
@@ -207,33 +217,34 @@ public class RecipeController {
 			resultA = pService.insertPhotoCampBoard(fileList);
 		}
 		
-		System.out.println(fileList);
 		ArrayList<Photo> pList = pService.selectBoardPhoto(sWork.selectBoard(recipe.getRecipeNo(), 2));
-		for(Photo p : pList) {
-			if(p.getPhotoLevel() == 0) {
-				x++;
-			}
-		}
-		if(x < 1) {
-			int test = pService.updatePhoto(pList.get(0).getPhotoNo());
+		if (!pList.isEmpty()) {
+		    for (Photo p : pList) {
+		        if (p.getPhotoLevel() == 0) {
+		            x++;
+		        }
+		    }
+		    if (x < 1) {
+		        int test = pService.updatePhoto(pList.get(0).getPhotoNo());
+		    }
 		}
 		
 		if(fileList.isEmpty()) {
 			if(resultB > 0) {
-				return "redirect:/campBoard.su";
+				return "redirect:/recipe.su";
 			}else {
 				model.addAttribute("msg", "게시글 수정에 실패했습니다.재작성 부탁드립니다.");
-				return "redirect:/campBoard.su";
+				return "redirect:/recipe.su";
 			}
 		}else {
 			if(resultA > 0 && resultB > 0) {
 				return "redirect:/campBoard.su";
 			}else if(resultA > 0 && resultB <= 0){
 				model.addAttribute("msg", "이미지 수정을 실패했습니다. 이미지 수정 없이 게시판이 작성되었습니다!");
-				return "redirect:/campBoard.su";
+				return "redirect:/recipe.su";
 			}else {
 				model.addAttribute("msg", "게시글 수정에 실패했습니다.재작성 부탁드립니다.");
-				return "redirect:/campBoard.su";
+				return "redirect:/recipe.su";
 			}
 		}
 	}

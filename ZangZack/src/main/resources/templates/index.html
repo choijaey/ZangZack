@@ -6,6 +6,7 @@
      <title>Insert title here</title>
      <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+     <link rel="stylesheet" href="css/mainPage.css"/>
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -201,18 +202,30 @@
         </div>
 
         <div class="review-section">
-            <div class="section-header">배송토피아 선택</div>
+            <div class="section-header"><b>인기 게시판</b></div>
             <!-- 리뷰 아이템들 -->
-            <div class="review-item">
-                <h3>리뷰 제목 1</h3>
-                <p>리뷰 설명 1</p>
-            </div>
-            <div class="review-item">
-                <h3>리뷰 제목 2</h3>
-                <p>리뷰 설명 2</p>
-            </div>
+            <div id="popularBoard">
+	            <table th:if="${!cbList.isEmpty}">
+	            	<thead>
+						<tr>
+							<th>추천수</th>
+							<th class="board_title" style="text-align: center">제목</th>
+							<th>조회</th>
+							<th>날짜</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="b : ${cbList}">
+							<input type="hidden" name="cbNo" th:value="${b.cbNo}"/>
+							<td>[[${b.heartCount}]]</td>
+							<td class="board_title" style="text-align: center">[[${b.cbTitle}]]</td>
+							<td>[[${b.cbCount}]]</td>
+							<td>03-21</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
         </div>
-        
     </div>
     
     <img style="width:100%; height:300px;" src="image/main/center/MBTI.png">
@@ -338,8 +351,38 @@
                 slides[slideIndex - 1].style.display = "block";
                 setTimeout(showSlides, 2000); // 2초마다 변경
             }
+            
+            popularListClick();
         }
         
+        
+        //인기 게시판
+        function popularListClick() {
+	        const tbody = document.querySelector('tbody');
+	        if (tbody) {
+	            tbody.addEventListener('click', selectCampBoard);
+	            console.log(123);
+	        }
+	    }
+	
+	    // 게시글로 이동하는 함수
+	    function selectCampBoard(event) {
+	        
+		    let target = event.target;
+		
+		    if (target.tagName !== 'TD') {
+		        target = target.closest('td');
+		    }
+		
+		    if (!target) return;
+		
+		    const hiddenInput = target.closest('tr').querySelector('input[type="hidden"][name="cbNo"]');
+		    if (hiddenInput) {
+		        const boardId = hiddenInput.value;
+		        location.href = "selectBoard.su?cbNo=" + boardId + "&page=1";
+		    }
+		}
+
     </script>
    
    
