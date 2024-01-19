@@ -108,7 +108,6 @@ public class CampBoardController {
 	    
 	    ArrayList<CampBoard> list = cService.searchBoardList(pi, search);
 
-	    
 	    if(search != null && search.getSearchText() != null) {
 	    	msg = list.isEmpty() ? "검색된 게시판이 없습니다!" : null;
 	    	category = search.getSearchCategoryNo();

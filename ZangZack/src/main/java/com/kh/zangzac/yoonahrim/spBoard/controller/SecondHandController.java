@@ -424,6 +424,7 @@ public class SecondHandController {
 		}
 	}
 	
+	
 	@GetMapping("admin.ah")
 	public String adminSecondPage(@ModelAttribute secondHandProduct sp, Model model ,@RequestParam(value="page", defaultValue="1")int page, HttpServletRequest request) {
 		
@@ -444,6 +445,35 @@ public class SecondHandController {
 			throw new secondHandException("없다");
 		}
 	}
+	
+	
+	@PostMapping("admin.ah")
+	public String handleSearchPost(@RequestParam(value = "page", defaultValue = "1") int page,
+			@RequestParam(value = "searchType", defaultValue = "") String searchType,
+			@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
+			HttpServletRequest request) {
+
+		// 검색 결과를 가져오는 로직
+	    HashMap<String, String> map = new HashMap<>();
+	    map.put("keyword", keyword);
+	    map.put("searchType", searchType);
+	    int currentPage = page;
+	    int listCount = spService.searchAdminList(map);
+	    PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 8);
+	    ArrayList<secondHandProduct> slist = spService.searchtAdminList(pi, map);
+
+	    if (slist != null) {
+	        model.addAttribute("pi", pi);
+	        model.addAttribute("slist", slist);
+	        model.addAttribute("loc", request.getRequestURI());
+	        model.addAttribute("keyword", keyword);
+	        model.addAttribute("searchType", searchType);
+	        return "views/yoonahrim/adminSecondHand";
+	    } else {
+	        throw new MemberException("게시글 목록 조회에 실패하였습니다.");
+	    }
+}
+	
 	
 	@PostMapping("editAdmin.ah")
 	public String editAdmin(@ModelAttribute secondHandProduct sp) {
@@ -478,7 +508,7 @@ public class SecondHandController {
 	      
 	      if(spList != null) {
 	  
-	    	  model.addAttribute("aList", aList);
+	    	 model.addAttribute("aList", aList);
 	         model.addAttribute("result", result);
 	         model.addAttribute("spList", spList);
 	         model.addAttribute("region", region);
@@ -492,7 +522,7 @@ public class SecondHandController {
 	      
 	   }
 	
-	//회원 검색
+	/*
 		@PostMapping("searchAdmin.ah")
 		public String searchId(@RequestParam(value = "page", defaultValue = "1") int page,
 								@RequestParam(value = "searchType", defaultValue = "") String searchType,
@@ -518,7 +548,7 @@ public class SecondHandController {
 				throw new MemberException("게시글 목록 조회에 실패하였습니다.");
 			}
 		}
-	
+	*/
 }
 	
 	
