@@ -187,17 +187,16 @@
 
     <div class="section">
         <div class="news-section">
-            <div class="section-header">배송 NEWS</div>
+            <div class="section-header">이달의 행사</div>
             <!-- 뉴스 아이템들 -->
-            <div class="news-item">
-                <img src="news1.jpg" alt="뉴스 이미지">
-                <h3>뉴스 제목 1</h3>
-                <p>뉴스 설명 1</p>
-            </div>
-            <div class="news-item">
-                <img src="news2.jpg" alt="뉴스 이미지">
-                <h3>뉴스 제목 2</h3>
-                <p>뉴스 설명 2</p>
+             <div class="news-item" th:each="eb:${ebList}">
+                <img th:src="${eb.photo.photoPath}" alt="뉴스 이미지" style="width: 100px;height: 140px;display: inline-block;">
+                <div style="display: inline-block; padding-top:10px;" >
+	                <h3 style="display: inline-block;">[[${eb.ebName}]]</h3><br>
+	                <p style="display: inline-block; margin-bottom: 0px;">[[${eb.ebLocation}]]</p><br>
+	                <p style="display: inline-block; font-size: 10px; margin-bottom: 0px;">[[${eb.ebDate}]]</p>
+                </div>
+
             </div>
         </div>
 
@@ -261,7 +260,7 @@
     
     <div class="section">
         <div class="news-section">
-            <div class="section-header">배송 NEWS</div>
+            <div class="section-header">이달의 행사</div>
             <!-- 뉴스 아이템들 -->
             <div class="news-item">
                 <img src="news1.jpg" alt="뉴스 이미지">
@@ -269,13 +268,14 @@
                 <p>뉴스 설명 1</p>
             </div>
             <div class="news-item">
-                <img src="news2.jpg" alt="뉴스 이미지">
-                <h3>뉴스 제목 2</h3>
-                <p>뉴스 설명 2</p>
+                <img src="news1.jpg" alt="뉴스 이미지">
+                <h3>뉴스 제목 1</h3>
+                <p>뉴스 설명 1</p>
             </div>
-        </div>
-
-        <div class="review-section">
+                
+            </div>
+            
+            <div class="review-section">
             <div class="section-header">배송토피아 선택</div>
             <!-- 리뷰 아이템들 -->
             <div class="review-item">
@@ -287,16 +287,14 @@
                 <p>리뷰 설명 2</p>
             </div>
         </div>
-        
+      </div>
+
+      
     </div>
 </div>
 <footer class="site-footer">
     <p>저작권 © 2024 ZangZac. 모든 권리 보유.</p>
 </footer>
-
-
-
-
 
 
 
@@ -316,8 +314,6 @@
                 console.log('이동할 페이지:', this.textContent);
             });
         });
-        
-        
         
         
         
