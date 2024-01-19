@@ -120,7 +120,7 @@
 	              Sign up
 	            </button>
 	            <p style="text-align: center;">
-	              <a href="home.me" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.1em;">
+	              <a href="/" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.1em;">
 					HOME으로 돌아가기
 				  </a>
 	            </p>
@@ -154,11 +154,11 @@
 	              Sign in
 	            </button><br><br>
 	           <a class="btnset btnset-round contents-start-kakao" 
-				    href="https://kauth.kakao.com/oauth/authorize?client_id=18ae7b1bab696aadfa39200fae9ad11b&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2FkakaoLogin&response_type=code&prompt=login"
+				    href="https://kauth.kakao.com/oauth/authorize?client_id=18ae7b1bab696aadfa39200fae9ad11b&redirect_uri=http://192.168.20.207:8080/kakaoLogin&response_type=code&prompt=login"
 				   id="kakaoBtn">카카오톡 연동하기
 				</a>
 	            <p style="text-align: center;">
-	              <a href="home.me" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.2em;" >
+	              <a href="/" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.2em;" >
 	                HOME 
 	              </a>
 	              <a href="signIn.me" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.2em;">
@@ -216,9 +216,10 @@
 	<!-- 카카오톡 로그인 -->
 
 	<script>
+	
 	  function loginWithKakao() {
 	    Kakao.Auth.authorize({
-	      redirectUri: 'http://localhost:8080/kakaoLogin',
+	      redirectUri: 'http://192.168.20.207:8080/kakaoLogin',
 	      state: 'userme',
 	    });
 	  }

@@ -43,8 +43,6 @@ public class SocketHandler extends TextWebSocketHandler {
    ChatService cService;
    
    public SocketHandler() {
-	   
-	  
 
    }
    
@@ -71,13 +69,9 @@ public class SocketHandler extends TextWebSocketHandler {
          //카운트 쌓아주기
          if(obj.get("chatType").equals("1")) { // 단체 채팅 
         	   int chatNum = Integer.parseInt((String)obj.get("roomName"));
-        	         	   
         	   //전체채팅리스트 - 현재채팅리스  
         	   obj.put("unReadChatter",chatterList.get(chatNum).size()-(temp.size()-1));
-        	   
-            }else{
-        	   
-           }
+         }
          
          //해당 방의 세션들만 찾아서 메시지를 발송해준다.
          for(String k : temp.keySet()) { 
@@ -107,11 +101,8 @@ public class SocketHandler extends TextWebSocketHandler {
       	   //전체채팅리스트 - 현재채팅리스  
       	   obj.put("unReadChatter",unReadChatter(chatterList.get(chatNum), nowChatter));
       	   
-          }else{
-      	   
-         }
+          }
          cFileManager.saveChat(obj);
-         
       }
    }
    
@@ -121,9 +112,8 @@ public class SocketHandler extends TextWebSocketHandler {
 	 //소켓 연결
 	   if(first) {
 		 //채팅방 개수 가져오기
-		   
 		   //1번방 저장 // 2번방 3번방 저장
-		   for(int i=0;i<4;i++) { // 기본적으로 3개라 치고 추후에 변경 예정
+		   for(int i=0;i<4;i++) { // 
 			   //방 번호에 따라 가져오기 
 			   ArrayList<Chatter> temp = cService.selectChatterList(i);
 			   chatterList.add(temp);

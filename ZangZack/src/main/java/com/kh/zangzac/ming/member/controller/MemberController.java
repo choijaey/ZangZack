@@ -73,11 +73,6 @@ public class MemberController {
 		return "views/ming/member/sign";
 	}
 	
-	//홈으로 가기
-	@GetMapping("home.me")
-	public String home() {
-		return "index";
-	}
 	
 	//심리테스트 메인화면
 	@GetMapping("psychologicalTestMain.me")
@@ -161,7 +156,7 @@ public class MemberController {
 				{
 					return "redirect:" + beforeURL;
 				}else {
-					return "redirect:home.me";
+					return "redirect:/";
 				}
 			}else {
 				model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
@@ -635,11 +630,11 @@ public class MemberController {
 	    if (isEmailDuplicate) {
 	        // 중복된 이메일이 있는 경우
 	    	session.setAttribute("loginUser", loginUser);
-	    	
+	    	session.setAttribute("msg", "중복되는 이메일이 있습니다.");
 	        if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me"))) {
 	            return "redirect:" + beforeURL;
 	        } else {
-	            return "redirect:home.me";
+	            return "redirect:/";
 	        }
 	        // 여기서 로그인 처리 등을 수행
 	        // 로그인만 가능하게끔 수정
@@ -653,7 +648,7 @@ public class MemberController {
 	            if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me"))) {
 	                return "redirect:" + beforeURL;
 	            } else {
-	                return "redirect:home.me";
+	                return "redirect:/";
 	            }
 	        } else {
 	        	System.out.println("로그인 실패");
