@@ -241,7 +241,6 @@
          }
          
          //댓글 insert
-         
          document.getElementById('button-addon2').addEventListener('click', () => {
              
              const content = document.getElementById("replyContent").value;
@@ -320,46 +319,6 @@
               }
           }
 		
-        //댓글 delete
-        
-        	/*웹 페이지가 로드될 때(DOMContentLoaded 이벤트) document.body에 클릭 이벤트 리스너를 추가합니다. 
-        		이 리스너는 사용자가 페이지 어딘가를 클릭할 때 실행됩니다. 
-        		클릭된 요소가 'delete_reply' 클래스를 포함하는 경우, handleDeleteReply 함수가 호출됩니다.
-        		
-        	document.addEventListener('DOMContentLoaded', function () {
-		    document.body.addEventListener('click', function (event) {
-		        if (event.target.classList.contains('delete_reply')) {
-		            handleDeleteReply(event);
-		        }
-		    });
-		    
-		    function handleDeleteReply(event) {
-		        const mediaElement = event.target.closest('.media');
-		        const replyNo = mediaElement.querySelector('#replyNo').value;
-				console.log(replyNo)
-		        if (replyNo !== 0) {
-		            const confirmDelete = confirm("정말 삭제하시겠습니까?");
-		            if (confirmDelete) {
-		                $.ajax({
-		                    url: 'deleteReply.rep',
-		                    method: 'POST',
-		                    data: { replyNo: replyNo },
-		                    success: (data) => {
-		                        console.log(data);
-		                        location.reload();
-		                    },
-		                    error: data => console.log(data)
-		                });
-		            } else {
-		                alert("삭제가 취소되었습니다.");
-		            }
-		        } else {
-		            alert("유효하지 않은 댓글입니다.");
-		        }
-		    }
-		});
-		*/		  
-		  
 		function deleteComment(replyNo){
 			if ( !confirm('선택하신 댓글을 삭제할까요?') ) {
 	            return false;

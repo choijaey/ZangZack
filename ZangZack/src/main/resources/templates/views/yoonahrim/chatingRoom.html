@@ -39,7 +39,7 @@
 	      	<div class="chating-content">
 	      		<div class="chating-content-image">
 	      				<img alt="profile" src="image/yoonahrim/user.png">
-	      				<p id="chatId">i_want_go_home</p>
+	      				<p id="chatId">[[${session.loginUser.memberId}]]</p>
 	      		</div>
 	      	</div>
 	      	<hr style="margin: 0px;">
@@ -88,7 +88,6 @@
          ws = new WebSocket("ws://" + location.host + "/chating/"+id+"/"+chatId+"/2");
          wsEvt();
       }
-      
       
       function wsEvt() {
          ws.onopen = function(data){
@@ -148,6 +147,7 @@
          }
          ws.send(JSON.stringify(option))                                                                                                                                  
          $('#chatting').val("");
+         
       }
       
       window.onload = function() {
@@ -160,8 +160,8 @@
 
             // innerHTML을 사용하여 문자열로 직접 HTML을 추가
             wrap.innerHTML += `
-            	<div class="send-chat">
-	      		<p>${message}<p>
+            	<div class="recieve-chat">
+	      			<p>${message}<p>
 	      		</div>
             `;
             
@@ -174,14 +174,16 @@
 
             // innerHTML을 사용하여 문자열로 직접 HTML을 추가
             wrap.innerHTML += `
-            	<div class="recieve-chat">
-	      		<p>${message}<p>
+            	<div class="send-chat">
+	      			<p>${message}<p>
 	      		</div>
             `;
             
             wrap.scrollTop = wrap.scrollHeight;
         }
         
+        
+       
         
         function countDown(){
            const countElement = document.getElementsByClassName('count')

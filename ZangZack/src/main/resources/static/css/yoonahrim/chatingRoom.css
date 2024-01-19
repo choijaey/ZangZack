@@ -118,7 +118,7 @@
 	height: auto;
 	background-color: #FFC8C3;
 	border-radius: 5px;
-	margin-left: auto; /* 왼쪽 마진을 자동으로 설정하여 오른쪽으로 이동 */
+	margin-left: auto;
 	text-align: right;
 }
 

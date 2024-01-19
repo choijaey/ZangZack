@@ -109,6 +109,7 @@
          }
        
 		const fileArea = document.querySelector('#fileArea');
+		/*
 		document.getElementById('addFile').addEventListener('click', () =>{
 			const newDiv = document.createElement('div');
 			newDiv.classList.add('mb-3');
@@ -116,7 +117,27 @@
 			
 			fileArea.append(newDiv);
 		})
-      
+      	*/
+		// 추가 된 부분
+		document.getElementById('addFile').addEventListener('click', () => {
+		    const newDiv = document.createElement('div');
+		    newDiv.classList.add('mb-3');
+		    newDiv.innerHTML = '<input type="file" class="form-control form-control-lg" name="file" style="width:500px;">'
+		
+		    // 삭제 OFF인 파일의 개수 계산
+		    const deleteOffCount = Array.from(document.querySelectorAll('.deleteAttm')).reduce((count, btn) => {
+		        return count + (btn.innerText === '삭제 OFF' ? 1 : 0);
+		    }, 0);
+		
+		    // 삭제 OFF인 파일과 추가된 파일의 합이 최대 허용 개수보다 작으면 새 파일 추가
+		    if (deleteOffCount + fileArea.children.length < 4) {
+		        fileArea.append(newDiv);
+		    } else {
+		        alert("사진은 총 " + 4 + "장까지 첨부하실 수 있습니다.");
+		    }
+		});
+		
+		
        	document.getElementById('submitAttm').addEventListener('click',() =>{
     	   const files = document.getElementsByClassName('file');
     	   const delBtns = document.getElementsByClassName('deleteAttm');
