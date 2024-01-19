@@ -12,6 +12,16 @@
     font-style: normal;
 }
 
+.category div{
+	width:80px;
+	border-radius:10px;
+	text-align:center;
+	height:25px;
+}
+.category div:hover{
+	background-color: orange;
+	color:white;
+}
 body, html {
   margin: 0;
   padding: 0;

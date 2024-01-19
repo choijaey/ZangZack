@@ -187,6 +187,8 @@ public interface ProductDAO {
 
 	ArrayList<Attachment> selectPhotoTHMap(HashMap<String, String> map);
 
+	ArrayList<Product> selectRecommendProduct();
+
 
 
 

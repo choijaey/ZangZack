@@ -945,5 +945,15 @@
 		</if>
 	</select>	
 	
-	
+	<select id="selectRecommendProduct" resultType="Product">
+		<![CDATA[
+			SELECT *
+			FROM (
+			    SELECT *
+			    FROM product
+			    ORDER BY product_score DESC
+			)
+			WHERE ROWNUM <= 8
+		]]>
+	</select>
 </mapper>

@@ -181,6 +181,8 @@ public interface ProductService {
 
 	ArrayList<Attachment> selectPhotoTHMap(HashMap<String, String> map);
 
+	ArrayList<Product> selectRecommendProduct();
+
 
 
 

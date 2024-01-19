@@ -463,6 +463,11 @@ public class ProductServiceImpl implements ProductService{
 		return pDAO.selectPhotoTHMap(map);
 	}
 
+	@Override
+	public ArrayList<Product> selectRecommendProduct() {
+		return pDAO.selectRecommendProduct();
+	}
+
 
 
 

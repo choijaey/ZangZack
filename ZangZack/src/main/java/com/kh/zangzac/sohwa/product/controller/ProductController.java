@@ -154,6 +154,10 @@ public class ProductController {
       PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
       ArrayList<Product> pList = pService.selectAdminProduct(map, pi);
       
+      //추천상품
+      ArrayList<Product> recommend = pService.selectRecommendProduct();
+      
+      model.addAttribute("recommend", recommend);
       model.addAttribute("loc", request.getRequestURI());
       model.addAttribute("pi", pi);
       model.addAttribute("keyword", keyword);
