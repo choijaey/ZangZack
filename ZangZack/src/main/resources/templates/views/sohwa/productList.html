@@ -114,7 +114,7 @@
 	        var scrollPosition = wrapper.scrollTop;
 		if(scrollflag){
 			// 스크롤이 80% 이상인 경우
-	        if (scrollPosition >= 0.4 * (wrapper.scrollHeight - wrapper.clientHeight)) {
+	        if (scrollPosition >= 0.8 * (wrapper.scrollHeight - wrapper.clientHeight)) {
 	            loadMoreItems();
 	            scrollflag = false;
 	            console.log(currentPage, maxPages);
@@ -467,27 +467,6 @@
 		
 		
 		
-		//MD's pick
-	    const productWrapper = document.querySelector('.product-wrapper');
-		const prevBtn = document.getElementById('prevBtn');
-		const nextBtn = document.getElementById('nextBtn');
-		const productCount = 4; // 보여질 상품 개수
-		
-		let currentPosition = 0;
-		
-		nextBtn.addEventListener('click', () => {
-		  if (currentPosition < productWrapper.children.length / productCount - 1) {
-		    currentPosition++;
-		    productWrapper.style.transform = `translateX(-${currentPosition * 100}%)`;
-		  }
-		});
-		
-		prevBtn.addEventListener('click', () => {
-		  if (currentPosition > 0) {
-		    currentPosition--;
-		    productWrapper.style.transform = `translateX(-${currentPosition * 100}%)`;
-		  }
-		});
 		
 		
 		
@@ -500,6 +479,7 @@
 		document.getElementById('searchImg').addEventListener('click', ()=>{
 			var categoryNo = document.getElementById('categoryNo').value;
 			var searchInputValue = document.getElementById('searchInput').value;
+			console.log(123);
 		    var url = 'productListView.so?categoryNo=' + categoryNo + '&keyword=' + searchInputValue + '&standard=1' ;
 		    window.location.href = url;
 		})

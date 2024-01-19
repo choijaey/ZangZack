@@ -468,6 +468,11 @@ public class ProductServiceImpl implements ProductService{
 		return pDAO.selectRecommendProduct();
 	}
 
+	@Override
+	public int purchaseYN(String id) {
+		return pDAO.purchaseYN(id);
+	}
+
 
 
 

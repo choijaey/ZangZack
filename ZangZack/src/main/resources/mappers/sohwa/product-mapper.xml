@@ -582,6 +582,7 @@
 				and category_no = 16
 			</if>
 		</if>
+		order by product_no desc
 	</select>
 
 	
@@ -836,6 +837,7 @@
 	<select id="selectMyOrder" resultType="Payment">
 		select *
 		from payment
+		where order_status = 'N' and member_id = #{id}
 		order by order_key_no
 	</select>
 	
@@ -881,7 +883,7 @@
 	
 	<update id="refundOrder">
 		update payment
-		set order_status = 'Y' , delivery_status = '환불요청'
+		set delivery_status = '환불요청'
 		where order_key_no = #{orderKeyNo}
 	</update>
 	
@@ -902,7 +904,7 @@
 	<select id="getListCountOrderN" resultType="_int">
 		select count(*)
 		from payment
-		where order_status='Y'
+		where delivery_status = '환불요청'
 		<if test="searchType==1">
 			and order_no like '%${keyword}%'
 		</if>
@@ -933,7 +935,7 @@
 	<select id="selectNPayment" resultType="Payment">
 		select *
 		from payment
-		where order_status = 'Y'
+		where delivery_status = '환불요청'
 		<if test="searchType==1">
 			and order_no like '%${keyword}%'
 		</if>
@@ -955,5 +957,11 @@
 			)
 			WHERE ROWNUM <= 8
 		]]>
+	</select>
+	
+	<select id="purchaseYN" resultType="_int">
+		select count(*)
+		from payment
+		where member_id = #{id}
 	</select>
 </mapper>
