@@ -126,6 +126,7 @@
 	            <th class="td8">판매여부</th>
 	            <th class="td9">작성날짜</th>
 	         </tr>
+	         
 	         <tr th:each="sp:${spList}">
 	         	<td class="td1">[[${sp.spNo}]]</td>
 	            <td class="td2">
@@ -192,7 +193,7 @@
 					const trTds = this.parentElement.querySelectorAll('td');
 						const boardId = trTds[0].innerText;
 						/*<![CDATA[*/
-						location.href='detail.ah?spNo=' + spNo + "&page=" +/*[[${pi.currentPage}]]*/1;
+						location.href='detail.ah?spNo=' + boardId + "&page=" +/*[[${pi.currentPage}]]*/1;
 						/*]]>*/
 				});
 			}

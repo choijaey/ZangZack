@@ -721,11 +721,6 @@ public class MemberController {
 									@RequestParam(value = "searchType", defaultValue = "") String searchType,
 									@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
 									HttpServletRequest request, @ModelAttribute CampBoard cb){
-		   
-		   System.out.println(page);
-		   System.out.println(searchType);
-		   System.out.println(keyword);
-		   
 		   Member loginUser = (Member) model.getAttribute("loginUser");
 		   String memberId = loginUser.getMemberId();
 		   
@@ -761,10 +756,6 @@ public class MemberController {
 									@RequestParam(value = "searchType", defaultValue = "") String searchType,
 									@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
 									HttpServletRequest request,@ModelAttribute secondHandProduct sp){
-		   
-		   System.out.println(page);
-		   System.out.println(searchType);
-		   System.out.println(keyword);
 		   
 		   Member loginUser = (Member) model.getAttribute("loginUser");
 		   String memberId = loginUser.getMemberId();
