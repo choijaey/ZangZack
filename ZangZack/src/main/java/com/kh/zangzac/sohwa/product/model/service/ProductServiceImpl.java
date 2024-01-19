@@ -28,6 +28,7 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public int insertProduct(Product p) {
 		return pDAO.insertProduct(p);
+		
 	}
 
 	@Override
@@ -40,10 +41,6 @@ public class ProductServiceImpl implements ProductService{
 		return pDAO.insertOption(list);
 	}
 
-	@Override
-	public int getListCount(String categoryNo) {
-		return pDAO.getListCount(categoryNo);
-	}
 
 	@Override
 	public ArrayList<Product> selectProductList(PageInfo pi, HashMap<String, String> map) {
@@ -73,10 +70,6 @@ public class ProductServiceImpl implements ProductService{
 		return pDAO.optionDetail(productNo);
 	}
 
-	@Override
-	public int getListCountKeyword(String keyword) {
-		return pDAO.getListCountKeyword(keyword);
-	}
 
 	@Override
 	public ArrayList<Product> searchProduct(PageInfo pi, HashMap<String, String> map) {
@@ -277,10 +270,6 @@ public class ProductServiceImpl implements ProductService{
 		pDAO.deleteReviewPhoto(reviewNo);
 	}
 
-	@Override
-	public ArrayList<Attachment> selectPhotothList(String categoryNo) {
-		return pDAO.selectPhotothList(categoryNo);
-	}
 
 	@Override
 	public ArrayList<Attachment> searchPhototh(HashMap<String, String> searchMap) {
@@ -449,6 +438,34 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public int getListCountOrderN(HashMap<String, String> map) {
 		return pDAO.getListCountOrderN(map);
+	}
+
+	@Override
+	public int getListCount(HashMap<String, String> map) {
+		return pDAO.getListCount(map);
+	}
+
+	@Override
+	public ArrayList<Product> selectProductMap(PageInfo pi, HashMap<String, String> map) {
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+		int limit = pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return pDAO.selectProductMap(map, rowBounds);
+	}
+
+	@Override
+	public ArrayList<Attachment> selectPhotoMap(HashMap<String, String> map) {
+		return pDAO.selectPhotoMap(map);
+	}
+
+	@Override
+	public ArrayList<Attachment> selectPhotoTHMap(HashMap<String, String> map) {
+		return pDAO.selectPhotoTHMap(map);
+	}
+
+	@Override
+	public ArrayList<Product> selectRecommendProduct() {
+		return pDAO.selectRecommendProduct();
 	}
 
 
