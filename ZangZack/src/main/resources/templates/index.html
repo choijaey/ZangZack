@@ -124,6 +124,20 @@
         .paging a:hover {
             background-color: #eee;
         }
+        
+        .foreground{
+		     background: url(https://aldo814.github.io/jobcloud/html/images/user/star_bg02.png) no-repeat;
+		     width: 121px;
+		     height: 20px;
+		     position: relative;
+		   }
+		  .foreground span{
+		     position: absolute;
+		     background: url(https://aldo814.github.io/jobcloud/html/images/user/star02.png);
+		     filter: invert(90%) sepia(10%) saturate(7000%) hue-rotate(570deg) brightness(115%) contrast(120%);
+		     height: 20px;
+		
+		  }
     </style>
 </head>
 <body class="index-body">
@@ -260,18 +274,15 @@
     
     <div class="section">
         <div class="news-section">
-            <div class="section-header">이달의 행사</div>
+            <div class="section-header">캠핑 후기</div>
             <!-- 뉴스 아이템들 -->
-            <div class="news-item">
-                <img src="news1.jpg" alt="뉴스 이미지">
-                <h3>뉴스 제목 1</h3>
-                <p>뉴스 설명 1</p>
-            </div>
-            <div class="news-item">
-                <img src="news1.jpg" alt="뉴스 이미지">
-                <h3>뉴스 제목 1</h3>
-                <p>뉴스 설명 1</p>
-            </div>
+	           <div class="news-item" th:each="cr:${crList}">
+	               <h3>[[${cr.crTitle}]]</h3>
+	               <p style="display: inline-block;">[[${cr.crStar}]]</p>
+	               <div class="foreground" style="float: left;">
+					     <span class="background" th:style="'width: ' + (${cr.crStar} * 100 / 5) + '%;'"></span>
+					</div>
+	           </div>
                 
             </div>
             

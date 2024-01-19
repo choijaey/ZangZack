@@ -12,6 +12,8 @@ import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.model.vo.SelectCondition;
 import com.kh.zangzac.common.photo.model.service.PhotoService;
 import com.kh.zangzac.common.photo.model.vo.Photo;
+import com.kh.zangzac.jaeyoung.campingReview.model.service.CampingReviewService;
+import com.kh.zangzac.jaeyoung.campingReview.model.vo.CampingReview;
 import com.kh.zangzac.jaeyoung.eventBoard.model.service.EventBoardService;
 import com.kh.zangzac.jaeyoung.eventBoard.model.vo.EventBoard;
 import com.kh.zangzac.yoonseo.camp.model.service.CampService;
@@ -28,6 +30,9 @@ public class BoardCondition {
 	
 	@Autowired
 	private PhotoService pService;
+	
+	@Autowired
+	private CampingReviewService crService;
 	
 	public SelectCondition selectBoard(int x, int y) {
 		SelectCondition b = new SelectCondition();
@@ -67,10 +72,31 @@ public class BoardCondition {
 		      eb.setPhoto(pList.get(0)); //썸네일 넣기
 			
 		}
+		
+		
+	    int listCount2 = crService.getListCount("");
+		
+		PageInfo pi2 = Pagination.getPageInfo(1, listCount2, 2);
+		ArrayList<CampingReview> crlist = crService.selectBoardList(pi2,"");
+		
+		//사진들 가져오기
+		for(CampingReview cr : crlist) {
+			SelectCondition sc = new SelectCondition();
+		      sc.setBoardNo(cr.getCrNo());
+		      sc.setBoardType(8);
+		      ArrayList<Photo> pList = pService.selectBoardPhoto(sc);
+		      cr.setPhotos(pList);
+		      cr.setThumnail(pList.get(0)); //썸네일 넣기
+		}
+		
+		
+		
+		
  		
 		if(list != null) {
 			model.addAttribute("photoList", photoList);
 			model.addAttribute("ebList", eblist);
+			model.addAttribute("crList", crlist);
 			return"index";
 		}else {
 			return"index";
