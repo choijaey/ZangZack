@@ -27,6 +27,6 @@ public class Product {
 	private String productCompany;
 	private int deliveryPrice;
 	private int eno;
-	
+	private String photoPath;
 
 }

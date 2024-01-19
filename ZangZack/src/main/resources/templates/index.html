@@ -187,17 +187,16 @@
 
     <div class="section">
         <div class="news-section">
-            <div class="section-header">배송 NEWS</div>
+            <div class="section-header">이달의 행사</div>
             <!-- 뉴스 아이템들 -->
-            <div class="news-item">
-                <img src="news1.jpg" alt="뉴스 이미지">
-                <h3>뉴스 제목 1</h3>
-                <p>뉴스 설명 1</p>
-            </div>
-            <div class="news-item">
-                <img src="news2.jpg" alt="뉴스 이미지">
-                <h3>뉴스 제목 2</h3>
-                <p>뉴스 설명 2</p>
+             <div class="news-item" th:each="eb:${ebList}">
+                <img th:src="${eb.photo.photoPath}" alt="뉴스 이미지" style="width: 100px;height: 140px;display: inline-block;">
+                <div style="display: inline-block; padding-top:10px;" >
+	                <h3 style="display: inline-block;">[[${eb.ebName}]]</h3><br>
+	                <p style="display: inline-block; margin-bottom: 0px;">[[${eb.ebLocation}]]</p><br>
+	                <p style="display: inline-block; font-size: 10px; margin-bottom: 0px;">[[${eb.ebDate}]]</p>
+                </div>
+
             </div>
         </div>
 
@@ -221,41 +220,47 @@
    
    
    <div class="section">
-        <div id="yoonSilder" class="news-section" style="height:350px;width:500px;padding: 0;">
-		  <div class="section-header" style="margin-bottom: 0; margin-left: 10px;">추천 캠핑장</div>
-			<div id="carouselExampleFade" class="carousel slide carousel-fade carousel-dark" data-bs-ride="carousel"
-			    style="overflow: hidden; width: 100%;">
-			    <div class="carousel-inner" style="width: 400px; height:250px; text-align: center;">
-			        <div th:each="photo, iterStat : ${photoList}" th:class="${iterStat.index == 0} ? 'carousel-item active' : 'carousel-item'"
-			            style="height: 300px;">
-			            <img th:src="${photo.photoPath}" class="d-block2" style="overflow: hidden; height: 200px; width: 350px; border-radius: 5px;">
-			            <div class="card-body" style="padding-bottom: 10px;">
-			                <h5 class="card-title" style="margin-bottom: 0;">[ [[${photo.cgRegion}]] ] [[${photo.cgName}]]</h5> 
-			            </div>
-			        </div>
-			    </div>
+        <div class="news-section" style="height:350px;width:500px;padding: 0;">
+        <div class="section-header" style="margin-bottom: 0; margin-left: 10px;">추천 캠핑장</div>
+         <div id="carouselExampleFade" class="carousel slide carousel-fade carousel-dark" data-bs-ride="carousel"
+             style="overflow: hidden; width: 100%;">
+             <div class="carousel-inner" style="width: 400px; height:250px; text-align: center;">
+                 <div th:each="photo, iterStat : ${photoList}" th:class="${iterStat.index == 0} ? 'carousel-item active' : 'carousel-item'"
+                     style="height: 300px;">
+                     <img th:src="${photo.photoPath}" class="d-block2" style="overflow: hidden; height: 200px; width: 350px; border-radius: 5px;">
+                     <div class="card-body" style="padding-bottom: 10px;">
+                         <h5 class="card-title" style="margin-bottom: 0;">[ [[${photo.cgRegion}]] ] [[${photo.cgName}]]</h5> 
+                     </div>
+                 </div>
+             </div>
             </div>
             <a href="campList.ys" class="btn btn-primary" style="margin-top: 10px; cursor: pointer; margin-left: 120px;">추천 캠핑장으로 이동</a>
-		</div>
-        <div class="review-section" style="width:100%;">
-            <div class="section-header">배송토피아 선택</div>
-            <!-- 리뷰 아이템들 -->
-            <div class="review-item">
-                <h3>리뷰 제목 1</h3>
-                <p>리뷰 설명 1</p>
-            </div>
-            <div class="review-item">
-                <h3>리뷰 제목 2</h3>
-                <p>리뷰 설명 2</p>
-            </div>
-        </div>
+      </div>
+      
+      <!-- 소화 -->
+      
+      <div class="slideshow-container" style="max-width: 1000px; position: relative; margin: auto;">
+          <div class="mySlides" style="display: none;">
+              <a href="productDetail.so?productNo=263"><img style="width: 100%;" src="image/sohwa/main3 (2).png"></a>
+          </div>
+      
+          <div class="mySlides" style="display: none;">
+              <a href="productDetail.so?productNo=262"><img style="width: 100%;"src="image/sohwa/제목 없는 디자인.gif"></a>
+          </div>
+      
+          <div class="mySlides" style="display: none;">
+              <a href="productDetail.so?productNo=261"><img style="width: 100%;"src="image/sohwa/main5.png"></a>
+          </div>
+      </div>
+          
+            
         
     </div>
     <img style="width:100%; height:300px;" src="image/main/center/checkList.png">
     
     <div class="section">
         <div class="news-section">
-            <div class="section-header">배송 NEWS</div>
+            <div class="section-header">이달의 행사</div>
             <!-- 뉴스 아이템들 -->
             <div class="news-item">
                 <img src="news1.jpg" alt="뉴스 이미지">
@@ -263,13 +268,14 @@
                 <p>뉴스 설명 1</p>
             </div>
             <div class="news-item">
-                <img src="news2.jpg" alt="뉴스 이미지">
-                <h3>뉴스 제목 2</h3>
-                <p>뉴스 설명 2</p>
+                <img src="news1.jpg" alt="뉴스 이미지">
+                <h3>뉴스 제목 1</h3>
+                <p>뉴스 설명 1</p>
             </div>
-        </div>
-
-        <div class="review-section">
+                
+            </div>
+            
+            <div class="review-section">
             <div class="section-header">배송토피아 선택</div>
             <!-- 리뷰 아이템들 -->
             <div class="review-item">
@@ -281,16 +287,14 @@
                 <p>리뷰 설명 2</p>
             </div>
         </div>
-        
+      </div>
+
+      
     </div>
 </div>
 <footer class="site-footer">
     <p>저작권 © 2024 ZangZac. 모든 권리 보유.</p>
 </footer>
-
-
-
-
 
 
 
@@ -312,11 +316,29 @@
         });
         
         
-        $('#yoonSlider').carousel({
-            interval: 2000,  
-            pause: false 
-        });
-   
+        
+        window.onload=()=>{
+           var slideIndex = 0;
+            showSlides();
+
+            function showSlides() {
+                var i;
+                var slides = document.getElementsByClassName("mySlides");
+
+                for (i = 0; i < slides.length; i++) {
+                    slides[i].style.display = "none";
+                }
+
+                slideIndex++;
+
+                if (slideIndex > slides.length) {
+                    slideIndex = 1;
+                }
+
+                slides[slideIndex - 1].style.display = "block";
+                setTimeout(showSlides, 2000); // 2초마다 변경
+            }
+        }
         
     </script>
    

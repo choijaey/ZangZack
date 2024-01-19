@@ -104,10 +104,6 @@
 	                     </div>
 	                     <div class="card-counts">
 	                         <span>
-	                           관심[[${s.spCount}]]
-	                         </span>
-	                       ∙
-	                         <span>
 	                           댓글[[${s.replyCount}]]
 	                         </span>
 	                     </div>
@@ -175,12 +171,12 @@
         });
         
         function categorySelect() {
-            var selectedRegion = document.getElementsByName('region')[0].value;
-            var selectedCategory = document.getElementsByName('type')[0].value;
+            var region = document.getElementsByName('region')[0].value;
+            var type = document.getElementsByName('type')[0].value;
 
             // 지역이나 카테고리 중 하나라도 선택되었는지 확인
-            if (selectedRegion !== '지역을 선택하세요' || selectedCategory !== '카테고리') {
-                location.href = 'searchSecondHand.ah?region=' + selectedRegion + '&type=' + selectedCategory;
+            if (region !== '지역을 선택하세요' || type !== '카테고리') {
+                location.href = 'searchSecondHand.ah?region=' + region + '&type=' + type;
             }
         }
         

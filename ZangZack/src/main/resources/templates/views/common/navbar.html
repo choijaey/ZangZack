@@ -17,20 +17,24 @@
    <!-- text-align:(위치) -->
    <div id="logo_area">
       <p style="text-align: left;" class="logo">
-         <img src="image/yoonahrim/zangzack_logo.png" width="165px" />
+      	<a href="/" width="165px">
+         	<img src="image/yoonahrim/zangzack_logo.png" width="165px" />
+         </a>
       </p>
       <!-- height="111~120px" -->
-      <div id="my_menu">
+      <div id="my_menu" >
          <ul th:if="${session.loginUser == null}">
             <li><a href="signIn.me">아이디찾기</a></li>
             <li><span>/</span></li>
             <li><a href="signUp.me">로그인</a></li>
          </ul>
-         <ul th:if="${session.loginUser != null}">
-            
-               <li><a href="logout.me">로그아웃</a></li>
-               <li><span>/</span></li>
-               <li><a href="myPage.me">마이페이지</a></li>
+         <ul th:if="${session.loginUser != null}" style="display:flex; justify-content: center; align-items: center;">
+         	<li><a href="cartView.so"><img style="width:25px; height:25px; display:inline-block;" src="image/sohwa/icons8-cart-64.png"></a></li>
+         	<li><a href="centerView.so">고객센터</a></li>
+            <li><a href="logout.me">로그아웃</a></li>
+            <li><span>/</span></li>
+            <th:block th:if="${session.loginUser.memberIsAdmin == 'N'}"><li><a href="myPage.me">마이페이지</a></li></th:block>
+            <th:block th:unless="${session.loginUser.memberIsAdmin == 'N'}"><li><a href="myPage.me">관리자페이지</a></li></th:block>
          </ul>
       </div>
    </div>
@@ -42,12 +46,10 @@
                <ul>
                   <li class="sub-menu-1">
                      <a href="campSearch.ys" class="sub-menu-name">캠핑장 검색<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
                      </a>
                   </li>
                   <li class="sub-menu-1">
                      <a  href="campList.ys" class="sub-menu-name">캠핑장 추천<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
                      </a>
                   </li>
                </ul>
@@ -56,22 +58,19 @@
                <ul>
                   <li class="sub-menu-1">
                      <a href="chatListView.jy" class="sub-menu-name">채팅방<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
                      </a>
                   </li>
                   <li class="sub-menu-1">
                      <a href="champingReviewListView.jy" class="sub-menu-name">캠핑후기게시판<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
                      </a>
                   </li>
                   <li class="sub-menu-1">
                      <a href="champingFriend.jy" class="sub-menu-name">캠핑친구모집<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
+                        
                      </a>
                   </li>
                   <li class="sub-menu-1">
                      <a href="eventBoardListView.jy" class="sub-menu-name">행사정보<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
                      </a>
                   </li>
                </ul>
@@ -80,32 +79,32 @@
                <ul>
                   <li class="sub-menu-1">
                      <a href="adminProductEnroll.so" class="sub-menu-name">텐트<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
+                        
                      </a>
                   </li>
                   <li class="sub-menu-1">
                      <a href="#" class="sub-menu-name">취침용품<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
+                        
                      </a>
                   </li>
                   <li class="sub-menu-1">
                      <a href="#" class="sub-menu-name">조리도구<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
+                        
                      </a>
                   </li>
                   <li class="sub-menu-1">
                      <a  href="#" class="sub-menu-name">발화용품<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
+                        
                      </a>
                   </li>
                   <li class="sub-menu-1">
                      <a href="#" class="sub-menu-name">배낭<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
+                        
                      </a>
                   </li>
                   <li class="sub-menu-1">
                      <a  href="#" class="sub-menu-name">기타<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
+                        
                      </a>
                   </li>
                </ul>
@@ -114,17 +113,17 @@
                <ul>
                   <li class="sub-menu-1">
                      <a href="#" class="sub-menu-name">심리테스트<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
+                        
                      </a>   
                   </li>
                   <li class="sub-menu-1">
                      <a th:href="@{/selectCategory.do}" class="sub-menu-name">체크리스트<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
+                        
                      </a>
                   </li>
                   <li class="sub-menu-1">
                      <a href="#" class="sub-menu-name">행사정보<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
+                        
                      </a>
                   </li>
                </ul>
@@ -133,17 +132,17 @@
                <ul>
                   <li class="sub-menu-1">
                      <a href="campBoard.su" class="sub-menu-name">캠핑게시판<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
+                        
                      </a>
                   </li>
                   <li class="sub-menu-1">
                      <a href="recipe.su" class="sub-menu-name">레시피<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
+                        
                      </a>
                   </li>
                   <li class="sub-menu-1">
                      <a href="secondHand.ah" class="sub-menu-name">중고물품<span class="gt"></span> 
-                        <img src="image/yoonahrim/point.png" alt="포인트 이미지" class="pointImg">
+                        
                      </a>
                   </li>
                </ul>
