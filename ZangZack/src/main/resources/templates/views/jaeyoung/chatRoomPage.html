@@ -376,8 +376,9 @@ a {
 							$("#roomName").val(rm);
 							
 						}
+						console.log(d.sub);
 						if(d.sub == true){
-							countDown();
+							window.location.reload();
 						}
 						
 					}else if(d.type == "message"){
@@ -388,8 +389,7 @@ a {
 							addChat(d.msg,d.userName,1,d.profile,d.nickName,d.time,d.unReadChatter);
 						}
 					}else if(d.type == "reset"){
-						console.log('확인');
-						countDown();
+						window.location.reload();
 					}else{
 						console.warn("unknown type!")
 					}
