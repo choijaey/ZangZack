@@ -27,6 +27,7 @@ import com.kh.zangzac.common.reply.model.service.ReplyService;
 import com.kh.zangzac.common.reply.model.vo.Reply;
 import com.kh.zangzac.jaeyoung.campingFriend.model.service.CampingFriendService;
 import com.kh.zangzac.jaeyoung.campingFriend.model.vo.CampingFriend;
+import com.kh.zangzac.ming.member.model.service.MemberService;
 import com.kh.zangzac.ming.member.model.vo.Member;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,6 +50,9 @@ public class FriendController {
 	
 	@Autowired
 	HeartService hService;
+	
+	@Autowired
+	MemberService mService;
 
     @Autowired
     public FriendController(ImageStorage imageStorage) {
@@ -70,6 +74,11 @@ public class FriendController {
 	      
 
 	      for(CampingFriend cf : list) {
+	    	  
+	    	  Member temp = new Member();
+	    	  temp.setMemberId(cf.getMemberId());
+	    	  //프로필사진 가져오기
+	    	  cf.setMemberProfile(mService.login(temp).getMemberProfilePath());
 	    	  
 		      //전체 리스트의 댓글들 저장하기
 		      SelectCondition sc = new SelectCondition();
@@ -129,6 +138,12 @@ public class FriendController {
       
       //전체 리스트의 댓글들 저장하기
       for(CampingFriend cf : list) {
+    	  
+    	  Member temp = new Member();
+    	  temp.setMemberId(cf.getMemberId());
+    	  //프로필사진 가져오기
+    	  cf.setMemberProfile(mService.login(temp).getMemberProfilePath());
+    	  
 	      SelectCondition sc = new SelectCondition();
 	      sc.setBoardNo(cf.getCfNo());
 	      sc.setBoardType(7);

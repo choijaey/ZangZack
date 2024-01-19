@@ -34,7 +34,7 @@
 		FROM camping_friends CF
 		LEFT JOIN camping_category CC ON CF.CATEGORY_NO = CC.CATEGORY_NO
 		LEFT JOIN photo P ON CF.CF_NO = P.BOARD_NO AND P.BOARD_TYPE = 7
-		WHERE CF_NO = #{boardNo} and where cf_status='N'
+		WHERE CF_NO = #{boardNo} and cf_status='N'
 	</select>
 	
 	<update id="updateCampingFriend">

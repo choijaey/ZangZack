@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kh.zangzac.ming.member.model.dao.MemberDAO">
+
+	<insert id="insertMember">
+		insert into member
+		values (#{memberId}, #{memberPwd}, #{memberName}, #{memberEmail}, #{memberNickName}, #{memberBirth}, #{memberAddress},
+				#{memberPhone},sysdate, default,default,default,default ) 
+	</insert>
+	
+	<select id="login" resultType="Member">
+		select * from member
+		where MEMBER_ID = #{memberId} and member_status = 'N'
+	</select>
+	
+	<select id="selectId" resultType="Member">
+		select *
+		from member
+		where member_name = #{memberName} and member_email =#{memberEmail} and member_status = 'N'
+	</select>
+	
+	<update id="updateNewPwd">
+	    update MEMBER
+	    set MEMBER_PWD = #{memberPwd}
+	    where MEMBER_ID = #{memberId} and member_status = 'N'
+	</update>
+	
+	<select id="checkId" resultType="_int">
+		select count(*)
+		from member
+		where member_id = #{memberId} and member_status = 'N'
+	</select>
+	
+	<select id="checkEmail" resultType="_int">
+		select count(*)
+		from member
+		where member_email = #{memberEmail} and member_status = 'N'
+	</select>
+	
+	<update id="deleteMember">
+		update member
+		set member_status = 'Y'
+		where member_id = #{memberId}
+	</update>
+	
+	<update id="changePwd">
+		update MEMBER
+	    set MEMBER_PWD = #{memberPwd}
+	    where MEMBER_ID = #{memberId} and member_status = 'N'
+	</update>
+	
+	<update id="updateMemberName">
+		update member
+		set member_name = #{memberName}
+		where MEMBER_ID = #{memberId} and member_status = 'N'
+	</update>
+	
+	<update id="updateMemberNickname">
+		update member
+		set MEMBER_NICKNAME = #{memberNickname}
+		where MEMBER_ID = #{memberId} and member_status = 'N'
+	</update>
+	
+	<update id="updatememberPhone">
+		update member
+		set MEMBER_PHONE = #{memberPhone}
+		where MEMBER_ID = #{memberId} and member_status = 'N'
+	</update>
+	
+	<update id="updatememberEmail">
+		update member
+		set MEMBER_EMAIL = #{memberEmail}
+		where MEMBER_ID = #{memberId} and member_status = 'N'
+	</update>
+	
+	<update id="updatememberAddress">
+		update member
+		set MEMBER_ADDRESS = #{memberAddress}
+		where MEMBER_ID = #{memberId} and member_status = 'N'
+	</update>
+	
+	<update id="updateMemberProfile">
+		update member
+		set MEMBER_PROFILE_PATH = #{memberProfilePath}
+		where MEMBER_ID = #{memberId} and member_status = 'N'
+	</update>
+	
+	<select id="selectMembers" resultType="Member">
+		select * 
+		from member
+	</select>
+	
+	<update id="updateInfo">
+		update member
+		set ${column} = #{data}
+		where member_id = #{id}
+	</update>
+	
+	<update id="adminUpdateNickName">
+	    update member
+	    set MEMBER_NICKNAME = #{memberNickName}
+	    where MEMBER_ID = #{memberId}
+	</update>
+	
+	<update id="adminUpdateName">
+		update member
+		set MEMBER_NAME = #{memberName}
+		where MEMBER_ID = #{memberId}
+	</update>
+	
+	<select id="getListCount" resultType="_int">
+		select count(*)
+		from member
+	</select>
+	
+	<select id="searchList" resultType="int">
+	    SELECT COUNT(*)
+	    FROM member
+	    where
+	    <if test="searchType =='memberId'">
+	       MEMBER_ID LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    <if test="searchType == 'memberName'">
+	        MEMBER_NAME LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    <if test="searchType == 'memberNickName'">
+	       MEMBER_NICKNAME LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    ORDER BY MEMBER_NAME DESC
+	</select>
+	
+	<select id="searchtNoticeList" resultType="Member">
+		SELECT *
+	    FROM member
+	    where
+	    <if test="searchType =='memberId'">
+	         MEMBER_ID LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    <if test="searchType == 'memberName'">
+	         MEMBER_NAME LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    <if test="searchType == 'memberNickName'">
+	         MEMBER_NICKNAME LIKE '%'|| #{keyword} ||'%'
+	    </if>
+	    ORDER BY MEMBER_NAME DESC
+	</select>
+</mapper>

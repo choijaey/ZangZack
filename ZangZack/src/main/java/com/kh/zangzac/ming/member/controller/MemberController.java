@@ -2,6 +2,7 @@ package com.kh.zangzac.ming.member.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
@@ -29,12 +30,18 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.PageInfo;
+import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.ming.member.model.exception.MemberException;
 import com.kh.zangzac.ming.member.model.service.MemberService;
 import com.kh.zangzac.ming.member.model.vo.Member;
+import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
+import com.kh.zangzac.sohwa.product.model.vo.Product;
+import com.kh.zangzac.sohwa.product.model.vo.Review;
+import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @SessionAttributes("loginUser")
 @Controller
@@ -66,11 +73,6 @@ public class MemberController {
 		return "views/ming/member/sign";
 	}
 	
-	//홈으로 가기
-	@GetMapping("home.me")
-	public String home() {
-		return "index";
-	}
 	
 	//심리테스트 메인화면
 	@GetMapping("psychologicalTestMain.me")
@@ -92,7 +94,9 @@ public class MemberController {
 		
 		m.setMemberNickName(existingNickname + "#" + generateRandomNumbers()); // 랜덤닉네임
 		m.setMemberPwd(bcrypt.encode(m.getMemberPwd()));
+		m.setMemberLoginType(1); // 일반 회원가입
 		m.getMemberId();
+		
 		
 		int result = mService.insertMember(m);
 		if(result > 0) {
@@ -148,25 +152,24 @@ public class MemberController {
 			if(bcrypt.matches(m.getMemberPwd(), loginUser.getMemberPwd())) {
 				model.addAttribute("loginUser",loginUser);
 				
-				if(!beforeURL.equals("http://localhost:8080/logout.me"))
+				if(!beforeURL.equals("http://localhost:8080/logout.me") && !beforeURL.equals("http://localhost:8080/signUp.me"))
 				{
 					return "redirect:" + beforeURL;
 				}else {
-					return "redirect:home.me";
+					return "redirect:/";
 				}
 			}else {
 				model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
 				model.addAttribute("searchUrl","views/ming/member/sign");
-				return "redirect:signUp.me";
+				return "views/ming/member/sign";
+				
 			}
 			
 		}else {
 			model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
 			model.addAttribute("searchUrl","views/ming/member/sign");
-			return "redirect:signUp.me";
+			return "views/ming/member/sign";
 		}
-		
-		
 	}
 	
 	//로그아웃
@@ -338,12 +341,12 @@ public class MemberController {
 			 } else {
 				 model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
 				 model.addAttribute("searchUrl","views/ming/member/updatePwd");
-				 return "redirect:updatePwd.me";
+				 return "views/ming/member/updatePwd";
 			 }
 		 }else {
 			 model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
 			 model.addAttribute("searchUrl","views/ming/member/updatePwd");
-			 return "redirect:updatePwd.me";
+			 return "views/ming/member/updatePwd";
 		 }
 		 
 	}
@@ -512,6 +515,7 @@ public class MemberController {
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
 		ArrayList<Member> list = mService.selectMembers(1, pi);
 		
+		System.out.println(list);
 		if(list != null) {
 			model.addAttribute("pi", pi);
 			model.addAttribute("list", list);
@@ -606,4 +610,208 @@ public class MemberController {
 			throw new MemberException("게시글 목록 조회에 실패하였습니다.");
 		}
 	}
-}
+	//카카오로그인
+	@GetMapping("kakaoLogin")
+	public String kakaoLogin(
+	        @RequestParam(value = "code", required = false) String code,
+	        HttpSession session,
+	        Model model,
+	        @RequestParam(value = "beforeURL", required = false) String beforeURL) throws Exception {
+	    // 카카오에서 받은 코드를 이용하여 access token을 얻어옴
+	    String access_Token = mService.getAccessToken(code);
+	    HashMap<String, Object> userInfo = mService.getUserInfo(access_Token);
+	    Member kakaoMemberInfo = (Member) userInfo.get("userInfo");
+	    // System.out.println("kakaoMemberInfo: " + kakaoMemberInfo);
+	    
+	    // 이메일 중복 체크
+	    boolean isEmailDuplicate = mService.isEmailDuplicate(kakaoMemberInfo.getMemberEmail());
+	    Member loginUser = mService.login(kakaoMemberInfo);
+	    
+	    if (isEmailDuplicate) {
+	        // 중복된 이메일이 있는 경우
+	    	session.setAttribute("loginUser", loginUser);
+	    	session.setAttribute("msg", "중복되는 이메일이 있습니다.");
+	        if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me"))) {
+	            return "redirect:" + beforeURL;
+	        } else {
+	            return "redirect:/";
+	        }
+	        // 여기서 로그인 처리 등을 수행
+	        // 로그인만 가능하게끔 수정
+	    } else {
+	        // 중복된 이메일이 없는 경우
+	        int result = mService.kakaoLogin(kakaoMemberInfo);
+	        if (result > 0) {
+	            // 로그인 성공
+	        	System.out.println("로그인성공: " + kakaoMemberInfo);
+	            session.setAttribute("loginUser", kakaoMemberInfo);
+	            if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me"))) {
+	                return "redirect:" + beforeURL;
+	            } else {
+	                return "redirect:/";
+	            }
+	        } else {
+	        	System.out.println("로그인 실패");
+	            // 회원가입에 실패한 경우에 대한 처리
+	            session.setAttribute("msg", "회원가입에 실패했습니다.");
+	        }
+	    }
+
+	    return "views/ming/member/sign";
+	}
+	
+	
+	//리뷰 불러오기
+	@GetMapping("review.me")
+	public String review(@RequestParam(value = "page", defaultValue = "1") int page, Model model,
+										@ModelAttribute Review r,@ModelAttribute Product p, HttpServletRequest request) {
+		Member loginUser = (Member) model.getAttribute("loginUser");
+		String memberId = loginUser.getMemberId();
+		int listCount = mService.getReviewListCount(6);
+		PageInfo pi = Pagination.getPageInfo(page, listCount, 3);
+		ArrayList<Review>rList = mService.selectReview(memberId,pi);
+		ArrayList<Product>pList = mService.selectAllProduct();
+		ArrayList<Photo>phList = mService.selectAllPotoProduct();
+		r.setMemberId(memberId);
+		
+		if(rList != null) {
+			model.addAttribute("pList",pList);
+			model.addAttribute("rList",rList);
+			model.addAttribute("phList",phList);
+			model.addAttribute("pi",pi);
+			model.addAttribute("memberId", memberId);
+			model.addAttribute("loc", request.getRequestURI());
+			return "views/ming/member/review";
+		}else {
+			throw new MemberException("게시글 목록 조회에 실패하였습니다.");
+		}
+		
+	}
+	
+	//리뷰삭제
+	   @PostMapping("deleteReview.me")
+	   public String deleteReview(@RequestParam("reviewNo") int reviewNo) {
+	      
+	      String name="sohwa";
+	      int result = mService.deleteReview(reviewNo);
+	      String deleteRename = mService.deleteSelectReview(reviewNo);
+	      System.out.println("deleteRename" + deleteRename);
+	      
+	      if(deleteRename != null) {
+	    	  Boolean sf = imageStorage.deleteImage(deleteRename, name);
+	    	  
+	      }
+	      
+	      if(result > 0) {
+	         return "redirect:review.me";
+	      }else {
+	         throw new MemberException("리뷰 삭제 실패");
+	      }
+	   }
+	   
+	   // 게시글 가져오기
+	   @GetMapping("myBoardList.me")
+	   public String myBoardList(@RequestParam(value = "page", defaultValue = "1") int page, Model model,
+									 @ModelAttribute CampBoard cb, HttpServletRequest request) {
+		   
+		   Member loginUser = (Member) model.getAttribute("loginUser");
+		   String memberId = loginUser.getMemberId();
+		   
+		   Map<String, Object> paramMap = new HashMap<>();
+		   paramMap.put("memberId", memberId);
+		   paramMap.put("1", 1);
+		   int listCount = mService.getmyBoardListCount(paramMap);
+
+		   PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
+		   
+		   ArrayList<CampBoard> cbList = mService.selectCampBoard(memberId,pi); 
+		   if(cbList != null) {
+			   model.addAttribute("cbList",cbList);
+			   model.addAttribute("pi",pi);
+			   model.addAttribute("memberId", memberId);
+			   model.addAttribute("loc", request.getRequestURI());
+		   }
+		   
+		   return "views/ming/member/myBoardList";
+	   }
+	   
+	   //게시글 검색
+	   @GetMapping("searchCbList.me")
+	   public String searchCbList(@RequestParam(value = "page", defaultValue = "1") int page,
+									@RequestParam(value = "searchType", defaultValue = "") String searchType,
+									@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
+									HttpServletRequest request){
+		    HashMap<String, String>map = new HashMap<>();
+			map.put("keyword", keyword);
+			map.put("searchType", searchType);
+			
+			int currentPage = page;
+			int listCount = mService.searchCbListCount(map);
+			
+			PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
+			ArrayList<CampBoard> cbList = mService.searchCbList(pi, map);
+			
+			if(cbList != null) {
+				model.addAttribute("pi", pi);
+				model.addAttribute("cbList",cbList);
+				model.addAttribute("loc", request.getRequestURI());
+				return "views/ming/member/myBoardList";
+			} else {
+				throw new MemberException("게시글 목록 조회에 실패하였습니다.");
+			}
+		}
+	   
+	   //중고게시글 가져오기
+	   @GetMapping("mySecondHandProductList.me")
+	   public String secondHandProductList(@RequestParam(value = "page", defaultValue = "1") int page, Model model,
+			   								@ModelAttribute secondHandProduct sp,HttpServletRequest request) {
+		   Member loginUser = (Member) model.getAttribute("loginUser");
+		   String memberId = loginUser.getMemberId();
+		   
+		   Map<String, Object> paramMap = new HashMap<>();
+		   paramMap.put("memberId", memberId);
+		   paramMap.put("4", 4);
+		   int listCount = mService.getmySecondHandProductListCount(paramMap);
+		   System.out.println(listCount);
+		   
+		   PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
+		   ArrayList<secondHandProduct> spList = mService.selectsecondHandProduct(memberId,pi); 
+		   
+		   if(spList != null) {
+			   model.addAttribute("spList",spList);
+			   model.addAttribute("pi",pi);
+			   model.addAttribute("memberId", memberId);
+			   model.addAttribute("loc", request.getRequestURI());
+		   }
+		   return "views/ming/member/mySecondHandProductList";
+	   }
+	   
+	   //중고 검색
+	   @GetMapping("searchSpList.me")
+	   public String searchSpList(@RequestParam(value = "page", defaultValue = "1") int page,
+									@RequestParam(value = "searchType", defaultValue = "") String searchType,
+									@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
+									HttpServletRequest request){
+		    HashMap<String, String>map = new HashMap<>();
+			map.put("keyword", keyword);
+			map.put("searchType", searchType);
+			
+			int currentPage = page;
+			int listCount = mService.searchSPListCount(map);
+			
+			PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
+			ArrayList<secondHandProduct> spList = mService.searchSpList(pi, map);
+			
+			if(spList != null) {
+				model.addAttribute("pi", pi);
+				model.addAttribute("spList", spList);
+				model.addAttribute("loc", request.getRequestURI()); // url 다 가져옴 / uri 뒤에만 가져옴
+				System.out.println("spList: " + spList);
+				return "views/ming/member/mySecondHandProductList";
+			} else {
+				throw new MemberException("게시글 목록 조회에 실패하였습니다.");
+			}
+		}
+	   
+	
+   }

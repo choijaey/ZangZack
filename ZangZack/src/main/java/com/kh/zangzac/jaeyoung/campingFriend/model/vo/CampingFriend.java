@@ -28,5 +28,5 @@ public class CampingFriend {
 	private String PhotoRename;
 	private ArrayList<Reply> replys;
 	private String likeStatus;
-
+	private String memberProfile;
 }

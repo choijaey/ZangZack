@@ -117,7 +117,7 @@
 #result {
   display: none;
   background-color: whitesmoke;
-  width: 80%;
+  width: 78%;
   text-align: center;
   border-radius: 20px;
   margin-top: 100px;
@@ -147,9 +147,9 @@
 }
 .ItemTilte{
 	position: absolute;
-	left: 240px;
-	top: 1400px;
-	font-size: 2.5em;
+	left: 195px;
+	top: 1450px;
+	font-size: 2.2em;
 	font-weight: bold;
 	text-align: center;
 	color: #F9612B;
@@ -157,7 +157,7 @@
 .ItemTilte2{
 	position: absolute;
 	left: 360px;
-	top: 1460px;
+	top: 1500px;
 	font-size: 1em;
 	font-weight: bold;
 	text-align: center;
@@ -172,27 +172,46 @@
 }
 .resultItem img{
 	position: absolute;
-	top: 1500px;
+	top: 1600px;
+	border-radius: 50%;
 }
 
 .resultItem .poto1{
-	left: 150px;
+	left: 90px;
 }
 .resultItem .poto2{
-	left: 600px;
+	left: 780px;
+}
+.resultItem .poto3{
+	left: 550px;
+}
+.resultItem .poto4{
+	left: 320px;
 }
 
 #poto1{
 	position: absolute;
 	font-size: 1.8em;
 	top: 1830px;
-	left: 270px;
+	left: 170px;
 }
 #poto2{
 	position: absolute;
 	font-size: 1.8em;
 	top: 1830px;
-	left: 731px;
+	left: 600px;
+}
+#poto3{
+	position: absolute;
+	font-size: 1.8em;
+	top: 1830px;
+	left: 370px;
+}
+#poto4{
+	position: absolute;
+	font-size: 1.8em;
+	top: 1830px;
+	left: 830px;
 }
 
 .img-fluid2{

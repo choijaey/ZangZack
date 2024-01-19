@@ -28,7 +28,8 @@
 	<select id="chatRoomList">
 		select *
 		from chat_list
-		left join camping_category using(category_no) 
+		left join camping_category using(category_no)
+		where cl_status = 'N'
 	</select>
 	
 	<select id="chatterList">
@@ -37,5 +38,15 @@
 	 	left join member using(member_id)
 	 	where cl_no = ${roomName}
 	</select>
+	<insert id="insertChat">
+		insert into chat_list
+		values (cl_seq.nextval,#{clLimitPerson},#{clName},default,#{categoryNo},default)
+	</insert>
+	
+	<update id="deleteChat">
+		update chat_list
+	    set cl_status = 'Y'
+	    where cl_no = ${no}
+	</update>
 	
 </mapper>

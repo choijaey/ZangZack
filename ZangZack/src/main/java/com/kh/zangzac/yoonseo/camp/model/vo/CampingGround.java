@@ -37,6 +37,8 @@ import lombok.ToString;
 		private int categoryNo;
 		private String cgImgInfo;
 		private double point; 
+		private String photoPath;
+		private String photoRename;
 		
 		public void calculateCgPoint() {
 			if (getCgStarPoint() != null) {

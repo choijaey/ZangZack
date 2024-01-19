@@ -9,7 +9,92 @@
 *{
 	font-family: 'GmarketSansMedium';
 }
+/* 페이징 css */
+.board_bottom_area {
+   display: inline-block;
+   position: relative;
+   width: 80%;
+   margin: 2%;
+   margin-left: 8%;
+   align-items: center;
+}
 
+.board_bottom_area hr {
+   margin-top: 30px;
+   background-color: #eeeee6;
+   border: none;
+   height: 1px;
+}
+
+#pagenation {
+   text-align: center;
+}
+
+#pagenation ul {
+   list-style: none;
+   padding: 0;
+   display: inline-block; /* 중앙 정렬을 위해 inline-block으로 변경 */
+   margin: 0; /* 기본 마진 제거 */
+}
+
+#pagenation ul li {
+   display: inline;
+   margin: 0 5px;
+}
+
+#pagenation ul li a {
+   text-decoration: none;
+   color: #464D0F;
+   font-size: 14px;
+   padding: 5px 10px;
+   border-radius: 5px; /* 모서리를 둥글게 */
+   transition: background-color 0.3s, color 0.3s;
+}
+
+#pagenation ul li a:hover {
+   background-color: #464D0F;
+   color: #e6e6e6;
+}
+
+#pagenation ul li a#check_page {
+   background-color: #464D0F;
+   color: #e6e6e6;
+}
+
+.search_area {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   padding: 20px 0;
+}
+
+.search_select {
+   padding: 5px 10px;
+   margin-right: 10px;
+   border: 1px solid #ccc;
+   border-radius: 5px;
+}
+
+.search_input {
+   padding: 5px 10px;
+   border: 1px solid #ccc;
+   border-radius: 5px;
+   width: 300px;
+   margin-right: 10px;
+}
+
+.search_button {
+   padding: 5px 15px;
+   border: none;
+   background-color: #464D0F;
+   color: white;
+   border-radius: 5px;
+   cursor: pointer;
+}
+
+.search_button:hover {
+   background-color: #363D0F;
+}
 #productListWrapped{
 	margin-left:18%;
 	margin-right:18%;
