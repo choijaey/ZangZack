@@ -95,6 +95,7 @@ public class CampBoardController {
 	    int listCount = cService.searchListCount(b);
 	    PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 	    
+
 	    ArrayList<CampBoard> list = cService.searchBoardList(pi, b);
 	    
 	    if(text != null && !text.trim().equals("")) {

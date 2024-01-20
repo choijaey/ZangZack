@@ -12,10 +12,15 @@ import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.model.vo.SelectCondition;
 import com.kh.zangzac.common.photo.model.service.PhotoService;
 import com.kh.zangzac.common.photo.model.vo.Photo;
+
+import com.kh.zangzac.yoonahrim.spBoard.model.service.secondHandService;
+import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
+
 import com.kh.zangzac.jaeyoung.eventBoard.model.service.EventBoardService;
 import com.kh.zangzac.jaeyoung.eventBoard.model.vo.EventBoard;
 import com.kh.zangzac.seongun.campboard.model.service.CampBoardService;
 import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
+
 import com.kh.zangzac.yoonseo.camp.model.service.CampService;
 import com.kh.zangzac.yoonseo.camp.model.vo.CampingGround;
 
@@ -26,6 +31,9 @@ public class BoardCondition {
 	private CampService cService;
 	
 	@Autowired
+
+	private secondHandService spService;
+
 	private EventBoardService ebService;
 	
 	@Autowired
@@ -33,7 +41,7 @@ public class BoardCondition {
 	
 	@Autowired
 	private CampBoardService cbService;
-	
+
 	public SelectCondition selectBoard(int x, int y) {
 		SelectCondition b = new SelectCondition();
 		b.setBoardNo(x);
@@ -52,9 +60,25 @@ public class BoardCondition {
 		for (CampingGround cg : list) {
 		    intArrayList.add(cg.getCgNo());
 		}
+
+		System.out.println(intArrayList);
 		
  		ArrayList<CampingGround> photoList = cService.selectMainPhoto(intArrayList);
  		
+ 		
+ 		
+ 		
+ 		ArrayList<secondHandProduct> spList = spService.getSpList(recomendation);
+ 		ArrayList<Integer> spArrayList = new ArrayList<>();
+ 		for (secondHandProduct sp : spList) {
+		    spArrayList.add(sp.getSpNo());
+		}
+ 		ArrayList<secondHandProduct> spPhotoList = spService.selectSpPhoto(spArrayList);
+ 		
+
+ 		ArrayList<CampingGround> photoList = cService.selectMainPhoto(intArrayList);
+ 		
+
  		
  		//jaeyoung
  		
@@ -82,11 +106,17 @@ public class BoardCondition {
 		
 		if(list != null) {
 			model.addAttribute("photoList", photoList);
+			model.addAttribute("spPhotoList", spPhotoList);
+			model.addAttribute("spList", spList);
+
 			model.addAttribute("ebList", eblist);
 			model.addAttribute("cbList", cbList);
+
 			return"index";
 		}else {
 			return"index";
 		}
+
 	}
+	
 }

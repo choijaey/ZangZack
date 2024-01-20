@@ -65,9 +65,14 @@
                <label>가격
                      <input class="form-control" type="number" name="spPrice" placeholder="Default input" aria-label="default input example" style="width: 800px;" th:value="${s.spPrice}">
                   </label><br><br>
+                  <!--  
                   <label>자세한 설명
-                     <input class="form-control" type="text" name="spContent" placeholder="Default input" aria-label="default input example" style="width: 800px; height:500px;" th:value="${s.spContent}">
+                     <textarea class="form-control" name="spContent" placeholder="내용을 입력해주세요" style="width: 800px; height: 500px;" required th:value="${s.spContent}"></textarea>
                   </label><br><br>
+                  -->
+                 <label for="exampleFormControlTextarea1" class="form-label">
+  					 <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" cols="75" name="spContent" th:utext="${#strings.replace(s.spContent, '\n', '<br>')}"></textarea>
+  				</label><br><br>
                   <label>주소
                      <p>
                      <input type="text" id="zip-code" placeholder="우편번호">
@@ -109,6 +114,7 @@
          }
        
 		const fileArea = document.querySelector('#fileArea');
+		/*
 		document.getElementById('addFile').addEventListener('click', () =>{
 			const newDiv = document.createElement('div');
 			newDiv.classList.add('mb-3');
@@ -116,7 +122,27 @@
 			
 			fileArea.append(newDiv);
 		})
-      
+      	*/
+		// 추가 된 부분
+		document.getElementById('addFile').addEventListener('click', () => {
+		    const newDiv = document.createElement('div');
+		    newDiv.classList.add('mb-3');
+		    newDiv.innerHTML = '<input type="file" class="form-control form-control-lg" name="file" style="width:500px;">'
+		
+		    // 삭제 OFF인 파일의 개수 계산
+		    const deleteOffCount = Array.from(document.querySelectorAll('.deleteAttm')).reduce((count, btn) => {
+		        return count + (btn.innerText === '삭제 OFF' ? 1 : 0);
+		    }, 0);
+		
+		    // 삭제 OFF인 파일과 추가된 파일의 합이 최대 허용 개수보다 작으면 새 파일 추가
+		    if (deleteOffCount + fileArea.children.length < 4) {
+		        fileArea.append(newDiv);
+		    } else {
+		        alert("사진은 총 " + 4 + "장까지 첨부하실 수 있습니다.");
+		    }
+		});
+		
+		
        	document.getElementById('submitAttm').addEventListener('click',() =>{
     	   const files = document.getElementsByClassName('file');
     	   const delBtns = document.getElementsByClassName('deleteAttm');
