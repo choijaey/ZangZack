@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -60,7 +61,7 @@
 	              <button type="button" id="send-code" style="width: 100px; display: inline-block; background-color: rgb(251, 125, 83); color: white;">코드전송</button></td>
 	            </div>
 	            <p style="text-align: center;">
-	              <a href="home.me" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.5em;">
+	              <a href="/" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.5em;">
 					HOME으로 돌아가기
 				  </a>
 	            </p>
@@ -98,7 +99,7 @@
 	              아이디 찾기
 	            </button>
 	            <p style="text-align: center;">
-	              <a href="home.me" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.5em;">
+	              <a href="/" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.5em;">
 					HOME으로 돌아가기
 				  </a>
 	            </p>
@@ -247,7 +248,8 @@
 	                    	const modalContent = document.querySelector('.modal-content');
 	                    	const spanContainer = modalContent.querySelector('span');
 	                    	spanContainer.innerHTML = ''; 
-	                    	if(data != null){
+	                    	if(data.length !== 0){
+	                    		console.log(data);
 		                    	for (const item of data) {
 		                    	    const ulItem = document.createElement('ul'); 
 		                    	    const liItem = document.createElement('li'); 
