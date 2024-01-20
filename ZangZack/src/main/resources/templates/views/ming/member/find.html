@@ -123,7 +123,7 @@
 	      <div class="col align-items-center flex-col">
 	        <div class="text sign-in">
 	          <h2>
-	           <a href="home.me">
+	           <a href="/">
 	            	<img src="image/ming/member/logo.png" style="width: 300px;">
 	            </a>
 	            <p style="font-size: 0.5em; margin-top: -50px; color: black;">아이디 찾기</p>
@@ -141,7 +141,7 @@
 	        </div>
 	        <div class="text sign-up">
 	          <h2>
-	          	<a href="home.me">
+	          	<a href="/">
 	            	<img src="image/ming/member/logo.png" style="width: 300px;">
 	            </a>
 	            <p style="font-size: 0.5em; margin-top: -50px; color: black;">비밀번호찾기</p>
@@ -214,7 +214,7 @@
                     code =data;
                     alert('임시 비밀번호를 발송했습니다. 메일이 오지 않으면 입력하신 정보가 회원정보와 일치하는지 확인해 주세요.')
                     if(data=="index") {
-    					location.href = "home.me";
+    					location.href = "/";
 					}
                     
                     
@@ -250,18 +250,27 @@
 	                    	spanContainer.innerHTML = ''; 
 	                    	if(data.length !== 0){
 	                    		console.log(data);
-		                    	for (const item of data) {
-		                    	    const ulItem = document.createElement('ul'); 
-		                    	    const liItem = document.createElement('li'); 
-		                    	    const spanItem = document.createElement('span'); 
-		                    	    spanItem.textContent = item.memberId; 
-		                    	    liItem.appendChild(spanItem); 
-		                    	    ulItem.appendChild(liItem); 
-		                    	    ulItem.style.padding = '8px 0';
-		                    	    ulItem.style.listStyle = 'none'; 
-		
-		                    	    spanContainer.appendChild(ulItem); 
-		                    	}
+	                    		for (const item of data) {
+	                    		    const ulItem = document.createElement('ul'); 
+	                    		    const liItem = document.createElement('li'); 
+	                    		    const spanItem = document.createElement('span'); 
+	                    		    const memberId = item.memberId;
+
+	                    		    if (/^\d+$/.test(memberId)) {
+	                    		        // 숫자로만 이뤄진 경우
+	                    		        spanItem.textContent = '카카오 간편 로그인 회원입니다.';
+	                    		    } else {
+	                    		        // 영어 및 숫자가 섞인 경우
+	                    		        spanItem.textContent = '아이디: ' + memberId;
+	                    		    }
+
+	                    		    liItem.appendChild(spanItem); 
+	                    		    ulItem.appendChild(liItem); 
+	                    		    ulItem.style.padding = '8px 0';
+	                    		    ulItem.style.listStyle = 'none'; 
+
+	                    		    spanContainer.appendChild(ulItem); 
+	                    		}
 	                    	}else{
 	                    		modalContent.textContent = memberName + '님은 등록된 아이디가 없습니다!';
 	                    	}
@@ -270,7 +279,7 @@
 	                        homepageButton.textContent = '홈페이지';
 	                        homepageButton.className = 'homepage-btn';
 	                        homepageButton.addEventListener('click', function() {
-                            window.location.href = 'home.me';
+                            window.location.href = '/';
 	                        });
 	                        
 	                        
