@@ -89,15 +89,15 @@
 		                   </div>
 	                   </th:block>
 	                   <div class="card-desc">
-	                     <div class="card-title">[[${#strings.length(s.spTitle) > 6 ? #strings.substring(s.spTitle, 0, 6) + '...' : s.spTitle}]]
+	                     <div class="card-title" style="font-size:15px;">[[${#strings.length(s.spTitle) > 6 ? #strings.substring(s.spTitle, 0, 6) + '...' : s.spTitle}]]
 	                           <div class="selectCategory">[[${s.categoryName}]]</div>
 	                     </div>
-	                     <div class="card-price">
+	                     <div class="card-price" style="font-size:12px;">
 	                     	<b>
 	                       		[[${#numbers.formatInteger(s.spPrice, 0, 'COMMA')}]]원
 	                     	</b>
 	                     </div>
-	                     <div class="card-region-name">
+	                     <div class="card-region-name" style="font-size:12px;">
 	                       	[[${#strings.length(s.spAddress) > 12 ? #strings.substring(s.spAddress, 0, 12) + '...' : s.spAddress}]]
 	                     </div>
 	                     <div class="card-counts">
@@ -117,7 +117,7 @@
 	           	 <ul class="pagination">
 	                   <!-- 이전 버튼 -->
 	                   <li class="page-item">
-	                      <a class="page-link" th:href="@{${loc}(page=${pi.currentPage-1})}" aria-label="Previous" th:if="${pi.currentPage>1}" style="width:100px;">
+	                      <a class="page-link" th:href="@{${loc}(page=${pi.currentPage-1})}" aria-label="Previous" th:if="${pi.currentPage>1}" style="width:63px;">
 	                      	&lt; 이전
 	                      </a>
 	                   </li>
@@ -129,7 +129,7 @@
 	                    </li>
 	                 	<!-- 다음 버튼 -->
 	                   <li class="page-item">
-	                      <a lass="page-link" th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next" th:if="${pi.currentPage<pi.maxPage}" style="width:100px;">
+	                      <a lass="page-link" th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next" th:if="${pi.currentPage<pi.maxPage}" style="width:63px;">
 	                      	다음 &gt;
 	                      </a>
 	                   </li>
@@ -138,7 +138,11 @@
             <hr/>
         </div>
      </div>
-   
+     <a id="goChatingRoom" class="chat" style="display: inline-block;" onclick="redirectToChat()">
+     	<input type="hidden" id="userId" th:if="${session.loginUser != null}" th:value="${session.loginUser.memberId}" />
+	    <input type="hidden" id="memberId" th:value="${s.memberId}" th:each="s : ${sList}"/>
+     	<img src="image/yoonahrim/icons8-chating-64.png" style="width:42px; height:42px; position:fixed; left: 1760px; bottom: 20px;"/>
+     </a>
    <script>
         document.addEventListener('DOMContentLoaded', function() {
             // 스크롤이 끝으로 이동 시 이벤트 발생
@@ -189,8 +193,11 @@
             }
         });
         
-        
-        
+        function redirectToChat() {
+        	var memberId = document.getElementById('memberId').value;
+			var userId = document.getElementById('userId').value;
+			window.location.href='chating.ah?memberId=' + memberId + '&userId=' + userId;
+        }
 </script>
 </body>
 </html>

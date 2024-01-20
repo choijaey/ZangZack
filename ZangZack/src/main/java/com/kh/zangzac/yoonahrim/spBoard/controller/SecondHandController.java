@@ -80,7 +80,9 @@ public class SecondHandController {
 		model.addAttribute("loc", request.getRequestURI());
 		
 		return "views/yoonahrim/secondHandList";
-	}
+     }	
+	
+	
 	
 	@GetMapping("searchSecondHand.ah")
 	   public String campSerchList(@ModelAttribute secondHandProduct sp,
