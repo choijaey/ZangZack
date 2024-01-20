@@ -129,7 +129,7 @@ public class CampController {
 		   
 		   return"views/yoonseo/campDetail";   
 		}else {
-			return"redirect:/";
+			throw new CampException("캠핑장 등록에 실패하였습니다");
 		}
 	}
 	
