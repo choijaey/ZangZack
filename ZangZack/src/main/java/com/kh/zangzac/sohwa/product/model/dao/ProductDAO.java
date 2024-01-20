@@ -189,7 +189,7 @@ public interface ProductDAO {
 
 	ArrayList<Product> selectRecommendProduct();
 
-	int purchaseYN(String id);
+	int purchaseYN(Payment p);
 
 
 

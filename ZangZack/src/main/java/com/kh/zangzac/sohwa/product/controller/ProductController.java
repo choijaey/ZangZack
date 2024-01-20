@@ -1304,10 +1304,12 @@ public class ProductController {
    
    @GetMapping("purchaseYN.so")
    @ResponseBody
-   public String purchaseYN(Model model) {
+   public String purchaseYN(Model model, @RequestParam("productNo") int productNo) {
 	   String id = ((Member)model.getAttribute("loginUser")).getMemberId();
-	   
-	   int result = pService.purchaseYN(id);
+	   Payment p = new Payment();
+	   p.setMemberId(id);
+	   p.setProductNo(productNo);
+	   int result = pService.purchaseYN(p);
 	   
 	   if(result == 0) {
 		   return "no";

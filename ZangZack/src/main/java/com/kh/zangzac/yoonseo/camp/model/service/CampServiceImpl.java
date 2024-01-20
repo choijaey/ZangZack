@@ -78,7 +78,6 @@ public class CampServiceImpl implements CampService {
 		RowBounds row = new RowBounds(offSet, pi.getBoardLimit());
 		
 		return cDAO.selectRecomendationList(row,recomendation);
-	}
 
 	@Override
 	public ArrayList<Photo> selectOnePhoto(int i) {

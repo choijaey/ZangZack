@@ -373,8 +373,11 @@
                 // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
                 paymentWidget.requestPayment({
                      orderId: String(Math.floor(Math.random() * 1000000)).padStart(6, "0"),
+
                      orderName: productNames[0].innerText + "외 " + (productNames.length-1) + "건",
-                     successUrl: 'http://localhost:8080/insertPayment.so?productNos=' + productNos + '&enos=' + enos +'&address=' + address + '&options=' + options + '&phone=' + phone + '&name=' + userName + '&required=' +required,
+                     successUrl: 'http://192.168.20.207:8080/insertPayment.so?productNos=' + productNos + '&enos=' + enos +'&address=' + address + '&options=' + options + '&phone=' + phone + '&name=' + userName + '&required=' +required,
+
+
                      failUrl: window.location.origin + "/fail",
                      customerEmail: "thghk0206@naver.com",
                      customerName: userName,

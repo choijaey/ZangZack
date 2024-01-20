@@ -962,6 +962,6 @@
 	<select id="purchaseYN" resultType="_int">
 		select count(*)
 		from payment
-		where member_id = #{id}
+		where member_id = #{memberId} and product_no = #{productNo}
 	</select>
 </mapper>

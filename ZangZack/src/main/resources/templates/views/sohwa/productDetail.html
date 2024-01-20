@@ -980,7 +980,7 @@
 	    document.getElementById("reviewForm").addEventListener("submit", function(event) {
         // 세션에 저장된 loginUser 객체 확인
 	        var loginUser = document.getElementById('loginUser').value;
-	
+			var productNo = document.getElementById('productNo').value;
 	        // 만약 loginUser가 없다면
 	        if (loginUser=="") {
 	            event.preventDefault();
@@ -988,7 +988,7 @@
 	        }else {
 	            $.ajax({
 	                url: 'purchaseYN.so',
-	                data: {},
+	                data: {productNo:productNo},
 	                success: function (data) {
 	                    if (data == "no") {
 	                        alert("이 상품의 구매자만 리뷰를 작성하실 수 있습니다.");

@@ -36,7 +36,7 @@
             <li><a href="logout.me">로그아웃</a></li>
             <li><span>/</span></li>
             <th:block th:if="${session.loginUser.memberIsAdmin == 'N'}"><li><a href="myPage.me">마이페이지</a></li></th:block>
-            <th:block th:unless="${session.loginUser.memberIsAdmin == 'N'}"><li><a href="myPage.me">관리자페이지</a></li></th:block>
+            <th:block th:unless="${session.loginUser.memberIsAdmin == 'N'}"><li><a href="adminPage.me">관리자페이지</a></li></th:block>
          </ul>
       </div>
    </div>
@@ -114,7 +114,7 @@
             <li class="main-menu"><a  href="#" class="main-menu-name">마니또</a>
                <ul>
                   <li class="sub-menu-1">
-                     <a href="#" class="sub-menu-name">심리테스트<span class="gt"></span> 
+                     <a href="psychologicalTestMain.me" class="sub-menu-name">심리테스트<span class="gt"></span> 
                         
                      </a>   
                   </li>
