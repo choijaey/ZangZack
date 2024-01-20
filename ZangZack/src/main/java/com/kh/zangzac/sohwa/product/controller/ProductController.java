@@ -37,6 +37,7 @@ import com.kh.zangzac.sohwa.product.model.vo.Product;
 import com.kh.zangzac.sohwa.product.model.vo.Qna;
 import com.kh.zangzac.sohwa.product.model.vo.Review;
 
+import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 
 @SessionAttributes("loginUser")
@@ -138,6 +139,7 @@ public class ProductController {
       
    }
    
+  
    
    //관리자 상품 목록페이지 view
    @GetMapping("adminProductList.so")
@@ -153,6 +155,10 @@ public class ProductController {
       PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
       ArrayList<Product> pList = pService.selectAdminProduct(map, pi);
       
+      //추천상품
+      ArrayList<Product> recommend = pService.selectRecommendProduct();
+      
+      model.addAttribute("recommend", recommend);
       model.addAttribute("loc", request.getRequestURI());
       model.addAttribute("pi", pi);
       model.addAttribute("keyword", keyword);
@@ -174,42 +180,30 @@ public class ProductController {
    public String productListView(@RequestParam(value="keyword", defaultValue="") String keyword, @RequestParam(value="standard", defaultValue="1") String standard, @RequestParam(value="categoryNo", defaultValue="0") String categoryNo, @RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
       
       
+      HashMap<String, String> map = new HashMap<>();
       
-      int listCount = 0;
-      HashMap<String, String> categoryMap = new HashMap<>();
-      HashMap<String, String> searchMap = new HashMap<>();
-      ArrayList<Product> pList = new ArrayList<>();
-      ArrayList<Attachment> aList = new ArrayList<>();
-      ArrayList<Attachment> thList = new ArrayList<>();
-      ArrayList<Option> oList = new ArrayList<>();
-      PageInfo pi = new PageInfo();
       
-      //categoryNo가 0일때는 keyword가져가기
-      //keyword가 ""일때는 categoryNo가져가기
-      if(!categoryNo.equals("0")) {
-         listCount = pService.getListCount(categoryNo);
-         int currentPage = page;
-         pi = Pagination.getPageInfo(currentPage, listCount, 12);
-         categoryMap.put("categoryNo", categoryNo);
-         categoryMap.put("standard", standard);
-         pList = pService.selectProductList(pi, categoryMap);
-         aList = pService.selectPhotoList(categoryNo);
-         thList = pService.selectPhotothList(categoryNo);
-      }else {
-         listCount = pService.getListCountKeyword(keyword);
-         int currentPage = page;
-         pi = Pagination.getPageInfo(currentPage, listCount, 12);
-         
-         searchMap.put("keyword", keyword);
-         searchMap.put("standard", standard);
-         
-         pList = pService.searchProduct(pi, searchMap);
-         aList = pService.searchPhoto(searchMap);
-         thList = pService.searchPhototh(searchMap);
-      }
-      System.out.println(categoryNo);
-      System.out.println("pi:" + pi);
+      map.put("keyword", keyword);
+      map.put("categoryNo", categoryNo);
+      map.put("standard", standard);
+      
+      int listCount = pService.getListCount(map);
+      int currentPage = page;
+      PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 12);
+      ArrayList<Product> pList = pService.selectProductMap(pi, map);
+      ArrayList<Attachment> aList = pService.selectPhotoMap(map);
+      ArrayList<Attachment> thList = pService.selectPhotoTHMap(map);
       ArrayList<Review> rList = pService.selectproductAllReview();
+      
+      for(int i=0; i<pList.size(); i++) {
+    	  for(int j=0; j<thList.size(); j++) {
+    		  if(pList.get(i).getProductNo()==thList.get(j).getBoardNo() && thList.get(j).getPhotoLevel()==0) {
+    			  pList.get(i).setPhotoPath(thList.get(j).getPhotoPath());
+    		  }
+    	  }
+      }
+      
+      
       System.out.println(pi.getMaxPage());
       if(aList != null) {
          model.addAttribute("thList", thList);
@@ -218,6 +212,7 @@ public class ProductController {
          model.addAttribute("keyword", keyword);
          model.addAttribute("aList", aList);
          model.addAttribute("pList", pList);
+         model.addAttribute("standard", standard);
          model.addAttribute("pi", pi);
          model.addAttribute("loc", request.getRequestURI());
          return "views/sohwa/productList";
@@ -259,40 +254,30 @@ public class ProductController {
    @ResponseBody
    public HashMap<String, Object> infiniteScroll(@RequestParam(value="keyword", defaultValue="") String keyword, @RequestParam(value="standard", defaultValue="1") String standard, @RequestParam(value="categoryNo", defaultValue="0") String categoryNo, @RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
 	   
-	   int listCount = 0;
-	      HashMap<String, String> categoryMap = new HashMap<>();
-	      HashMap<String, String> searchMap = new HashMap<>();
-	      ArrayList<Product> pList = new ArrayList<>();
-	      ArrayList<Attachment> aList = new ArrayList<>();
-	      ArrayList<Attachment> thList = new ArrayList<>();
-	      ArrayList<Option> oList = new ArrayList<>();
-	      PageInfo pi = new PageInfo();
-	      int currentPage = 0;
-	      //categoryNo가 0일때는 keyword가져가기
-	      //keyword가 ""일때는 categoryNo가져가기
-	      if(!categoryNo.equals("0")) {
-	         listCount = pService.getListCount(categoryNo);
-	         currentPage = page;
-	         pi = Pagination.getPageInfo(currentPage, listCount, 12);
-	         categoryMap.put("categoryNo", categoryNo);
-	         categoryMap.put("standard", standard);
-	         pList = pService.selectProductList(pi, categoryMap);
-	         aList = pService.selectPhotoList(categoryNo);
-	         thList = pService.selectPhotothList(categoryNo);
-	      }else {
-	         listCount = pService.getListCountKeyword(keyword);
-	         currentPage = page;
-	         pi = Pagination.getPageInfo(currentPage, listCount, 12);
-	         
-	         searchMap.put("keyword", keyword);
-	         searchMap.put("standard", standard);
-	         
-	         pList = pService.searchProduct(pi, searchMap);
-	         aList = pService.searchPhoto(searchMap);
-	         thList = pService.searchPhototh(searchMap);
+	   HashMap<String, String> map1 = new HashMap<>();
+	      System.out.printf("standard = %s", standard);
+	      
+	      map1.put("keyword", keyword);
+	      map1.put("categoryNo", categoryNo);
+	      map1.put("standard", standard);
+	      
+	      int listCount = pService.getListCount(map1);
+	      int currentPage = page;
+	      PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 12);
+	      ArrayList<Product> pList = pService.selectProductMap(pi, map1);
+	      ArrayList<Attachment> aList = pService.selectPhotoMap(map1);
+	      ArrayList<Attachment> thList = pService.selectPhotoTHMap(map1);
+	      ArrayList<Option> oList = pService.selectAllOption();
+	      
+	      for(int i=0; i<pList.size(); i++) {
+	    	  for(int j=0; j<thList.size(); j++) {
+	    		  if(pList.get(i).getProductNo()==thList.get(j).getBoardNo() && thList.get(j).getPhotoLevel()==0 && thList.get(j).getBoardType()==5) {
+	    			  pList.get(i).setPhotoPath(thList.get(j).getPhotoPath());
+	    		  }
+	    	  }
 	      }
-	      System.out.println(categoryNo);
-	      System.out.println(pi.getMaxPage());
+	      
+	      System.out.println(pList);
 	      ArrayList<Review> rList = pService.selectproductAllReview();
 	      HashMap<String, Object> map = new HashMap<>();
 	      
@@ -302,6 +287,8 @@ public class ProductController {
 	         map.put("rList", rList);
 	         map.put("categoryNo", categoryNo);
 	         map.put("keyword", keyword);
+	         map.put("standard", standard);
+	         
 	         map.put("aList", aList);
 	         map.put("pList", pList);
 	         map.put("pi", pi);
@@ -474,7 +461,7 @@ public class ProductController {
       
       
       if(result0 + result1 + result2 + result3 == options.length + coreList.size()+detailList.size()+1) {
-         return "redirect:productListView.so";
+         return "redirect:adminProductList.so";
       }else {
          throw new ProductException("상품 등록 실패");
       }
@@ -617,6 +604,7 @@ public class ProductController {
          return "fail";
       }
    }
+   
    
    @GetMapping("centerView.so")
    public String qnaView(Model model) {
@@ -1018,7 +1006,7 @@ public class ProductController {
        System.out.println(paymentKey);
        System.out.println(amount); //100
        String id = ((Member)model.getAttribute("loginUser")).getMemberId();
-       //{"mId":"tvivarepublica","lastTransactionKey":"B648AB26AC000718EB50E755086D240A","paymentKey":"jPblkGKaEWd46qopOB89O6JmlGN7mEVZmM75y0v1YenRLQD2","orderId":"1W_pCfO4rzG9szJEcThKerr","orderName":"토스 티셔츠 외 2건","taxExemptionAmount":0,"status":"DONE","requestedAt":"2024-01-15T17:05:59+09:00","approvedAt":"2024-01-15T17:06:13+09:00","useEscrow":false,"cultureExpense":false,"card":null,"virtualAccount":null,"transfer":null,"mobilePhone":null,"giftCertificate":null,"cashReceipt":null,"cashReceipts":null,"discount":null,"cancels":null,"secret":"ps_yZqmkKeP8gy6eJqEOD2OVbQRxB9l","type":"NORMAL","easyPay":{"provider":"토스페이","amount":100,"discountAmount":0},"country":"KR","failure":null,"isPartialCancelable":true,"receipt":{"url":"https://dashboard.tosspayments.com/receipt/redirection?transactionId=tviva20240115170559mESY4&ref=PX"},"checkout":{"url":"https://api.tosspayments.com/v1/payments/jPblkGKaEWd46qopOB89O6JmlGN7mEVZmM75y0v1YenRLQD2/checkout"},"currency":"KRW","totalAmount":100,"balanceAmount":100,"suppliedAmount":91,"vat":9,"taxFreeAmount":0,"method":"간편결제","version":"2022-11-16"}
+       //{"mId":"tvivarepublica","lastTransactionKey":"34292C37FAF8374CFEEB0EEDE9E5EEE4","paymentKey":"k0A2Ga1QqXjExPeJWYVQOqkPjmjBdq849R5gvNLdzZwO6oKl","orderId":"555324","orderName":"[네이처하이크] 더블 후드 슬리핑백 침낭외 2건","taxExemptionAmount":0,"status":"DONE","requestedAt":"2024-01-19T09:37:40+09:00","approvedAt":"2024-01-19T09:37:58+09:00","useEscrow":false,"cultureExpense":false,"card":null,"virtualAccount":null,"transfer":null,"mobilePhone":null,"giftCertificate":null,"cashReceipt":null,"cashReceipts":null,"discount":null,"cancels":null,"secret":"ps_d46qopOB89ddnydPaq75rZmM75y0","type":"NORMAL","easyPay":{"provider":"토스페이","amount":196100,"discountAmount":0},"country":"KR","failure":null,"isPartialCancelable":true,"receipt":{"url":"https://dashboard.tosspayments.com/receipt/redirection?transactionId=tviva20240119093740OT7W4&ref=PX"},"checkout":{"url":"https://api.tosspayments.com/v1/payments/k0A2Ga1QqXjExPeJWYVQOqkPjmjBdq849R5gvNLdzZwO6oKl/checkout"},"currency":"KRW","totalAmount":196100,"balanceAmount":196100,"suppliedAmount":178273,"vat":17827,"taxFreeAmount":0,"method":"간편결제","version":"2022-11-16"}//{"mId":"tvivarepublica","lastTransactionKey":"FF4400ED2C256723D7B4568D1CFE20FE","paymentKey":"01OAv2P6yqLlDJaYngro9XZ27RO97G3ezGdRpXxKN7BQMEk4","orderId":"309629","orderName":"NaN건","taxExemptionAmount":0,"status":"DONE","requestedAt":"2024-01-19T09:30:56+09:00","approvedAt":"2024-01-19T09:31:12+09:00","useEscrow":false,"cultureExpense":false,"card":null,"virtualAccount":null,"transfer":null,"mobilePhone":null,"giftCertificate":null,"cashReceipt":null,"cashReceipts":null,"discount":null,"cancels":null,"secret":"ps_GePWvyJnrKvEdbYXXbXLVgLzN97E","type":"NORMAL","easyPay":{"provider":"토스페이","amount":196100,"discountAmount":0},"country":"KR","failure":null,"isPartialCancelable":true,"receipt":{"url":"https://dashboard.tosspayments.com/receipt/redirection?transactionId=tviva20240119093056MY3M0&ref=PX"},"checkout":{"url":"https://api.tosspayments.com/v1/payments/01OAv2P6yqLlDJaYngro9XZ27RO97G3ezGdRpXxKN7BQMEk4/checkout"},"currency":"KRW","totalAmount":196100,"balanceAmount":196100,"suppliedAmount":178273,"vat":17827,"taxFreeAmount":0,"method":"간편결제","version":"2022-11-16"}
        System.out.println(productNos);
        HttpRequest request = HttpRequest.newBuilder()
              .uri(URI.create("https://api.tosspayments.com/v1/payments/confirm"))
@@ -1069,7 +1057,12 @@ public class ProductController {
       } catch (InterruptedException e) {
          e.printStackTrace();
       }
-      return "redirect:myOrderPageView.so";
+      model.addAttribute("orderNo", orderId);
+      model.addAttribute("address", address.split("@")[1] + " " + address.split("@")[2]);
+      model.addAttribute("phone", phone);
+      model.addAttribute("name", name);
+      model.addAttribute("price", amount);
+      return "views/sohwa/success";
     }
     
      
@@ -1163,15 +1156,7 @@ public class ProductController {
       int optionResult = pService.insertOption(oList);
       
       
-      
-      
-      //deleteAttm이 비워져있고, coreFiles와 detailFiles도 비워져있을 때
-      //deleteAttm이 비워져있고, coreFiles만 비워져있고, detailFiles는 존재
-      //deleteAttm이 비워져있고, coreFiles는 존재하고, detailFiles는 비워져있을 때
       //deleteAttm이 비워져있고, coreFiles와 detailFiles 둘 다 존재
-      //deleteAttm이 채워져있고, coreFiles와 detailFiles는 비워져있을 때
-      //deleteAttm이 채워져있고, coreFiles만 비워져있고, detailFiles는 존재
-      //deleteAttm이 채워져있고, coreFiles는 존재하고, detailFiles는 비워져있을 때
       //deleteAttm이 채워져있고, coreFiles와 detailFiles 둘 다 존재
             
       
@@ -1207,14 +1192,6 @@ public class ProductController {
           }
        }
       
-//      if(!delRename.isEmpty()) {
-//         deleteResult = pService.deleteProductPhoto(delRename);
-//         if(deleteResult > 0) {
-//            for(String rename : delRename) {
-//               imageStorage.deleteImage(rename, name);
-//            }
-//         }
-//      }
       
       //이전의 첨부파일이 존재했는지에 대한 boolean값
       boolean existBeforeAttm = true;
@@ -1267,16 +1244,6 @@ public class ProductController {
             }
          }
       }
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
       
       
       
@@ -1335,6 +1302,20 @@ public class ProductController {
    
    
    
+   @GetMapping("purchaseYN.so")
+   @ResponseBody
+   public String purchaseYN(Model model) {
+	   String id = ((Member)model.getAttribute("loginUser")).getMemberId();
+	   
+	   int result = pService.purchaseYN(id);
+	   
+	   if(result == 0) {
+		   return "no";
+	   }else {
+		   return "yes";
+	   }
+	  
+   }
    
    
    

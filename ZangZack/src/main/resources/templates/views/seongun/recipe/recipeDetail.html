@@ -5,19 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>레시피 상세보기</title>
     <link rel="stylesheet" href="css/seongun/recipeDetail.css">
+    <style>
+    	img{
+    		vertical-align: middle;
+    	}
+    </style>
 </head>
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
-    <div class="recipe-detail">
+    <div class="recipe-detail" style="margin-top : 2%; margin-bottom: 5%; border: 1px solid black; padding:5%; padding-top: 2%;">
+    	<h1>레시피</h1>
         <!-- 이미지 슬라이더 -->
-        <h1>[[${r.recipeName}]]</h1>
         <th:block th:if="${pList != null && !pList.isEmpty}">
 	        <div class="image-slider">
 	            <button class="slide-btn prev-btn"></button>
-	            <div class="image-container" th:each="p : ${pList}">>
-	                <img th:src="${p.photoPath}" th:alt="${p.photoRename}">
-	                <!-- 추가 이미지 -->
-	            </div>
+		            <div class="image-container">
+					    <th:block th:each="p : ${pList}">
+					        <img th:src="${p.photoPath}" th:alt="${p.photoRename}" style="max-height: 600px;"/>
+					    </th:block>
+					</div>
 	            <button class="slide-btn next-btn"></button>
 	            <div class="slider-pagination"></div>
 	        </div>
@@ -26,13 +32,13 @@
         <!-- 레시피 정보 테이블 -->
         <table class="recipe-info">
             <tr>
-                <th>메인재료</th>
+                <th>요리이름</th>
                 <th>조리도구</th>
                 <th>맛</th>
             </tr>
             <tr>
-                <td>[[${r.recipeIngredients}]]</td>
-                <td>[[${r.cookCategoryName}]]</td>
+                <td>[[${r.recipeName}]]</td>
+                <td>[[${#strings.arrayJoin(r.cookCategoryName, ', ')}]]</td>
                 <td>[[${r.recipeTaste}]]</td>
             </tr>
             <!-- 추가 정보 -->
@@ -40,10 +46,13 @@
 
         <!-- 레시피 설명 -->
         <div class="recipe-description">
-            <p>[[${r.recipeIngredients}]]</p>
+            <p style="white-space: pre-line;"><b>메인 재료<br></b>
+            	[[${r.recipeIngredients}]]
+            </p>
         </div>
-        <div class="recipe-description">
-            <p>[[${r.recipeContent}]]</p>
+        <br>
+        <div class="recipe-description"><b>조리법<br></b>
+            <p style="white-space: pre-line;">[[${r.recipeContent}]]</p>
         </div>
     </div>
 
@@ -54,15 +63,15 @@
 	    let imageContainer = document.querySelector('.image-container');
 	    let paginationContainer = document.querySelector('.slider-pagination');
 
-    // 페이징 버튼 생성
-		    sliderImages.forEach((_, idx) => {
-		        let btn = document.createElement('span');
-		        btn.classList.add('pagination-btn');
-		        btn.addEventListener('click', () => {
-		            currentImageIdx = idx;
-		            updateSliderPosition();
-		            updatePaginationButtons();
-		        });
+    	// 페이징 버튼 생성
+		sliderImages.forEach((_, idx) => {
+			let btn = document.createElement('span');
+			btn.classList.add('pagination-btn');
+			btn.addEventListener('click', () => {
+				currentImageIdx = idx;
+				updateSliderPosition();
+				updatePaginationButtons();
+			});
 		        paginationContainer.appendChild(btn);
 		    });
 		
@@ -94,6 +103,6 @@
 		    updatePaginationButtons(); // 초기 페이징 버튼 설정
 		});
 
-    </script> <!-- JavaScript 파일 링크 -->
+    </script> 
 </body>
 </html>

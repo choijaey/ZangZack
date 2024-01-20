@@ -96,24 +96,145 @@
 	
 	
 	
+<!-- 	<select id="getListCount" resultType="_int"> -->
+<!-- 		select count(*) -->
+<!-- 		from product -->
+<!-- 		where product_status = 'N' -->
+<!-- 		<if test="categoryNo != 0"> -->
+<!-- 			and category_no=#{categoryNo} -->
+<!-- 		</if> -->
+<!-- 	</select> -->
+	
 	<select id="getListCount" resultType="_int">
 		select count(*)
 		from product
-		where product_status = 'N'
+		where product_name like '%${keyword}%'
+		<if test="categoryNo == 0">
+			<if test="standard == 1">
+				order by product_no desc
+			</if>
+			<if test="standard == 2">
+				order by product_price
+			</if>
+			<if test="standard == 3">
+				order by product_price desc
+			</if>
+			<if test="standard == 4">
+				order by product_score desc
+			</if>
+		</if>
 		<if test="categoryNo != 0">
-			and category_no=#{categoryNo}
+			and category_No = #{categoryNo}
+			<if test="standard == 1">
+				order by product_no desc
+			</if>
+			<if test="standard == 2">
+				order by product_price
+			</if>
+			<if test="standard == 3">
+				order by product_price desc
+			</if>
+			<if test="standard == 4">
+				order by product_score desc
+			</if>
+		</if>
+		
+	</select>
+	
+	<select id="selectProductMap" resultType="Product">
+		select *
+		from product
+		where product_name like '%${keyword}%' and product_status = 'N'
+
+		<if test="categoryNo != 0">
+			and category_No = #{categoryNo}
+		</if>
+		
+		<if test="standard == 1">
+			order by product_no desc
+		</if>
+		<if test="standard == 2">
+			order by product_price
+		</if>
+		<if test="standard == 3">
+			order by product_price desc
+		</if>
+		<if test="standard == 4">
+			order by product_score desc
 		</if>
 	</select>
 	
-	
-	
-	
-	<select id="getListCountKeyword" resultType="_int">
-		select count(*)
-		from product
-		where product_status = 'N' and product_name like '%${keyword}%'
+	<select id="selectPhotoMap" resultType="Attachment">
+		select *
+		from photo
+			 join product on (board_no = product_no)
+		where photo_status = 'N' and photo_level = 0 and product_name like '%${keyword}%'
+		<if test="categoryNo == 0">
+			<if test="standard == 1">
+				order by product_no desc
+			</if>
+			<if test="standard == 2">
+				order by product_price
+			</if>
+			<if test="standard == 3">
+				order by product_price desc
+			</if>
+			<if test="standard == 4">
+				order by product_score desc
+			</if>
+		</if>
+		<if test="categoryNo != 0">
+			and category_No = #{categoryNo}
+			<if test="standard == 1">
+				order by product_no desc
+			</if>
+			<if test="standard == 2">
+				order by product_price
+			</if>
+			<if test="standard == 3">
+				order by product_price desc
+			</if>
+			<if test="standard == 4">
+				order by product_score desc
+			</if>
+		</if>
 	</select>
 	
+	<select id="selectPhotoTHMap" resultType="Attachment">
+		select *
+		from photo
+			 join product on (product_no = board_no)
+		where photo_status = 'N' and photo_level in (0,1) and product_name like '%${keyword}%'
+		<if test="categoryNo == 0">
+			<if test="standard == 1">
+				order by product_no desc
+			</if>
+			<if test="standard == 2">
+				order by product_price
+			</if>
+			<if test="standard == 3">
+				order by product_price desc
+			</if>
+			<if test="standard == 4">
+				order by product_score desc
+			</if>
+		</if>
+		<if test="categoryNo != 0">
+			and category_No = #{categoryNo}
+			<if test="standard == 1">
+				order by product_no desc
+			</if>
+			<if test="standard == 2">
+				order by product_price
+			</if>
+			<if test="standard == 3">
+				order by product_price desc
+			</if>
+			<if test="standard == 4">
+				order by product_score desc
+			</if>
+		</if>
+	</select>
 	
 	
 	<select id="searchProduct" resultType="Product">
@@ -140,7 +261,7 @@
 		select *
 		from photo
 			 join product on (board_no = product_no)
-		where photo_status = 'N' and product_name like '%${keyword}%' and photo_level =0
+		where photo_status = 'N' and product_name like '%${keyword}%' and photo_level =0 and board_type=5
 		<if test="standard==1">
 			order by product_no desc
 		</if>
@@ -159,7 +280,7 @@
 		select *
 		from photo
 			 join product on (board_no = product_no)
-		where photo_status = 'N' and product_name like '%${keyword}%' and photo_level in (0,1)
+		where photo_status = 'N' and product_name like '%${keyword}%' and photo_level in (0,1) and board_type=5
 		<if test="standard==1">
 			order by product_no desc
 		</if>
@@ -461,6 +582,7 @@
 				and category_no = 16
 			</if>
 		</if>
+		order by product_no desc
 	</select>
 
 	
@@ -715,6 +837,7 @@
 	<select id="selectMyOrder" resultType="Payment">
 		select *
 		from payment
+		where order_status = 'N' and member_id = #{id}
 		order by order_key_no
 	</select>
 	
@@ -760,7 +883,7 @@
 	
 	<update id="refundOrder">
 		update payment
-		set order_status = 'Y' , delivery_status = '환불요청'
+		set delivery_status = '환불요청'
 		where order_key_no = #{orderKeyNo}
 	</update>
 	
@@ -781,7 +904,7 @@
 	<select id="getListCountOrderN" resultType="_int">
 		select count(*)
 		from payment
-		where order_status='Y'
+		where delivery_status = '환불요청'
 		<if test="searchType==1">
 			and order_no like '%${keyword}%'
 		</if>
@@ -812,7 +935,7 @@
 	<select id="selectNPayment" resultType="Payment">
 		select *
 		from payment
-		where order_status = 'Y'
+		where delivery_status = '환불요청'
 		<if test="searchType==1">
 			and order_no like '%${keyword}%'
 		</if>
@@ -824,5 +947,21 @@
 		</if>
 	</select>	
 	
+	<select id="selectRecommendProduct" resultType="Product">
+		<![CDATA[
+			SELECT *
+			FROM (
+			    SELECT *
+			    FROM product
+			    ORDER BY product_score DESC
+			)
+			WHERE ROWNUM <= 8
+		]]>
+	</select>
 	
+	<select id="purchaseYN" resultType="_int">
+		select count(*)
+		from payment
+		where member_id = #{id}
+	</select>
 </mapper>

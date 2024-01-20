@@ -8,6 +8,11 @@
 	<link rel="stylesheet" href="css/seongun/boardDetail.css">
 	<link rel="stylesheet" href="css/seongun/common/paging.css">
 	<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+	<style>
+    	img{
+    		vertical-align: middle;
+    	}
+    </style>
 </head>
 <link rel="shortcut icon">
 <body>
@@ -15,7 +20,7 @@
 	<div class="container">
 		<div class="article_header">
 			<span class="boardCategory">[[${bList.categoryName}]]</span>
-			<div id="boardEditContainer" th:style="${session.loginUser != null && session.loginUser.memberId == bList.memberId ? '' : 'display:none;'}">
+			<div th:style="${session.loginUser != null ? (session.loginUser.memberId == bList.memberId || session.loginUser.memberIsAdmin == 'Y' ? '' : 'display:none;') : 'display:none;'}">
 			    <button id="boardEditBtn">
 			        <img id="settingBtn" src="image/seongun/boardAdd.png" alt="게시판 설정 버튼">
 			    </button>
@@ -45,7 +50,7 @@
 			</div>
 		</div>
 		<div class="post-content">
-			<p>[[${bList.cbContent}]]</p>
+			<p style="white-space: pre-line;">[[${bList.cbContent}]]</p>
 			<th:block th:if="${!pList.isEmpty}">
 				<img style="max-width:100%;"th:src="${p.photoPath}" alt="게시글 이미지" th:each="p : ${pList}">
 			</th:block>
@@ -98,7 +103,7 @@
 		            insertHeart();
 		        }
 		    } else {
-		        alert("로그인하고 누르삼");
+		        alert("권한이 없습니다.");
 		    }
 		};
 		

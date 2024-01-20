@@ -77,11 +77,6 @@ public class secondHandServiceImpl implements secondHandService{
 	}
 
 	@Override
-	public ArrayList<Reply> selectReply(int spNo) {
-		return spDAO.selectReply(spNo);
-	}
-
-	@Override
 	public ArrayList<Photo> selectPhotoSeconHand(Integer spNo) {
 		return spDAO.selectPhotoSeconHand(spNo);
 	}
@@ -163,6 +158,16 @@ public class secondHandServiceImpl implements secondHandService{
 	@Override
 	public ArrayList<Chatter> chatterList(String roomName) {
 		return spDAO.chatterList(roomName);
+	}
+
+	@Override
+	public ArrayList<secondHandProduct> getSpList(String recomendation) {
+		return spDAO.getSpList(recomendation);
+	}
+
+	@Override
+	public ArrayList<secondHandProduct> selectSpPhoto(ArrayList<Integer> spArrayList) {
+		return spDAO.selectSpPhoto(spArrayList);
 	}
 
 	
