@@ -119,14 +119,6 @@ public class MemberServiceImpl implements MemberService{
 	}
 	
 	//관리자페이지
-	@Override
-	public ArrayList<Member> selectMembers(int i, PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
-		int limit = pi.getBoardLimit();
-		
-		RowBounds rowBounds = new RowBounds(offset, limit);
-		return mDAO.selectMembers(i, rowBounds);
-	}
 
 	@Override
 	public int updateInfo(Properties prop) {
@@ -388,20 +380,20 @@ public class MemberServiceImpl implements MemberService{
 //	public int getmyBoardListCount(String memberId,int i) {
 //		return mDAO.getmyBoardListCount(memberId,i);
 //	}
+//
+//	@Override
+//	public int getmySecondHandProductListCount(Map<String, Object> paramMap) {
+//		return mDAO.getmySecondHandProductListCount(paramMap);
+//	}
 
-	@Override
-	public int getmySecondHandProductListCount(Map<String, Object> paramMap) {
-		return mDAO.getmySecondHandProductListCount(paramMap);
-	}
-
-	@Override
-	public ArrayList<secondHandProduct> selectsecondHandProduct(String memberId, PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
-		int limit = pi.getBoardLimit();
-		
-		RowBounds rowBounds = new RowBounds(offset, limit);
-		return mDAO.selectsecondHandProduct(memberId,rowBounds);
-	}
+//	@Override
+//	public ArrayList<secondHandProduct> selectsecondHandProduct(String memberId, PageInfo pi) {
+//		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+//		int limit = pi.getBoardLimit();
+//		
+//		RowBounds rowBounds = new RowBounds(offset, limit);
+//		return mDAO.selectsecondHandProduct(memberId,rowBounds);
+//	}
 
 	@Override
 	public ArrayList<CampBoard> selectCampBoard(String memberId, PageInfo pi) {
@@ -413,7 +405,7 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public ArrayList<secondHandProduct> searchSpList(PageInfo pi, HashMap<String, String> map) {
+	public ArrayList<secondHandProduct> searchSpList(PageInfo pi, HashMap<String, Object> map) {
 		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
 		int limit = pi.getBoardLimit();
 		
@@ -422,12 +414,12 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public int searchSPListCount(HashMap<String, String> map) {
+	public int searchSPListCount(HashMap<String, Object> map) {
 		return mDAO.searchSPListCount(map);
 	}
 
 	@Override
-	public ArrayList<CampBoard> searchCbList(PageInfo pi, HashMap<String, String> map) {
+	public ArrayList<CampBoard> searchCbList(PageInfo pi, HashMap<String, Object> map) {
 		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
 		int limit = pi.getBoardLimit();
 		
@@ -436,7 +428,7 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public int searchCbListCount(HashMap<String, String> map) {
+	public int searchCbListCount(HashMap<String, Object> map) {
 		return mDAO.searchCbListCount(map);
 	}
 
@@ -444,6 +436,7 @@ public class MemberServiceImpl implements MemberService{
 	public int getmyBoardListCount(Map<String, Object> paramMap) {
 		return mDAO.getmyBoardListCount(paramMap);
 	}
+
 
 
 

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -72,7 +73,7 @@
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="password" placeholder="Password" style="height: 45px;" id="memberId" name="memberPwd">
+	              <input type="password" placeholder="Password" style="height: 45px;" name="memberPwd">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
@@ -92,13 +93,13 @@
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="tel" placeholder="전화번호(-제외)" style="height: 45px; width: 300px; display: inline-block;" name="memberPhone" id="phone">
+	              <input type="tel" placeholder="전화번호(-제외)" style="height: 45px; width: 320px; display: inline-block;" name="memberPhone" id="phone">
 	              <button type="button" id="send" class="confirmBtn2">전송</button>
-	              <input type="text" id="userNum" placeholder="인증번호" style="width: 200px; display: inline-block; height: 45px;">   <!-- 인증번호 입력창 -->
+	              <input type="text" id="userNum" placeholder="인증번호" style="width: 210px; display: inline-block; height: 45px;">   <!-- 인증번호 입력창 -->
 				  <button type="button" id="enterBtn"  class="confirmBtn">확인</button> <!-- 인증번호와 내가 입력창에 입력한 인증번호 비교하는 창 -->
 	            </div>
 	            <div class="input-group">
-					<input type="text" id="sample6_postcode" placeholder="우편번호" name="sample6_postcode" style="width: 200px; display: inline-block; height: 45px;" >
+					<input type="text" id="sample6_postcode" placeholder="우편번호" name="sample6_postcode" style="width: 210px; display: inline-block; height: 45px;" >
 					<input type="button" id="sample6" onclick="sample6_execDaumPostcode()" value="주소검색"  class="confirmBtn">
 				</div>
 				<div class="input-group">
@@ -333,11 +334,11 @@
 		        let idvalcheck = /^[a-z0-9]+$/;
 				if(this.value.trim() == ''){
 					alert('아이디는 영소문자,숫자로 구성된 6글자 이상으로 조합하시오.');
-    				id.style.borderColor = 'red';
+					memberId.style.borderColor = 'red';
 		            $('#memberId').focus();
 				}else if(!idvalcheck.test(idval) || idval.length<6){
 					alert('아이디는 영소문자,숫자로 구성된 6글자 이상으로 조합하시오.');
-					id.style.borderColor = 'red';
+					memberId.style.borderColor = 'red';
    
 				} else {
 					// 아이디 중복체크
@@ -351,6 +352,7 @@
 			    				checkId = true;
 			    			} else {
 			    				memberId.style.borderColor = 'red';
+			    				alert('중복된 아이디가 있습니다.');
 			    				checkId = false;
 			    			}
 			    		},
@@ -363,7 +365,7 @@
 		document.getElementById('memberNickName').addEventListener('change', function() {
 		    let nickNameval = $('#memberNickName').val();
 		    let nickNamevalcheck = /^[ㄱ-ㅎㅏ-ㅣ가-힣가-힣A-Za-z0-9]+$/;
-		    let prohibitedWords = ['ㅅㅂ', '염병', '옘병','시발', '시바', 'ㅂㅅ','미친','ㅂ1ㅅ',,'수1발'];
+		    let prohibitedWords = ['ㅅㅂ', '염병', '옘병','시발', '시바', 'ㅂㅅ','미친','ㅂ1ㅅ',,'수1발','tlqkf'];
 		
 		    if (this.value.trim() === '') {
 		        alert('닉네임은 영어, 한글, 숫자로 구성된 6글자 이상으로 조합하시오.');

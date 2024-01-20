@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -114,7 +115,7 @@
 </head>
 <body>
 	<div class="logo">
-		<a href="home.me"><img src="../image/ming/member/logo.png" alt="logo"></a>
+		<a href="/"><img src="../image/ming/member/logo.png" alt="logo"></a>
 	</div>
 	<aside class="sidebar">
 		<div class="user">
@@ -139,10 +140,6 @@
 				<img src="../image/ming/member/리뷰.png" style="width: 60px;"></img>
 				<a href="review.me">리뷰</a>
 			</li>
-			<li>
-				<img src="../image/ming/member/택배.png" style="width: 60px;"></img>
-				<a href="#">배송</a>
-			</li>
 		<hr>
 			<li>
 				<img src="../image/ming/member/icons8-쇼핑몰-50.png" style="width: 60px;"></img>
@@ -158,7 +155,7 @@
 			</li>
 			<li id="deleteMemberBtn">
 				<img src="../image/ming/member/icons8-취소-100 (1).png" style="width: 60px;"></img>
-				<a id="deleteMember">회원탈퇴</a>
+				<a id="deleteMember" style="color: red;">회원탈퇴</a>
 			</li>
 		</ul>
 	</aside>
@@ -183,12 +180,12 @@
 				   <button type="button" id="updateBtn" onclick="updateProfileImage()">수정</button>
 	            </div>
 	         </form>
-			<form action="updateMemberName.me" method="post">
+			<form action="updateMemberName.me" method="post" >
 			    <input type="text" th:value="${loginUser.memberName}" class="updateInput" name="memberName" placeholder="이름">
 			    <input type="submit" value="수정" class="updateBtn">
 			</form>
 			<form action="updateMemberNickName.me" method="post">
-			    <input type="text" th:value="${loginUser.memberNickName}" class="updateInput" id="memberNickName" name="existingNickname" placeholder="닉네임">
+			    <input type="text" th:value="${#strings.arraySplit(loginUser.memberNickName, '#')[0]}" class="updateInput" id="memberNickName" name="existingNickname" placeholder="닉네임">
 			    <input type="submit" value="수정" id="memberNickNameBtn" class="updateBtn">
 			</form>
 		    <input type="text" th:value="${loginUser.memberId}" class="updateInput" name="memberId" placeholder="Id" readonly>
@@ -200,8 +197,8 @@
 					<input type="submit" value="수정" class="updateBtn" id="enterBtn">
 				</div>
 			</form>
-			<form action="updateMemberEmail.me" method="post" id="updateEmailForm">
-			    <input type="email" id="memberEmail" name="memberEmail" class="updateInput" placeholder="이메일" th:value="${loginUser.memberEmail}"  required>
+			<form action="updateMemberEmail.me" method="post" id="updateEmailForm" onsubmit="return noEmail()">
+			    <input type="email" id="memberEmail" name="memberEmail" class="updateInput" placeholder="이메일" th:value="${loginUser.memberEmail}" required>
 			    <input type="button" id="mail-Check-Btn" value="코드전송" class="updateBtn" >
 			    <div th:if="${loginUser.memberLoginType == 1}" class="comment-section">
 				    <input type="text" id="EmailCheckNo" class="updateInput" name="emailCode" placeholder="인증코드">
@@ -271,7 +268,8 @@
 	    } 
 	</script>
 	<script>
-		let check_code=false;
+	
+		let check_code = false;
 		let check_num;
 		let code="";
     	let checkE = false;
@@ -345,7 +343,7 @@
 	 	//닉네임 정규식
 		let checkNickName = false; // 전역 변수로 선언
 
-		document.getElementById('memberNickName').addEventListener('blur', function () {
+		document.getElementById('memberNickName').addEventListener('keyup', function () {
 		    let nickNameval = $('#memberNickName').val();
 		    let nickNamevalcheck = /^[ㄱ-ㅎㅏ-ㅣ가-힣가-힣A-Za-z0-9]+$/;
 		    let prohibitedWords = ['ㅅㅂ', '염병', '옘병', '시발', '시바', 'ㅂㅅ', '미친', 'ㅂ1ㅅ', '수1발','tlqkf'];
@@ -433,23 +431,26 @@
 		
 		
 		
-		window.onload = () =>{
-			let check_code = false;
-			let code;
+			let email_check_code = false;
+			let email_code="test";
 			let checkEmail = false;
 			let check_button = false;
-
+			
+			
 			document.getElementById('memberEmail').addEventListener('change', function () {
 			    let emailVal = $('#memberEmail').val();
 			    $.ajax({
 			        url: 'checkEmail.me',
 			        data: { memberEmail: this.value },
 			        success: (data) => {
+			        	console.log("test1: "+data);
 			            if (data == 'yes') {
+			            	console.log("test2: "+data);
 			                memberEmail.style.borderColor = 'green';
 			                checkEmail = true;
 			                $('#mail-Check-Btn').prop('disabled', false); // 이메일이 중복되지 않으면 코드 전송 버튼 활성화
 			            } else {
+			            	console.log("test3: "+data);
 			                memberEmail.style.borderColor = 'red';
 			                alert('중복되는 이메일이 있습니다. 다른 이메일을 입력해주세요');
 			                checkEmail = false;
@@ -461,8 +462,9 @@
 			});
 
 			$('#mail-Check-Btn').click(function () {
-			    const checkInput = $('.EmailCheckNo'); // 인증번호 입력하는 곳 
+			    const checkInput = $('#EmailCheckNo'); // 인증번호 입력하는 곳 
 			    let btn=this;
+			    console.log("11");
 			    check_button = true;
 			    const memberLoginType = /*[[${session.loginUser.memberLoginType}]]*/3;
 			    //memberLoginType 이거 먼저 3으로 뜨는지 찍어보고
@@ -473,37 +475,57 @@
 			        return;
 			    }// 조건문 추가해서 1일때는 에이작스 작동되게
 			    else if(memberLoginType === 1){
-				    $.ajax({
-				        type: 'get',
-				        url: 'mailCheck.me',
-				        data: { memberEmail: document.getElementById('memberEmail').value },
-				        success: function (data) {
-				            console.log("data : " + data);
-				            checkInput.attr('disabled', false);
-				            code = data;
-				            toggleCo(btn);
-				            alert('인증번호를 발송했습니다. 인증번호가 오지 않으면 입력하신 정보가 회원정보와 일치하는지 확인해 주세요.');
-				        }
-				    });
+			    	if(checkEmail == true){
+					    $.ajax({
+					        type: 'get',
+					        url: 'mailCheck.me',
+					        data: { memberEmail: document.getElementById('memberEmail').value },
+					        success: function (data) {
+					            console.log("data : " + data);
+					            checkInput.attr('disabled', false);
+					            email_code = data;
+					            toggleCo(btn);
+					            alert('인증번호를 발송했습니다. 인증번호가 오지 않으면 입력하신 정보가 회원정보와 일치하는지 확인해 주세요.');
+					        }
+					    });
+			    		
+			    	}else{
+			    		alert('중복되는 이메일이 있습니다. 다른 이메일을 입력해주세요');
+			    	}
 			    }
 			    
 			});
 
-			$('#EmailCheckNo').click(function () {
-			    let inputCode = this.value;
-			    if (inputCode === code) {
-			        alert('인증 성공하였습니다.');
-			        this.innerText = '인증성공';
-			        check_code = true;
-			        $('#updateEmail').submit();
-			    } else {
-			        alert('인증 실패하였습니다. 다시 입력해주세요.');
-			        this.innerText = '인증실패';
-			        check_code = false;
-			        $('#EmailCheckNo').focus();
-			    }
-			});
-		}
+		
+			function noEmail(event){
+				let inputCode = document.getElementById('EmailCheckNo').value;
+			    console.log(inputCode);
+			    if(check_button){
+				    if (inputCode == email_code) {
+				        alert('인증 성공하였습니다.');
+				        email_check_code = true;
+				    } else {
+				        email_check_code = false;
+				        $('#EmailCheckNo').focus();
+				    }
+		   		 }
+				
+				
+				if(email_check_code){
+					email_check_code = true;
+					check_button = true;
+					checkEmail = true;
+					form.submit();
+					return true;
+				}else{
+					email_check_code = false;
+					check_button = false;
+					checkEmail = false;
+					alert('인증 실패하였습니다. 다시 입력해주세요.');
+					return false;
+				}
+			}
+		
 	</script>
 	<script th:inline="javascript">
 	
