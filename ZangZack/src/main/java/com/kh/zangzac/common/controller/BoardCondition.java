@@ -31,9 +31,9 @@ public class BoardCondition {
 	private CampService cService;
 	
 	@Autowired
-
 	private secondHandService spService;
-
+	
+	@Autowired
 	private EventBoardService ebService;
 	
 	@Autowired
@@ -61,24 +61,10 @@ public class BoardCondition {
 		    intArrayList.add(cg.getCgNo());
 		}
 
-		System.out.println(intArrayList);
 		
  		ArrayList<CampingGround> photoList = cService.selectMainPhoto(intArrayList);
  		
- 		
- 		
- 		
- 		ArrayList<secondHandProduct> spList = spService.getSpList(recomendation);
- 		ArrayList<Integer> spArrayList = new ArrayList<>();
- 		for (secondHandProduct sp : spList) {
-		    spArrayList.add(sp.getSpNo());
-		}
- 		ArrayList<secondHandProduct> spPhotoList = spService.selectSpPhoto(spArrayList);
- 		
-
- 		ArrayList<CampingGround> photoList = cService.selectMainPhoto(intArrayList);
- 		
-
+ 	
  		
  		//jaeyoung
  		
@@ -106,8 +92,6 @@ public class BoardCondition {
 		
 		if(list != null) {
 			model.addAttribute("photoList", photoList);
-			model.addAttribute("spPhotoList", spPhotoList);
-			model.addAttribute("spList", spList);
 
 			model.addAttribute("ebList", eblist);
 			model.addAttribute("cbList", cbList);
