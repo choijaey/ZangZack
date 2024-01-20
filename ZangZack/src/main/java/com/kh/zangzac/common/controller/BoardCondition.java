@@ -51,7 +51,7 @@ public class BoardCondition {
 	
 	@GetMapping("/")
 	public String main(Model model) {
-		
+		//yoonseo
 		String recomendation = "Y";
 		ArrayList<CampingGround> list = cService.getMainList(recomendation);
 		
@@ -66,7 +66,7 @@ public class BoardCondition {
  		ArrayList<CampingGround> photoList = cService.selectMainPhoto(intArrayList);
  		
  		
- 		
+ 		//arim
  		
  		ArrayList<secondHandProduct> spList = spService.getSpList(recomendation);
  		ArrayList<Integer> spArrayList = new ArrayList<>();
@@ -76,7 +76,7 @@ public class BoardCondition {
  		ArrayList<secondHandProduct> spPhotoList = spService.selectSpPhoto(spArrayList);
  		
 
- 		ArrayList<CampingGround> photoList = cService.selectMainPhoto(intArrayList);
+ 		
  		
 
  		
