@@ -1320,7 +1320,10 @@ public class ProductController {
    }
    
    
-   
+   @GetMapping("sohwa.so")
+   public String test() {
+	   return "views/sohwa/sohwa";
+   }
    
    
    
