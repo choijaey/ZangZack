@@ -34,7 +34,7 @@ public interface CampDAO {
 
 	int getRecomendationCount(String recomendation);
 
-	ArrayList<CampingGround> selectRecomendationList(String recomendation);
+	ArrayList<CampingGround> selectRecomendationList(RowBounds row, String recomendation);
 
 	ArrayList<Photo> selectOnePhoto(int i);
 
