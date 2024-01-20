@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -9,7 +10,7 @@
 </head>
 <body>
 <div class="logo">
-		<a href="home.me"><img src="../image/ming/member/logo.png" alt="logo"></a>
+		<a href="/"><img src="../image/ming/member/logo.png" alt="logo"></a>
 	</div>
 	<aside class="sidebar">
 		<div class="user">
@@ -33,10 +34,6 @@
 			<li>
 				<img src="../image/ming/member/리뷰.png" style="width: 60px;"></img>
 				<a href="review.me">리뷰</a>
-			</li>
-			<li>
-				<img src="../image/ming/member/택배.png" style="width: 60px;"></img>
-				<a href="#">배송</a>
 			</li>
 		<hr>
 			<li>
@@ -88,14 +85,14 @@
 						                    <span class="review-date" th:text="${r.reviewModifyDate == null ? r.reviewUploadDate : r.reviewModifyDate}"></span><br>
 						                    <div class="review-text" th:text="${r.reviewContent}">리뷰 내용</div>
 						                    <div class="review-actions">
-						                    <form th:action="updateReview.so" method="post">
+						                    <!-- <form th:action="updateReview.so" method="post">
 						                        <input type="hidden" name="reviewNo" th:value="${r.reviewNo}" />
 						                        <button type="submit" class="delete-review">수정</button>
 					                    	</form>
 					                       <form th:action="deleteReview.me" method="post">
 						                        <input type="hidden" name="reviewNo" th:value="${r.reviewNo}" />
 						                        <button type="submit" class="delete-review">삭제</button>
-					                    	</form>
+					                    	</form> -->
 						                    </div>
 						                </div>
 						            </td>

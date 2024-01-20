@@ -17,31 +17,31 @@
 		<p>상품삭제를 하게되면, 상품의 정보는 보관되지만 사진은 영구삭제됩니다.</p>
 		<br>
 		<div style="float:right;">
-			<a href="productListN.so" style="text-decoration:none; color:gray;" id="trash">휴지통<img src="image/sohwa/icons8-trash-64.png" ></a>
+			
 			<button class="custom-btn btn-4" onclick="enrollPage();">상품등록</button>
 			<th:block th:if="${pageStatus=='Y'}"><button class="custom-btn btn-5" id="checkDelete">선택삭제</button></th:block>
 			<div class="dropdown">
 	             <button class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-	                 주문번호 검색
+	                 상품번호 검색
 	             </button>
 	             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-	                 <li><a class="dropdown-item" href="#" onclick="showSearch('search1', '주문번호 검색')">주문번호 검색</a></li>
-	                 <li><a class="dropdown-item" href="#" onclick="showSearch('search2', '주문자 명 검색')">주문자 명 검색</a></li>
-	                 <li><a class="dropdown-item" href="#" onclick="showSearch('search3', '배송상태 검색')">배송상태 검색</a></li>
+	                 <li><a class="dropdown-item" href="#" onclick="showSearch('search1', '상품번호 검색')">상품번호 검색</a></li>
+	                 <li><a class="dropdown-item" href="#" onclick="showSearch('search2', '상품 명 검색')">상품 명 검색</a></li>
+	                 <li><a class="dropdown-item" href="#" onclick="showSearch('search3', '카테고리 검색')">카테고리 검색</a></li>
 	            </ul>
 	        </div>
 				
 			<div class="search" id="search1">
-				<input type="text" placeholder="주문번호 입력">
-		  		<a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+				<input type="text" placeholder="상품번호 입력" id="searchInput1">
+		  		<a id="searchLink1" href="#"><img id="searchImg1" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
 			</div>
 			<div class="search" id="search2" style="display: none;">
-				<input type="text" placeholder="주문자 성함 입력">
-		  		<a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+				<input type="text" placeholder="상품 명 입력" id="searchInput2">
+		  		<a id="searchLink2" href="#"><img id="searchImg2" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
 			</div>
 			<div class="search" id="search3" style="display: none;">
-				<input type="text" placeholder="배송상태 입력">
-		  		<a href="#"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
+				<input type="text" placeholder="카테고리 입력" id="searchInput3">
+		  		<a id="searchLink3" href="#"><img id="searchImg3" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></a>
 			</div>
 		</div>
 		
@@ -56,7 +56,7 @@
 			</tr>
 			
 			<th:block th:each="p:${pList}">
-				<tr th:each="a:${aList}" th:if="${ p.productNo eq a.boardNo && a.photoLevel==0 }">
+				<tr th:each="a:${aList}" th:if="${ p.productNo eq a.boardNo && a.photoLevel==0 && a.boardType==5}">
 					<td>
 						<input type="checkbox" name="dc">
 						<input type="hidden" name="productNo" th:value="${p.productNo}">
@@ -66,8 +66,8 @@
 					<td>[[${p.productName}]]</td>
 					<td th:text="|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|"></td>
 					<td>
-						<th:block th:if="${pageStatus=='Y'}"><button style="margin-bottom:5px;" th:onclick="productDetail([[${p.productNo}]])">상품페이지로 이동</button><br></th:block>
-						<button th:onclick="productUpdate([[${p.productNo}]])">상품 수정</button>
+						<th:block th:if="${pageStatus=='Y'}"><button style="margin-bottom:5px;" th:onclick="productDetail([[${p.productNo}]])">상품페이지로 이동</button><br><button th:onclick="productUpdate([[${p.productNo}]])">상품 수정</button></th:block>
+						
 					</td>
 				</tr>
 			</th:block>
@@ -77,25 +77,25 @@
 		
 		
 		
-		<nav aria-label="Page navigation example" style="float:right;">
-		    <ul class="pagination">
-		       <li class="page-item">
-		         <a class="page-link" href="#" aria-label="Previous">
-		           <span aria-hidden="true">&laquo;</span>
-		         </a>
-		       </li>
-		       <li class="page-item"><a class="page-link" href="#">1</a></li>
-		       <li class="page-item"><a class="page-link" href="#">2</a></li>
-		       <li class="page-item"><a class="page-link" href="#">3</a></li>
-		       <li class="page-item"><a class="page-link" href="#">4</a></li>
-		       <li class="page-item"><a class="page-link" href="#">5</a></li>
-		       <li class="page-item">
-		       <a class="page-link" href="#" aria-label="Next">
-		           <span aria-hidden="true">&raquo;</span>
-		       </a>
-		       </li>
-		    </ul>
-		</nav>
+		<div id="pagenation" th:with="loc=${loc}" th:if="${!pList.isEmpty}">
+            <ul>
+<!--                이전 버튼 -->
+               <li th:if="${pi.currentPage > 10}">
+                  <a th:href="@{${loc}(status=${status},searchType=${searchType},keyword=${keyword},page=${pi.currentPage-10})}">&lt; 이전</a>
+               </li>
+<!--                    페이지 번호 -->
+               <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+                  <a th:href="@{${loc}(status=${status},searchType=${searchType},keyword=${keyword},page=${p})}" th:id="${p == pi.currentPage ? 'check_page' : ''}">
+                     [[${p}]] 
+                  </a>
+               </li>
+
+                   <!--다음 버튼  -->
+               <li th:if="${pi.maxPage >= 10 && pi.maxPage - pi.currentPage > 10}">
+                  <a th:href="@{${loc}(status=${status},searchType=${searchType},keyword=${keyword},page=${pi.currentPage+10})}">다음 &gt;</a>
+               </li>
+            </ul>
+        </div>
 		
 		
 	</div>
@@ -113,6 +113,40 @@
 	
 	
 	<script th:inline="javascript">
+	
+		var searchInput1 = document.getElementById("searchInput1");
+		var searchInput2 = document.getElementById("searchInput2");
+		var searchInput3 = document.getElementById("searchInput3");
+		var searchImg1 = document.getElementById("searchImg1");
+		var searchImg2 = document.getElementById("searchImg2");
+		var searchImg3 = document.getElementById("searchImg3");
+		var searchLink1 = document.getElementById('searchLink1');
+		var searchLink2 = document.getElementById('searchLink2');
+		var searchLink3 = document.getElementById('searchLink3');
+	    
+	
+	    searchImg1.addEventListener("click", function() {
+	        var keyword = searchInput1.value;
+	        
+	        location.href= 'adminProductList.so?searchType=1&keyword=' + keyword;
+	        console.log(keyword);
+	    });
+	    
+	    searchImg2.addEventListener("click", function() {
+	        var keyword = searchInput2.value;
+	        location.href= 'adminProductList.so?searchType=2&keyword=' + keyword;
+	    });
+	    
+	    searchImg3.addEventListener("click", function() {
+	        var keyword = searchInput3.value;
+	        location.href= 'adminProductList.so?searchType=3&keyword=' + keyword;
+	    });
+	
+	
+	
+	
+	
+	
 		//체크박스 전체선택
         document.addEventListener('DOMContentLoaded', function () {
             const allSelectCheckbox = document.getElementById('allSelect');

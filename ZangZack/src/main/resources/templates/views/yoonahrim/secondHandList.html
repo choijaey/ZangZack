@@ -13,7 +13,6 @@
 	<input type="hidden" id="loginUser" th:value="${loginUser}"/>
 	<!-- 게시판 navbar -->
 	<a id="back-to-top"><img src='image/seongun/topBtn.png' style='width:38px; height:38px;'></a>
-    <button type="button" th:onclick="location.href='admin.ah'"></button>
     <div id="content">
         <div id="space_zone">
             <p>
@@ -61,7 +60,7 @@
       </div>
       
       <div>
-         <select style="height:23px; float: left; position:relative; left: 230px; top: 36px;" name="type">
+         <select style="height:23px; float: left; position:relative; left: 225px; top: 36px;" name="type">
             <option>카테고리</option>
             <option value="11">텐트</option>
             <option value="12">취침용품</option>
@@ -72,18 +71,17 @@
          </select>   
        </div>
       
-      <button type="button" id="searchBtn" onclick="categorySelect()">GO</button>
+      <button type="button" id="searchBtn" class="btn btn-outline-dark" onclick="categorySelect()">GO</button>
       
       <div class="pointerBtn">
          <button id="writeBtn" class="btn-hover color-1" th:onclick="location.href='write.ah'">글쓰기</button>&nbsp;&nbsp;
       </div>
-      <br><br>
       
       
       <!-- CARD-->
       <div class="container text-center">
          <div class="row g-3">
-               <div class="col-md-3" th:each="s: ${sList}" style="margin-bottom:100px;">
+               <div class="col-md-3" th:each="s: ${sList}" style="margin-bottom:120px;">
 	               <a class="card-link " th:onclick="|location.href='detail.ah?spNo=${s.spNo}'|">
 	                   <th:block th:each="a : ${aList}" th:if="${a.boardNo eq s.spNo}">
 		                   <div class="card-photo" th:if="${a.photoLevel == 0}">
@@ -104,10 +102,6 @@
 	                     </div>
 	                     <div class="card-counts">
 	                         <span>
-	                           관심[[${s.spCount}]]
-	                         </span>
-	                       ∙
-	                         <span>
 	                           댓글[[${s.replyCount}]]
 	                         </span>
 	                     </div>
@@ -123,7 +117,7 @@
 	           	 <ul class="pagination">
 	                   <!-- 이전 버튼 -->
 	                   <li class="page-item">
-	                      <a class="page-link" th:href="@{${loc}(page=${pi.currentPage-1})}" aria-label="Previous" th:if="${pi.currentPage>1}">
+	                      <a class="page-link" th:href="@{${loc}(page=${pi.currentPage-1})}" aria-label="Previous" th:if="${pi.currentPage>1}" style="width:100px;">
 	                      	&lt; 이전
 	                      </a>
 	                   </li>
@@ -135,7 +129,7 @@
 	                    </li>
 	                 	<!-- 다음 버튼 -->
 	                   <li class="page-item">
-	                      <a lass="page-link" th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next" th:if="${pi.currentPage<pi.maxPage}">
+	                      <a lass="page-link" th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next" th:if="${pi.currentPage<pi.maxPage}" style="width:100px;">
 	                      	다음 &gt;
 	                      </a>
 	                   </li>
@@ -175,12 +169,12 @@
         });
         
         function categorySelect() {
-            var selectedRegion = document.getElementsByName('region')[0].value;
-            var selectedCategory = document.getElementsByName('type')[0].value;
+            var region = document.getElementsByName('region')[0].value;
+            var type = document.getElementsByName('type')[0].value;
 
             // 지역이나 카테고리 중 하나라도 선택되었는지 확인
-            if (selectedRegion !== '지역을 선택하세요' || selectedCategory !== '카테고리') {
-                location.href = 'searchSecondHand.ah?region=' + selectedRegion + '&type=' + selectedCategory;
+            if (region !== '지역을 선택하세요' || type !== '카테고리') {
+                location.href = 'searchSecondHand.ah?region=' + region + '&type=' + type;
             }
         }
         

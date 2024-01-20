@@ -10,6 +10,9 @@
 }
 
 /* 내용물 */
+div.card :hover{
+	cursor: pointer;
+}
 .board_list_card .txt {
 	max-height: 44px;
 	margin-top: 6px;

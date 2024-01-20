@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -72,7 +73,7 @@
       <h1>회원 관리</h1>
       <button class="cateBtn active" onclick="toggleTable('allMember', 'refundMember')">회원 목록</button>
       <div style="float:right;">
-         <form action="search.me" method="post">
+         <form action="adminPage.me" method="get">
 	         <div class="nav-item dropdown" id="search1">
 	         	<select name="searchType" class="dropdown-item">
 	         		<option value="memberId" name="memberId" th:selected="${searchType eq 'memberId'}">아이디</option>
@@ -102,7 +103,7 @@
 	            <td class="td1" style="display: none;"><input type="checkbox"></td>
 	            <td class="td2">[[${m.memberId}]]</td>
 	            <td class="td3">[[${m.memberName}]]</td>
-	            <td class="td4" th:text="${#strings.substringBefore(m.memberNickName, '#')}"></td>
+	            <td class="td4">[[${m.memberNickName}]]</td>
 	            <td class="td5">[[${m.memberAddress.replace('@', ' ')}]]</td>
 	            <td class="td6">[[${m.memberPhone}]]</td>
 	            <td class="td7"> 
@@ -117,31 +118,33 @@
          
       </table>
       
-      <nav class="nav2" aria-label="Page navigation example" style="float: right;" th:with="loc=${loc}">
-         <ul class="pagination">
-               <li class="page-item">
-               	  <a class="page-link" th:if="${pi.currentPage <= 1}" aria-label="Previous">
-                  	<span aria-hidden="true">&laquo;</span>
-                  </a>
-                  <a class="page-link" th:if="${pi.currentPage > 1}" th:href="@{${loc}(page=${pi.currentPage-1})}" aria-label="Previous">
-                  	<span aria-hidden="true">&laquo;</span>
-                  </a>
+      <div class="board_bottom_area">
+         <div id="pagenation" th:with="loc=${loc}" th:if="${!list.isEmpty}">
+            <ul>
+               <!-- 이전 버튼 -->
+               <li th:if="${pi.currentPage > 10}">
+                  <a th:href="@{${loc}(page=${pi.currentPage-10}, searchType=${searchType}, keyword=${keyword})}">&lt; 이전</a>
                </li>
-               <li class="page-item" th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
-                  <a class="page-link" th:href="@{${loc}(page=${p})}">[[${ p }]]</a>
+                   <!-- 페이지 번호 -->
+                   <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+                      <th:block th:if="${keyword == null}">
+                      <a th:href="@{${loc}(page=${p}, searchType=${searchType}, keyword=${keyword})}" th:id="${p == pi.currentPage} ? 'check_page'">
+                          [[${p}]] 
+                      </a>
+                   </th:block>
+                   <th:block th:if="${keyword != null}">
+                      <a th:href="@{${loc}(page=${p}, searchType=${searchType}, keyword=${keyword})}" th:id="${p == pi.currentPage} ? 'check_page'">
+                         [[${p}]]
+                     </a>
+                   </th:block>
                </li>
-               
-	          <li class="page-item">
-	              <a class="page-link" th:if="${pi.currentPage >= pi.maxPage}" aria-label="Next">
-	                 <span aria-hidden="true">&raquo;</span>
-	              </a>
-	              <a class="page-link" th:if="${pi.currentPage < pi.maxPage}" th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next">
-	                 <span aria-hidden="true">&raquo;</span>
-	              </a>
-	          </li>
-          </ul>
-      </nav>
-   </div>
+                   <!-- 다음 버튼 -->
+                   <li th:if="${pi.maxPage >= 10 && pi.maxPage - pi.currentPage > 10}">
+                      <a th:href="@{${loc}(page=${pi.currentPage+10}, searchType=${searchType}, keyword=${keyword})}">다음 &gt;</a>
+                   </li>
+                 </ul>
+   	 		</div>
+   		</div>
 	
 	<div class="modal">
 		<div class="modal_body">
@@ -354,7 +357,7 @@
 	                		data : {memberName:memberNameElement.innerText, memberId:changeId.children[1].innerText},
 	                		success: data=>{
 	                			if(data == 'success'){
-	                				changeId.children[2].innerHTML = '<td class="td3">' + memberName + '</td>';
+	                				changeId.children[2].innerHTML = '<td class="td3">' + this.value + '</td>';
 	                			}else{
 	                				alert('수정이 실패하여 페이지가 새로고침 됩니다.');
 									location.reload();

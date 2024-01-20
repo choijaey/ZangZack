@@ -11,6 +11,7 @@ import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.common.reply.model.vo.Reply;
+import com.kh.zangzac.jaeyoung.chat.model.vo.Chatter;
 import com.kh.zangzac.yoonahrim.spBoard.model.dao.secondHandDAO;
 import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
 
@@ -73,11 +74,6 @@ public class secondHandServiceImpl implements secondHandService{
 	@Override
 	public ArrayList<secondHandProduct> selectSeconHand(secondHandProduct sp) {
 		return spDAO.selectSeconHand(sp);
-	}
-
-	@Override
-	public ArrayList<Reply> selectReply(int spNo) {
-		return spDAO.selectReply(spNo);
 	}
 
 	@Override
@@ -156,6 +152,22 @@ public class secondHandServiceImpl implements secondHandService{
 	@Override
 	public int updateCount(int spNo) {
 		return spDAO.updateCount(spNo);
+
+	}
+
+	@Override
+	public ArrayList<Chatter> chatterList(String roomName) {
+		return spDAO.chatterList(roomName);
+	}
+
+	@Override
+	public ArrayList<secondHandProduct> getSpList(String recomendation) {
+		return spDAO.getSpList(recomendation);
+	}
+
+	@Override
+	public ArrayList<secondHandProduct> selectSpPhoto(ArrayList<Integer> spArrayList) {
+		return spDAO.selectSpPhoto(spArrayList);
 	}
 
 	

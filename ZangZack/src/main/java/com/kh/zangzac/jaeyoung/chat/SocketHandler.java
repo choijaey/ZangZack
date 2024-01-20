@@ -43,8 +43,6 @@ public class SocketHandler extends TextWebSocketHandler {
    ChatService cService;
    
    public SocketHandler() {
-	   
-	  
 
    }
    
@@ -71,13 +69,9 @@ public class SocketHandler extends TextWebSocketHandler {
          //카운트 쌓아주기
          if(obj.get("chatType").equals("1")) { // 단체 채팅 
         	   int chatNum = Integer.parseInt((String)obj.get("roomName"));
-        	         	   
         	   //전체채팅리스트 - 현재채팅리스  
         	   obj.put("unReadChatter",chatterList.get(chatNum).size()-(temp.size()-1));
-        	   
-            }else{
-        	   
-           }
+         }
          
          //해당 방의 세션들만 찾아서 메시지를 발송해준다.
          for(String k : temp.keySet()) { 
@@ -107,30 +101,25 @@ public class SocketHandler extends TextWebSocketHandler {
       	   //전체채팅리스트 - 현재채팅리스  
       	   obj.put("unReadChatter",unReadChatter(chatterList.get(chatNum), nowChatter));
       	   
-          }else{
-      	   
-         }
+          }
          cFileManager.saveChat(obj);
-         
       }
    }
    
    @SuppressWarnings("unchecked")
    @Override
    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-	   
+	 //소켓 연결
 	   if(first) {
 		 //채팅방 개수 가져오기
-		   
 		   //1번방 저장 // 2번방 3번방 저장
-		   for(int i=0;i<4;i++) { // 기본적으로 3개라 치고 추후에 변경 예정
+		   for(int i=0;i<4;i++) { // 
 			   //방 번호에 따라 가져오기 
 			   ArrayList<Chatter> temp = cService.selectChatterList(i);
 			   chatterList.add(temp);
 		   }
 		   first=false;
 	   }
-	   
 	   
       //소켓 연결
       super.afterConnectionEstablished(session);
@@ -159,7 +148,7 @@ public class SocketHandler extends TextWebSocketHandler {
           } 
     	  
       }
-      
+      boolean check =false;
       //DB, 파일 채팅 설정
       // 1. 단체 채팅인 경우 채팅방에 입장 했는지 DB에서 확인하기
       if(chatType == 1) {
@@ -171,7 +160,8 @@ public class SocketHandler extends TextWebSocketHandler {
     	  
     	  if(count>0) {
     		  // 채팅방에 이미 있는 상태라면
-    		  boolean check = cFileManager.updateUnreadChatter(roomName,myId);
+    		  
+    		  check = cFileManager.updateUnreadChatter(roomName,myId);
     		  
     		  //입장한 채팅방에 메시지를 보내 갱신시키게 만들거.
     		  
@@ -194,7 +184,6 @@ public class SocketHandler extends TextWebSocketHandler {
 	    	            }
 	    	            
 	    	            obj.put("type", "reset");
-	    	            //각 세션에 보내기
 	    	            WebSocketSession wss = (WebSocketSession)((ChatSession)(temp.get(k))).getSession();
 	    	            if(wss != null) {
 	    	               try {
@@ -216,11 +205,9 @@ public class SocketHandler extends TextWebSocketHandler {
     		  ArrayList<Chatter> changeList = cService.selectChatterList(Integer.parseInt(roomName));
     		  chatterList.set(Integer.parseInt(roomName), changeList);
     	  }
+      }else if(chatType == 2) {
+    	  
       }
-      
-      
-      
-      // 2. 개인 채팅인 경우
       
       
       //컨트롤러 세션 방 설정
@@ -257,6 +244,8 @@ public class SocketHandler extends TextWebSocketHandler {
       obj.put("type", "getId");
       obj.put("sessionId", session.getId());
       obj.put("roomName", roomName);
+      obj.put("sub", check);
+     
       
       session.sendMessage(new TextMessage(obj.toJSONString()));
    }

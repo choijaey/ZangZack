@@ -12,23 +12,23 @@ import com.kh.zangzac.seongun.common.model.vo.SearchBoard;
 @Mapper
 public interface CampBoardDAO {
 
-	int getListCount(int i);
-
-	ArrayList<CampBoard> selectBoardList(int i, RowBounds rowBounds);
+	int getListCount(CampBoard b);
 
 	int insertCampBoard(CampBoard board);
-
-	int insertAttmCampBoard(ArrayList<Photo> fileList);
 
 	CampBoard selectBoard(int cbNo);
 
 	int updateCount(int cbNo);
 
-	int searchListCount(SearchBoard search);
+	int searchListCount(CampBoard b);
 	
-	ArrayList<CampBoard> searchBoardList(SearchBoard search, RowBounds rowBounds);
+	ArrayList<CampBoard> searchBoardList(CampBoard b, RowBounds rowBounds);
 
 	int deleteCampBoard(int cbNo);
 
 	int updateCampBoard(CampBoard b);
+
+	int listCount();
+
+	ArrayList<CampBoard> popularList(RowBounds rowBounds);
 }

@@ -243,7 +243,9 @@
 		<th:block th:each="cf:${list}">
 			<div class="bg-white rounded-lg shadow-md p-4">
 				<div class="flex items-center" style="width: 100%;">
-				    <div class="rounded-full h-16 w-16 bg-gray-300 mr-3"></div>
+				    <div class="rounded-lg h-16 w-16 bg-blue-500 mr-3" style="border-radius: 500px">
+					    <img th:src="${cf.memberProfile}" class="h-full w-full object-cover rounded-lg" alt="Member Profile Image" style="border-radius: 500px">
+					</div>
 				    <div class="flex flex-col flex-grow">
 				        <div class="font-semibold text-lg">[[${cf.cfTitle}]]</div>
 				        <div class="text-gray-500 text-md" style="display:inline-block">[[|@${cf.categoryName} @${cf.memberId}|]]</div>
@@ -279,7 +281,7 @@
 				<div class="comment-section comment-list" th:id="${cf.cfNo}">
 					<th:block th:each="re:${cf.replys}">
 						<div class="comment-item">
-			 	            <img class="comment-thumb" th:src="${re.memberProfilePath}" alt="프로필 사진">
+			 	            <img class="comment-thumb" th:src="${re.memberProfilePath}" alt="프로필 사진" style="width: 50px; height: 50px;">
 			 	            <div class="comment-content">
 			 	                <div class="comment-author">[[${re.memberName}]]</div>
 			 	                <div class="comment-message">[[${re.replyContent}]]</div><br>
@@ -788,7 +790,7 @@
 		        	
 		        	replyHTML+=`
 		        		<div class="comment-item">
-			 	            <img class="comment-thumb" src="${reply.memberProfilePath}" alt="프로필 사진">
+			 	            <img class="comment-thumb" src="${reply.memberProfilePath}" alt="프로필 사진" style="width: 50px; height: 50px;">
 			 	            <div class="comment-content">
 			 	                <div class="comment-author">${reply.memberName}</div>
 			 	                <div class="comment-message">${reply.replyContent}</div><br>
@@ -802,7 +804,9 @@
 		        const newItemHTML = `
 		            <div class="bg-white rounded-lg shadow-md p-4">
 		                <div class="flex items-center" style="width: 100%;">
-		                    <div class="rounded-full h-16 w-16 bg-gray-300 mr-3"></div>
+		               		<div class="rounded-lg h-16 w-16 bg-blue-500 mr-3" style="border-radius: 500px">
+							    <img src="${itemData.memberProfile}" class="h-full w-full object-cover rounded-lg" alt="Member Profile Image" style="border-radius: 500px">
+							</div>
 		                    <div class="flex flex-col flex-grow">
 		                        <div class="font-semibold text-lg">${itemData.cfTitle}</div>
 		                        <div class="text-gray-500 text-md" style="display:inline-block">@${itemData.categoryName} @${itemData.memberId}</div>
@@ -881,7 +885,7 @@
 	 	// 템플릿 문자열을 사용하여 새로운 댓글을 만들고 commentList에 추가
 	 	    const newComment = `
 	 	        <div class="comment-item">
-	 	            <img class="comment-thumb" src="${item.memberProfilePath}" alt="프로필 사진">
+	 	            <img class="comment-thumb" src="${item.memberProfilePath}" alt="프로필 사진" style="width: 50px; height: 50px;">
 	 	            <div class="comment-content">
 	 	                <div class="comment-author">${item.memberName}</div>
 	 	                <div class="comment-message">${item.replyContent}</div><br>
