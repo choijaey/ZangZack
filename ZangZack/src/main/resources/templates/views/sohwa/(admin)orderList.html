@@ -51,7 +51,7 @@
 				<th class="td6" style="text-align:center;">배송상태</th>
 			</tr>
 			
-			<tr class="trs" th:each="pa:${paList}">
+			<tr class="trs" th:each="pa:${paList}" style="border-bottom:1px solid lightgray;">
 <!-- 				<td class="td1"><input type="checkbox"></td> -->
 				<input type="hidden" class="td1" th:value="${pa.orderKeyNo}">
 				<td class="td2">[[${pa.orderNo}]]</td>

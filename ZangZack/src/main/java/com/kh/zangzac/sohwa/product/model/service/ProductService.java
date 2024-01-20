@@ -183,6 +183,8 @@ public interface ProductService {
 
 	ArrayList<Product> selectRecommendProduct();
 
+	int purchaseYN(String id);
+
 
 
 

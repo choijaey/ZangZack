@@ -189,6 +189,8 @@ public interface ProductDAO {
 
 	ArrayList<Product> selectRecommendProduct();
 
+	int purchaseYN(String id);
+
 
 
 
