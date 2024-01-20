@@ -469,8 +469,8 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public int purchaseYN(String id) {
-		return pDAO.purchaseYN(id);
+	public int purchaseYN(Payment p) {
+		return pDAO.purchaseYN(p);
 	}
 
 
