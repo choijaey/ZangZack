@@ -73,7 +73,11 @@ public class CampServiceImpl implements CampService {
 
 	@Override
 	public ArrayList<CampingGround> selectRecomendationList(PageInfo pi, String recomendation) {
-		return cDAO.selectRecomendationList(recomendation);
+		
+		int offSet = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+		RowBounds row = new RowBounds(offSet, pi.getBoardLimit());
+		
+		return cDAO.selectRecomendationList(row,recomendation);
 	}
 
 	@Override
