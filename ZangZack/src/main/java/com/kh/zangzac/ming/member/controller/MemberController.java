@@ -567,10 +567,6 @@ public class MemberController {
 		
 		
 		m.setMemberNickName(memberNickName);
-		/*
-		 * HashMap<String,String>map = new HashMap<String, String>();
-		 * map.put("memberId", memberId); map.put("memberNickName", memberNickName);
-		 */
 		
 		int result = mService.adminUpdateNickName(m);
 		System.out.println(result);
@@ -716,41 +712,19 @@ public class MemberController {
 	      }
 	   }
 	   
-	   // 게시글 가져오기
 	   @GetMapping("myBoardList.me")
-	   public String myBoardList(@RequestParam(value = "page", defaultValue = "1") int page, Model model,
-									 @ModelAttribute CampBoard cb, HttpServletRequest request) {
-		   
+	   public String searchSpList(@RequestParam(value = "page", defaultValue = "1") int page,
+									@RequestParam(value = "searchType", defaultValue = "") String searchType,
+									@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
+									HttpServletRequest request, @ModelAttribute CampBoard cb){
 		   Member loginUser = (Member) model.getAttribute("loginUser");
 		   String memberId = loginUser.getMemberId();
 		   
-		   Map<String, Object> paramMap = new HashMap<>();
-		   paramMap.put("memberId", memberId);
-		   paramMap.put("1", 1);
-		   int listCount = mService.getmyBoardListCount(paramMap);
-
-		   PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
-		   
-		   ArrayList<CampBoard> cbList = mService.selectCampBoard(memberId,pi); 
-		   if(cbList != null) {
-			   model.addAttribute("cbList",cbList);
-			   model.addAttribute("pi",pi);
-			   model.addAttribute("memberId", memberId);
-			   model.addAttribute("loc", request.getRequestURI());
-		   }
-		   
-		   return "views/ming/member/myBoardList";
-	   }
-	   
-	   //게시글 검색
-	   @GetMapping("searchCbList.me")
-	   public String searchCbList(@RequestParam(value = "page", defaultValue = "1") int page,
-									@RequestParam(value = "searchType", defaultValue = "") String searchType,
-									@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
-									HttpServletRequest request){
-		    HashMap<String, String>map = new HashMap<>();
+		   HashMap<String, Object>map = new HashMap<>();
 			map.put("keyword", keyword);
 			map.put("searchType", searchType);
+			map.put("memberId", memberId);
+			map.put("1", 1);
 			
 			int currentPage = page;
 			int listCount = mService.searchCbListCount(map);
@@ -760,48 +734,33 @@ public class MemberController {
 			
 			if(cbList != null) {
 				model.addAttribute("pi", pi);
-				model.addAttribute("cbList",cbList);
-				model.addAttribute("loc", request.getRequestURI());
+				model.addAttribute("cbList", cbList);
+				model.addAttribute("loc", request.getRequestURI());// url 다 가져옴 / uri 뒤에만 가져옴
+				model.addAttribute("searchType",searchType);
+				model.addAttribute("keyword",keyword);
+				model.addAttribute("memberId", memberId);
 				return "views/ming/member/myBoardList";
 			} else {
 				throw new MemberException("게시글 목록 조회에 실패하였습니다.");
 			}
 		}
 	   
-	   //중고게시글 가져오기
-	   @GetMapping("mySecondHandProductList.me")
-	   public String secondHandProductList(@RequestParam(value = "page", defaultValue = "1") int page, Model model,
-			   								@ModelAttribute secondHandProduct sp,HttpServletRequest request) {
-		   Member loginUser = (Member) model.getAttribute("loginUser");
-		   String memberId = loginUser.getMemberId();
-		   
-		   Map<String, Object> paramMap = new HashMap<>();
-		   paramMap.put("memberId", memberId);
-		   paramMap.put("4", 4);
-		   int listCount = mService.getmySecondHandProductListCount(paramMap);
-		   System.out.println(listCount);
-		   
-		   PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
-		   ArrayList<secondHandProduct> spList = mService.selectsecondHandProduct(memberId,pi); 
-		   
-		   if(spList != null) {
-			   model.addAttribute("spList",spList);
-			   model.addAttribute("pi",pi);
-			   model.addAttribute("memberId", memberId);
-			   model.addAttribute("loc", request.getRequestURI());
-		   }
-		   return "views/ming/member/mySecondHandProductList";
-	   }
-	   
+
 	   //중고 검색
-	   @GetMapping("searchSpList.me")
+	   @GetMapping("mySecondHandProductList.me")
 	   public String searchSpList(@RequestParam(value = "page", defaultValue = "1") int page,
 									@RequestParam(value = "searchType", defaultValue = "") String searchType,
 									@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
-									HttpServletRequest request){
-		    HashMap<String, String>map = new HashMap<>();
+									HttpServletRequest request,@ModelAttribute secondHandProduct sp){
+		   
+		   Member loginUser = (Member) model.getAttribute("loginUser");
+		   String memberId = loginUser.getMemberId();
+		   
+		   HashMap<String, Object>map = new HashMap<>();
 			map.put("keyword", keyword);
 			map.put("searchType", searchType);
+			map.put("memberId", memberId);
+			map.put("4", 4);
 			
 			int currentPage = page;
 			int listCount = mService.searchSPListCount(map);
@@ -809,11 +768,15 @@ public class MemberController {
 			PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
 			ArrayList<secondHandProduct> spList = mService.searchSpList(pi, map);
 			
+			System.out.println(spList);
+			
 			if(spList != null) {
 				model.addAttribute("pi", pi);
 				model.addAttribute("spList", spList);
-				model.addAttribute("loc", request.getRequestURI()); // url 다 가져옴 / uri 뒤에만 가져옴
-				System.out.println("spList: " + spList);
+				model.addAttribute("loc", request.getRequestURI());// url 다 가져옴 / uri 뒤에만 가져옴
+				model.addAttribute("searchType",searchType);
+				model.addAttribute("keyword",keyword);
+				model.addAttribute("memberId", memberId);
 				return "views/ming/member/mySecondHandProductList";
 			} else {
 				throw new MemberException("게시글 목록 조회에 실패하였습니다.");
