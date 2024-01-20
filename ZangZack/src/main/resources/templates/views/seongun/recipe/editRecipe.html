@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>게시판 수정</title>
-	<link href="css/seongun/campboard/editboard.css" rel="stylesheet">
-	<style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>레시피 작성</title>
+    <link href="css/seongun/writeboard.css" rel="stylesheet">
+    <style>
     	img{
     		vertical-align: middle;
     	}
@@ -13,35 +13,40 @@
 </head>
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
-	<div class="head-container">
-		<h1>캠핑게시판 수정</h1>
-	</div>
-	<div class="write-container">
-		<form method="post" action="updateCampBoard.su"enctype="multipart/form-data">
-			<!-- 제목 입력 -->
-			<div class="write-row">
-				<input type="hidden" name="cbNo" th:value="${bList.cbNo}"/>
-				<input type="text" id="title" name="cbTitle" th:value="${bList.cbTitle}" />
-			</div>
-			<!-- 카테고리 선택 -->
-			<div class="write-row">
-			    <select name="categoryNo" id="category">
-			        <option value="1" th:selected="${bList.categoryNo == 1}">백패킹</option>
-			        <option value="2" th:selected="${bList.categoryNo == 2}">오토캠핑</option>
-			        <option value="3" th:selected="${bList.categoryNo == 3}">장박</option>
-			        <option value="4" th:selected="${bList.categoryNo == 4}">글램핑</option>
-			    </select>
-			</div>
-
-			<!-- 내용 입력 -->
-			<div class="write-row">
-				<textarea id="content" name="cbContent" th:text="${bList.cbContent}"></textarea>
-			</div>
-			<!-- 파일 첨부 -->
-			<th:block th:if="${not #lists.isEmpty(pList)}">
+    <div class="head-container">
+        <h1>레시피 작성</h1>
+    </div>
+    <div class="write-container">
+        <form method="post" action="updateRecipe.su" enctype="multipart/form-data">
+        	<input type="hidden" name="recipeNo" th:value="${r.recipeNo}">
+            <!-- 제목 입력 -->
+            <div class="write-row">
+                <input type="text" id="title" name="recipeName" placeholder="요리 이름" th:value="${r.recipeName}" />
+            </div>
+            <!-- 카테고리 선택 -->
+            <div class="write-row">
+            	<h4>조리도구를 선택해 주세요</h4>
+            	<div id="category" th:object="${r}">
+				    <label><input type="checkbox" name="cookCategoryNo" value="1" th:checked="${#arrays.contains(r.cookCategoryNo, 1)}"> 후라이팬</label>
+				    <label><input type="checkbox" name="cookCategoryNo" value="2" th:checked="${#arrays.contains(r.cookCategoryNo, 2)}"> 가위</label>
+				    <label><input type="checkbox" name="cookCategoryNo" value="3" th:checked="${#arrays.contains(r.cookCategoryNo, 3)}"> 칼</label>
+				    <label><input type="checkbox" name="cookCategoryNo" value="4" th:checked="${#arrays.contains(r.cookCategoryNo, 4)}"> 버너</label>
+				    <label><input type="checkbox" name="cookCategoryNo" value="5" th:checked="${#arrays.contains(r.cookCategoryNo, 5)}"> 에어프라이어</label>
+				    <label><input type="checkbox" name="cookCategoryNo" value="6" th:checked="${#arrays.contains(r.cookCategoryNo, 6)}"> 그릴</label>
+				</div>
+            </div>
+            <input type="text" name="recipeTaste" th:value="${r.recipeTaste}"/>
+            <!-- 내용 입력 -->
+            <div class="write-row">
+                <textarea id="content" name="recipeIngredients" placeholder="요리 재료를 입력하세요.">[[${r.recipeIngredients}]]</textarea>
+            </div>
+            <div class="write-row">
+                <textarea id="content" name="recipeContent" placeholder="조리 법을 입력하세요.">[[${r.recipeContent}]]</textarea>
+            </div>
+            <!-- 파일 첨부 -->
+            <th:block th:if="${not #lists.isEmpty(pList)}">
 				<th:block th:each="p : ${pList}">
-					<input type="hidden" name="deletePhoto"
-						th:value="${p.photoRename + '#is'}">
+					<input type="hidden" name="deletePhoto" th:value="${p.photoRename + '#is'}">
 					<div class="upload-container">
 						<div class="upload-top-area">
 							<label class="upload-label" th:text="${p.photoLevel == 0 ? '대표 사진' : '등록한 사진'}"></label>
@@ -91,14 +96,14 @@
             </div>
         </label>
     </div>
-</th:block>
-			<div class="write-row">
-				<button type="submit" class="submit-btn">수정</button>
-			</div>
-		</form>
-	</div>
+	</th:block>
+            <div class="write-row">
+                <button type="submit" class="submit-btn">등록</button>
+            </div>
+        </form>
+    </div>
 
-	<script th:inline="javascript">
+    <script th:inline="javascript">
     	/*<![CDATA[*/
     	let memeber = /*[[${session.loginUser}]]*/null;
 	    function sumviewImage(event) {
@@ -238,8 +243,5 @@
         };
 	    /*]]>*/
 </script>
-
-
-
 </body>
 </html>

@@ -10,14 +10,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.jaeyoung.chat.ChatFileManager;
 import com.kh.zangzac.jaeyoung.chat.model.service.ChatService;
 import com.kh.zangzac.jaeyoung.chat.model.vo.ChatRoom;
 import com.kh.zangzac.jaeyoung.chat.model.vo.Chatter;
+import com.kh.zangzac.ming.member.model.vo.Member;
 
+import jakarta.servlet.http.HttpSession;
 
+@SessionAttributes("loginUser")
 @Controller
 public class ChatController {
 	
@@ -47,7 +51,7 @@ public class ChatController {
     }
     
     @GetMapping("/enterChatRoom.jy")
-    public String chatRoom(@RequestParam("chatRoomId") String roomName,Model model) {
+    public String chatRoom(@RequestParam("chatRoomId") String roomName,Model model,HttpSession session) {
     	
     	//채팅참가자 불러오기
     	ArrayList<Chatter> list = cService.chatterList(roomName);
@@ -55,6 +59,7 @@ public class ChatController {
     	//채팅내역 불러오기
     	//예시: "1" 방의 채팅 로그 읽어오기
     	//unReadChatterCount
+    	Member loginUser = (Member)session.getAttribute("loginUser");
         JSONArray chatLogs = cFileManager.readChatLog(roomName);
         String chatName="";
         
@@ -69,7 +74,6 @@ public class ChatController {
         }else if(roomName.equals("5")) {
         	chatName="야영장";
         }
-        
         
         
         model.addAttribute("chatName", chatName);

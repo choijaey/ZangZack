@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <title>캠핑장 정보 등록</title>
 <style>
  body {
@@ -125,43 +126,46 @@ button:hover {
 				</div>		
 		    </div>
 		    <br>
-			<div style="width:750px; margin-left: 10px;">
+			<div class="form-group" style="width:750px; margin-left: 10px;">
 			         <table class="table">
 					   <tr>
 					     <td>주소</td>
-					     <td><input text="text" style="width:500px;" name="cgAddress" required></td>
+					     <td>
+					       <input type="text" name="cgAddress" id="address-1" class="updateInput" placeholder="주소" readonly>
+					       <input type="button" id="sample6" onclick="execDaumPostcode()" value="주소검색" class="updateBtn">
+					     </td>
 					   </tr>
 					   <tr>
 					     <td>문의처</td>
-					     <td><input text="text" style="width:500px;" name="cgPhone" required></td>
+					     <td><input text="text" style="width:300px;" name="cgPhone" required></td>
 					   </tr>
 					   <tr>
 					     <td>캠핑장 유형</td>
-					     <td><input text="text" style="width:500px;" name="cgType" required></td>
+					     <td><input text="text" style="width:300px;" name="cgType" required></td>
 					   </tr>
 					   <tr>
 					     <td>캠핑장 환경</td>
-					     <td><input text="text" style="width:500px;" name="cgArea" required></td>
+					     <td><input text="text" style="width:300px;" name="cgArea" required></td>
 					   </tr>
 					   <tr>
 					     <td>운영기간</td>
-					     <td><input text="text" style="width:500px;" name="cgSeason" required></td>
+					     <td><input text="text" style="width:300px;" name="cgSeason" required></td>
 					   </tr>
 					   <tr>
 					     <td>운영일</td>
-					     <td><input text="text" style="width:500px;" name="cgManageDate" required></td>
+					     <td><input text="text" style="width:300px;" name="cgManageDate" required></td>
 					   </tr>
 					   <tr>
 					     <td>홈페이지</td>
-					     <td><input text="text" style="width:500px;" name="cgPage" required></td>
+					     <td><input text="text" style="width:300px;" name="cgPage" required></td>
 					   </tr>
 					   <tr>
 					     <td>예약방법</td>
-					     <td><input text="text" style="width:500px;" name="cgBooking" required></td>
+					     <td><input text="text" style="width:300px;" name="cgBooking" required></td>
 					   </tr>
 					   <tr>
 					     <td>주변이용가능시설</td>
-					     <td><input text="text" style="width:500px;" name="cgInfo" required></td>
+					     <td><input text="text" style="width:300px;" name="cgInfo" required></td>
 					   </tr>
 					  <tr>
 					     <td>캠핑장 소개</td>
@@ -200,69 +204,87 @@ button:hover {
 		      <button style="background-color: red; margin-left: 10px;">취소</button>  
 	     </div>
 	   </div>
+	   <input type="hidden" name="nowURL">
+	   <input type="hidden" id="msg" th:value="${msg}">
 	</form> 
    <script th:lnline="javascript">
-	window.onload = () => {
-		const fileArea = document.querySelector('#fileArea');
-		document.getElementById('addfile').addEventListener('click', ()=> {
-			const newDiv = document.createElement('div');
-			newDiv.classList.add('mb-3');
-			newDiv.innerHTML = '<input type="file" class="form-control form-control" name="campImg" accept="image/*" style=" width:200px;" onchange="previewImage4()"><div class="infoImgs" style="display:inline-block"></div><button type="button" class="deleteInput">삭제</button>';
-			
-			fileArea.append(newDiv);
-			
-			 // 삭제 버튼에 클릭 이벤트 추가
-	        const deleteButton = newDiv.querySelector('.deleteInput');
-	        deleteButton.addEventListener('click', () => {
-	            newDiv.remove(); // 해당 div를 삭제
-	        });
-		});	
+		 window.onload = () => {
+			 
+			 const msg = document.getElementById('msg').value;
+			 if(msg.trim().length > 0){
+				 alert(msg);
+			 }
+			 
+		 }
+			const fileArea = document.querySelector('#fileArea');
+			document.getElementById('addfile').addEventListener('click', ()=> {
+				const newDiv = document.createElement('div');
+				newDiv.classList.add('mb-3');
+				newDiv.innerHTML = '<input type="file" class="form-control form-control" name="campImg" accept="image/*" style=" width:200px;" onchange="previewImage4()"><div class="infoImgs" style="display:inline-block"></div><button type="button" class="deleteInput">삭제</button>';
+				
+				fileArea.append(newDiv);
+				
+				 // 삭제 버튼에 클릭 이벤트 추가
+		        const deleteButton = newDiv.querySelector('.deleteInput');
+		        deleteButton.addEventListener('click', () => {
+		            newDiv.remove(); // 해당 div를 삭제
+		        });
+			});	
+	
+		function previewImage3() {
+			const input = document.getElementById('campImg');
+	        const infoImgs = input.parentElement.querySelector('.infoImgs');
+	
+	        while (infoImgs.firstChild) {
+	            infoImgs.removeChild(infoImgs.firstChild);
+	        }
+	
+	        const files = input.files;
+	        for (const file of files) {
+	            const reader = new FileReader();
+	            reader.onload = function (e) {
+	                const img = document.createElement('img');
+	                img.src = e.target.result;
+	                img.style.width = '150px'; // 미리보기 이미지의 너비를 조절할 수 있습니다.
+	                infoImgs.appendChild(img);
+	            };
+	            reader.readAsDataURL(file);
+	        }
+	    }
 		
-     }
-	function previewImage3() {
-		const input = document.getElementById('campImg');
-        const infoImgs = input.parentElement.querySelector('.infoImgs');
-
-        while (infoImgs.firstChild) {
-            infoImgs.removeChild(infoImgs.firstChild);
-        }
-
-        const files = input.files;
-        for (const file of files) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.width = '150px'; // 미리보기 이미지의 너비를 조절할 수 있습니다.
-                infoImgs.appendChild(img);
-            };
-            reader.readAsDataURL(file);
-        }
-    }
+		function previewImage4() {
+			const input = event.target;
+	        const infoImgs = input.parentElement.querySelector('.infoImgs');
 	
-	function previewImage4() {
-		const input = event.target;
-        const infoImgs = input.parentElement.querySelector('.infoImgs');
-
-        while (infoImgs.firstChild) {
-            infoImgs.removeChild(infoImgs.firstChild);
-        }
-
-        const files = input.files;
-        for (const file of files) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.width = '150px'; // 미리보기 이미지의 너비를 조절할 수 있습니다.
-                infoImgs.appendChild(img);
-            };
-            reader.readAsDataURL(file);
-        }
-	}
+	        while (infoImgs.firstChild) {
+	            infoImgs.removeChild(infoImgs.firstChild);
+	        }
 	
+	        const files = input.files;
+	        for (const file of files) {
+	            const reader = new FileReader();
+	            reader.onload = function (e) {
+	                const img = document.createElement('img');
+	                img.src = e.target.result;
+	                img.style.width = '150px'; // 미리보기 이미지의 너비를 조절할 수 있습니다.
+	                infoImgs.appendChild(img);
+	            };
+	            reader.readAsDataURL(file);
+	        }
+		}
+   </script>
+
 	
-</script>
+
+	<script th:inline="javascript">
+		function execDaumPostcode() {
+		    new daum.Postcode( {
+		      oncomplete: function( data ) {
+		        document.getElementById( 'address-1' ).value = data.address;
+		      }
+		    } ).open();
+		  }
+	</script>
 
 </body>
 </html>

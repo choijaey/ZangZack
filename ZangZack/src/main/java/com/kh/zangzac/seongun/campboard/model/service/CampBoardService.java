@@ -11,23 +11,21 @@ import com.kh.zangzac.seongun.common.model.vo.SearchBoard;
 
 public interface CampBoardService {
 
-	int getListCount(int i);
-
-	ArrayList<CampBoard> selectBoardList(PageInfo pi, int i);
+	int getListCount(CampBoard b);
 
 	int insertCampBoard(CampBoard board);
 
-	int insertAttmCampBoard(ArrayList<Photo> fileList);
-
 	CampBoard selectBoard(int cbNo, String id);
 
-	ArrayList<Reply> selectReply(SelectCondition b);
+	int searchListCount(CampBoard b);
 
-	int searchListCount(SearchBoard search);
-
-	ArrayList<CampBoard> searchBoardList(PageInfo pi, SearchBoard search);
+	ArrayList<CampBoard> searchBoardList(PageInfo pi, CampBoard b);
 
 	int deleteCampBoard(int cbNo);
 
 	int updateCampBoard(CampBoard b);
+
+	int listCount();
+
+	ArrayList<CampBoard> popularList(PageInfo cbPi);
 }

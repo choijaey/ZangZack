@@ -21,32 +21,14 @@ public class CampBoardServiceImpl implements CampBoardService{
 	@Autowired
 	private CampBoardDAO cDAO;
 	
-	@Autowired
-	private ReplyDAO rDAO;
-	
 	@Override
-	public int getListCount(int i) {
-		return cDAO.getListCount(i);
-	}
-
-	@Override
-	public ArrayList<CampBoard> selectBoardList(PageInfo pi, int i) {
-		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
-		ArrayList<CampBoard> list = cDAO.selectBoardList(i, rowBounds);
-		for(CampBoard b : list) {
-			format(b);
-		}
-		return list;
+	public int getListCount(CampBoard b) {
+		return cDAO.getListCount(b);
 	}
 
 	@Override
 	public int insertCampBoard(CampBoard board) {
 		return cDAO.insertCampBoard(board);
-	}
-
-	@Override
-	public int insertAttmCampBoard(ArrayList<Photo> fileList) {
-		return cDAO.insertAttmCampBoard(fileList);
 	}
 
 	@Override
@@ -65,21 +47,16 @@ public class CampBoardServiceImpl implements CampBoardService{
 	}
 
 	@Override
-	public ArrayList<Reply> selectReply(SelectCondition b) {
-		return rDAO.selectReply(b);
+	public int searchListCount(CampBoard b) {
+		return cDAO.searchListCount(b);
 	}
 
 	@Override
-	public int searchListCount(SearchBoard search) {
-		return cDAO.searchListCount(search);
-	}
-
-	@Override
-	public ArrayList<CampBoard> searchBoardList(PageInfo pi, SearchBoard search) {
+	public ArrayList<CampBoard> searchBoardList(PageInfo pi, CampBoard b){
 		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
-		ArrayList<CampBoard> list = cDAO.searchBoardList(search, rowBounds);
-		for(CampBoard b : list) {
-			format(b);
+		ArrayList<CampBoard> list = cDAO.searchBoardList(b, rowBounds);
+		for(CampBoard board : list) {
+			listFormat(board);
 		}
 		return list;
 	}
@@ -106,4 +83,29 @@ public class CampBoardServiceImpl implements CampBoardService{
         	b.setFormatDate("(수정)"+modify);
         }
     }
+	
+	public void listFormat(CampBoard b) {
+		String DATE_TIME_FORMAT = "YYYY MM-dd";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+        String create = b.getCbCreateDate().format(formatter);
+        String modify = b.getCbModifyDate().format(formatter);
+        
+        if(create.equals(modify)) {
+        	b.setFormatDate(create);
+        }else {
+        	b.setFormatDate(create);
+        }
+    }
+
+	@Override
+	public int listCount() {
+		return cDAO.listCount();
+	}
+
+	@Override
+	public ArrayList<CampBoard> popularList(PageInfo pi) {
+		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1 )* pi.getBoardLimit(), pi.getBoardLimit());
+		ArrayList<CampBoard> list = cDAO.popularList(rowBounds);
+		return list;
+	}
 }

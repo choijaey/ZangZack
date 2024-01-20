@@ -40,8 +40,7 @@ public class ChatServiceImpl implements ChatService{
 
 	@Override
 	public ArrayList<Chatter> chatterList(String roomName) {
-		// TODO Auto-generated method stub
-		return null;
+		return cDAO.chatterList(roomName);
 	}
 
 	@Override

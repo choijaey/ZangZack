@@ -7,6 +7,11 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/seongun/commonBoard.css">
     <link rel="stylesheet" href="css/seongun/listBoard.css">
+    <style>
+    	img{
+    		vertical-align: middle;
+    	}
+    </style>
 </head>
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
@@ -33,14 +38,15 @@
             </div>
             <div id="point_zone">
                 <div id="category">
-                    <form method="post">
-                        <input type="hidden" name="boardId" value="free">
-                        <input type="hidden" name="category_no" value="">
-                        <a href="#none" onclick="setCategory('')" class="on" id="select-category">전체보기</a>
-                        <a href="#none" onclick="setCategory('백패킹')" class="on">백패킹</a>
-                        <a href="#none" onclick="setCategory('오토캠핑')" class="on">오토캠핑</a>
-                        <a href="#none" onclick="setCategory('장박')" class="on">장박</a>
-                        <a href="#none" onclick="setCategory('글램핑')" class="on">글램핑</a>
+                    <form method="get">
+                        <input type="hidden" name="categoryNo" value="">
+                        <input type="hidden" name="searchText" th:value="${b.searchText == null ? null : b.searchText}">
+                        <input type="hidden" name="searchCategory" th:value="${b.searchText == null ? 0 : b.searchCategory}">
+                        <a onclick="setCategory('0')" class="on" th:id="${b.categoryNo == 0 ? 'select-category' : ''}">전체보기</a>
+                        <a onclick="setCategory('1')" class="on" th:id="${b.categoryNo == 1 ? 'select-category' : ''}">백패킹</a>
+                        <a onclick="setCategory('2')" class="on" th:id="${b.categoryNo == 2 ? 'select-category' : ''}">오토캠핑</a>
+                        <a onclick="setCategory('3')" class="on" th:id="${b.categoryNo == 3 ? 'select-category' : ''}">장박</a>
+                        <a onclick="setCategory('4')" class="on" th:id="${b.categoryNo == 4 ? 'select-category' : ''}">글램핑</a>
                     </form>
                 </div>
 				<div id="boardType-area">
@@ -74,7 +80,7 @@
                                 	</th:block>
                                 </td>
                                 <td>[[${b.cbCount}]]</td>
-                                <td>추천수</td>
+                                <td>[[${b.heartCount}]]</td>
                                 <td>[[${b.formatDate}]]</td>
                             </tr>
                         </tbody>
@@ -102,17 +108,18 @@
 					</li>
 	                <!-- 페이지 번호 -->
 	                <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
-	                	<th:block th:if="${search.searchText == null}">
-							<a th:href="@{${loc}(page=${p})}" th:id="${p == pi.currentPage} ? 'check_page'">
-						        [[${p}]] 
-						    </a>
-					    </th:block>
-					    <th:block th:if="${search.searchText != null}">
-						    <a th:href="@{${loc}(page=${p}, searchCategory=${search.searchCategory}, searchText=${search.searchText})}" th:id="${p == pi.currentPage} ? 'check_page'">
-							    [[${p}]]
-							</a>
-					    </th:block>
-					</li>
+			            <th:block th:if="${b.searchText == null}">
+			                <a th:href="@{${loc}(page=${p})}" th:id="${p == pi.currentPage} ? 'check_page'" >
+			                    [[${p}]] 
+			                </a>
+			            </th:block>
+			            <th:block th:if="${b.searchText != null && b.searchText.trim != ''}">
+			                <a th:href="@{${loc}(page=${p}, searchCategory=${b.searchCategory},
+			                	searchText=${b.searchText != null ? b.searchText : ''})}" th:id="${p == pi.currentPage} ? 'check_page'">
+			                    [[${p}]]
+			                </a>
+			            </th:block>
+			        </li>
 	                <!-- 다음 버튼 -->
 	                <li th:if="${pi.maxPage >= 10 && pi.maxPage - pi.currentPage > 10}">
 	                	<a th:href="@{${loc}(page=${pi.currentPage+10})}">다음 &gt;</a>
@@ -123,7 +130,7 @@
               <!-- 검색 필터 영역 -->	
             <div class="search_area">
 	            <form action="campBoard.su">
-		            <select name="searchCategoryNo" class="search_select">
+		            <select name="CategoryNo" class="search_select">
 			            <option value="0">전체보기</option>
 			            <option value="1">백패킹</option>
 			            <option value="2">오토캠핑</option>
@@ -143,97 +150,99 @@
         </div>
     </div>
     
-     <script th:inline="javascript">
-		/*<![CDATA[*/
-		let member = /*[[${session.loginUser}]]*/[];
-		let categoryNo= /*[[${selectedCategory}]]*/ 0;
-		let list = /*[[${list}]]*/null;
+	<script th:inline="javascript">
+	    /*<![CDATA[*/
+	    let member = /*[[${session.loginUser}]]*/ 'null';
+	    let categoryNo = /*[[${selectedCategory}]]*/ '0';
+	    let list = /*[[${list}]]*/ 'null';
+	
+	    // 문서 로드 시 실행되는 함수들
+	    document.addEventListener('DOMContentLoaded', function() {
+	        setupScrollEvent();
+	        setupBackToTopButton();
+	        setupBoardListClickEvent();
+	    });
+	
+	    // 스크롤 이벤트 설정 함수
+	    function setupScrollEvent() {
+	        window.addEventListener('scroll', toggleBackToTopButton);
+	        window.addEventListener('touchmove', toggleBackToTopButton);
+	    }
+	
+	    // 맨 위로 가기 버튼 설정 함수
+	    function setupBackToTopButton() {
+	        document.getElementById('back-to-top').addEventListener('click', scrollToTop);
+	    }
+	
+	    // 맨 위로 가기 버튼 표시/숨김 함수
+	    function toggleBackToTopButton() {
+	        let backToTopButton = document.getElementById('back-to-top');
+	        backToTopButton.classList.toggle('show', window.pageYOffset > 0);
+	    }
+	
+	    // 맨 위로 스크롤하는 함수
+	    function scrollToTop() {
+	        window.scrollTo({ top: 0, behavior: 'smooth' });
+	        toggleBackToTopButton();
+	    }
+	
+	    // 게시글 목록 클릭 이벤트 설정 함수
+	    function setupBoardListClickEvent() {
+	        const tbody = document.querySelector('tbody');
+	        if (tbody) {
+	            tbody.addEventListener('click', navigateToBoard);
+	        }
+	    }
+	
+	    // 게시글로 이동하는 함수
+	    function navigateToBoard(event) {
+		    let target = event.target;
 		
+		    if (target.tagName !== 'TD') {
+		        target = target.closest('td');
+		    }
 		
-        document.addEventListener('DOMContentLoaded', function() {
-            // 스크롤이 끝으로 이동 시 이벤트 발생
-            window.addEventListener('scroll', function() {
-                if (window.pageYOffset <= 0) {
-                    document.getElementById('back-to-top').classList.remove('show');
-                } else {
-                    document.getElementById('back-to-top').classList.add('show');
-                }
-            });
+		    if (!target) return;
+		
+		    const boardId = target.parentElement.querySelector('.board_num').innerText;
+		    location.href = "selectBoard.su?cbNo=" + boardId + "&page=" + /*[[${pi.currentPage}]]*/ '1';
+		}
 
-            window.addEventListener('touchmove', function() {
-                if (window.pageYOffset <= 0) {
-                    document.getElementById('back-to-top').classList.remove('show');
-                } else {
-                    document.getElementById('back-to-top').classList.add('show');
-                }
-            });
-
-            document.getElementById('back-to-top').addEventListener('click', function() {
-                // 페이지 맨 위로 스크롤하는 애니메이션
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-                document.getElementById('back-to-top').classList.remove('show');
-            });
-        });
-        
-        if (!list.isEmpty && list.length > 0) {
-            const tbody = document.querySelector('tbody');
-            const tds = tbody.querySelectorAll('td');
-            for (const td of tds) {
-                td.addEventListener('click', function () {
-                    const trTds = this.parentElement.querySelectorAll('td');
-                    const boardId = trTds[0].innerText;
-                    location.href = 'selectBoard.su?cbNo=' + boardId + "&page=" + /*[[${pi.currentPage}]]*/1;
-                });
-            }
-        }
-        
-        function writeBtn(){
-        	if(member != null){
-        		window.location.href="writeCampBoard.su";
-        	}else{
-        		alert("로그인 후 이용해주세요.");
-        		window.location.href="signUp.me";
-        	}
-        }
-        
-        function setCategory(category) {
-            document.querySelector('input[name="category"]').value = category;
-            document.querySelector('form').submit();
-        }
-        
-        window.onload = function() {
-			let msg = /*[[${msg}]]*/'';
-            
-            // errorMessage가 비어있지 않은 경우에만 알림 표시
-            if(msg && msg.trim().length > 0) {
-                alert(msg);
-            }
-            var categoryValue = document.getElementsByName('category')[0].value;
-
-            // categoryValue에 따라 해당 링크에 id를 추가합니다.
-            switch (categoryValue) {
-                case '0':
-                    document.querySelector('a[onclick="setCategory(\'0\')"]').id = 'select-category';
-                    break;
-                case '1':
-                    document.querySelector('a[onclick="setCategory(\'1\')"]').id = 'select-category';
-                    break;
-                case '2':
-                    document.querySelector('a[onclick="setCategory(\'2\')"]').id = 'select-category';
-                    break;
-                case '3':
-                    document.querySelector('a[onclick="setCategory(\'3\')"]').id = 'select-category';
-                    break;
-                case '4':
-                    document.querySelector('a[onclick="setCategory(\'4\')"]').id = 'select-category';
-                    break;
-            }
-            
-        };
-		/*]]>*/
-    </script>
+	
+	    // 글쓰기 버튼 클릭 이벤트
+	    function writeBtn() {
+	        if (member !== 'null') {
+	            window.location.href = "writeCampBoard.su";
+	        } else {
+	            alert("로그인 후 이용해주세요.");
+	            window.location.href = "signUp.me";
+	        }
+	    }
+	
+	    // 카테고리 설정 및 폼 제출 함수
+	    function setCategory(category) {
+	        document.querySelector('input[name="categoryNo"]').value = category;
+	        document.querySelector('form').submit();
+	    }
+	
+	    // 페이지 로드 시 실행되는 함수
+	    window.onload = function() {
+	        let msg = /*[[${msg}]]*/'null';
+	        if (msg != null && msg.trim().length > 0) {
+	            alert(msg);
+	        }
+	
+	        highlightSelectedCategory();
+	    };
+	
+	    function highlightSelectedCategory() {
+	        let categoryValue = document.querySelector('input[name="categoryNo"]').value;
+	        if (categoryValue) {
+	            let selectedLink = document.querySelector(`a[onclick="setCategory('${categoryValue}')"]`);
+	            if (selectedLink) selectedLink.id = 'select-category';
+	        }
+	    }
+	    /*]]>*/
+	</script>
 </body>
 </html>

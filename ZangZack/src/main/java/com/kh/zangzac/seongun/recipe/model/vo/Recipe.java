@@ -22,8 +22,8 @@ public class Recipe {
 	private Date recipeCreateDate;
 	private Date recipeModifyDate;
 	private String recipeStatus;
-	private String cookCategoryName;
-	private int cookCategoryNo;
+	private String[] cookCategoryName;
+	private Integer[] cookCategoryNo;
 	private String photoPath;
 	private String photoRename;
 }

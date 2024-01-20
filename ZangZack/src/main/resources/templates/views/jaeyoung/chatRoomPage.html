@@ -376,6 +376,11 @@ a {
 							$("#roomName").val(rm);
 							
 						}
+						console.log(d.sub);
+						if(d.sub == true){
+							window.location.reload();
+						}
+						
 					}else if(d.type == "message"){
 						console.log(d.msg);
 						if(d.sessionId == $("#sessionId").val()){
@@ -383,10 +388,8 @@ a {
 						}else{
 							addChat(d.msg,d.userName,1,d.profile,d.nickName,d.time,d.unReadChatter);
 						}
-							
 					}else if(d.type == "reset"){
-						// 오면 카운트 부분 이너텍스트 줄이기
-						countDown();
+						window.location.reload();
 					}else{
 						console.warn("unknown type!")
 					}

@@ -21,4 +21,15 @@ public interface RecipeDAO {
 
 	Recipe selectRecipe(int recipeNo);
 
+	ArrayList<CookwareList> selectCookwareList(int recipeNo);
+
+	int deleteRecipe(int recipeNo);
+
+	int updateRecipe(Recipe recipe);
+
+	int updataeCookList(ArrayList<CookwareList> cookList);
+
+	void deleteCookList(int recipeNo);
+
+
 }
