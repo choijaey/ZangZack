@@ -37,6 +37,12 @@
 		where member_email = #{memberEmail} and member_status = 'N'
 	</select>
 	
+	<select id="checkcurrentPwd" resultType="_int">
+		select count(*)
+		from member
+		where MEMBER_PWD = #{memberPwd} and member_status = 'N'
+	</select>
+	
 	<update id="deleteMember">
 		update member
 		set member_status = 'Y'
@@ -85,10 +91,6 @@
 		where MEMBER_ID = #{memberId} and member_status = 'N'
 	</update>
 	
-	<select id="selectMembers" resultType="Member">
-		select * 
-		from member
-	</select>
 	
 	<update id="updateInfo">
 		update member
@@ -113,26 +115,27 @@
 		from member
 	</select>
 	
-	<select id="searchList" resultType="int">
+	<select id="searchList" resultType="_int">
 	    SELECT COUNT(*)
 	    FROM member
-	    where
-	    <if test="searchType =='memberId'">
-	       MEMBER_ID LIKE '%'|| #{keyword} ||'%'
-	    </if>
-	    <if test="searchType == 'memberName'">
-	        MEMBER_NAME LIKE '%'|| #{keyword} ||'%'
-	    </if>
-	    <if test="searchType == 'memberNickName'">
-	       MEMBER_NICKNAME LIKE '%'|| #{keyword} ||'%'
-	    </if>
+	    <where>
+	        <if test="searchType =='memberId'">
+	            AND MEMBER_ID LIKE '%'|| #{keyword} ||'%'
+	        </if>
+	        <if test="searchType == 'memberName'">
+	            AND MEMBER_NAME LIKE '%'|| #{keyword} ||'%'
+	        </if>
+	        <if test="searchType == 'memberNickName'">
+	            AND MEMBER_NICKNAME LIKE '%'|| #{keyword} ||'%'
+	        </if>
+	    </where>
 	    ORDER BY MEMBER_NAME DESC
 	</select>
 	
 	<select id="searchtNoticeList" resultType="Member">
 		SELECT *
 	    FROM member
-	    where
+	    <where>
 	    <if test="searchType =='memberId'">
 	         MEMBER_ID LIKE '%'|| #{keyword} ||'%'
 	    </if>
@@ -142,6 +145,7 @@
 	    <if test="searchType == 'memberNickName'">
 	         MEMBER_NICKNAME LIKE '%'|| #{keyword} ||'%'
 	    </if>
+	    </where>
 	    ORDER BY MEMBER_NAME DESC
 	</select>
 	
@@ -225,7 +229,7 @@
 	<select id="searchSPListCount" resultType="_int">
 		SELECT COUNT(*)
 	    FROM SECONDHAND_PRODUCT
-	    where SP_STATUS = 'N'
+	    where SP_STATUS = 'N' AND member_id=#{memberId}
 	    <if test="searchType =='spTitle'">
 	         and SP_TITLE LIKE '%'|| #{keyword} ||'%'
 	    </if>
@@ -241,7 +245,7 @@
 	<select id="searchSpList" resultType="secondHandProduct">
 		SELECT *
 	    FROM SECONDHAND_PRODUCT
-	    where SP_STATUS = 'N'
+	    where SP_STATUS = 'N' AND member_id=#{memberId}
 	    <if test="searchType =='spTitle'">
 	         and SP_TITLE LIKE '%'|| #{keyword} ||'%'
 	    </if>
