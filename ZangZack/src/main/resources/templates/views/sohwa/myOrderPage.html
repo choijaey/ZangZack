@@ -30,7 +30,7 @@
          <br><br>
          <div >
 	         <div class="productss" th:each="on:${orderNos}">
-		         <div class="dayAndDetail">
+		         <div class="dayAndDetail" th:each="pa:${paList}" th:if="${pa.orderNo == on and session.loginUser.memberId == pa.memberId}">
 		         	<span class="detailOrder">
 		         		주문상세보기>>
 		         		<input class="orderNo" type="hidden" th:value="${on}">
@@ -38,14 +38,14 @@
 		         	<h5 style="margin-left:60px;">주문번호 : [[${on}]]</h5> 
 		         </div>
 		         <!--같은 날짜 일때 반복-->
-		            <div class="products" th:each="pa:${paList}" th:if="${pa.orderNo == on}">
-		            	<th:block th:unless="${pa.deliveryStatus=='환불요청'}"><span style="margin-left:10px; font-size:13px;color:darkolivegreen; width:80px;">[[${pa.orderDate}]]<br>[[${pa.deliveryStatus}]]</span></th:block>
+		            <div class="products" th:each="pa:${paList}" th:if="${pa.orderNo == on and session.loginUser.memberId == pa.memberId}">
+		            	<th:block th:unless="${pa.deliveryStatus=='환불요청'}"><span style="margin-left:10px; font-size:13px;color:darkolivegreen; width:100px;">[[${pa.orderDate}]]<br>[[${pa.deliveryStatus}]]</span></th:block>
 		            	<th:block th:if="${pa.deliveryStatus=='환불요청'}"><span style="margin-left:10px; font-size:13px;color:red; width:80px;">[[${pa.orderDate}]]<br>[[${pa.deliveryStatus}]]</span></th:block>
 		                <div class="left" th:each="p:${pList}" th:if="${pa.productNo == p.productNo}">
 		                <!-- 왼쪽 컨테이너 내용 -->
 			                <table>
 			                  <tr class="cart-row">
-			                      <td class="td1">
+			                      <td class="td1" style="width:400px;">
 			                         <img th:each="a:${aList}" th:if="${a.photoLevel==0 &&a.boardType==5 && a.boardNo == p.productNo}" th:src="${a.photoPath}">
 			                         <div>
 			                           <div>[[${p.productCompany}]]</div>
@@ -60,7 +60,7 @@
 		                              </div>
 		                          </td>
 		                          <td style="width:150px;">[[${pa.productOption}]]</td>
-		                          <td class="td3">
+		                          <td class="td3" style="width:150px;">
 		                          
 		                          </td>
 			                   </tr>   
@@ -71,7 +71,8 @@
 		                
 		                <div class="right">
 		                <!-- 오른쪽 컨테이너 내용 -->
-		                   <a th:href="@{'refundOrder.so?orderKeyNo=' + ${pa.orderKeyNo}}" onclick="return confirm('정말 환불요청을 진행하시겠습니까?')"><button>환불신청</button></a><br>
+		                   <input type="hidden" th:value="${pa.orderDate}" class="orderDate">
+		                   <a th:href="@{'refundOrder.so?orderKeyNo=' + ${pa.orderKeyNo}}" onclick="return refundOrder(this)"><button>환불신청</button></a><br>
 		                </div>
 		            </div>
 	            </div>
@@ -324,8 +325,36 @@
 	    });
 	   
    
-   
-   
+   		
+	    function refundOrder(link) {
+	        var currentDate = new Date();
+	        
+	        // 일주일 전 날짜 계산
+	        var oneWeekAgo = new Date(currentDate);
+	        oneWeekAgo.setDate(currentDate.getDate() - 7);
+
+	        // 이전 동위 요소 찾기
+	        var previousSibling = link.previousElementSibling;
+
+	        // 이전 동위 요소가 input 요소이고, 값이 날짜 형식이라 가정
+	        var previousDate = new Date(previousSibling.value);
+
+	        // 일주일 이내인지 확인
+	        if (previousDate < oneWeekAgo) {
+	            alert("환불은 일주일 이내에만 가능합니다.");
+	            return false;
+	        } else {
+	            // 확인 버튼이 눌렸을 때
+	            var isConfirmed = confirm("환불 신청을 하시겠습니까?");
+	            if (isConfirmed) {
+	                // URL로 이동
+	                window.location.href = link.getAttribute("href");
+	            }
+
+	            // 취소 버튼이 눌렸을 때
+	            return false;
+	        }
+	    }
    
    
    

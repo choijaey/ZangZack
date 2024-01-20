@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link href="css/sohwa/productList.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  
+</style>
+<title>Insert title here</title>
+</head>
+<body class="bg-gray-50 font-sans leading-normal tracking-normal">
+	<div th:replace="~{common/navbar :: navbar}"></div>
+	<div class="container mx-auto p-8">
+		<br><br>
+	  	<div style="border:1px solid gray; margin-left:30%; margin-right:30%; background-color:white; border-radius:10px; text-align:center;">
+	  		<img style="margin-left:270px;" src="image/sohwa/icons8-check-64.png">
+	  		<h2 style="font-size:30px; color:darkolivegreen;">결제가 완료되었습니다!</h2>
+	  		<br>
+	  		<div style="border:1px solid black; margin-left:30px; margin-right:30px; font-size:20px; border-radius:10px;">
+	  			<input type="hidden" th:value="${orderNo}" id="orderNo">
+	  			<br>
+	  			<br>
+	  			결제 금액 : [[|${#numbers.formatDecimal(price, 0, 'COMMA', 0, 'POINT')}원|]]
+	  			<br>
+	  			성함 : [[${name}]]
+	  			<br> 
+	  			배송 주소 : [[${address}]]
+	  			<br> 
+	  			번호 : [[${phone}]]
+	  			<br><br>
+	  			<a th:href="@{'detailOrderView.so?orderNo=' + ${orderNo}}"><button style="border:1px solid black; border-radius: 3px; width:150px; background-color: black; color:white;">내 주문내역</button></a>
+	  			<br><br>
+	  		</div>
+	  		<br><br>
+	  	</div>
+	</div>
+</body>
+
+	
+	
+	
+	
+
+</html>

@@ -175,7 +175,7 @@ public class MemberServiceImpl implements MemberService{
 	         sb.append("grant_type=authorization_code");
 	            
 	         sb.append("&client_id=18ae7b1bab696aadfa39200fae9ad11b"); //본인이 발급받은 key
-	         sb.append("&redirect_uri=http://localhost:8080/kakaoLogin"); // 본인이 설정한 주소
+	         sb.append("&redirect_uri=http://192.168.20.207:8080/kakaoLogin"); // 본인이 설정한 주소
 	            
 	         sb.append("&code=" + code);
 	         System.out.println("code = "+code);

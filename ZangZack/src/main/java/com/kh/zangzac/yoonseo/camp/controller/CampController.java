@@ -64,7 +64,7 @@ public class CampController {
 			
 			return "views/yoonseo/campSearch";
 		}else {
-			throw new CampException("캠프 목록 조회 실패");
+			return "redirect:/";
 		}
 	}
 	
@@ -95,7 +95,7 @@ public class CampController {
 			return "views/yoonseo/campList";
 			
 		}else {
-			throw new CampException("추천 목록 조회 실패");
+			return "redirect:/";
 		}
 				
 	}
@@ -103,14 +103,9 @@ public class CampController {
 	@GetMapping("campDetail.ys")
 	public String selectCampDetail(@RequestParam("no") int no,
 			                       @RequestParam("page") int page,
-			                       Model model,HttpSession session) {
+			                       Model model) {
 		
-		Member loginUser = (Member)session.getAttribute("loginUser");
-		String id = null;
-		if(loginUser != null) {
-			id = loginUser.getMemberId();
-		}
-		
+	
 		CampingGround camp = cService.selectCampingDetail(no);
 		int count = cService.updateCount(no);
 		if(count > 0) {
@@ -119,7 +114,7 @@ public class CampController {
 		
 		ArrayList<Photo> campList = cService.selectPhoto(no); //캠핑장 사진
 		
-		
+		System.out.println(camp.getCgImgInfo());
 	    String info = camp.getCgImgInfo();
 	    String[] infoArray = info.split(",");
 	  
@@ -131,12 +126,10 @@ public class CampController {
 		   model.addAttribute("page", page);
 		   model.addAttribute("infoArray", infoArray);
 		   model.addAttribute("point", point);
-		   model.addAttribute("id", id);
-		  
 		   
 		   return"views/yoonseo/campDetail";   
 		}else {
-			throw new CampException("상세보기를 실패했습니다");
+			return"redirect:/";
 		}
 	}
 	
@@ -147,11 +140,13 @@ public class CampController {
 	
 	@PostMapping("campInsert.ys")
 	public String campInsert(@ModelAttribute CampingGround camp,
-			                 @RequestParam("campImg") ArrayList<MultipartFile> campFiles
+			                 @RequestParam("campImg") ArrayList<MultipartFile> campFiles,
+			                 @RequestParam("nowURL") String nowURL,
+			                 Model model
 			                
 			                 ) {
 		
-		
+		System.out.println(camp.getCgAddress());
 		
 		ArrayList<Photo> campList = new ArrayList<>();
 		
@@ -198,8 +193,10 @@ public class CampController {
 				
 		if(result1 + result2  == campList.size()+ 1) {
 			return "redirect:campUpdate.ys";
+			
 		}else {
-			throw new CampException("캠핑장 등록 실패");
+			model.addAttribute("msg", "캠핑장 등록에 실패하였습니다.");
+			return "views/yoonseo/detailWrite";
 		}
 	}
 	
@@ -219,7 +216,9 @@ public class CampController {
 			
 			return "views/yoonseo/campUpdate";
 		}else {
-			throw new CampException("게시글 조회 실패");
+			
+			model.addAttribute("msg", "캠핑장 목록 조회에 실패하였습니다.");
+			return "views/yoonseo/campUpdate";
 		}
 		
 	}
@@ -262,7 +261,7 @@ public class CampController {
 			
 			return "views/yoonseo/campEdit";
 		}else {
-			throw new CampException("삭제 되었거나 없는 캠핑장입니다");
+			return "redirect:/";
 		}
 	}
 	
@@ -360,7 +359,7 @@ public class CampController {
 			redirectAttributes.addAttribute("page", page);
 			return "redirect:campUpdate.ys";
 		}else {
-			throw new CampException("캠핑장 수정에 실패");
+			return "redirect:/";
 		}
 		
 	}
@@ -374,10 +373,10 @@ public class CampController {
 		
 		
 		int result = cService.searchCampCount(keyword,city,type);
-		ArrayList<CampingGround> campList = cService.searchCampList(keyword,city,type);
 		
 		int currentPage = page;
 		PageInfo pi = Pagination.getPageInfo(currentPage,result,6);
+		ArrayList<CampingGround> campList = cService.searchCampList(pi,keyword,city,type);
 		
 		if(campList != null) {
 			model.addAttribute("result", result);
@@ -389,7 +388,7 @@ public class CampController {
 			
 			return "views/yoonseo/campSearchList";
 		}else {
-			throw new CampException("캠핑장 검색에 실패하였습니다");
+			return "redirect:/";
 		}
 		
 	}

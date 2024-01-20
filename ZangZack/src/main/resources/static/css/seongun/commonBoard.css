@@ -255,3 +255,7 @@ p {
 .search_button:hover {
 	background-color: #5cb85c;
 }
+
+a.on:hover, a.on:focus{
+	cursor: pointer;
+}

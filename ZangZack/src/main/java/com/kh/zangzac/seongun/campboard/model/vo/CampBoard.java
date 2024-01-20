@@ -32,4 +32,7 @@ public class CampBoard {
 	private String photoRename;
 	private int replyCount;
 	private String formatDate;
+	private String searchText;
+	private int searchCategory;
+	
 }

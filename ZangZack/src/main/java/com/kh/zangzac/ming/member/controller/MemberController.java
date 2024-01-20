@@ -609,9 +609,11 @@ public class MemberController {
 	    if (isEmailDuplicate) {
 	        // 중복된 이메일이 있는 경우
 	    	session.setAttribute("loginUser", loginUser);
+
 	    	session.setAttribute("msg", "중복된 이메일이 있습니다.");
 	        if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me") ||
 	        							beforeURL.equals("http://192.168.20.207:8080/logout.me") || beforeURL.equals("http://192.168.20.207:8080/signUp.me"))) {
+
 	            return "redirect:" + beforeURL;
 	        } else {
 	            return "redirect:/";
@@ -628,7 +630,9 @@ public class MemberController {
 											beforeURL.equals("http://192.168.20.207:8080/logout.me") || beforeURL.equals("http://192.168.20.207:8080/signUp.me"))) {
 	                return "redirect:" + beforeURL;
 	            } else {
+
 	            	return "redirect:/";
+
 	            }
 	        } else {
 	        	System.out.println("로그인 실패");
