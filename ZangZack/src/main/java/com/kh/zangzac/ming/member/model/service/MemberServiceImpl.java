@@ -119,14 +119,6 @@ public class MemberServiceImpl implements MemberService{
 	}
 	
 	//관리자페이지
-	@Override
-	public ArrayList<Member> selectMembers(int i, PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
-		int limit = pi.getBoardLimit();
-		
-		RowBounds rowBounds = new RowBounds(offset, limit);
-		return mDAO.selectMembers(i, rowBounds);
-	}
 
 	@Override
 	public int updateInfo(Properties prop) {
@@ -444,6 +436,7 @@ public class MemberServiceImpl implements MemberService{
 	public int getmyBoardListCount(Map<String, Object> paramMap) {
 		return mDAO.getmyBoardListCount(paramMap);
 	}
+
 
 
 

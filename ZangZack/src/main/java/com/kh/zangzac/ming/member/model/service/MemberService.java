@@ -45,7 +45,6 @@ public interface MemberService {
 	int updateMemberProfile(Member m);
 	
 	//관리자페이지
-	ArrayList<Member> selectMembers(int i, PageInfo pi);
 
 	int updateInfo(Properties prop);
 
@@ -94,6 +93,7 @@ public interface MemberService {
 	int getmyBoardListCount(Map<String, Object> paramMap);
 
 	ArrayList<secondHandProduct> searchSpList(PageInfo pi, HashMap<String, Object> map);
+
 
 
 

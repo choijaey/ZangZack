@@ -73,11 +73,6 @@ public class MemberController {
 		return "views/ming/member/sign";
 	}
 	
-	//홈으로 가기
-	@GetMapping("home.me")
-	public String home() {
-		return "index";
-	}
 	
 	//심리테스트 메인화면
 	@GetMapping("psychologicalTestMain.me")
@@ -123,6 +118,7 @@ public class MemberController {
 		return result;
 	}
 	
+	
 	//이메일 중복체크
 	@RequestMapping(value ="checkEmail.me")
 	@ResponseBody
@@ -161,7 +157,7 @@ public class MemberController {
 										beforeURL.equals("http://192.168.20.207:8080/logout.me") || beforeURL.equals("http://192.168.20.207:8080/signUp.me"))) {
 					return "redirect:" + beforeURL;
 				}else {
-					return "redirect:home.me";
+					return "redirect:/";
 				}
 			}else {
 				model.addAttribute("msg", "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.");
@@ -181,7 +177,7 @@ public class MemberController {
 	@GetMapping("logout.me")
 	public String logout(SessionStatus status) {
 		status.setComplete();
-		return "index";
+		return "redirect:/";
 	}
 	
 	//아이디 / 비밀번호 화면
@@ -219,7 +215,6 @@ public class MemberController {
 	       String subject = "[ZangZac]인증코드";                   // 제목
 	       String content = "인증코드 ["+checkNum+"] 입니다.";    // 내용
 	       String from = "gah_yn@naver.com";
-	       System.out.println(to);
 	       
 	       try {
 	    	   MimeMessage mail = mailSender.createMimeMessage();
@@ -512,16 +507,24 @@ public class MemberController {
 	}
 	
 	//관리자 페이지
-	@GetMapping("/adminPage.me")
-	public String adminPage(Model model, HttpServletRequest request, @RequestParam(value="page", defaultValue="1") int page) {
+	@GetMapping("adminPage.me")
+	public String adminPage(Model model, HttpServletRequest request, @RequestParam(value="page", defaultValue="1") int page,
+							@RequestParam(value = "searchType", defaultValue = "") String searchType,
+							@RequestParam(value = "keyword", defaultValue = "")String keyword,@ModelAttribute Member m) {
 		
-		int listCount = mService.getListCount();
+		HashMap<String, String>map = new HashMap<>();
+		map.put("keyword", keyword);
+		map.put("searchType", searchType);
+
 		int currentPage = page;
+		int listCount = mService.searchList(map);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
-		ArrayList<Member> list = mService.selectMembers(1, pi);
+		ArrayList<Member> list = mService.searchtNoticeList(pi, map);
 		
 		System.out.println(list);
 		if(list != null) {
+			model.addAttribute("searchType",searchType);
+			model.addAttribute("keyword",keyword);
 			model.addAttribute("pi", pi);
 			model.addAttribute("list", list);
 			model.addAttribute("loc", request.getRequestURI()); // url 다 가져옴 / uri 뒤에만 가져옴
@@ -530,6 +533,7 @@ public class MemberController {
 			throw new MemberException("게시글 목록 조회에 실패하였습니다.");
 		}
 	}
+	
 	
 	@GetMapping("selectMemberList.me")
 	@ResponseBody
@@ -585,32 +589,6 @@ public class MemberController {
 	}
 	
 	
-	//회원 검색
-	@PostMapping("search.me")
-	public String searchId(@RequestParam(value = "page", defaultValue = "1") int page,
-							@RequestParam(value = "searchType", defaultValue = "") String searchType,
-							@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
-							HttpServletRequest request) {
-		
-		HashMap<String, String>map = new HashMap<>();
-		map.put("keyword", keyword);
-		map.put("searchType", searchType);
-		
-		int currentPage = page;
-		int listCount = mService.searchList(map);
-		
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
-		ArrayList<Member> list = mService.searchtNoticeList(pi, map);
-		
-		if(list != null) {
-			model.addAttribute("pi", pi);
-			model.addAttribute("list", list);
-			model.addAttribute("loc", request.getRequestURI()); // url 다 가져옴 / uri 뒤에만 가져옴
-			return "views/ming/admin/allMemberList";
-		} else {
-			throw new MemberException("게시글 목록 조회에 실패하였습니다.");
-		}
-	}
 	//카카오로그인
 	@GetMapping("kakaoLogin")
 	public String kakaoLogin(
@@ -631,7 +609,7 @@ public class MemberController {
 	    if (isEmailDuplicate) {
 	        // 중복된 이메일이 있는 경우
 	    	session.setAttribute("loginUser", loginUser);
-	    	
+	    	session.setAttribute("msg", "중복된 이메일이 있습니다.");
 	        if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me") ||
 	        							beforeURL.equals("http://192.168.20.207:8080/logout.me") || beforeURL.equals("http://192.168.20.207:8080/signUp.me"))) {
 	            return "redirect:" + beforeURL;
@@ -645,13 +623,12 @@ public class MemberController {
 	        int result = mService.kakaoLogin(kakaoMemberInfo);
 	        if (result > 0) {
 	            // 로그인 성공
-	        	System.out.println("로그인성공: " + kakaoMemberInfo);
 	            session.setAttribute("loginUser", kakaoMemberInfo);
 	            if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me") ||
 											beforeURL.equals("http://192.168.20.207:8080/logout.me") || beforeURL.equals("http://192.168.20.207:8080/signUp.me"))) {
 	                return "redirect:" + beforeURL;
 	            } else {
-	                return "redirect:home.me";
+	            	return "redirect:/";
 	            }
 	        } else {
 	        	System.out.println("로그인 실패");

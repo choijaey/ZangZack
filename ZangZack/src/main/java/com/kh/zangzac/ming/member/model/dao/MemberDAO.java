@@ -57,8 +57,6 @@ public interface MemberDAO {
 
 	int updateMemberProfile(Member m);
 
-	ArrayList<Member> selectMembers(int i, RowBounds rowBounds);
-
 	int updateInfo(Properties prop);
 
 	int adminUpdateNickName(Member m);
@@ -104,5 +102,6 @@ public interface MemberDAO {
 	int getmyBoardListCount(Map<String, Object> paramMap);
 
 	ArrayList<CampBoard> searchCbList(RowBounds rowBounds, HashMap<String, Object> map);
+
 
 }
