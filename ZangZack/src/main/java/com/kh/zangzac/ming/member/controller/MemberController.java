@@ -166,8 +166,10 @@ public class MemberController {
 				model.addAttribute("loginUser",loginUser);
 				
 				if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me") ||
-										beforeURL.equals("http://192.168.20.207:8080/logout.me") || beforeURL.equals("http://192.168.20.207:8080/signUp.me"))) {
+										beforeURL.equals("http://192.168.20.207:8080/logout.me") || beforeURL.equals("http://192.168.20.207:8080/signUp.me"))){
 					return "redirect:" + beforeURL;
+				}else if(beforeURL.equals(beforeURL.equals("http://192.168.20.207:8080/login.me") || beforeURL.equals("http://localhost:8080/login.me")) ) {
+					return "redirect:/";
 				}else {
 					return "redirect:/";
 				}
@@ -684,7 +686,8 @@ public class MemberController {
 	}
 	
 	//리뷰삭제
-	   @PostMapping("deleteReview.me")
+	   @GetMapping("deleteReview.me")
+	   @ResponseBody
 	   public String deleteReview(@RequestParam("reviewNo") int reviewNo) {
 	      
 	      String name="sohwa";
