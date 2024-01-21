@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -9,7 +10,7 @@
 </head>
 <body>
 <div class="logo">
-		<a href="home.me"><img src="../image/ming/member/logo.png" alt="logo"></a>
+		<a href="/"><img src="../image/ming/member/logo.png" alt="logo"></a>
 	</div>
 	<aside class="sidebar">
 		<div class="user">
@@ -99,31 +100,32 @@
 						    </tbody>
 						</table>
 				        <!-- Pagination here -->
-					     <nav aria-label="Page navigation example" th:with="loc=${loc}">
-				         <ul class="pagination">
-				               <li class="page-item">
-				               	  <a class="page-link" th:if="${pi.currentPage <= 1}" aria-label="Previous">
-				                  	<span aria-hidden="true">&laquo;</span>
-				                  </a>
-				                  <a class="page-link" th:if="${pi.currentPage > 1}" th:href="@{${loc}(page=${pi.currentPage-1})}" aria-label="Previous">
-				                  	<span aria-hidden="true">&laquo;</span>
-				                  </a>
-				               </li>
-				               <li class="page-item" th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
-				                  <a class="page-link" th:href="@{${loc}(page=${p})}">[[${ p }]]</a>
-				               </li>
-				               
-					          <li class="page-item">
-					              <a class="page-link" th:if="${pi.currentPage >= pi.maxPage}" aria-label="Next">
-					                 <span aria-hidden="true">&raquo;</span>
-					              </a>
-					              <a class="page-link" th:if="${pi.currentPage < pi.maxPage}" th:href="@{${loc}(page=${pi.currentPage+1})}" aria-label="Next">
-					                 <span aria-hidden="true">&raquo;</span>
-					              </a>
-					          </li>
-				          </ul>
-				      </nav>
-				</div>
-	 	 </div>
+					     <div class="board_bottom_area">
+	         <div id="pagenation" th:with="loc=${loc}" th:if="${!rList.isEmpty}">
+	            <ul>
+	               <!-- 이전 버튼 -->
+	               <li th:if="${pi.currentPage > 10}">
+	                  <a th:href="@{${loc}(page=${pi.currentPage-10})}">&lt; 이전</a>
+	               </li>
+	                   <!-- 페이지 번호 -->
+	                   <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+	                      <a th:href="@{${loc}(page=${p})}" th:id="${p == pi.currentPage} ? 'check_page'">
+	                          [[${p}]] 
+	                      </a>
+	                   <th:block th:if="${keyword != null}">
+	                      <a th:href="@{${loc}(page=${p})}" th:id="${p == pi.currentPage} ? 'check_page'">
+	                         [[${p}]]
+	                     </a>
+	                   </th:block>
+	               </li>
+	                   <!-- 다음 버튼 -->
+	                   <li th:if="${pi.maxPage >= 10 && pi.maxPage - pi.currentPage > 10}">
+	                      <a th:href="@{${loc}(page=${pi.currentPage+10})}">다음 &gt;</a>
+	                   </li>
+	                 </ul>
+	        	 </div>
+	   		</div>
+		</div>
+ 	 </div>
 </body>
 </html>

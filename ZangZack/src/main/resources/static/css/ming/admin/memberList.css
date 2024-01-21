@@ -145,6 +145,96 @@ td {
  .buttonStyle{
     background: #F9612B;
  }
+ .board_bottom_area {
+   display: inline-block;
+   position: relative;
+   width: 80%;
+   margin: 2%;
+   margin-left: 8%;
+   align-items: center;
+}
+
+.board_bottom_area hr {
+   margin-top: 30px;
+   background-color: #eeeee6;
+   border: none;
+   height: 1px;
+}
+
+#pagenation {
+   text-align: center;
+}
+
+#pagenation ul {
+   list-style: none;
+   padding: 0;
+   display: inline-block;
+   margin: 0;
+}
+
+#pagenation ul li {
+   display: inline;
+   margin: 0 5px;
+}
+
+#pagenation ul li a {
+   text-decoration: none;
+    text-align: center;
+    color: #333;
+    font-size: 14px;
+    width: 30px; 
+    height: 30px;
+    line-height: 30px;
+    padding: 0;
+    border-radius: 5px;
+    display: inline-block;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#pagenation ul li a:hover {
+   background-color: #5cb85c;
+   color: #e6e6e6;
+}
+
+#pagenation ul li a#check_page {
+   background-color: #5cb85c;
+   color: #e6e6e6;
+}
+
+.search_area {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   padding: 20px 0;
+}
+
+.search_select {
+   padding: 5px 10px;
+   margin-right: 10px;
+   border: 1px solid #ccc;
+   border-radius: 5px;
+}
+
+.search_input {
+   padding: 5px 10px;
+   border: 1px solid #ccc;
+   border-radius: 5px;
+   width: 300px;
+   margin-right: 10px;
+}
+
+.search_button {
+   padding: 5px 15px;
+   border: none;
+   background-color: #5cb85c;
+   color: white;
+   border-radius: 5px;
+   cursor: pointer;
+}
+
+.search_button:hover {
+   background-color: #5cb85c;
+}
  
 /* 카테고리 */
 #point_zone {

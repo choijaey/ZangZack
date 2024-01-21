@@ -76,7 +76,7 @@
 			<div id="qnaDiv">
 				
 				<!--반복-->
-				<div th:each="q:${qList}" id="qnaD">
+				<div th:each="q:${qList}" id="qnaD" th:if="${session.loginUser.memberId == q.memberId}">
 					<table>
 						<tr class="cart-row">
 		                    <td class="td1">

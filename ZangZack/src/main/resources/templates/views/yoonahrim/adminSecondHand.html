@@ -79,7 +79,7 @@
       <h1>중고물품 관리</h1>
       
       <div style="float:right;">
-         <form action="searchAdmin.ah" method="post">
+         <form action="admin.ah" method="Post">
 	         <div class="nav-item dropdown" id="search1">
 	         	<select name="searchType" class="dropdown-item">
 	         		<option value="spNo" name="spNo" th:selected="${searchType eq 'spNo'}">물품번호</option>
@@ -94,37 +94,35 @@
       
       <table id="allOrder" class="allOrder">
          <tr>
-            <th class="td1"><input type="checkbox" id="allSelect" onclick="toggleAllCheckboxes('allOrder', 'allSelect')"></th>
-            <th class="td2">물품번호</th>
-            <th class="td3">아이디</th>
-            <th class="td4">물품명</th>
-            <th class="td5">물품가격</th>
-            <th class="td6">카테고리</th>
-            <th class="td7">예약여부</th>
-            <th class="td8">판매여부</th>
-            <th class="td9">삭제여부</th>
+            <th class="td1">물품번호</th>
+            <th class="td2">아이디</th>
+            <th class="td3">물품명</th>
+            <th class="td4">물품가격</th>
+            <th class="td5">카테고리</th>
+            <th class="td6">예약여부</th>
+            <th class="td7">판매여부</th>
+            <th class="td8">삭제여부</th>
          </tr>
-         
-         <tr th:each="s : ${list}">
-          <td class="td1"><input type="checkbox"></td>
-          <td class="td2" th:text="${s.spNo}" name="${s.spNo}"></td>
-          <td class="td3" th:text="${s.memberId}"></td>
-          <td class="td4" th:text="${s.spTitle}"></td>
-          <td class="td5" th:text="${#numbers.formatInteger(s.spPrice, 0, 'COMMA') + '원'}"></td>
-          <td class="td6" th:text="${s.categoryName}"><</td>
-          <td class="td7">
-              <div th:class="${s.spIsSell == 'Y' ? 'selectState' : 'unselectState'}">Y</div>
-              <div th:class="${s.spIsSell == 'N' ? 'selectState' : 'unselectState'}">N</div>
-          </td>
-          <td class="td8">
-              <div th:class="${s.spIsBook == 'Y' ? 'selectState' : 'unselectState'}">Y</div>
-              <div th:class="${s.spIsBook == 'N' ? 'selectState' : 'unselectState'}">N</div>
-          </td>
-          <td class="td9">
-              <div th:class="${s.spStatus == 'Y' ? 'selectState' : 'unselectState'}">Y</div>
-              <div th:class="${s.spStatus == 'N' ? 'selectState' : 'unselectState'}">N</div>
-          </td>
-      </tr>
+         <b><hr id="identify"/></b>
+         <tr th:each="item : ${list != null ? list : slist}">
+	          <td class="td1" th:text="${item.spNo}" name="${s.spNo}"></td>
+	          <td class="td2" th:text="${item.memberId}"></td>
+	          <td class="td3" th:text="${item.spTitle}"></td>
+	          <td class="td4" th:text="${#numbers.formatInteger(item.spPrice, 0, 'COMMA') + '원'}"></td>
+	          <td class="td5" th:text="${item.categoryName}"><</td>
+	          <td class="td6">
+	              <div th:class="${item.spIsSell == 'Y' ? 'selectState' : 'unselectState'}">Y</div>
+	              <div th:class="${item.spIsSell == 'N' ? 'selectState' : 'unselectState'}">N</div>
+	          </td>
+	          <td class="td7">
+	              <div th:class="${item.spIsBook == 'Y' ? 'selectState' : 'unselectState'}">Y</div>
+	              <div th:class="${item.spIsBook == 'N' ? 'selectState' : 'unselectState'}">N</div>
+	          </td>
+	          <td class="td8">
+	              <div th:class="${item.spStatus == 'Y' ? 'selectState' : 'unselectState'}">Y</div>
+	              <div th:class="${item.spStatus == 'N' ? 'selectState' : 'unselectState'}">N</div>
+	          </td>
+        </tr>
          
       </table>
       
@@ -147,33 +145,33 @@
    </div>
    
    
-    <th:block th:each="s : ${list}">
-        <div class="modal modal-dialog-scrollable" style="display:none; text-align:center;" th:id="'modal_' + ${s.spNo}">
-    		<form action="editAdmin.ah" method="post">
-	            <div class="modal_body">
-	                NO.<input type="text" class="form-control" name="spNo" aria-label="default input example" th:value="${s.spNo}" readonly/><br><br>
-	                ID.<input type="text" class="form-control"  aria-label="default input example" th:value="${s.memberId}" readonly><br><br>
-	                NICKNAME.<input type="text" class="form-control" aria-label="default input example" th:value="${s.memberName}" readonly/><br><br>
-	                SPTITLE.<input type="text" class="form-control" name="spTitle" aria-label="default input example" th:value="${s.spTitle}"/><br><br>
-	                SPPRICE<input type="text" class="form-control" name="spPrice" aria-label="default input example" th:value="${s.spPrice}"/><br><br>
-	                SPCONTENT<input type="text" class="form-control" name="spContent" aria-label="default input example" th:value="${s.spContent}"/><br><br>
-	                SPADDRESS<input type="text" class="form-control" name="spAddress" aria-label="default input example" th:value="${s.spAddress}"/><br><br><br>
-	                <p>판매여부
-	                    <input type="radio" class="form-check-input" name="spIsSell" th:value="Y" th:checked="${s.spIsSell == 'Y'}"/>Y
-	                    <input type="radio" class="form-check-input" name="spIsSell" th:value="N" th:checked="${s.spIsSell == 'N'}"/>N
-	                </p>
-	                <p>예약여부
-	                    <input type="radio" class="form-check-input" name="spIsBook" th:value="Y" th:checked="${s.spIsBook == 'Y'}"/>Y
-	                    <input type="radio" class="form-check-input" name="spIsBook" th:value="N" th:checked="${s.spIsBook == 'N'}"/>N
-	                </p>
-	                <p>삭제여부
-	                    <input type="radio" class="form-check-input" name="spStatus" th:value="Y" th:checked="${s.spStatus == 'Y'}"/>Y
-	                    <input type="radio" class="form-check-input" name="spStatus" th:value="N" th:checked="${s.spStatus == 'N'}"/>N
-	                </p>
-	                
-	                <button type="submit">수정</button>
-	            </div>
-	        </form>
+   <th:block th:each="item : ${list != null ? list : slist}">
+    <div class="modal modal-dialog-scrollable" style="display:none; text-align:center;" th:id="'modal_' + ${item.spNo}">
+        <form action="editAdmin.ah" method="post">
+            <div class="modal_body">
+                NO.<input type="text" class="form-control" name="spNo" aria-label="default input example" th:value="${item.spNo}" readonly/><br><br>
+                ID.<input type="text" class="form-control" aria-label="default input example" th:value="${item.memberId}" readonly><br><br>
+                NICKNAME.<input type="text" class="form-control" aria-label="default input example" th:value="${item.memberName}" readonly/><br><br>
+                SPTITLE.<input type="text" class="form-control" name="spTitle" aria-label="default input example" th:value="${item.spTitle}"/><br><br>
+                SPPRICE<input type="text" class="form-control" name="spPrice" aria-label="default input example" th:value="${item.spPrice}"/><br><br>
+                SPCONTENT<input type="text" class="form-control" name="spContent" aria-label="default input example" th:value="${item.spContent}"/><br><br>
+                SPADDRESS<input type="text" class="form-control" name="spAddress" aria-label="default input example" th:value="${item.spAddress}"/><br><br><br>
+                <p>판매여부
+                    <input type="radio" class="form-check-input" name="spIsSell" th:value="Y" th:checked="${item.spIsSell == 'Y'}"/>Y
+                    <input type="radio" class="form-check-input" name="spIsSell" th:value="N" th:checked="${item.spIsSell == 'N'}"/>N
+                </p>
+                <p>예약여부
+                    <input type="radio" class="form-check-input" name="spIsBook" th:value="Y" th:checked="${item.spIsBook == 'Y'}"/>Y
+                    <input type="radio" class="form-check-input" name="spIsBook" th:value="N" th:checked="${item.spIsBook == 'N'}"/>N
+                </p>
+                <p>삭제여부
+                    <input type="radio" class="form-check-input" name="spStatus" th:value="Y" th:checked="${item.spStatus == 'Y'}"/>Y
+                    <input type="radio" class="form-check-input" name="spStatus" th:value="N" th:checked="${item.spStatus == 'N'}"/>N
+                </p>
+
+                <button type="submit">수정</button>
+            </div>
+        </form>
         </div>
     </th:block>
 	
@@ -204,11 +202,11 @@
 		const tds = document.getElementsByTagName('td');
 		
 		for (let i = 0; i < tds.length; i++) {
-		    const index = i % 9;
-		    if (index != 0 && index != 6 && index != 7 && index != 8) {
+		    const index = i % 8;
+		    if (index != 0 && index != 5 && index != 6 && index != 7) {
 		        tds[i].addEventListener('dblclick', function () {
 		            // 클릭한 행에서 spNo를 가져오기
-		            const spNo = this.closest('tr').querySelector('.td2').innerText;
+		            const spNo = this.closest('tr').querySelector('.td1').innerText;
 		
 		            // 해당하는 모달 표시
 		            const modal = document.getElementById('modal_' + spNo);

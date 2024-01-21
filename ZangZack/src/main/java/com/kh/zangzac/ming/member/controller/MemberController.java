@@ -90,6 +90,7 @@ public class MemberController {
 		if(!sample6_postcode.trim().equals("")) {
 			 address = sample6_postcode + "@" + sample6_address + "@" + sample6_detailAddress + "@" + sample6_extraAddress;
 		}
+		
 		m.setMemberAddress(address);
 		
 		m.setMemberNickName(existingNickname + "#" + generateRandomNumbers()); // 랜덤닉네임
@@ -100,7 +101,7 @@ public class MemberController {
 		
 		int result = mService.insertMember(m);
 		if(result > 0) {
-		   return "index";
+		   return "redirect:/";
 	    } else {
 	    	model.addAttribute("msg", "회원가입에 실패하였습니다.\n인증코드를 확인해주세요");
 			return "views/ming/member/sign";
@@ -120,14 +121,25 @@ public class MemberController {
 	
 	
 	//이메일 중복체크
-	@RequestMapping(value ="checkEmail.me")
+	@RequestMapping(value = "checkEmail.me")
 	@ResponseBody
 	public String checkEmail(@RequestParam("memberEmail") String memberEmail) {
-		
-		int count = mService.checkEmail(memberEmail);
-		String result = count == 0 ? "yes" : "no";
-		
-		return result;
+	    int count = mService.checkEmail(memberEmail);
+
+	    if (count == 0) {
+	        return "yes";
+	    } else {
+	        Member result = mService.getMemberLoginType(memberEmail);
+	        System.out.println("중복은 걸러짐" + result);
+	        
+	        if (result != null) {
+	            System.out.println("kakao");
+	            return "kakao";
+	        } else {
+	            System.out.println("no");
+	            return "no";
+	        }
+	    }
 	}
 	
 	
@@ -281,7 +293,7 @@ public class MemberController {
         
         
         if (result > 0) {
-            return "index";
+            return "redirect:/";
         } else {
         }
          
@@ -304,7 +316,7 @@ public class MemberController {
 		int result = mService.deleteMember(memberId);
 		
 		if(result > 0) {
-			return "index";
+			return "redirect:/";
 		}else {
 			model.addAttribute("msg","회원탈퇴실패");
 			return "views/ming/member/myPage";
@@ -609,9 +621,11 @@ public class MemberController {
 	    if (isEmailDuplicate) {
 	        // 중복된 이메일이 있는 경우
 	    	session.setAttribute("loginUser", loginUser);
+
 	    	session.setAttribute("msg", "중복된 이메일이 있습니다.");
 	        if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me") ||
 	        							beforeURL.equals("http://192.168.20.207:8080/logout.me") || beforeURL.equals("http://192.168.20.207:8080/signUp.me"))) {
+
 	            return "redirect:" + beforeURL;
 	        } else {
 	            return "redirect:home.me";
@@ -628,6 +642,7 @@ public class MemberController {
 											beforeURL.equals("http://192.168.20.207:8080/logout.me") || beforeURL.equals("http://192.168.20.207:8080/signUp.me"))) {
 	                return "redirect:" + beforeURL;
 	            } else {
+
 	            	return "redirect:/";
 	            }
 	        } else {

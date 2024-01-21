@@ -139,6 +139,7 @@ public class ProductController {
       
    }
    
+  
    
    //관리자 상품 목록페이지 view
    @GetMapping("adminProductList.so")
@@ -177,7 +178,6 @@ public class ProductController {
    
    @GetMapping("productListView.so")
    public String productListView(@RequestParam(value="keyword", defaultValue="") String keyword, @RequestParam(value="standard", defaultValue="1") String standard, @RequestParam(value="categoryNo", defaultValue="0") String categoryNo, @RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
-      
       
       
       HashMap<String, String> map = new HashMap<>();
@@ -461,7 +461,7 @@ public class ProductController {
       
       
       if(result0 + result1 + result2 + result3 == options.length + coreList.size()+detailList.size()+1) {
-         return "redirect:productListView.so";
+         return "redirect:adminProductList.so";
       }else {
          throw new ProductException("상품 등록 실패");
       }
@@ -1156,13 +1156,7 @@ public class ProductController {
       int optionResult = pService.insertOption(oList);
       
       
-      //deleteAttm이 비워져있고, coreFiles와 detailFiles도 비워져있을 때
-      //deleteAttm이 비워져있고, coreFiles만 비워져있고, detailFiles는 존재
-      //deleteAttm이 비워져있고, coreFiles는 존재하고, detailFiles는 비워져있을 때
       //deleteAttm이 비워져있고, coreFiles와 detailFiles 둘 다 존재
-      //deleteAttm이 채워져있고, coreFiles와 detailFiles는 비워져있을 때
-      //deleteAttm이 채워져있고, coreFiles만 비워져있고, detailFiles는 존재
-      //deleteAttm이 채워져있고, coreFiles는 존재하고, detailFiles는 비워져있을 때
       //deleteAttm이 채워져있고, coreFiles와 detailFiles 둘 다 존재
             
       
@@ -1198,14 +1192,6 @@ public class ProductController {
           }
        }
       
-//      if(!delRename.isEmpty()) {
-//         deleteResult = pService.deleteProductPhoto(delRename);
-//         if(deleteResult > 0) {
-//            for(String rename : delRename) {
-//               imageStorage.deleteImage(rename, name);
-//            }
-//         }
-//      }
       
       //이전의 첨부파일이 존재했는지에 대한 boolean값
       boolean existBeforeAttm = true;
@@ -1258,16 +1244,6 @@ public class ProductController {
             }
          }
       }
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
       
       
       
@@ -1326,6 +1302,20 @@ public class ProductController {
    
    
    
+   @GetMapping("purchaseYN.so")
+   @ResponseBody
+   public String purchaseYN(Model model) {
+	   String id = ((Member)model.getAttribute("loginUser")).getMemberId();
+	   
+	   int result = pService.purchaseYN(id);
+	   
+	   if(result == 0) {
+		   return "no";
+	   }else {
+		   return "yes";
+	   }
+	  
+   }
    
    
    

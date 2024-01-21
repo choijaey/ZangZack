@@ -1,8 +1,0 @@
-spring:
-  cloud:
-    gcp:
-      storage:
-        credentials:
-          location: classpath:zangzac-3cd950393504.json
-        project-id: zangzac
-        bucket: zangzac

@@ -18,4 +18,13 @@ public interface RecipeService {
 
 	Recipe selectRecipe(int recipeNo);
 
+	int deleteRecipe(int recipeNo);
+
+	int updateRecipe(Recipe recipe);
+
+	int updataeCookList(ArrayList<CookwareList> cookList);
+
+	void deleteCookList(int recipeNo);
+
+
 }

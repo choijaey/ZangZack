@@ -437,6 +437,12 @@ public class MemberServiceImpl implements MemberService{
 		return mDAO.getmyBoardListCount(paramMap);
 	}
 
+	@Override
+	public Member getMemberLoginType(String memberEmail) {
+		return mDAO.getMemberLoginType(memberEmail);
+	}
+
+
 
 
 

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -395,21 +396,41 @@
 		
 		//이메일 중복체크
 		document.getElementById('memberEmail').addEventListener('change', function(){
-			let emailVal = $('#memberEmail').val();
-				$.ajax({
-					url: 'checkEmail.me',
-					data : {memberEmail : this.value},
-					success: (data) =>{
-						if(data == 'yes'){
-							memberEmail.style.borderColor = 'green';
-							checkEmail = true;
-						}else{
-							memberEmail.style.borderColor = 'red';
-							checkEmail = false;
-						}
-					},
-					error : data => console.log(data)
-				});
+		    let emailVal = $(this).val();
+		    let memberEmail = this;
+		    let checkEmail = false;
+		    
+		    let result;  // 미리 선언 및 초기화
+		
+		    $.ajax({
+		        url: 'checkEmail.me',
+		        data: { memberEmail: emailVal },
+		        success: (data) => {
+		            console.log("서버에서 받은 응답:", data);
+
+		            result = data;  // 비동기적으로 result 업데이트
+		            
+		            if (result == 'yes') {
+		                memberEmail.style.borderColor = 'green';
+		                checkEmail = true;
+		            } else {
+		                console.log("들어오기는 하나?");
+		                if (result == 'kakao') {
+		                    console.log("카카오 로그인");
+		                    alert('카카오 로그인 회원입니다. 카카오 로그인으로 진행해주세요.');
+		                    memberEmail.style.borderColor = 'red';
+		                    checkEmail = false;
+		                } else if(result == 'no') {
+		                    console.log("이메일 중복");
+		                    alert('중복되는 이메일이 있습니다.');
+		                    memberEmail.style.borderColor = 'red';
+		                    checkEmail = false;
+		                }
+		            }
+		            console.log("이것도 아니고 저것도 아닌");
+		        },
+		        error: (data) => console.log(data)
+		    });
 		});
 	
 	</script>
