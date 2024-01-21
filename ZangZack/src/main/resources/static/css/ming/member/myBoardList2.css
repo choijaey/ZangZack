@@ -448,9 +448,6 @@ tr {
    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-* {
-   font-family: 'GmarketSansMedium';
-}
 
 p {
     display: block;
@@ -466,9 +463,6 @@ p {
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
     font-weight: normal;
     font-style: normal;
-}
-*{
-   font-family: 'GmarketSansMedium';
 }
 
 #orderListWrapped{
@@ -633,9 +627,6 @@ td {
    width: 97%; /* 전체 너비를 사용 */
    border-top: 1px solid #e6e6e6; /* 하단 테두리 설정 */
    padding-bottom: 20px; /* 하단 테두리 아래에 여백을 줌 */
-}
-* {
-   font-family: 'GmarketSansMedium';
 }
 
 p {
