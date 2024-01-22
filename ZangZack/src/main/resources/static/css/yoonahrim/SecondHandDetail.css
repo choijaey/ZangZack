@@ -147,14 +147,14 @@
 
 .form-control{
 	position:absolute;
-	top: 250px;
+	top: 150px;
 	right: 20px;
 	width: 650px;
 }
 
 #button-addon2{
 	position:absolute;
-	top: 240px;
+	top: 130px;
 	left: 690px;
 	height: 35px;
 }
@@ -170,7 +170,7 @@
 }
 #hr_content{
 	position: relative;
-	top: 250px;
+	top: 150px;
 	width: 810px;
 }
 #hr_line{
