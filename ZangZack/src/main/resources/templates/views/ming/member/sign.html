@@ -155,7 +155,7 @@
 	              Sign in
 	            </button><br><br>
 	           <a class="btnset btnset-round contents-start-kakao" 
-				    href="https://kauth.kakao.com/oauth/authorize?client_id=18ae7b1bab696aadfa39200fae9ad11b&redirect_uri=http://192.168.20.207:8080/kakaoLogin&response_type=code&prompt=login"
+				   href="https://kauth.kakao.com/oauth/authorize?client_id=18ae7b1bab696aadfa39200fae9ad11b&redirect_uri=http://192.168.20.207:8080/kakaoLogin&response_type=code&prompt=login"
 				   id="kakaoBtn">카카오톡 연동하기
 				</a>
 	            <p style="text-align: center;">
@@ -217,7 +217,10 @@
 	<!-- 카카오톡 로그인 -->
 
 	<script>
-	
+		let checkId = false;
+		let checkNickName = false;
+	    let checkPwd = false;
+	    let checkEmail = false;
 	  function loginWithKakao() {
 	    Kakao.Auth.authorize({
 	      redirectUri: 'http://192.168.20.207:8080/kakaoLogin',
@@ -397,30 +400,42 @@
 		
 		//이메일 중복체크
 		document.getElementById('memberEmail').addEventListener('change', function(){
-			let emailVal = $('#memberEmail').val();
-				$.ajax({
-					url: 'checkEmail.me',
-					data : {memberEmail : this.value},
-					success: (data) =>{
-						if(data == 'yes'){
-							memberEmail.style.borderColor = 'green';
-							checkEmail = true;
-						}else{
-							memberEmail.style.borderColor = 'red';
-							checkEmail = false;
-						}
-					},
-					error : data => console.log(data)
-				});
+		    let emailVal = $(this).val();
+		    let memberEmail = this;
+		    let checkEmail = false;
+		    
+		    let result;  // 미리 선언 및 초기화
+		
+		    $.ajax({
+		        url: 'checkEmail.me',
+		        data: { memberEmail: emailVal },
+		        success: (data) => {
+		            result = data;  // 비동기적으로 result 업데이트
+		            
+		            if (result == 'yes') {
+		                memberEmail.style.borderColor = 'green';
+		                checkEmail = true;
+		            } else {
+		                if (result == 'kakao') {
+		                    alert('카카오 로그인 회원입니다. 카카오 로그인으로 진행해주세요.');
+		                    memberEmail.style.borderColor = 'red';
+		                    checkEmail = false;
+		                } else if(result == 'no') {
+		                    console.log("이메일 중복");
+		                    alert('중복되는 이메일이 있습니다.');
+		                    memberEmail.style.borderColor = 'red';
+		                    checkEmail = false;
+		                }
+		            }
+		        },
+		        error: (data) => console.log(data)
+		    });
 		});
 	
 	</script>
 	<script>
 		<!-- 비밀번호 확인 + 정규식 -->
-		let checkId = false;
-		let checkNickName = false;
-	    let checkPwd = false;
-	    let checkEmail = false;
+	    
 		function focusOut(){
 			let pwd = document.getElementById("memberId");
 	        let pwdConfirm = document.getElementById("pwdConfirm");
@@ -493,10 +508,8 @@
 		// 모든 폼이 일치해야 넘어오게 
 		function NoSign(){
 			
-			if(check_code){
-				checkId = true;
-			   	checkPwd = true;
-			    checkEmail = true;
+			if(check_code && checkId && checkPwd && checkEmail && checkNickName){
+				
 				return true;
 			}else{
 				alert("정보가 올바르게 작성되었는지 확인해주세요.");
