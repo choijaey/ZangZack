@@ -28,20 +28,23 @@
          
          <!--다른 날짜일때 반복-->
          <br><br>
-         <div >
+         <div>
 	         <div class="productss" th:each="on:${orderNos}">
-		         <div class="dayAndDetail" th:each="pa:${paList}" th:if="${pa.orderNo == on and session.loginUser.memberId == pa.memberId}">
+		         <div class="dayAndDetail">
 		         	<span class="detailOrder">
 		         		주문상세보기>>
 		         		<input class="orderNo" type="hidden" th:value="${on}">
 		         	</span>
-		         	<h5 style="margin-left:60px;">주문번호 : [[${on}]]</h5> 
+		         	<h5 style="margin-left:60px; display:inline-block;">주문번호 : [[${on}]]</h5> <th:block><a th:href="@{'refundOrder.so?orderNo=' + ${on}}" onclick="return refundOrder(this)"><button class="refundBtn">환불신청</button></a></th:block>
 		         </div>
 		         <!--같은 날짜 일때 반복-->
 		            <div class="products" th:each="pa:${paList}" th:if="${pa.orderNo == on and session.loginUser.memberId == pa.memberId}">
-		            	<th:block th:unless="${pa.deliveryStatus=='환불요청'}"><span style="margin-left:10px; font-size:13px;color:darkolivegreen; width:100px;">[[${pa.orderDate}]]<br>[[${pa.deliveryStatus}]]</span></th:block>
-		            	<th:block th:if="${pa.deliveryStatus=='환불요청'}"><span style="margin-left:10px; font-size:13px;color:red; width:80px;">[[${pa.orderDate}]]<br>[[${pa.deliveryStatus}]]</span></th:block>
+		            	<input type="hidden" th:value="${pa.orderDate}" class="orderDate">
+		            	<th:block th:unless="${pa.deliveryStatus=='환불요청'}"><span style="margin-left:10px; font-size:13px;color:darkolivegreen; width:110px;">[[${pa.orderDate}]]<br>[[${pa.deliveryStatus}]]</span><br></th:block>
+		            	<th:block th:if="${pa.deliveryStatus=='환불요청'}"><span style="margin-left:10px; font-size:13px;color:red; width:110px;">[[${pa.orderDate}]]<br>[[${pa.deliveryStatus}]]</span></th:block>
+		            	
 		                <div class="left" th:each="p:${pList}" th:if="${pa.productNo == p.productNo}">
+		                
 		                <!-- 왼쪽 컨테이너 내용 -->
 			                <table>
 			                  <tr class="cart-row">
@@ -53,13 +56,13 @@
 			                           [[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]
 			                         </div>
 			                      </td>
-		                          <td class="td2">
-		                              <div class="quantity-input">&nbsp;&nbsp;&nbsp;
+		                          <td class="td2" style="margin-right:0px !important;">
+		                              <div class="quantity-input" style="margin-right:0px !important;">&nbsp;&nbsp;&nbsp;
 		                              	  <input type="hidden" class="productPrice" th:value="${p.productPrice}">
 		                                  <input type="text" class="quantity" th:value="${pa.orderProductEno}" min="1" readonly>개
 		                              </div>
 		                          </td>
-		                          <td style="width:150px;">[[${pa.productOption}]]</td>
+		                          <td style="width:200px; margin-right:20px !important;">[[${pa.productOption}]]</td>
 		                          <td class="td3" style="width:150px;">
 		                          
 		                          </td>
@@ -72,7 +75,7 @@
 		                <div class="right">
 		                <!-- 오른쪽 컨테이너 내용 -->
 		                   <input type="hidden" th:value="${pa.orderDate}" class="orderDate">
-		                   <a th:href="@{'refundOrder.so?orderKeyNo=' + ${pa.orderKeyNo}}" onclick="return refundOrder(this)"><button>환불신청</button></a><br>
+		                   <a th:href="@{'productDetail.so?productNo=' + ${pa.productNo}}" ><button>상품페이지로 이동</button></a>
 		                </div>
 		            </div>
 	            </div>
@@ -332,9 +335,10 @@
 	        // 일주일 전 날짜 계산
 	        var oneWeekAgo = new Date(currentDate);
 	        oneWeekAgo.setDate(currentDate.getDate() - 7);
-
+			
+	        
 	        // 이전 동위 요소 찾기
-	        var previousSibling = link.previousElementSibling;
+	        var previousSibling = link.parentElement.nextElementSibling.firstElementChild;
 
 	        // 이전 동위 요소가 input 요소이고, 값이 날짜 형식이라 가정
 	        var previousDate = new Date(previousSibling.value);
