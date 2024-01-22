@@ -185,7 +185,9 @@ p {
 }
 
 #pagenation {
-	text-align: center;
+	display: flex;
+	justify-content: center;
+	text-align:center;
 }
 
 #pagenation ul {
@@ -392,7 +394,7 @@ select{
 }
 
 #pagenation ul li a:hover {
-   background-color: #363D0F;
+   background-color: #5cb85c;
    color: #e6e6e6;
 }
 

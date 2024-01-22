@@ -89,15 +89,15 @@
 		                   </div>
 	                   </th:block>
 	                   <div class="card-desc">
-	                     <div class="card-title" style="font-size:15px;">[[${#strings.length(s.spTitle) > 6 ? #strings.substring(s.spTitle, 0, 6) + '...' : s.spTitle}]]
+	                     <div class="card-title">[[${#strings.length(s.spTitle) > 6 ? #strings.substring(s.spTitle, 0, 6) + '...' : s.spTitle}]]
 	                           <div class="selectCategory">[[${s.categoryName}]]</div>
 	                     </div>
-	                     <div class="card-price" style="font-size:12px;">
+	                     <div class="card-price">
 	                     	<b>
 	                       		[[${#numbers.formatInteger(s.spPrice, 0, 'COMMA')}]]원
 	                     	</b>
 	                     </div>
-	                     <div class="card-region-name" style="font-size:12px;">
+	                     <div class="card-region-name">
 	                       	[[${#strings.length(s.spAddress) > 12 ? #strings.substring(s.spAddress, 0, 12) + '...' : s.spAddress}]]
 	                     </div>
 	                     <div class="card-counts">
@@ -139,7 +139,7 @@
         </div>
      </div>
      <a id="goChatingRoom" class="chat" style="display: inline-block;" onclick="redirectToChat()">
-     	<input type="hidden" id="userId" th:if="${session.loginUser != null}" th:value="${session.loginUser.memberId}" />
+     	<input type="hidden" id="userId" th:if="${session.loginUser != null}" th:value="${session.loginUser.memberId}"/>
 	    <input type="hidden" id="memberId" th:value="${s.memberId}" th:each="s : ${sList}"/>
      	<img src="image/yoonahrim/icons8-chat-bubble-100.png" style="width:50px; height:50px; position:fixed; left: 1820px; bottom: 80px;"/>
      </a>

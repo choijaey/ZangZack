@@ -161,11 +161,11 @@
 
 .reply_count>p{
 	position: absolute;
-	top: -80px;
+	bottom: 530px;
 }
 #hr_count{
 	position: relative;
-	top: -40px;
+	top: -170px;
 	width: 820px;
 }
 #hr_content{
@@ -175,13 +175,13 @@
 }
 #hr_line{
 	position: absolute;
-	top: 1900px;
+	top: 1800px;
 	left: 550px;
 	width: 820px;
 }
 .reply_content{
 	position: absolute;
-	top: 25px;
+	bottom: 250px;
 	overflow: auto;
 }
 

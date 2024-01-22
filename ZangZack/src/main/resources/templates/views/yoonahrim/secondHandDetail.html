@@ -75,18 +75,18 @@
                         <img alt="img" th:src="${s.memberProfilePath}"> <!-- 프로필 가져오기 -->
                            <p><b>[[${s.memberId}]]</b></p>
                            <p>[[${#strings.arraySplit(s.spAddress, ',')[0]}]]</p>
-                        	<div class="container2 text-end">
+                        	<!--  <div class="container2 text-end">
 	                        		<input type="hidden" id="userId" th:if="${session.loginUser != null}" th:value="${session.loginUser.memberId}"/>
 	                        		<input type="hidden" id="memberId" th:value="${s.memberId}"/>
 	                          		<button type="button" class="btn_booked" onclick="goChating()" th:if="${session.loginUser != null}">1 : 1 채팅방</button>
-                        	</div>   
+                        	</div> -->   
                      </span>
                   </span>   
-                   
+                  <br>
                   <div id="content">
                      <div style="margin:50px">
                         <br><br><br>
-                        <p style="margin:20px"><b>[[${#numbers.formatInteger(s.spPrice, 0, 'COMMA')}]]원</b></p><hr><br>
+                        <p style="margin:20px"><b>[[${#numbers.formatInteger(s.spPrice, 0, 'COMMA')}]]원</b></p><hr>
                         <div class="content-line">
                            <textarea style="margin:10px; overflow-x: hidden; resize: none; border:none;" rows="13" cols="75" th:utext="${#strings.replace(s.spContent, '\n', '<br>')}" readonly></textarea>
                         </div>
@@ -101,7 +101,7 @@
             <div class="reply" style="margin:30px">
                   <!-- 댓글 카운트가 보이는 부분 -->
                   <div class="reply_count">
-                     <p style="margin:20px">댓글 [[${s.replyCount}]]</p>
+                     <p>댓글 [[${s.replyCount}]]</p>
                   </div>
                   <hr id="hr_count">
                   <!-- 작성한 댓글이 보이는 부분 -->

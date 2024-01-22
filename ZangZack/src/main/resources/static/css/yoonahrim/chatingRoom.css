@@ -51,13 +51,13 @@
 .chat-content{
 	width: 400px;
 	height: 65px;
-	border: 1px solid lightgray;
+	border: 1px solid black;
 	border-radius: 30px;
 	display:inline-block;
 	position: relative;
-	left: 20px;
+	left: 50px;
 	margin-top: 20px;
-	background-color: #FFC8C3;
+	background-color: white;
 }
 
 .chat-content-image>img{
@@ -117,7 +117,7 @@
 	margin: 30px;
 	width: 200px;
 	height: auto;
-	background-color: #FFC8C3;
+	background-color: lightgray;
 	border-radius: 5px;
 	margin-left: auto;
 	text-align: right;

@@ -73,22 +73,25 @@ public class SecondHandController {
 		int spNo = sp.getSpNo();
 		ArrayList<secondHandProduct> sList =  spService.selectSeconHand(pi, 4);
 		
-		model.addAttribute("loginUser", session.getAttribute("loginUser"));
-		model.addAttribute("aList", aList);
-		model.addAttribute("sList", sList);
-		model.addAttribute("pi", pi);
-		model.addAttribute("loc", request.getRequestURI());
-		
+		if(sList != null) {
+			model.addAttribute("loginUser", session.getAttribute("loginUser"));
+			model.addAttribute("aList", aList);
+			model.addAttribute("sList", sList);
+			model.addAttribute("pi", pi);
+			model.addAttribute("loc", request.getRequestURI());
 		return "views/yoonahrim/secondHandList";
-     }	
+     }else {
+    	 throw new secondHandException("리스트불러오기에 실패하였습니다");
+     }
+	}
 	
 	
-	
-	@GetMapping("searchSecondHand.ah")
-	   public String campSerchList(@ModelAttribute secondHandProduct sp,
+	 @GetMapping("searchSecondHand.ah")
+	  public String campSerchList(@ModelAttribute secondHandProduct sp,
 			   					  @RequestParam("region") String region,
 	                              @RequestParam("type") String type,
 	                              @RequestParam(value="page", defaultValue="1") int page,
+	                              HttpServletRequest request,
 	                              Model model) {
 	      
 		  HashMap<String, String> map = new HashMap<>();
@@ -110,7 +113,7 @@ public class SecondHandController {
 	         model.addAttribute("region", region);
 	         model.addAttribute("type", type);
 	         model.addAttribute("pi", pi);
-	         
+	         model.addAttribute("loc", request.getRequestURI());
 	         return "views/yoonahrim/searchSecondHand";
 	      }else {
 	         throw new secondHandException("검색에 실패하였습니다");
