@@ -130,7 +130,6 @@ public class MemberController {
 	        return "yes";
 	    } else {
 	        Member result = mService.getMemberLoginType(memberEmail);
-	        System.out.println("중복은 걸러짐" + result);
 	        
 	        if (result != null) {
 	            System.out.println("kakao");
@@ -205,7 +204,6 @@ public class MemberController {
 	@ResponseBody
 	public String selectId(@ModelAttribute Member m, Model model) {
 		
-		System.out.println(m);
 		ArrayList<Member> list = mService.selectId(m);
 		JSONArray jArr = new JSONArray();
 		
@@ -245,7 +243,6 @@ public class MemberController {
 	       } catch(Exception e) {
 	          e.printStackTrace();
 	       }
-	       	System.out.println("checkNum: "+checkNum);
 	          return checkNum+"";
 	     }
 	
@@ -296,7 +293,6 @@ public class MemberController {
         
         
         if (result > 0) {
-        	System.out.println(str + ": str");
         } else {
         }
          
@@ -347,11 +343,9 @@ public class MemberController {
 			 
 			 
 			 int result = mService.changePwd(map);
-			 System.out.println("test1 : " +map);
 			 
 			 if(result > 0) {
 				 model.addAttribute("loginUser", mService.login(m));
-				 System.out.println("test2 : " + m);
 				 return "redirect:myPage.me";
 			 } else {
 				 model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
@@ -536,7 +530,6 @@ public class MemberController {
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
 		ArrayList<Member> list = mService.searchtNoticeList(pi, map);
 		
-		System.out.println(list);
 		if(list != null) {
 			model.addAttribute("searchType",searchType);
 			model.addAttribute("keyword",keyword);
@@ -582,13 +575,11 @@ public class MemberController {
 	public String adminUpdateNickName(@ModelAttribute Member m) {
 		String memberNickName = null;
 		memberNickName = m.getMemberNickName() + "#" + generateRandomNumbers();
-		System.out.println(memberNickName);
 		
 		
 		m.setMemberNickName(memberNickName);
 		
 		int result = mService.adminUpdateNickName(m);
-		System.out.println(result);
 		
 		return result == 1? "success" : "fail";
 	}
@@ -597,7 +588,6 @@ public class MemberController {
 	@ResponseBody
 	public String adminUpdateName(@ModelAttribute Member m) {
 		String memberName = m.getMemberName();
-		System.out.println(memberName);
 		
 		int result = mService.adminUpdateName(m);
 		return result == 1? "success" : "fail";
@@ -694,7 +684,6 @@ public class MemberController {
 	      String name="sohwa";
 	      int result = mService.deleteReview(reviewNo);
 	      String deleteRename = mService.deleteSelectReview(reviewNo);
-	      System.out.println("deleteRename" + deleteRename);
 	      
 	      if(deleteRename != null) {
 	    	  Boolean sf = imageStorage.deleteImage(deleteRename, name);
@@ -764,7 +753,6 @@ public class MemberController {
 			PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
 			ArrayList<secondHandProduct> spList = mService.searchSpList(pi, map);
 			
-			System.out.println(spList);
 			
 			if(spList != null) {
 				model.addAttribute("pi", pi);
