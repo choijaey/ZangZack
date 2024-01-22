@@ -73,11 +73,11 @@
 }
 
 .p-line{
-	text-align: left;
+	text-align: center;
 	margin: 20px;
 	
 	position: relative;
-	bottom: 15px;
+	bottom: 10px;
 }
 
 .p-line p {

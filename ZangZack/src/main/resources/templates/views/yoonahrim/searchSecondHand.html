@@ -138,10 +138,10 @@
             <hr/>
         </div>
      </div>
-     <a id="goChatingRoom" class="chat" style="display: inline-block;" onclick="redirectToChat()">
-     	<input type="hidden" id="userId" th:if="${session.loginUser != null}" th:value="${session.loginUser.memberId}" />
-	    <input type="hidden" id="memberId" th:value="${s.memberId}" th:each="s : ${sList}"/>
-     	<img src="image/yoonahrim/icons8-chat-bubble-100.png" style="width:50px; height:50px; position:fixed; left: 1820px; bottom: 80px;"/>
+      <a id="goChatingRoom" class="chat" style="display: inline-block; cursor:pointer;" onclick="redirectToChat()">
+     		<input type="hidden" id="userId" th:if="${session.loginUser != null}" th:value="${session.loginUser.memberId}"/>
+	    	<input type="hidden" id="memberId" th:value="${s.memberId}" th:each="s : ${sList}"/>
+     		<img src="image/yoonahrim/icons8-chat-bubble-100.png" style="width:50px; height:50px; position:fixed; left: 1820px; bottom: 80px;"/>
      </a>
    <script>
         document.addEventListener('DOMContentLoaded', function() {

@@ -114,7 +114,7 @@ public class SecondHandController {
 	         model.addAttribute("type", type);
 	         model.addAttribute("pi", pi);
 	         model.addAttribute("loc", request.getRequestURI());
-	         return "views/yoonahrim/searchSecondHand";
+	         return "views/yoonahrim/secondHandList";
 	      }else {
 	         throw new secondHandException("검색에 실패하였습니다");
 	      }

@@ -110,7 +110,7 @@
                         <img class="d-flex rounded-circle" alt="reply_profile" th:src="${r.memberProfilePath}" style="position:absolute; width:50px; height:50px">
                         <div class="media-body" style="position:relative; left:60px">
                            <input type="hidden" id="replyNo" th:value="${r.replyNo}"/>
-                              <h6 class="mt-0">[[${r.memberId}]]  [[${#temporals.format(r.replyCreateDate, 'yyyy-MM-dd HH:mm')}]]</h6> 
+                              <span class="mt-0">[[${r.memberId}]]</span>&nbsp;&nbsp;<span class="mt-1">[[${#temporals.format(r.replyCreateDate, 'yyyy-MM-dd')}]]</span> 
                               <p>[[${r.replyContent}]]</p>
 	                           <!-- 수정 input type="text" 창 -->
 	                             <div class="modal" tabindex="-1" th:id="'modal-' + ${r.replyNo}">
