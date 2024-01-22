@@ -82,7 +82,6 @@ a{
 }
 
 .links li:hover {
-	left: 0.05px;
     border-radius: 4px;
     cursor: pointer;
 }
@@ -503,22 +502,18 @@ th{
 }
 
 .td2{
-   width:8%;
+   width:12%;
 }
 
 .td3{
-   width:10%;
-}
-
-.td4{
-   width:13%;
+   width:20%;
 }
 
 .td5{
    width:20%;
 }
 .td6{
-   width:10%;
+   width:8%;
 }
 .td7{
    width:8%;
@@ -527,8 +522,9 @@ th{
    width:8%;
 }
 .td9{
-   width:8%;
+   width:10%;
 }
+
 
 tr{
    height:40px;
@@ -610,6 +606,8 @@ td {
 	position: relative;
 	top: 150px;
 }
+
+
 .board-container {
    display: flex;
    flex-wrap: wrap;
@@ -892,4 +890,3 @@ p {
 .search_button:hover {
    background-color: #5cb85c;
 }
-

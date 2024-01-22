@@ -84,7 +84,7 @@
                   </label>
                   
                   <label for="required">* 배송 요청사항<br>
-                      <textarea id="required" name="required"></textarea><br><br>
+                      <textarea id="required" name="required" style="width:450px; height:150px;"></textarea><br><br>
                   </label>
              </div>
             
@@ -181,7 +181,7 @@
              <!-- 결제 UI, 이용약관 UI 영역 -->
              <div id="payment-method"></div>
              <div id="agreement"></div>
-              <button id="payment-button">결제하기</button>
+             <button id="payment-button" style="width:100%; border-radius:10px; background-color:blue; color:white; border:none;">결제하기</button>
              
             </div>
           </div>
@@ -330,9 +330,9 @@
 	           const totalPrice = parseInt(totalPrice2.innerText.replace('원', '').replace(',', ''));
 	           const productNames = document.querySelectorAll('.productName');
              const paymentMethodWidget = paymentWidget.renderPaymentMethods(
-               "#payment-method",
-               { value: orderPrice },
-               { variantKey: "DEFAULT" }
+                 "#payment-method",
+                 { value: orderPrice },
+                 { variantKey: "DEFAULT" }
                
              );
 
@@ -354,10 +354,8 @@
                 // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
                 paymentWidget.requestPayment({
                      orderId: String(Math.floor(Math.random() * 1000000)).padStart(6, "0"),
-
                      orderName: productNames[0].innerText + "외 " + (productNames.length-1) + "건",
-                     successUrl: 'http://192.168.20.207:8080/insertPayment.so?productNos=' + productNos + '&enos=' + enos +'&address=' + address + '&options=' + options + '&phone=' + phone + '&name=' + userName + '&required=' +required,
-
+                     successUrl: 'http://localhost:8080/insertPayment.so?productNos=' + productNos + '&enos=' + enos +'&address=' + address + '&options=' + options + '&phone=' + phone + '&name=' + userName + '&required=' +required,
                      failUrl: window.location.origin + "/fail",
                      customerEmail: "thghk0206@naver.com",
                      customerName: userName,
