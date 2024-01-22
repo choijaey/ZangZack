@@ -30,6 +30,18 @@ body {
 	box-sizing: border-box;
 }
 
+#campBoardContent {
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	-ms-word-break: break-all;
+	word-break: break-all;
+	word-break: break-word;
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	-ms-hyphens: auto;
+	hyphens: auto;
+}
+
 .post-header {
 	border-bottom: 1px solid #ececec;
 	padding-bottom: 20px;
@@ -99,35 +111,21 @@ body {
 }
 
 /* 보드 수정 버튼 */
-#boardEditContainer {
-	position: absolute;
-    top: 10px; /* 상단에서의 거리 */
-    right: 10px; /* 우측에서의 거리 */
-}
-
 #boardEditBtn {
-	background-color: none;
-	background-image: url("../../image/seongun/boardAdd.png");
-	width: 15px;
-	height: 15px;
-	background: none;
-	border: none;
-	width: 35px;
-	height: auto;
-	float: right;
-	display: flex;
-	position: relative;
+    background-color: transparent;
+    width: 35px;
+    height: auto;
+    border: none;
+    display: flex;
+    position: relative;
+    float: right;
+    top:-20px;
+    right: 10px;
 }
 
 #boardEditBtn img#settingBtn {
-	width: 30px;
-	position: relative;
-}
-
-#editDropDown {
-	position: absolute;
-	top: -20px;
-	right: 29.7%;
+    width: 30px;
+    position: relative;
 }
 
 #boardEditBtn :hover {
@@ -135,21 +133,17 @@ body {
 }
 
 #editDropDown {
-	position: absolute;
-	left: -10px;
-	top: -12px;
-	background-color: #f9f9f9;
-	min-width: 50px;
-	height: 30px;
-	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	z-index: 1;
-	border-radius: 4px;
-	padding: 0;
-	align-content: center;
-	align-items: center;
-	background: #5cb85c;
+    position: absolute;
+    top: 20px; 
+    right: 10px; 
+    z-index: 1;
+    min-width: 50px;
+    border-radius: 4px;
+    padding: 0;
+    align-content: center;
+    align-items: center;
+    background: none;
 }
-
 #editDropDown li {
 	list-style: none;
 }
@@ -166,6 +160,14 @@ body {
 	width: 100%;
 }
 
+#editDropDown #boardDeleteBtn{
+    background: red;
+}
+
+#editDropDown .editDropMenu:hover {
+    background-color: #8ccf8c; /* 마우스 오버시 백그라운드 색상 */
+    color: #333; /* 마우스 오버시 글자 색상 */
+}
 /* 좋아요 버튼과 댓글 카운트 스타일링 */
 .post-like-comment {
 	display: flex;
@@ -283,6 +285,15 @@ body {
 .comment-message {
 	color: #666;
 	width: 98%;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	-ms-word-break: break-all;
+	word-break: break-all;
+	word-break: break-word;
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	-ms-hyphens: auto;
+	hyphens: auto;
 }
 
 .comment-info {
