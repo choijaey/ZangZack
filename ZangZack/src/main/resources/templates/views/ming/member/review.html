@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>내가 쓴 리뷰</title>
 <link href="../css/ming/member/review.css" rel="stylesheet">
+<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -35,6 +35,10 @@
 			<li>
 				<img src="../image/ming/member/리뷰.png" style="width: 60px;"></img>
 				<a href="review.me">리뷰</a>
+			</li>
+			<li>
+				<img src="../image/ming/member/icons8-계산서-100.png" style="width: 60px;"></img>
+				<a href="review.me">결제내역</a>
 			</li>
 		<hr>
 			<li>
@@ -91,8 +95,8 @@
 						                        <button class="btn-hover color-2"  type="submit" style="left: 920px; width: 100px; top:-50px;">수정</button>
 					                    	</form>
 					                    	<form>
-						                        <input type="hidden" id="reviewNo" name="reviewNo" th:value="${r.reviewNo}" />
-						                        <button class="btn-hover color-1" id="deleteReview" type="submit" style="left: 1050px; width: 100px; top:-50px;">삭제</button>
+						                        <input type="hidden" class="reviewNo" th:value="${r.reviewNo}" />
+						                        <button class="btn-hover color-1 deleteReview" id="deleteReview" type="submit" style="left: 1050px; width: 100px; top:-50px;">삭제</button>
 					                        </form>
 						                    </div>
 						                </div>
@@ -129,7 +133,7 @@
 		</div>
  	 </div>
 </body>
-<script th:inline="javascript">
+ <script th:inline="javascript">
 	 	document.getElementById('deleteMember').addEventListener('click', function(event) {
 	 		event.preventDefault();
 	 		const modal = document.getElementById('myModal');
@@ -165,60 +169,71 @@
 	 	
 	 	
 	 	//삭제모달
-	 	document.addEventListener("DOMContentLoaded", function () {
-        // 클래스명으로 요소를 가져오기
-        var deleteButtons = document.getElementsByClassName('deleteReview');
+        document.addEventListener("DOMContentLoaded", function () {
+            // 기존의 리뷰 삭제 버튼들에 대한 이벤트 등록
+            var deleteButtons = document.getElementsByClassName('deleteReview');
+            for (var i = 0; i < deleteButtons.length; i++) {
+                deleteButtons[i].addEventListener('click', handleDeleteButtonClick);
+            }
 
-        // 각 삭제 버튼에 대해 클릭 이벤트 추가
-        for (var i = 0; i < deleteButtons.length; i++) {
-            deleteButtons[i].addEventListener('click', handleDeleteButtonClick);
+            // 새로운 리뷰 삭제 버튼에 대한 이벤트 등록
+            var newDeleteButton = document.getElementById('deleteReview');
+            newDeleteButton.addEventListener('click', handleDeleteButtonClick);
+        });
+
+        function handleDeleteButtonClick(event) {
+            event.preventDefault();
+
+            const modal = document.getElementById('myModal');
+            const modalContent = document.getElementById('modalContent');
+            modalContent.textContent = '정말 삭제하시겠습니까? \n 삭제 후 리뷰 복구는 불가능합니다.';
+            modalContent.appendChild(document.createElement('br'));
+            modalContent.appendChild(document.createElement('br'));
+            modal.style.display = 'block';
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = '네';
+            deleteButton.className = 'homepage-btn';
+            deleteButton.addEventListener('click', function () {
+                // 여기에 삭제 동작 및 Ajax 호출 추가
+                var reviewNoInput = event.target.closest('.review-item').querySelector('.reviewNo');
+                var reviewNo = reviewNoInput ? reviewNoInput.value : null;
+
+                if (reviewNo) {
+                    console.log(reviewNo);
+                    // Ajax 호출 및 리뷰 삭제 로직 추가
+                    $.ajax({
+                        type: 'get',
+                        url: 'deleteReview.me',
+                        data: { reviewNo: reviewNo },
+                        success: (data) => {
+                            closeModal();
+                            // 리뷰 삭제 후 해당 리뷰를 DOM에서 제거
+                            event.target.closest('.review-item').remove();
+                        },
+                        error: data => console.log(data)
+                    });
+                } else {
+                    console.log('Review number not found');
+                }
+            });
+
+            modalContent.appendChild(deleteButton);
+
+            const homepageButton = document.createElement('button');
+            homepageButton.textContent = '아니오';
+            homepageButton.className = 'homepage-btn';
+            homepageButton.addEventListener('click', function () {
+                closeModal();
+            });
+
+            modalContent.appendChild(homepageButton);
         }
-  		 });
 
-	    function handleDeleteButtonClick(event) {
-	        event.preventDefault();
-	
-	        const modal = document.getElementById('myModal');
-	        const modalContent = document.getElementById('modalContent');
-	        modalContent.textContent = '정말 삭제하시겠습니까? \n 삭제 후 리뷰 복구는 불가능합니다.';
-	        modalContent.appendChild(document.createElement('br'));
-	        modalContent.appendChild(document.createElement('br'));
-	
-	        modal.style.display = 'block';
-	
-	        const deleteButton = document.createElement('button');
-	        deleteButton.textContent = '네';
-	        deleteButton.className = 'homepage-btn';
-	        deleteButton.addEventListener('click', function () {
-	            // 여기에 삭제 동작 및 Ajax 호출 추가
-	            $.ajax({
-	                type: 'get',
-	                url: 'deleteReview.me',
-	                data: { reviewNo: document.getElementById('reviewNo').value },
-	                success: (data) => {
-	                    closeModal();
-	                },
-	                error: data => console.log(data)
-	            });
-	        });
-	
-	        modalContent.appendChild(deleteButton);
-	
-	        const homepageButton = document.createElement('button');
-	        homepageButton.textContent = '아니오';
-	        homepageButton.className = 'homepage-btn';
-	        homepageButton.addEventListener('click', function () {
-	            closeModal();
-	        });
-	
-	        modalContent.appendChild(homepageButton);
-	    }
-	
-	    function closeModal() {
-	        const modal = document.getElementById('myModal');
-	        modal.style.display = 'none';
-	    }
-	 	
+        function closeModal() {
+            const modal = document.getElementById('myModal');
+            modal.style.display = 'none';
+        }
 	 	
 	</script>
 </html>

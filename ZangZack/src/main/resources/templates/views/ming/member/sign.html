@@ -155,7 +155,7 @@
 	              Sign in
 	            </button><br><br>
 	           <a class="btnset btnset-round contents-start-kakao" 
-				    href="https://kauth.kakao.com/oauth/authorize?client_id=18ae7b1bab696aadfa39200fae9ad11b&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2FkakaoLogin&response_type=code&prompt=login"
+				   href="https://kauth.kakao.com/oauth/authorize?client_id=18ae7b1bab696aadfa39200fae9ad11b&redirect_uri=http://192.168.20.207:8080/kakaoLogin&response_type=code&prompt=login"
 				   id="kakaoBtn">카카오톡 연동하기
 				</a>
 	            <p style="text-align: center;">
@@ -217,9 +217,13 @@
 	<!-- 카카오톡 로그인 -->
 
 	<script>
+		let checkId = false;
+		let checkNickName = false;
+	    let checkPwd = false;
+	    let checkEmail = false;
 	  function loginWithKakao() {
 	    Kakao.Auth.authorize({
-	      redirectUri: 'http://localhost:8080/kakaoLogin',
+	      redirectUri: 'http://192.168.20.207:8080/kakaoLogin',
 	      state: 'userme',
 	    });
 	  }
@@ -431,10 +435,7 @@
 	</script>
 	<script>
 		<!-- 비밀번호 확인 + 정규식 -->
-		let checkId = false;
-		let checkNickName = false;
-	    let checkPwd = false;
-	    let checkEmail = false;
+	    
 		function focusOut(){
 			let pwd = document.getElementById("memberId");
 	        let pwdConfirm = document.getElementById("pwdConfirm");
@@ -507,10 +508,8 @@
 		// 모든 폼이 일치해야 넘어오게 
 		function NoSign(){
 			
-			if(check_code){
-				checkId = true;
-			   	checkPwd = true;
-			    checkEmail = true;
+			if(check_code && checkId && checkPwd && checkEmail && checkNickName){
+				
 				return true;
 			}else{
 				alert("정보가 올바르게 작성되었는지 확인해주세요.");

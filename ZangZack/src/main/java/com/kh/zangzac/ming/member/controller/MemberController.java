@@ -81,7 +81,7 @@ public class MemberController {
 	}
 	
 	//회원가입
-	@PostMapping("/insertMember.me")
+	@PostMapping("insertMember.me")
 	public String insertMember(@ModelAttribute Member m, @RequestParam("sample6_postcode") String sample6_postcode,
 								@RequestParam("sample6_address") String sample6_address,@RequestParam("sample6_detailAddress") String sample6_detailAddress,
 								@RequestParam("sample6_extraAddress") String sample6_extraAddress, @RequestParam("existingNickname") String existingNickname, Model model) {
@@ -103,7 +103,7 @@ public class MemberController {
 		if(result > 0) {
 		   return "redirect:/";
 	    } else {
-	    	model.addAttribute("msg", "회원가입에 실패하였습니다.\n인증코드를 확인해주세요");
+	    	model.addAttribute("msg", "회원가입에 실패하였습니다.");
 			return "views/ming/member/sign";
 	    }
 	}
@@ -228,7 +228,7 @@ public class MemberController {
 	         
 	       String subject = "[ZangZac]인증코드";                   // 제목
 	       String content = "인증코드 ["+checkNum+"] 입니다.";    // 내용
-	       String from = "gah_yn@naver.com";
+	       String from = "park718513@naver.com";
 	       
 	       try {
 	    	   MimeMessage mail = mailSender.createMimeMessage();
@@ -245,6 +245,7 @@ public class MemberController {
 	       } catch(Exception e) {
 	          e.printStackTrace();
 	       }
+	       	System.out.println("checkNum: "+checkNum);
 	          return checkNum+"";
 	     }
 	
@@ -274,7 +275,7 @@ public class MemberController {
         
         String subject = "[ZangZac]임시 비밀번호";		// 제목
 		String content = "임시비밀번호는 [ "+str+" ] 입니다.";    // 내용
-		String from = "gah_yn@naver.com";
+		String from = "park718513@naver.com";
 		 
 		 try {
 	    	   MimeMessage mail = mailSender.createMimeMessage();
@@ -295,7 +296,7 @@ public class MemberController {
         
         
         if (result > 0) {
-            return "redirect:/";
+        	System.out.println(str + ": str");
         } else {
         }
          

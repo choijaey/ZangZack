@@ -212,9 +212,7 @@
         			console.log("data : " +  data);
                     code =data;
                     alert('임시 비밀번호를 발송했습니다. 메일이 오지 않으면 입력하신 정보가 회원정보와 일치하는지 확인해 주세요.')
-                    if(data=="index") {
-    					location.href = "/";
-					}
+   					location.href = "/";
                     
                     
         		},
@@ -290,7 +288,7 @@
 	                        homepageButton.textContent = '홈페이지';
 	                        homepageButton.className = 'homepage-btn';
 	                        homepageButton.addEventListener('click', function() {
-                            window.location.href = '/';
+                            window.location.href = 'http://localhost:8080';
 	                        });
 	                        
 	                        
