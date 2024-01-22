@@ -81,6 +81,7 @@ public class CampServiceImpl implements CampService {
 
 	}
 
+
 	@Override
 	public ArrayList<Photo> selectOnePhoto(int i) {
 		return cDAO.selectOnePhoto(i);

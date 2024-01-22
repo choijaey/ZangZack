@@ -178,7 +178,7 @@
             </div>
 		    <div class="grid grid-cols-1 gap-4">
 		       	<div class="flex gap-2 divClick" th:each="cr:${list}" th:id="${cr.crNo}" th:onclick="|campingReviewDetail(${cr.crNo})|">
-		       		<img th:src="${cr.thumnail.photoPath}" class="w-44 h-44 mr-4 rounded-lg ">
+		       		<img th:src="${cr.thumnail.photoPath}" class="rounded-lg " style="width: 190px;">
 				    <div>
 				        <span class="oval-tag mb-8">[[${cr.categoryName}]]</span>
 				        <h2 class="text-lg font-semibold mb-2">[[${cr.crTitle}]]</h2>

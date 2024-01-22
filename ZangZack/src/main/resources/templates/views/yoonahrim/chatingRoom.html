@@ -21,7 +21,7 @@
 	     <div class="scrollBar" >
 	     	<th:block th:each="list : ${list}" th:if="${session.loginUser.memberId != list.memberId}">
 	     	 <input type="hidden" th:value="${list.memberId}"/>
-		      	<div class="chat-content" th:id="${list.memberId}" th:onclick="get(event)">
+		      	<div class="chat-content" th:id="${list.memberId}" style="cursor:pointer;" th:onclick="get(event)">
 		      		<th:block th:if="session.loginUser != null">
 		      		<div class="chat-content-image">
 		      			<img alt="profile" th:src="${list.memberProfilePath}">
@@ -161,7 +161,7 @@
 
             // innerHTML을 사용하여 문자열로 직접 HTML을 추가
             wrap.innerHTML += `
-            	<div class="recieve-chat">
+            	<div class="send-chat">
 	      			<p>${message}<p>
 	      		</div>
             `;
@@ -175,7 +175,7 @@
 
             // innerHTML을 사용하여 문자열로 직접 HTML을 추가
             wrap.innerHTML += `
-            	<div class="send-chat">
+            	<div class="recieve-chat">
 	      			<p>${message}<p>
 	      		</div>
             `;
