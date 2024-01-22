@@ -74,7 +74,7 @@
                             <tr th:each="b : ${list}">
                                 <td class="board_num">[[${b.cbNo}]]</td>
                                 <td class="board_category">[[${b.categoryName}]]</td>
-                                <td class="board_writer">[[${b.memberName}]]</td>
+                                <td class="board_writer">[[${b.memberNickname.split('#')[0]}]]</td>
                                 <td class="board_title">[[${b.cbTitle}]]
                                 	<th:block th:if="${b.photoPath != null}">
                                 		<img src="image/seongun/file.png" th:alt="${b.photoRename}" class="attachment_icon">

@@ -25,5 +25,6 @@ public class Reply {
    private String replyStatus;
    private String memberId;
    private String memberName;
+   private String memberNickname;
    private String memberProfilePath;
 }
