@@ -148,7 +148,7 @@
                       <div class="col-xs-4">
                         <label for="replyContent">
                              <input class="form-control" id="replyContent" type="text" placeholder="댓글을 입력하세요">
-                             <button class="btn_reply btn-outline-secondary" type="submit" id="button-addon2" onclick="buttonAddon2">
+                             <button class="btn_reply btn-outline-secondary" type="submit" id="button-addon2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cursor-fill" viewBox="0 0 16 16">
                                    <path d="M14.082 2.182a.5.5 0 0 1 .103.557L8.528 15.467a.5.5 0 0 1-.917-.007L5.57 10.694.803 8.652a.5.5 0 0 1-.006-.916l12.728-5.657a.5.5 0 0 1 .556.103z"/>
                               </svg>
@@ -241,7 +241,7 @@
          }
          
          //댓글 insert
-         document.getElementById('button-addon2').addEventListener('click', () => {
+         /* document.getElementById('button-addon2').addEventListener('click', () => {
              
              const content = document.getElementById("replyContent").value;
              const boardNo = document.getElementById("boardNo").value;
@@ -260,7 +260,38 @@
              } else {
                  alert("댓글 내용을 입력해주세요");
              }
-         });
+         }); */
+         
+         document.getElementById('replyContent').addEventListener('keydown', (event) => {
+        	    if (event.key === 'Enter' && !event.shiftKey) {
+        	        event.preventDefault();
+        	        submitReply();
+        	    }
+        	});
+
+        	document.getElementById('button-addon2').addEventListener('click', () => {
+        	    submitReply();
+        	});
+
+        	function submitReply() {
+        	    const content = document.getElementById("replyContent").value;
+        	    const boardNo = document.getElementById("boardNo").value;
+
+        	    if (content !== '') {
+        	        $.ajax({
+        	            url: 'insertReply.rep',
+        	            method: 'POST',
+        	            data: { replyContent: content, boardType: '4', boardNo: boardNo },
+        	            success: (data) => {
+        	                console.log(data);  // 전송에 성공했을 때
+        	                location.reload();
+        	            },
+        	            error: data => console.log(data)  // 전송에 실패했을 때
+        	        });
+        	    } else {
+        	        alert("댓글 내용을 입력해주세요");
+        	    }
+        	}
          
          //모달 open
          function showUpdateModal(replyNo) {

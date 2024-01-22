@@ -59,7 +59,7 @@ public class SecondHandController {
 
     
 	//중고 메인 페이지로 이동
-	@GetMapping("secondHand.ah")
+/*	@GetMapping("secondHand.ah")
 	public String secondHand(@ModelAttribute secondHandProduct sp, Model model,
 							 @RequestParam(value="page", defaultValue="1") int page, HttpServletRequest request, HttpSession session) {
 		
@@ -119,9 +119,56 @@ public class SecondHandController {
 	         throw new secondHandException("검색에 실패하였습니다");
 	      }
 	      
-	   }
-	
-	
+	   }*/
+    @GetMapping("secondHand.ah")
+    public String secondHand(@ModelAttribute secondHandProduct sp,
+                             @RequestParam(value="region", required = false) String region,
+                             @RequestParam(value="type", required = false) String type,
+                             @RequestParam(value="page", defaultValue="1") int page,
+                             Model model, HttpServletRequest request, HttpSession session) {
+
+        int listCount;
+        PageInfo pi;
+
+        if (region == null && type == null) {
+            // 검색 조건이 주어지지 않은 경우
+            listCount = spService.getListCount();
+        } else {
+            // 검색 조건이 주어진 경우
+            HashMap<String, String> map = new HashMap<>();
+            map.put("region", region);
+            map.put("type", type);
+            listCount = spService.searchSpCount(map);
+        }
+
+        int currentPage = page;
+        pi = Pagination.getPageInfo(currentPage, listCount, 12);
+        ArrayList<Photo> aList = spService.selectPhotoSeconHand(null);
+
+        ArrayList<secondHandProduct> sList;
+
+        if (region == null && type == null) {
+            // 검색 조건이 주어지지 않은 경우
+            sList = spService.selectSeconHand(pi, 4);
+        } else {
+            // 검색 조건이 주어진 경우
+            HashMap<String, String> map = new HashMap<>();
+            map.put("region", region);
+            map.put("type", type);
+            sList = spService.searchSpList(map);
+        }
+
+        if(sList != null) {
+            model.addAttribute("loginUser", session.getAttribute("loginUser"));
+            model.addAttribute("aList", aList);
+            model.addAttribute("sList", sList);
+            model.addAttribute("pi", pi);
+            model.addAttribute("loc", request.getRequestURI());
+            return "views/yoonahrim/secondHandList";
+        } else {
+            throw new secondHandException("리스트불러오기에 실패하였습니다");
+        }
+    }
 	
 	//중고 게시글 불러오기
 	@GetMapping("edit.ah")

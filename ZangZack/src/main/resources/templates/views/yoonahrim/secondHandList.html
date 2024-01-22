@@ -81,7 +81,39 @@
       <!-- CARD-->
       <div class="container text-center">
          <div class="row g-3">
-               <div class="col-md-3" th:each="s: ${sList}" style="margin-bottom:120px;">
+               <div class="col-md-3" th:each="s: ${sList}" th:if="${spList == null or #lists.size(spList) == 0}" style="margin-bottom:120px;">
+	               <a class="card-link " th:onclick="|location.href='detail.ah?spNo=${s.spNo}'|">
+	                   <th:block th:each="a : ${aList}" th:if="${a.boardNo eq s.spNo}">
+		                   <div class="card-photo" th:if="${a.photoLevel == 0}">
+			                       <img th:src="${a.photoPath}" alt="캠핑사진" style="cursor: pointer">
+		                   </div>
+	                   </th:block>
+	                   <div class="card-desc">
+	                     <div class="card-title">[[${#strings.length(s.spTitle) > 6 ? #strings.substring(s.spTitle, 0, 6) + '...' : s.spTitle}]]
+	                           <div class="selectCategory">[[${s.categoryName}]]</div>
+	                     </div>
+	                     <div class="card-price">
+	                     	<b>
+	                       		[[${#numbers.formatInteger(s.spPrice, 0, 'COMMA')}]]원
+	                     	</b>
+	                     </div>
+	                     <div class="card-region-name">
+	                       	[[${#strings.length(s.spAddress) > 12 ? #strings.substring(s.spAddress, 0, 12) + '...' : s.spAddress}]]
+	                     </div>
+	                     <div class="card-counts">
+	                         <span>
+	                           댓글[[${s.replyCount}]]
+	                         </span>
+	                     </div>
+	                </div>
+	               </a>
+            	</div>
+         	</div>   
+         </div>
+         
+         <div class="container text-center">
+         <div class="row g-3">
+               <div class="col-md-3" th:each="s: ${spList}" th:if="${spList != null}" style="margin-bottom:120px;">
 	               <a class="card-link " th:onclick="|location.href='detail.ah?spNo=${s.spNo}'|">
 	                   <th:block th:each="a : ${aList}" th:if="${a.boardNo eq s.spNo}">
 		                   <div class="card-photo" th:if="${a.photoLevel == 0}">
@@ -178,7 +210,7 @@
 
             // 지역이나 카테고리 중 하나라도 선택되었는지 확인
             if (region !== '지역을 선택하세요' || type !== '카테고리') {
-                location.href = 'searchSecondHand.ah?region=' + region + '&type=' + type;
+                location.href = 'secondHand.ah?region=' + region + '&type=' + type;
             }
         }
         
