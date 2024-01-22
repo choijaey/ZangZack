@@ -31,6 +31,6 @@ public class Payment {
    private String orderPhone;
    private String orderName;
    private Date deliveryDate;
-   
+   private String paymentKey;
 
 }

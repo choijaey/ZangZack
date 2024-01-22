@@ -7,6 +7,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -470,8 +471,25 @@ public class ProductController {
    
    
    @GetMapping("refundOrder.so")
-   public String refundOrder(@RequestParam("orderKeyNo") int orderKeyNo, Model model) {
-	   int result = pService.refundOrder(orderKeyNo);
+   public String refundOrder(@RequestParam("orderNo") int orderNo, Model model) {
+	   String paymentKey = pService.selectPaymentKey(orderNo);
+	   String token = "test_sk_24xLea5zVAjM2olw4v70rQAMYNwW:";
+	   String base64EncodedToken = Base64.getEncoder().encodeToString(token.getBytes());
+	   HttpRequest request = HttpRequest.newBuilder()
+		    .uri(URI.create("https://api.tosspayments.com/v1/payments/" + paymentKey + "/cancel"))
+		    .header("Authorization", "Basic " + base64EncodedToken)
+		    .header("Content-Type", "application/json")
+		    .method("POST", HttpRequest.BodyPublishers.ofString("{\"cancelReason\":\"고객이 취소를 원함\"}"))
+		    .build();
+		HttpResponse<String> response;
+		
+		try {
+			response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+			System.out.println(response.body());
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
+	   int result = pService.refundOrder(orderNo);
 	   
 	   if(result > 0) {
 		   return "redirect:myOrderPageView.so";
@@ -1041,7 +1059,9 @@ public class ProductController {
             pa.setOrderName(name);
             pa.setOrderContent(required);
             pa.setOrderNo(Integer.parseInt(orderId));
+            pa.setPaymentKey(paymentKey);
             paList.add(pa);
+            
         }
       System.out.println(paList);
       //[Payment(orderKeyNo=0, orderPrice=38600, orderDate=null, orderContent=test2, orderNo=320746, orderMethod=null, orderCard=null, orderStatus=null, memberId=ming11, orderAddress=12066@경기 남양주시 진접읍 해밀예당1로 40@1층 LG유플러스, orderProductEno=1, deliveryStatus=결제완료, productOption=하양, productNo=202, orderPhone=01073558749, orderName=민경), 
@@ -1224,7 +1244,6 @@ public class ProductController {
                }
             }
          }
-         
       }
       
       for(int i=0; i<coreList.size(); i++) {
@@ -1266,9 +1285,6 @@ public class ProductController {
          }
       }
       
-      
-      
-      
       if(!coreList.isEmpty()) {
          coreResult = pService.insertProductPhoto(coreList);
       }
@@ -1281,8 +1297,6 @@ public class ProductController {
       }else {
          throw new ProductException("상품수정실패");
       }
-   
-   
    }
    
    
