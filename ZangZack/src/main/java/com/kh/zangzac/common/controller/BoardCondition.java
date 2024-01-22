@@ -51,7 +51,7 @@ public class BoardCondition {
 	
 	@GetMapping("/")
 	public String main(Model model) {
-		
+		//yoonseo
 		String recomendation = "Y";
 		ArrayList<CampingGround> list = cService.getMainList(recomendation);
 		
@@ -64,7 +64,6 @@ public class BoardCondition {
 		
  		ArrayList<CampingGround> photoList = cService.selectMainPhoto(intArrayList);
  		
- 	
  		
  		//jaeyoung
  		

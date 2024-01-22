@@ -77,8 +77,7 @@ public class CampServiceImpl implements CampService {
 		int offSet = (pi.getCurrentPage()-1)*pi.getBoardLimit();
 		RowBounds row = new RowBounds(offSet, pi.getBoardLimit());
 		
-		return cDAO.selectRecomendationList(recomendation);
-	}
+		return cDAO.selectRecomendationList(row,recomendation);
 
 	@Override
 	public ArrayList<Photo> selectOnePhoto(int i) {
