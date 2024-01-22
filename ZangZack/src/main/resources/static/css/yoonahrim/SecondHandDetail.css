@@ -147,7 +147,7 @@
 
 .form-control{
 	position:absolute;
-	top: 260px;
+	top: 250px;
 	right: 20px;
 	width: 650px;
 }
@@ -271,7 +271,7 @@
     border: none;
     background-size: 300% 100%;
 	position: relative;
-	top: 15px;
+	top: 10px;
 	
     border-radius: 50px;
     -moz-transition: all .4s ease-in-out;
