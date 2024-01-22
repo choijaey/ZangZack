@@ -515,16 +515,10 @@
 		   		 }
 				
 				
-				if(email_check_code){
-					email_check_code = true;
-					check_button = true;
-					checkEmail = true;
+				if(email_check_code && check_button && checkEmail){
 					form.submit();
 					return true;
 				}else{
-					email_check_code = false;
-					check_button = false;
-					checkEmail = false;
 					alert('인증 실패하였습니다. 다시 입력해주세요.');
 					return false;
 				}
@@ -624,16 +618,10 @@
         }
 		function NoSign(event) {
 		    // 이 함수가 호출되면서 폼이 제출될 때만 check_code를 확인하도록 변경
-		    if (check_code) {
-		        check_code = true;
-		        checkE = true;
-		        checkNickName = true;
+		    if (check_code && checkE && checkNickName) {
 		        return true;
 		    } else {
 		        alert("정보가 올바르게 작성되었는지 확인해주세요.");
-		        check_code = false;
-		        checkE = false;
-		        checkNickName = false;
 		        // 실패 시 이벤트 중지
 		        event.preventDefault();
 		        return false;
