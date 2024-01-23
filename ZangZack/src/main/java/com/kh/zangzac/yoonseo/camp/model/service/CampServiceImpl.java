@@ -80,7 +80,6 @@ public class CampServiceImpl implements CampService {
 		return cDAO.selectRecomendationList(row,recomendation);
 
 	}
-	
 
 	@Override
 	public ArrayList<Photo> selectOnePhoto(int i) {

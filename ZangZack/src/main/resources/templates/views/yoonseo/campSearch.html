@@ -80,11 +80,11 @@
 				</div>
 				<div>
 					<input type="text" name="keyword" placeholder="키워드 검색"
-						style="margin-left: 20px; width: 250px; height: 40px; float: left; margin-right: 20px;">
+						style="margin-left: 20px; width: 250px; height: 40px; float: left; margin-right: 20px; border-radius: 5px;">
 					<div class="search_boxes">
 						<div class="search_box">
 							<select name="city" onchange="categoryChange(this)"
-								style="float: left; margin-right: 10px; height: 40px;">
+								style="float: left; margin-right: 10px; height: 40px; border-radius: 5px;">
 								<option value=''>시/도 선택</option>
 								<option value="강원도">강원도</option>
 								<option value="경기도">경기도</option>
@@ -106,7 +106,7 @@
 						</div>
 
 						<div>
-							<select style="height: 40px; float: left;" name="type">
+							<select style="height: 40px; float: left; border-radius: 5px;" name="type">
 								<option value=''>선택</option>
 								<option value="일반야영장">일반야영</option>
 								<option value="오토캠핑">오토캠핑</option>
@@ -305,7 +305,6 @@
 		  
 		
 		        const table = document.getElementById('campingTable');
-				
 		        const ths = document.getElementsByClassName('table-th');
 		      
 		        for(th of ths){
@@ -316,17 +315,10 @@
 		        		const phone = this.querySelector('.cgPhone').innerText;
 		        		const no = this.querySelector('.cgNo').value;
 		        		
-		        		
 		        		clearMarkers();
-		        		
-		        		console.log(no, region, location, campName, phone);
 		        		// 클릭한 div에 대응되는 새로운 마커 생성
 		        	    createMarker(no, region, location, campName, phone);
-		        		
-		        		
-	
-			        });
-			        
+			        });  
 		        }
 		        
 		        function getPositionForDivId(location, campName) {
