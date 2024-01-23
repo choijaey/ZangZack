@@ -419,68 +419,61 @@
 		        paginationDiv.style.display = 'none';
 		        return;
 		    } else {
-		        paginationDiv.style.display = 'block';
+		        paginationDiv.style.display = 'flex';
+		        paginationDiv.justifyContent = 'center';
 		    }
 		
-		    const prevGroupDiv = document.createElement('div');
-		    prevGroupDiv.className = 'page-nav-buttons';
-		    paginationDiv.appendChild(prevGroupDiv);
+		    // "이전" 페이지 그룹 링크
+		    if (rPi.currentPage > 1) {
+		        const prevLink = document.createElement('a');
+		        prevLink.href = '#';
+		        prevLink.textContent = '< 이전';
+		        prevLink.className = "pagingBtn";
+		        prevLink.onclick = function(event) {
+		            event.preventDefault();
+		            loadCommentList(rPi.currentPage - 1);
+		        };
+		        paginationDiv.appendChild(prevLink);
+		    }
 		
 		    const ul = document.createElement('ul');
 		    ul.className = 'page-numbers';
-		    paginationDiv.appendChild(ul);
-		
-		    const nextGroupDiv = document.createElement('div');
-		    nextGroupDiv.className = 'page-nav-buttons';
-		    paginationDiv.appendChild(nextGroupDiv);
-		
-		    const pageLimit = rPi.pageLimit;
-		    const totalPageGroups = Math.ceil(rPi.maxPage / pageLimit);
-		    const currentPageGroup = Math.ceil(rPi.currentPage / pageLimit);
-		
-		    if (currentPageGroup > 1) {
-		        const prevGroupLink = document.createElement('a');
-		        prevGroupLink.href = '#';
-		        prevGroupLink.innerHTML = '&lt; 이전';
-		        prevGroupLink.onclick = function(event) {
-		            event.preventDefault();
-		            const prevPage = (currentPageGroup - 1) * pageLimit - (pageLimit - 1);
-		            loadCommentList(prevPage);
-		        };
-		        prevGroupDiv.appendChild(prevGroupLink);
-		    }
-		
-		    // 페이지 번호
-		    let startPage = (currentPageGroup - 1) * pageLimit + 1;
-		    let endPage = startPage + pageLimit - 1;
-		    endPage = endPage > rPi.maxPage ? rPi.maxPage : endPage;
-		
-		    for (let i = startPage; i <= endPage; i++) {
-		        const pageLi = document.createElement('li');
-		        const pageLink = document.createElement('a');
-		        pageLink.href = '#';
-		        pageLink.textContent = i;
-		        if (i === rPi.currentPage) {
-		            pageLink.id = 'check_page';
-		        }
-		        pageLink.onclick = function(event) {
+		    
+		    // 페이지 번호 생성
+		    for (let i = rPi.startPage; i <= rPi.endPage; i++) {
+		        const li = document.createElement('li');
+		        li.style.display = 'inline';
+		        
+		        const a = document.createElement('a');
+		        a.href = '#';
+		        a.textContent = i;
+		        a.onclick = function(event) {
 		            event.preventDefault();
 		            loadCommentList(i);
 		        };
-		        pageLi.appendChild(pageLink);
-		        ul.appendChild(pageLi);
+		        
+		        if (i === rPi.currentPage) {
+		            a.style.backgroundColor = '#5cb85c';
+		            a.style.color = '#ffffff';
+		        }
+		        
+		        li.appendChild(a);
+		        ul.appendChild(li);
 		    }
+		    
+		    paginationDiv.appendChild(ul);
 		
-		    if (currentPageGroup < totalPageGroups) {
-		        const nextGroupLink = document.createElement('a');
-		        nextGroupLink.href = '#';
-		        nextGroupLink.innerHTML = '다음 &gt;';
-		        nextGroupLink.onclick = function(event) {
+		    // "다음" 페이지 그룹 링크
+		    if (rPi.currentPage < rPi.maxPage) {
+		        const nextLink = document.createElement('a');
+		        nextLink.href = '#';
+		        nextLink.textContent = '다음 >';
+		        nextLink.className = "pagingBtn";
+		        nextLink.onclick = function(event) {
 		            event.preventDefault();
-		            const nextPage = currentPageGroup * pageLimit + 1;
-		            loadCommentList(nextPage);
+		            loadCommentList(rPi.currentPage + 1);
 		        };
-		        nextGroupDiv.appendChild(nextGroupLink);
+		        paginationDiv.appendChild(nextLink);
 		    }
 		}
 		
