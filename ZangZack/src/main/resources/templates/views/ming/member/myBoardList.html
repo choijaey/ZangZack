@@ -37,6 +37,10 @@
 		height: 30px;
 	}
 	
+	.hoverTr:hover{
+		background-color: rgb(226, 226, 226);
+		cursor: pointer;
+	}
 </style>
 </head>
 <body>
@@ -127,7 +131,7 @@
 	            <th class="td8">작성날짜</th>
 	         </tr>
 	         
-	         <tr th:each="cb:${cbList}">
+	         <tr th:each="cb:${cbList}" class="hoverTr">
 		            <td class="td1">[[${cb.cbNo}]]</td>
 		            <td class="td2">[[${cb.categoryName}]]</td>
 		            <td class="td4">[[${cb.cbTitle}]]</td>
@@ -135,7 +139,7 @@
 		            <td class="td5">[[${cb.cbCount}]]</td>
 		            <td class="td6">[[${cb.heartCount}]]</td>
 		            <td class="td7">[[${cb.replyCount}]]</td>
-		            <td class="td8">[[${cb.cbModifyDate}]]</td>
+		            <td class="td8" th:text="${#strings.substring(cb.cbModifyDate, 0, 10)}"></td>
 	         </tr>
 	         <th:block th:if="${cbList.isEmpty}">
                 <div class="board-container" >
