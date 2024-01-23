@@ -48,7 +48,7 @@
 		                and cb_content like #{searchText}
 		            </when>
 		            <when test="searchCategory == 3">
-		                and member_Name like #{searchText}
+		                and member_nickName like #{searchText}
 		            </when>
 		        </choose>
 	    	</if>
@@ -75,7 +75,7 @@
 		                and cb_content like #{searchText}
 		            </when>
 		            <when test="searchCategory == 3">
-		                and member_Name like #{searchText}
+		                and member_nickName like #{searchText}
 		            </when>
 		        </choose>
 	    	</if>
