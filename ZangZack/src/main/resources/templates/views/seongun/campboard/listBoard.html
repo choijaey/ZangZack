@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>캠핑 게시판</title>
+    <link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
     <link rel="stylesheet" href="css/seongun/commonBoard.css">
     <link rel="stylesheet" href="css/seongun/listBoard.css">
     <style>
@@ -26,7 +27,7 @@
             <div id="snb_zone">
                 <ul>
                     <li>
-                        <a id="check_snb">캠핑게시시판</a>
+                        <a id="check_snb">캠핑게시판</a>
                     </li>
                     <li>
                         <a href="recipe.su">캠핑레시피</a>
@@ -73,7 +74,7 @@
                             <tr th:each="b : ${list}">
                                 <td class="board_num">[[${b.cbNo}]]</td>
                                 <td class="board_category">[[${b.categoryName}]]</td>
-                                <td class="board_writer">[[${b.memberName}]]</td>
+                                <td class="board_writer">[[${b.memberNickname.split('#')[0]}]]</td>
                                 <td class="board_title">[[${b.cbTitle}]]
                                 	<th:block th:if="${b.photoPath != null}">
                                 		<img src="image/seongun/file.png" th:alt="${b.photoRename}" class="attachment_icon">

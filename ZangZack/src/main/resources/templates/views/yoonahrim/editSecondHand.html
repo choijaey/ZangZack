@@ -71,7 +71,7 @@
                   </label><br><br>
                   -->
                  <label for="exampleFormControlTextarea1" class="form-label">
-  					 <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" cols="75" name="spContent" th:utext="${#strings.replace(s.spContent, '\n', '<br>')}"></textarea>
+  					 <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" cols="75" name="spContent" style="resize: none;" th:utext="${#strings.replace(s.spContent, '\n', '<br>')}"></textarea>
   				</label><br><br>
                   <label>주소
                      <p>

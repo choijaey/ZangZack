@@ -27,6 +27,13 @@
     background-color: rgb(225, 230, 234);
 }
 
+.sidebar ul{
+	position: relative;
+	top: -20px;
+	left: -12px;
+}
+
+
 .sidebar:hover {
     width: 280px;
 }
@@ -58,15 +65,16 @@
 .sidebar:hover .user p {
     opacity: 1; /* 변경: 마우스 호버 시에는 투명도를 0으로 설정하여 사라지도록 설정 */
 }
-.sidebar:hover li{
-	left: -50px;
-}
 
 .sidebar:hover .links h4 {
     color: black;
     font-weight: 500;
     margin-bottom: 10px;
     display: none;
+}
+
+.sidebar:hover li{
+	left: -65px;
 }
 
 .sidebar .links h4 {
@@ -80,7 +88,6 @@
 }
 
 .links li:hover {
-	left: 0.05px;
     border-radius: 4px;
     cursor: pointer;
 }
