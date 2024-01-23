@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
+<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
 <title>주문서 작성 페이지</title>
 <link href="css/sohwa/orderPage.css" rel="stylesheet">
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -355,7 +356,7 @@
                 paymentWidget.requestPayment({
                      orderId: String(Math.floor(Math.random() * 1000000)).padStart(6, "0"),
                      orderName: productNames[0].innerText + "외 " + (productNames.length-1) + "건",
-                     successUrl: 'http://localhost:8080/insertPayment.so?productNos=' + productNos + '&enos=' + enos +'&address=' + address + '&options=' + options + '&phone=' + phone + '&name=' + userName + '&required=' +required,
+                     successUrl: 'http://192.168.20.207:8080/insertPayment.so?productNos=' + productNos + '&enos=' + enos +'&address=' + address + '&options=' + options + '&phone=' + phone + '&name=' + userName + '&required=' +required,
                      failUrl: window.location.origin + "/fail",
                      customerEmail: "thghk0206@naver.com",
                      customerName: userName,
