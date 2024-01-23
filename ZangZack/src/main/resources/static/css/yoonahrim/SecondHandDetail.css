@@ -147,41 +147,41 @@
 
 .form-control{
 	position:absolute;
-	top: 150px;
+	top: 60px;
 	right: 20px;
 	width: 650px;
 }
 
 #button-addon2{
 	position:absolute;
-	top: 130px;
+	top: 40px;
 	left: 690px;
 	height: 35px;
 }
 
 .reply_count>p{
 	position: absolute;
-	bottom: 530px;
+	bottom: 605px;
 }
 #hr_count{
 	position: relative;
-	top: -170px;
+	top: -250px;
 	width: 820px;
 }
 #hr_content{
 	position: relative;
-	top: 150px;
+	top: 50px;
 	width: 810px;
 }
 #hr_line{
 	position: absolute;
-	top: 1800px;
+	top: 1730px;
 	left: 550px;
 	width: 820px;
 }
 .reply_content{
 	position: absolute;
-	bottom: 250px;
+	bottom: 350px;
 	overflow: auto;
 }
 

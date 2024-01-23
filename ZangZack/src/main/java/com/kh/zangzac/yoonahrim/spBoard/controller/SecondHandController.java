@@ -170,6 +170,7 @@ public class SecondHandController {
         }
     }
 	
+    
 	//중고 게시글 불러오기
 	@GetMapping("edit.ah")
     public String editPage(@ModelAttribute secondHandProduct sp, @RequestParam("spNo") Integer spNo, HttpSession session, Model model) {
