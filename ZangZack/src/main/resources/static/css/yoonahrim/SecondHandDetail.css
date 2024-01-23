@@ -147,41 +147,41 @@
 
 .form-control{
 	position:absolute;
-	top: 260px;
+	top: 150px;
 	right: 20px;
 	width: 650px;
 }
 
 #button-addon2{
 	position:absolute;
-	top: 240px;
+	top: 130px;
 	left: 690px;
 	height: 35px;
 }
 
 .reply_count>p{
 	position: absolute;
-	top: -80px;
+	bottom: 530px;
 }
 #hr_count{
 	position: relative;
-	top: -40px;
+	top: -170px;
 	width: 820px;
 }
 #hr_content{
 	position: relative;
-	top: 250px;
+	top: 150px;
 	width: 810px;
 }
 #hr_line{
 	position: absolute;
-	top: 1900px;
+	top: 1800px;
 	left: 550px;
 	width: 820px;
 }
 .reply_content{
 	position: absolute;
-	top: 25px;
+	bottom: 250px;
 	overflow: auto;
 }
 
@@ -271,7 +271,7 @@
     border: none;
     background-size: 300% 100%;
 	position: relative;
-	top: 15px;
+	top: 10px;
 	
     border-radius: 50px;
     -moz-transition: all .4s ease-in-out;
@@ -309,5 +309,7 @@
     transform: translateX(-50%) translateY(-50%);
 }
 
-
+.mt-1{
+	font-size:10px;
+}
 

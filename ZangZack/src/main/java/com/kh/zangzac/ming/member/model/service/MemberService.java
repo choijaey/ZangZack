@@ -94,6 +94,8 @@ public interface MemberService {
 
 	ArrayList<secondHandProduct> searchSpList(PageInfo pi, HashMap<String, Object> map);
 
+	Member getMemberLoginType(String memberEmail);
+
 
 
 

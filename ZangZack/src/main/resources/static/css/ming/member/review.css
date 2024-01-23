@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
 @font-face {
     font-family: 'GmarketSansMedium';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
@@ -10,7 +11,10 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'GmarketSansMedium';
-    text-decoration: none;
+}
+a{
+	 text-decoration: none;
+	 color: black;
 }
 /*사이드바*/
 .sidebar {
@@ -27,23 +31,21 @@
     transition: width 0.3s ease;
     background-color: rgb(225, 230, 234);
 }
-
+.sidebar ul{
+	position: relative;
+	top: -60px;
+	left: -12px;
+}
 .sidebar:hover {
     width: 280px;
 }
 
-.sidebar .logo-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 25px 10px 15px;
-}
 
 .logo img{
 	width: 250px;
 	position: relative;
 	top: 50px;
-	left: 900px;
+	left: 905px;
 	margin-bottom: -100px;
 }
 
@@ -52,19 +54,21 @@
 }
 
 .user{
-	padding-top: 100px;
+	padding-top: 60px;
 }
 .user p {
     display: block; /* 변경: 초기에는 보이도록 설정 */
     opacity: 0; /* 변경: 초기에는 투명도를 1로 설정하여 보이도록 설정 */
     transition: opacity 0.3s ease;
+    position:relative;
+    left: 12px;
 }
 
 .sidebar:hover .user p {
     opacity: 1; /* 변경: 마우스 호버 시에는 투명도를 0으로 설정하여 사라지도록 설정 */
 }
 .sidebar:hover li{
-	left: -50px;
+	left: -75px;
 }
 
 .sidebar:hover .links h4 {
@@ -90,7 +94,7 @@
 }
 
 .links hr {
-    margin: 10px 8px;
+    margin: 8px 8px;
 }
 
 .sidebar:hover .links hr {
@@ -103,7 +107,7 @@
 
 .links li a {
     color: black;
-    padding: 30px;
+    padding: 20px;
     font-weight: 500;
     white-space: nowrap;
     text-decoration: none;
@@ -117,6 +121,110 @@
 .sidebar:hover .links li a {
     display: block;
 }
+.profilePoto{
+		border-radius: 50%;
+		width: 120px;
+		height:120px;
+		top: 170px;
+		position: relative;
+		left: 45%;
+	}
+	#profileImage.profile-poto{
+		border-radius: 50%;
+	}
+	.modal {
+	    display: none;
+	    position: fixed;
+	    z-index: 1;
+	    left: 0;
+	    top: 0;
+	    width: 100%;
+	    height: 100%;
+	    overflow: auto;
+	    background-color: rgba(0, 0, 0, 0.4);
+	}
+	.modal-content {
+	    background-color: white;
+	    margin: 15% auto;
+	    margin-left:35%;
+	    padding: 20px;
+	    border: 1px solid #888;
+	    width: 80%;
+	    max-width: 600px;
+	    text-align: center;
+	    height: auto;
+	    max-height: 70%;
+	    overflow-y: auto;
+	    display: flex;
+	    flex-direction: column; /* 수정된 부분 */
+    	justify-content: center; /* 추가된 부분 */
+    	align-items: center;
+    	border-radius: 10px;
+	}
+	.modal-content Button{
+		background-color: rgb(251, 125, 83);
+		color: white;
+		border-radius: 5px;
+		border-color: rgb(251, 125, 83);
+		height: 50px;
+		width: 100px;
+		margin: 5px;
+	}
+	.modal-content Button:hover{
+		background-color: #FB8D53;
+		color: white;
+		border-radius: 5px;
+		border-color: rgb(251, 125, 83);
+		height: 50px;
+		width: 100px;
+		cursor: pointer;
+	}
+	
+	#deleteBtn{
+		width: 115px;
+		height: 33px;
+		top: 230px;
+		position: relative;
+		left: 52%;
+		padding: 6px 25px;
+		background-color:white;
+	  	border-radius: 4px;
+	  	color: black;
+	  	border: solid 1px black;
+	  	cursor: pointer;
+	  	font-size: 15px;
+	  	text-align: center;
+	}
+	#updateBtn{
+		width: 115px;
+		height: 33px;
+		top: 230px;
+		position: relative;
+		left: 26%;
+		padding: 6px 25px;
+		background-color:white;
+	  	border-radius: 4px;
+	  	color: black;
+	  	border: solid 1px black;
+	  	cursor: pointer;
+	  	font-size: 15px;
+	  	text-align: center;
+	}
+	.comment-section {
+	    max-height: 0;
+	    transition: max-height 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+	    opacity: 0;
+	    z-index: inherit;
+	}
+   
+   .comment-section.show {
+       max-height: 1000px;
+       opacity: 1;
+   }
+	
+	input:focus {outline:none;}
+	
+	
 /*챗 gtp*/
 h1{
 	position: relative;
@@ -276,6 +384,50 @@ h1{
  	left:400px;
  	top:150px;
  	font-size: 2em;
- 	width: 300px;
+ 	width: 800px;
  }
+ 
+.btn-hover {
+    width: 200px;
+    font-size: 16px;
+    font-weight: 600;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    margin: 20px;
+    height: 55px;
+    text-align:center;
+    border: none;
+    background-size: 300% 100%;
+
+    border-radius: 50px;
+    -moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+    
+    position: absolute;
+    top: 850px;
+}
+
+.btn-hover:hover {
+    background-position: 100% 0;
+    -moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+}
+
+.btn-hover:focus {
+    outline: none;
+}
+
+.btn-hover.color-1{
+   background-image: linear-gradient(to right, rgb(192, 192, 192), rgb(255, 255, 255), rgb(255, 255, 255), rgb(192, 192, 192));
+    box-shadow: 0 4px 15px 0 rgb(192, 192, 192);
+}
+
+.btn-hover.color-2 {
+    background-image: linear-gradient(to right, #fc6076, #ff9a44, #ef9d43, #e75516);
+    box-shadow: 0 4px 15px 0 rgba(252, 104, 110, 0.75);
+}
  

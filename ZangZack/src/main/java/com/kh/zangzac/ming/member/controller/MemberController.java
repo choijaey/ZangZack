@@ -81,7 +81,7 @@ public class MemberController {
 	}
 	
 	//회원가입
-	@PostMapping("/insertMember.me")
+	@PostMapping("insertMember.me")
 	public String insertMember(@ModelAttribute Member m, @RequestParam("sample6_postcode") String sample6_postcode,
 								@RequestParam("sample6_address") String sample6_address,@RequestParam("sample6_detailAddress") String sample6_detailAddress,
 								@RequestParam("sample6_extraAddress") String sample6_extraAddress, @RequestParam("existingNickname") String existingNickname, Model model) {
@@ -90,6 +90,7 @@ public class MemberController {
 		if(!sample6_postcode.trim().equals("")) {
 			 address = sample6_postcode + "@" + sample6_address + "@" + sample6_detailAddress + "@" + sample6_extraAddress;
 		}
+		
 		m.setMemberAddress(address);
 		
 		m.setMemberNickName(existingNickname + "#" + generateRandomNumbers()); // 랜덤닉네임
@@ -100,9 +101,9 @@ public class MemberController {
 		
 		int result = mService.insertMember(m);
 		if(result > 0) {
-		   return "index";
+		   return "redirect:/";
 	    } else {
-	    	model.addAttribute("msg", "회원가입에 실패하였습니다.\n인증코드를 확인해주세요");
+	    	model.addAttribute("msg", "회원가입에 실패하였습니다.");
 			return "views/ming/member/sign";
 	    }
 	}
@@ -120,14 +121,24 @@ public class MemberController {
 	
 	
 	//이메일 중복체크
-	@RequestMapping(value ="checkEmail.me")
+	@RequestMapping(value = "checkEmail.me")
 	@ResponseBody
 	public String checkEmail(@RequestParam("memberEmail") String memberEmail) {
-		
-		int count = mService.checkEmail(memberEmail);
-		String result = count == 0 ? "yes" : "no";
-		
-		return result;
+	    int count = mService.checkEmail(memberEmail);
+
+	    if (count == 0) {
+	        return "yes";
+	    } else {
+	        Member result = mService.getMemberLoginType(memberEmail);
+	        
+	        if (result != null) {
+	            System.out.println("kakao");
+	            return "kakao";
+	        } else {
+	            System.out.println("no");
+	            return "no";
+	        }
+	    }
 	}
 	
 	
@@ -154,8 +165,10 @@ public class MemberController {
 				model.addAttribute("loginUser",loginUser);
 				
 				if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me") ||
-										beforeURL.equals("http://192.168.20.207:8080/logout.me") || beforeURL.equals("http://192.168.20.207:8080/signUp.me"))) {
+										beforeURL.equals("http://192.168.20.207:8080/logout.me") || beforeURL.equals("http://192.168.20.207:8080/signUp.me"))){
 					return "redirect:" + beforeURL;
+				}else if(beforeURL.equals(beforeURL.equals("http://192.168.20.207:8080/login.me") || beforeURL.equals("http://localhost:8080/login.me")) ) {
+					return "redirect:/";
 				}else {
 					return "redirect:/";
 				}
@@ -191,7 +204,6 @@ public class MemberController {
 	@ResponseBody
 	public String selectId(@ModelAttribute Member m, Model model) {
 		
-		System.out.println(m);
 		ArrayList<Member> list = mService.selectId(m);
 		JSONArray jArr = new JSONArray();
 		
@@ -214,7 +226,7 @@ public class MemberController {
 	         
 	       String subject = "[ZangZac]인증코드";                   // 제목
 	       String content = "인증코드 ["+checkNum+"] 입니다.";    // 내용
-	       String from = "gah_yn@naver.com";
+	       String from = "park718513@naver.com";
 	       
 	       try {
 	    	   MimeMessage mail = mailSender.createMimeMessage();
@@ -260,7 +272,7 @@ public class MemberController {
         
         String subject = "[ZangZac]임시 비밀번호";		// 제목
 		String content = "임시비밀번호는 [ "+str+" ] 입니다.";    // 내용
-		String from = "gah_yn@naver.com";
+		String from = "park718513@naver.com";
 		 
 		 try {
 	    	   MimeMessage mail = mailSender.createMimeMessage();
@@ -281,7 +293,6 @@ public class MemberController {
         
         
         if (result > 0) {
-            return "index";
         } else {
         }
          
@@ -304,7 +315,7 @@ public class MemberController {
 		int result = mService.deleteMember(memberId);
 		
 		if(result > 0) {
-			return "index";
+			return "redirect:/";
 		}else {
 			model.addAttribute("msg","회원탈퇴실패");
 			return "views/ming/member/myPage";
@@ -332,11 +343,9 @@ public class MemberController {
 			 
 			 
 			 int result = mService.changePwd(map);
-			 System.out.println("test1 : " +map);
 			 
 			 if(result > 0) {
 				 model.addAttribute("loginUser", mService.login(m));
-				 System.out.println("test2 : " + m);
 				 return "redirect:myPage.me";
 			 } else {
 				 model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
@@ -521,7 +530,6 @@ public class MemberController {
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
 		ArrayList<Member> list = mService.searchtNoticeList(pi, map);
 		
-		System.out.println(list);
 		if(list != null) {
 			model.addAttribute("searchType",searchType);
 			model.addAttribute("keyword",keyword);
@@ -567,13 +575,11 @@ public class MemberController {
 	public String adminUpdateNickName(@ModelAttribute Member m) {
 		String memberNickName = null;
 		memberNickName = m.getMemberNickName() + "#" + generateRandomNumbers();
-		System.out.println(memberNickName);
 		
 		
 		m.setMemberNickName(memberNickName);
 		
 		int result = mService.adminUpdateNickName(m);
-		System.out.println(result);
 		
 		return result == 1? "success" : "fail";
 	}
@@ -582,7 +588,6 @@ public class MemberController {
 	@ResponseBody
 	public String adminUpdateName(@ModelAttribute Member m) {
 		String memberName = m.getMemberName();
-		System.out.println(memberName);
 		
 		int result = mService.adminUpdateName(m);
 		return result == 1? "success" : "fail";
@@ -616,7 +621,7 @@ public class MemberController {
 
 	            return "redirect:" + beforeURL;
 	        } else {
-	            return "redirect:/";
+	            return "redirect:home.me";
 	        }
 	        // 여기서 로그인 처리 등을 수행
 	        // 로그인만 가능하게끔 수정 http://192.168.20.207:8080/
@@ -632,7 +637,6 @@ public class MemberController {
 	            } else {
 
 	            	return "redirect:/";
-
 	            }
 	        } else {
 	        	System.out.println("로그인 실패");
@@ -673,13 +677,13 @@ public class MemberController {
 	}
 	
 	//리뷰삭제
-	   @PostMapping("deleteReview.me")
+	   @GetMapping("deleteReview.me")
+	   @ResponseBody
 	   public String deleteReview(@RequestParam("reviewNo") int reviewNo) {
 	      
 	      String name="sohwa";
 	      int result = mService.deleteReview(reviewNo);
 	      String deleteRename = mService.deleteSelectReview(reviewNo);
-	      System.out.println("deleteRename" + deleteRename);
 	      
 	      if(deleteRename != null) {
 	    	  Boolean sf = imageStorage.deleteImage(deleteRename, name);
@@ -749,7 +753,6 @@ public class MemberController {
 			PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
 			ArrayList<secondHandProduct> spList = mService.searchSpList(pi, map);
 			
-			System.out.println(spList);
 			
 			if(spList != null) {
 				model.addAttribute("pi", pi);

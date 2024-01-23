@@ -43,6 +43,12 @@
 		where MEMBER_PWD = #{memberPwd} and member_status = 'N'
 	</select>
 	
+	<select id="getMemberLoginType">
+		select *
+		from member
+		where member_email = #{memberEmail} and member_status = 'N' and MEMBER_LOGIN_TYPE = '2'
+	</select>
+	
 	<update id="deleteMember">
 		update member
 		set member_status = 'Y'

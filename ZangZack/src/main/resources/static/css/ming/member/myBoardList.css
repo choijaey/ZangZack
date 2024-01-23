@@ -29,6 +29,7 @@ a{
 	top: -60px;
 	left: -12px;
 }
+
 .sidebar:hover {
     width: 280px;
 }
@@ -82,7 +83,6 @@ a{
 }
 
 .links li:hover {
-	left: 0.05px;
     border-radius: 4px;
     cursor: pointer;
 }

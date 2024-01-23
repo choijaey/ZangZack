@@ -3,8 +3,8 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>게시글 상세보기</title>
-	<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/seongun/b9045bb4-dad6-4ab1-b9fa-4841e6716aed">
+	<title>캠핑 게시판</title>
+	<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
 	<link rel="stylesheet" href="css/seongun/boardDetail.css">
 	<link rel="stylesheet" href="css/seongun/common/paging.css">
 	<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
@@ -25,13 +25,13 @@
 			        <img id="settingBtn" src="image/seongun/boardAdd.png" alt="게시판 설정 버튼">
 			    </button>
 			    <ul id="editDropDown">
-			        <li>
-			            <button class="editDropMenu" id="boardEditBtn" onclick="boardEditBtn()">수정</button>
-			        </li>
-			        <li>
-			            <button class="editDropMenu" id="boardEditBtn" onclick="baordDeleteBtn()">삭제</button>
-			        </li>
-			    </ul>
+				    <li>
+				        <button class="editDropMenu" id="boardUpdateBtn" onclick="boardEditBtn()">수정</button>
+				    </li>
+				    <li>
+				        <button class="editDropMenu" id="boardDeleteBtn" onclick="baordDeleteBtn()">삭제</button>
+				    </li>
+				</ul>
 			</div>
 
 			<div class="post-header">
@@ -40,7 +40,7 @@
 					<img class="author-profile" th:src="${bList.memberProfilePath}"
 						alt="작성자 프로필 이미지" />
 					<div class="profile_area">
-						<span class="author-name">[[${bList.memberName}]]</span>
+						<span class="author-name">[[${bList.memberNickname}]]</span>
 						<div class="article_info">
 							<span class="post-date">[[${bList.formatDate}]]</span> 
 							<span class="post-views">조회수: [[${bList.cbCount}]]</span>
@@ -50,7 +50,7 @@
 			</div>
 		</div>
 		<div class="post-content">
-			<p style="white-space: pre-line;">[[${bList.cbContent}]]</p>
+			<p id="campBoardContent">[[${bList.cbContent}]]</p>
 			<th:block th:if="${!pList.isEmpty}">
 				<img style="max-width:100%;"th:src="${p.photoPath}" alt="게시글 이미지" th:each="p : ${pList}">
 			</th:block>
@@ -62,7 +62,7 @@
 					<span class="like-text">좋아요</span>
 					<span class="like-count" id="like-count">[[${bList.heartCount}]]</span> 
 					<span class="comment-text">댓글</span>
-					<span class="comment-count">[[${bList.replyCount}]]</span>
+					<span class="comment-count" id="replyCount">[[${bList.replyCount}]]</span>
 				</div>
 			</div>
 
@@ -85,6 +85,9 @@
 		let heart = /*[[${bList.heartCheck}]]*/true;
 		let heartCountNum = /*[[${bList.heartCount}]]*/1;
 		let boardId = /*[[${bList.cbNo}]]*/1;
+		let replyCount = document.getElementById('replyCount');
+		let replyNum = replyCount.innerHTML;
+		let bReplyCount = /*[[${bList.replyCount}]]*/1;
 		
 		let memberId = null;
 
@@ -165,7 +168,7 @@
 		        error: data => console.log(data)
 		    });
 		};
-		// 페이지 로드 시 댓글 목록 및 좋아요 상태 불러오기
+		
 		window.onload = function() {
 		    loadCommentList(/*[[${maxPage}]]*/);
 		};
@@ -173,7 +176,7 @@
 		// 댓글 목록 불러오는 함수
 		function loadCommentList(replyPage) {
 		    $.ajax({
-		        url: 'replyLimitList.rep', // 서버의 댓글 목록 불러오기 URL
+		        url: 'replyLimitList.rep',
 		        method: 'GET',
 		        data: { 
 		        	page: replyPage,
@@ -198,7 +201,7 @@
 		    
 		    commentInput.addEventListener('keypress', function(event) {
 		        if (event.key === 'Enter') {
-		            event.preventDefault(); // 텍스트 영역에서 엔터를 누를 때의 기본 동작을 방지합니다.
+		            event.preventDefault();
 		            const replyContent = commentInput.value.trim();
 
 		            if (replyContent === '') {
@@ -206,7 +209,7 @@
 		                return;
 		            }
 
-		            insertReplyButton.click(); // 'insertReply' 버튼의 클릭 이벤트를 실행합니다.
+		            insertReplyButton.click(); 
 		        }
 		    });
 		    
@@ -229,6 +232,7 @@
 		                success: function(data) {
 		                    loadCommentList(data.maxPage);
 		                    document.getElementById('replyContent').value = '';
+		                    replyCount.innerText = bReplyCount += 1;
 		                },
 		                error: function(error) {
 		                	alert("댓글을 500자 이내로 입력해주세요!");
@@ -254,7 +258,7 @@
 		        commentItem.classList.add('comment-item');
 		
 		        const imgContainer = document.createElement('div');
-		        imgContainer.classList.add('img-container'); // 클래스 추가
+		        imgContainer.classList.add('img-container');
 		
 		        // 이미지 요소 생성
 		        const img = document.createElement('img');
@@ -271,7 +275,7 @@
 		
 		        const authorDiv = document.createElement('div');
 		        authorDiv.classList.add('comment-author');
-		        authorDiv.textContent = comment.memberName;
+		        authorDiv.textContent = comment.memberNickname;
 		        contentDiv.appendChild(authorDiv);
 		
 		        const messageDiv = document.createElement('div');
@@ -290,7 +294,7 @@
 				
 				    const commentButton = document.createElement('button');
 				    commentButton.classList.add('comment-action-button');
-				    commentButton.style.backgroundImage = 'url("image/seongun/replyButton.svg")'; // 가정한 경로입니다.
+				    commentButton.style.backgroundImage = 'url("image/seongun/replyButton.svg")';
 				
 				    const dropdownMenu = document.createElement('ul');
 				    dropdownMenu.classList.add('dropdown-menu');
@@ -313,14 +317,17 @@
 				    	const buttonsContainer = document.createElement('div');
 				    	buttonsContainer.classList.add('buttons-container');
 				
-				    	// '수정' 버튼 생성
 				    	const submitButton = document.createElement('button');
 				    	submitButton.type = 'button';
 				    	submitButton.classList.add('update-submit');
 				    	submitButton.textContent = '수정';
 				    	submitButton.onclick = function() {
 
-				    		let text = textarea.value
+				    		let text = textarea.value;
+							if (text === '') {
+								alert('수정 내용을 입력해주세요.'); // 사용자에게 알림 표시
+								return; // 함수 실행 중단
+							}
 				    	    updateReply(text, comment);
 
 				    	    messageDiv.textContent = textarea.value;
@@ -338,8 +345,8 @@
 				    	
 				    	textarea.addEventListener('keypress', function(event) {
 				            if (event.key === 'Enter') {
-				                event.preventDefault(); // 기본 동작 방지 (텍스트 영역에서 새 줄 추가 방지)
-				                submitButton.click(); // '수정' 버튼의 클릭 이벤트 실행
+				                event.preventDefault(); 
+				                submitButton.click();
 				            }
 				        });
 						
@@ -503,6 +510,7 @@
 					if(data >= 0){
 						alert("댓글이 삭제되었습니다.")
 						loadCommentList(data);
+						replyCount.innerText = bReplyCount -= 1;
 					}else{
 						alert("댓글 삭제를 실패했습니다. 다시 시도해주세요.");
 					}

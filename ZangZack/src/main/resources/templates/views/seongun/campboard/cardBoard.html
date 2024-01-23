@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>캠핑 게시판</title>
+    <link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
     <link rel="stylesheet" href="css/seongun/commonBoard.css">
     <link rel="stylesheet" href="css/seongun/cardBoard.css">
     <style>
@@ -25,7 +26,7 @@
             <div id="snb_zone">
                 <ul>
                     <li>
-                        <a id="check_snb">캠핑게시시판</a>
+                        <a id="check_snb">캠핑게시판</a>
                     </li>
                     <li>
                         <a href="recipe.su">캠핑레시피</a>
@@ -83,7 +84,7 @@
                                             <tbody>
                                                 <tr>
                                                     <td class="p-nick">
-                                                        <a  class="u-tcol-k">[[${b.memberName}]]</a>
+                                                        <a  class="u-tcol-k">[[${b.memberNickname.split('#')[0]}]]</a>
                                                     </td>
                                                 </tr>
                                             </tbody>
