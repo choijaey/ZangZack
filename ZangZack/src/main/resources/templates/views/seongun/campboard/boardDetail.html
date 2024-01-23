@@ -52,7 +52,7 @@
 		<div class="post-content">
 			<p id="campBoardContent">[[${bList.cbContent}]]</p>
 			<th:block th:if="${!pList.isEmpty}">
-				<img style="max-width:100%;"th:src="${p.photoPath}" alt="게시글 이미지" th:each="p : ${pList}">
+				<img style="max-width:100%; margin-bottom: 10px;"th:src="${p.photoPath}" alt="게시글 이미지" th:each="p : ${pList}">
 			</th:block>
 		</div>
 		<div class="comments-section">

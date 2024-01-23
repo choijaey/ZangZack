@@ -58,7 +58,7 @@
             <div class="board-container" th:if="${!list.isEmpty}">
                 <!-- 카드 반복 -->
                 <th:block th:each="b : ${list}">
-	                <div class="card">
+	                <div class="card" style="float: left;">
 	                	<input type="hidden" th:value="${b.cbNo}">
 	                    <div class="card-image">
 	                    	<th:block th:if="${b.photoPath != null}">
