@@ -73,7 +73,7 @@
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="password" placeholder="Password" style="height: 45px;" name="memberPwd">
+	              <input type="password" placeholder="Password" id="memberPwd" style="height: 45px;" name="memberPwd">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
@@ -402,7 +402,7 @@
 		document.getElementById('memberEmail').addEventListener('change', function(){
 		    let emailVal = $(this).val();
 		    let memberEmail = this;
-		    let checkEmail = false;
+		    
 		    
 		    let result;  // 미리 선언 및 초기화
 		
@@ -414,6 +414,7 @@
 		            
 		            if (result == 'yes') {
 		                memberEmail.style.borderColor = 'green';
+		                alert('사용가능한 이메일입니다.');
 		                checkEmail = true;
 		            } else {
 		                if (result == 'kakao') {
@@ -435,29 +436,28 @@
 	</script>
 	<script>
 		<!-- 비밀번호 확인 + 정규식 -->
-	    
+		
+		document.getElementById("pwdConfirm").addEventListener("focusout", function() {
+		    focusOut();
+		  });
+
 		function focusOut(){
-			let pwd = document.getElementById("memberId");
+			let memberPwd = document.getElementById("memberPwd");
 	        let pwdConfirm = document.getElementById("pwdConfirm");
 	        let pwdcheck = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#%^&*])[A-Za-z\d!@#%^&*]{8,}$/;
 	        
-			if(pwd2.value.trim() == ''){		// 비밀번호 입력안하고
-			
-			} else if(pwdConfirm.value != pwd.value || !pwdcheck.test(pwd.value)) {	
-				pwd.style.borderColor = 'red';
+			if(memberPwd.value.trim() == ''){		// 비밀번호 입력안하고
+			} else if(pwdConfirm.value != memberPwd.value || !pwdcheck.test(memberPwd.value)) {	
+				memberPwd.style.borderColor = 'red';
 				pwdConfirm.style.borderColor = 'red';
-				console.log(pwd.value);
-				console.log(pwdConfirm.value);
 				alert('비밀번호는 영대소문자,숫자로 구성된 8글자 이상으로 조합하시오.')
 				checkPwd = false;
-			} else if(pwdConfirm.value == pwd.value && pwdcheck.test(pwd.value)){// 비밀번호가 같지 않고, 정규식 안 맞을 때
-				pwd.style.borderColor = 'green';
+			} else if(pwdConfirm.value == memberPwd.value && pwdcheck.test(memberPwd.value)){ // 비밀번호가 다르고 정규식도 다를떄
+				memberPwd.style.borderColor = 'green';
 				pwdConfirm.style.borderColor = 'green';
-				console.log(pwd.value);
-				console.log(pwd2.value);
 				checkPwd = true;
 			} 
-		}
+		};
 	</script> 
 	
 	<script>
@@ -496,6 +496,7 @@
 			if(check_num === userNum) {
 				alert('인증 성공하였습니다.');
                 this.innerText = '인증성공';
+                
                 check_code = true;
 			}
 			else {
@@ -507,9 +508,14 @@
 		
 		// 모든 폼이 일치해야 넘어오게 
 		function NoSign(){
+			console.log("check_code: " + check_code);
+			console.log("checkId: " + checkId);
+			console.log("checkPwd: " + checkPwd);
+			console.log("checkEmail: " + checkEmail);
+			console.log("checkNickName: " + checkNickName);
 			
 			if(check_code && checkId && checkPwd && checkEmail && checkNickName){
-				
+				alert("통과");
 				return true;
 			}else{
 				alert("정보가 올바르게 작성되었는지 확인해주세요.");

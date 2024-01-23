@@ -631,7 +631,7 @@ public class MemberController {
 
 	            return "redirect:" + beforeURL;
 	        } else {
-	            return "redirect:home.me";
+	            return "redirect:/";
 	        }
 	        // 여기서 로그인 처리 등을 수행
 	        // 로그인만 가능하게끔 수정 http://192.168.20.207:8080/
