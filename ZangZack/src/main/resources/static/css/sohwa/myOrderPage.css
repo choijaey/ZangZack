@@ -153,6 +153,18 @@ button:hover{
 	border:none;
 }
 
+.refundBtn{
+	border:0.8px solid #F9612B;
+	background-color: white;
+	color:#F9612B;
+	border-radius: 2px;
+	width:150px;
+	height:35px;
+	margin-left:10px;
+	font-size:15px;
+}
+
+
 .right button{
 	border:0.8px solid #F9612B;
 	background-color: white;
@@ -161,11 +173,8 @@ button:hover{
 	width:150px;
 	height:35px;
 	font-size:15px;
-	margin-left:20px;
+	margin-right:25px;
 }
-
-
-
 
 
 
@@ -184,11 +193,12 @@ button:hover{
 }
 
 .left{
-	width: 65%;
+	width: 85%;
 }
 
 .right{
-	width:25%;
+	width:15%;
+	margin-right:20px;
 }
 .left, .right {
    /* 왼쪽과 오른쪽 컨테이너 너비 */
