@@ -1,11 +1,11 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
 <meta http-equiv="X-UA-Compatible" content="ie=edge" /> 
-<title>Insert title here</title>
+<title>마이페이지</title>
+<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
 <link href="../css/ming/member/MyPage.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <style>
@@ -139,6 +139,10 @@
 			<li>
 				<img src="../image/ming/member/리뷰.png" style="width: 60px;"></img>
 				<a href="review.me">리뷰</a>
+			</li>
+			<li>
+				<img src="../image/ming/member/icons8-계산서-100.png" style="width: 60px;"></img>
+				<a href="myOrderPageView.so">결제내역</a>
 			</li>
 		<hr>
 			<li>
@@ -511,16 +515,10 @@
 		   		 }
 				
 				
-				if(email_check_code){
-					email_check_code = true;
-					check_button = true;
-					checkEmail = true;
+				if(email_check_code && check_button && checkEmail){
 					form.submit();
 					return true;
 				}else{
-					email_check_code = false;
-					check_button = false;
-					checkEmail = false;
 					alert('인증 실패하였습니다. 다시 입력해주세요.');
 					return false;
 				}
@@ -620,16 +618,10 @@
         }
 		function NoSign(event) {
 		    // 이 함수가 호출되면서 폼이 제출될 때만 check_code를 확인하도록 변경
-		    if (check_code) {
-		        check_code = true;
-		        checkE = true;
-		        checkNickName = true;
+		    if (check_code && checkE && checkNickName) {
 		        return true;
 		    } else {
 		        alert("정보가 올바르게 작성되었는지 확인해주세요.");
-		        check_code = false;
-		        checkE = false;
-		        checkNickName = false;
 		        // 실패 시 이벤트 중지
 		        event.preventDefault();
 		        return false;

@@ -1,8 +1,13 @@
 package com.kh.zangzac.yoonseo.camp.controller;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Properties;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,13 +25,11 @@ import com.kh.zangzac.common.ImageStorage;
 import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.photo.model.vo.Photo;
-import com.kh.zangzac.ming.member.model.vo.Member;
 import com.kh.zangzac.yoonseo.camp.model.exception.CampException;
 import com.kh.zangzac.yoonseo.camp.model.service.CampService;
 import com.kh.zangzac.yoonseo.camp.model.vo.CampingGround;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 @SessionAttributes("loginUser")
 @Controller
@@ -129,7 +132,7 @@ public class CampController {
 		   
 		   return"views/yoonseo/campDetail";   
 		}else {
-			return"redirect:/";
+			throw new CampException("캠핑장 등록에 실패하였습니다");
 		}
 	}
 	
@@ -393,7 +396,7 @@ public class CampController {
 		
 	}
 	
-	
+
 	
 	
 

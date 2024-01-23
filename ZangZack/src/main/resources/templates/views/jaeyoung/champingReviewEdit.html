@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Upload Interface</title>
+    <title>캠핑 리뷰수정</title>
+	<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Additional styles if needed */
@@ -52,11 +53,11 @@
             <div class="mb-4">
                 <label for="postCategory" class="block text-gray-700 text-sm font-bold mb-2">카테고리</label>
                 <select id="postCategory" name="categoryNo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <option th:value="1" th:selected="${categoryNo == 1}">백패킹</option>
-				    <option th:value="2" th:selected="${categoryNo == 2}">오토캠핑</option>
-				    <option th:value="3" th:selected="${categoryNo == 3}">장박</option>
-				    <option th:value="4" th:selected="${categoryNo == 4}">글램핑</option>
-				    <option th:value="5" th:selected="${categoryNo == 5}">야영장</option>
+                    <option th:value="1" th:selected="${cr.categoryNo == 1}">백패킹</option>
+				    <option th:value="2" th:selected="${cr.categoryNo == 2}">오토캠핑</option>
+				    <option th:value="3" th:selected="${cr.categoryNo == 3}">장박</option>
+				    <option th:value="4" th:selected="${cr.categoryNo == 4}">글램핑</option>
+				    <option th:value="5" th:selected="${cr.categoryNo == 5}">야영장</option>
                 </select>
             </div>
             

@@ -103,5 +103,7 @@ public interface MemberDAO {
 
 	ArrayList<CampBoard> searchCbList(RowBounds rowBounds, HashMap<String, Object> map);
 
+	Member getMemberLoginType(String memberEmail);
+
 
 }
