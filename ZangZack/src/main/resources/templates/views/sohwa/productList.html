@@ -52,8 +52,8 @@
 	
 	
 			<div class="search">			
-		  		<input id="searchInput" type="text" placeholder="상품명 검색" th:value="${keyword}">
-		  		<img id="searchImg" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+		  		<input onkeydown="handleEnterKey(event)" id="searchInput" type="text" placeholder="상품명 검색" th:value="${keyword}">
+		  		<img id="searchImg" onclick="handleSearchClick()" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
 			</div>
 			
 			<div class="dropdown" style="background-color: white !important; color:black;">
@@ -176,7 +176,7 @@
               
           for (let p of data.pList) {
            		  let imgHTML ='';
-           		  imgHTML = `<img src="${p.photoPath}">`;
+           		  imgHTML = `<figure><img src="${p.photoPath}"></figure>`;
            		  const productPrice = `${p.productPrice.toLocaleString()}원`;
           		      
            		  
@@ -476,13 +476,36 @@
 		
 		
 		//검색
-		document.getElementById('searchImg').addEventListener('click', ()=>{
-			var categoryNo = document.getElementById('categoryNo').value;
-			var searchInputValue = document.getElementById('searchInput').value;
-			console.log(123);
-		    var url = 'productListView.so?categoryNo=' + categoryNo + '&keyword=' + searchInputValue + '&standard=1' ;
-		    window.location.href = url;
-		})
+// 		document.getElementById('searchImg').addEventListener('click', ()=>{
+// 			var categoryNo = document.getElementById('categoryNo').value;
+// 			var searchInputValue = document.getElementById('searchInput').value;
+// 			console.log(123);
+// 		    var url = 'productListView.so?categoryNo=' + categoryNo + '&keyword=' + searchInputValue + '&standard=1' ;
+// 		    window.location.href = url;
+// 		})
+		
+		
+		function handleEnterKey(event) {
+		    if (event.key === "Enter") {
+		      handleSearchClick();
+		    }
+		  }
+		
+		  function handleSearchClick() {
+		    // 여기에 검색 기능을 구현하거나 클릭 이벤트에 대한 동작을 추가하세요.
+		    var keyword = document.getElementById("searchInput").value;
+		    // 예시: 검색 함수 호출 또는 원하는 동작 수행
+		    searchFunction(keyword);
+		 }
+		
+		  // 예시: 검색 함수 정의
+		  function searchFunction(keyword) {
+			  var categoryNo = document.getElementById('categoryNo').value;
+			  var searchInputValue = document.getElementById('searchInput').value;
+			  console.log(123);
+		      var url = 'productListView.so?categoryNo=' + categoryNo + '&keyword=' + keyword + '&standard=1' ;
+		      window.location.href = url;
+		  }
 
 
 		
