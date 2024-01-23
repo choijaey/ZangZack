@@ -147,7 +147,7 @@ public interface ProductService {
 
 	ArrayList<Payment> selectMyOrder(String id);
 
-	ArrayList<Integer> selectOrderNo();
+	ArrayList<Integer> selectOrderNo(String id);
 
 	ArrayList<Payment> selectPayment(int orderNo);
 
