@@ -150,6 +150,7 @@ public class CampController {
 			                 ) {
 		
 		System.out.println(camp.getCgAddress());
+		System.out.println(camp.getCgImgInfo());
 		
 		ArrayList<Photo> campList = new ArrayList<>();
 		

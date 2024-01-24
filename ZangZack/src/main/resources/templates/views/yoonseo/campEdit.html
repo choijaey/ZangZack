@@ -146,7 +146,7 @@ button:hover {
 		          </div>
 		        </div>
 		    <br>
-			<div style="width:750px; margin-left: 10px;">
+			<div class="form-group" style="width:750px; margin-left: 10px;">
 		         <table class="table" >
 				   <tr>
 				     <td>주소</td>
@@ -190,23 +190,49 @@ button:hover {
 				  </tr> 
 				  <tr>
 				     <td>시설안내</td>
-					 <td>
-						 <div>
-					       <input class="info" type="checkbox" name="cgImgInfo" value="전기사용" th:checked="${#strings.contains(info, '전기사용')}">전기사용
-						   <input class="info" type="checkbox" name="cgImgInfo" value="온수사용" th:checked="${#strings.contains(info, '온수사용')}">온수사용
-						   <input class="info" type="checkbox" name="cgImgInfo" value="와이파이" th:checked="${#strings.contains(info, '와이파이')}">와이파이
-					       <input class="info" type="checkbox" name="cgImgInfo" value="산책로" th:checked="${#strings.contains(info, '산책로')}">산책로
-					       <input class="info" type="checkbox" name="cgImgInfo" value="물놀이장" th:checked="${#strings.contains(info, '물놀이장')}">물놀이장
-					       <input class="info" type="checkbox" name="cgImgInfo" value="놀이터" th:checked="${#strings.contains(info, '놀이터')}">놀이터
-					       <input class="info" type="checkbox" name="cgImgInfo" value="마트.편의점" th:checked="${#strings.contains(info, '마트.편의점')}">마트.편의점
-					       <input class="info" type="checkbox" name="cgImgInfo" value="운동시설" th:checked="${#strings.contains(info, '운동시설')}">운동시설
-					       <input class="info" type="checkbox" name="cgImgInfo" value="운동장" th:checked="${#strings.contains(info, '운동장')}">운동장
-					       <input class="info" type="checkbox" name="cgImgInfo" value="장작판매" th:checked="${#strings.contains(info, '장작판매')}">장작판매
-					       <input class="info" type="checkbox" name="cgImgInfo" value="트렘폴린" th:checked="${#strings.contains(info, '트렘폴린')}">트렘폴린
-					       <input class="info" type="checkbox" name="cgImgInfo" value="공용화장실" th:checked="${#strings.contains(info, '공용화장실')}">공용화장실
-					       <input class="info" type="checkbox" name="cgImgInfo" value="주차장" th:checked="${#strings.contains(info, '주차장')}">주차장
-					       <input class="info" type="checkbox" name="cgImgInfo" value="바베큐" th:checked="${#strings.contains(info, '바베큐')}">바베큐
-					     </div>
+					 <td> 
+				       <label>
+				         <input class="info" type="checkbox" name="cgImgInfo" value="전기사용" th:checked="${#strings.contains(info, '전기사용')}">전기사용
+				       </label>
+				       <label>
+				         <input class="info" type="checkbox" name="cgImgInfo" value="온수사용" th:checked="${#strings.contains(info, '온수사용')}">온수사용
+				       </label>
+				       <label>
+				         <input class="info" type="checkbox" name="cgImgInfo" value="와이파이" th:checked="${#strings.contains(info, '와이파이')}">와이파이
+				       </label>
+				       <label>
+				         <input class="info" type="checkbox" name="cgImgInfo" value="산책로" th:checked="${#strings.contains(info, '산책로')}">산책로
+				       </label>
+				       <label>
+				         <input class="info" type="checkbox" name="cgImgInfo" value="물놀이장" th:checked="${#strings.contains(info, '물놀이장')}">물놀이장
+				       </label>
+				       <label>
+				         <input class="info" type="checkbox" name="cgImgInfo" value="놀이터" th:checked="${#strings.contains(info, '놀이터')}">놀이터
+				       </label>
+				       <label>
+				         <input class="info" type="checkbox" name="cgImgInfo" value="마트.편의점" th:checked="${#strings.contains(info, '마트.편의점')}">마트.편의점
+				       </label>
+				       <label>
+				         <input class="info" type="checkbox" name="cgImgInfo" value="운동시설" th:checked="${#strings.contains(info, '운동시설')}">운동시설
+				       </label>
+				       <label>
+				         <input class="info" type="checkbox" name="cgImgInfo" value="운동장" th:checked="${#strings.contains(info, '운동장')}">운동장
+				       </label>
+				       <label>
+				         <input class="info" type="checkbox" name="cgImgInfo" value="장작판매" th:checked="${#strings.contains(info, '장작판매')}">장작판매
+				       </label>
+				       <label>
+				         <input class="info" type="checkbox" name="cgImgInfo" value="트렘폴린" th:checked="${#strings.contains(info, '트렘폴린')}">트렘폴린
+				       </label>
+				       <label>
+				         <input class="info" type="checkbox" name="cgImgInfo" value="공용화장실" th:checked="${#strings.contains(info, '공용화장실')}">공용화장실
+				       </label>
+				       <label>
+				         <input class="info" type="checkbox" name="cgImgInfo" value="주차장" th:checked="${#strings.contains(info, '주차장')}">주차장
+				       </label>
+				       <label>
+				         <input class="info" type="checkbox" name="cgImgInfo" value="바베큐" th:checked="${#strings.contains(info, '바베큐')}">바베큐
+				       </label>
 				     </td>
 				  </tr> 
 				  <tr>
