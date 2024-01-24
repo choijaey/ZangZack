@@ -306,22 +306,21 @@ public class MemberController {
 		return "views/ming/member/myPage";
 	}
 	
-	//회원탈퇴
 	@GetMapping("deleteMember.me")
-	public String deleteMember(Model model) {
-		Member m = (Member)model.getAttribute("loginUser");
-		
-		String memberId = m.getMemberId();
-		int result = mService.deleteMember(memberId);
-		
-		if(result > 0) {
-			return "redirect:logout.me";
-		}else {
-			model.addAttribute("msg","회원탈퇴실패");
-			return "views/ming/member/myPage";
-		}
-		
-	}
+	   public String deleteMember(Model model) {
+	      Member m = (Member)model.getAttribute("loginUser");
+	      
+	      String memberId = m.getMemberId();
+	      int result = mService.deleteMember(memberId);
+	      
+	      if(result > 0) {
+	         return "redirect:logout.me";
+	      }else {
+	         model.addAttribute("msg","회원탈퇴실패");
+	         return "views/ming/member/myPage";
+	      }
+	      
+	   }
 	
 	
 	//비밀번호 변경
