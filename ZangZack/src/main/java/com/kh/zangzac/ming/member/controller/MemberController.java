@@ -614,15 +614,8 @@ public class MemberController {
 	    if (isEmailDuplicate) {
 	        // 중복된 이메일이 있는 경우
 	    	session.setAttribute("loginUser", loginUser);
-
-	    	session.setAttribute("msg", "중복된 이메일이 있습니다.");
-	        if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me") ||
-	        							beforeURL.equals("http://192.168.20.207:8080/logout.me") || beforeURL.equals("http://192.168.20.207:8080/signUp.me"))) {
-
-	            return "redirect:" + beforeURL;
-	        } else {
+	    	session.setAttribute("msg", "중복되는 이메일이 있습니다.");
 	            return "redirect:/";
-	        }
 	        // 여기서 로그인 처리 등을 수행
 	        // 로그인만 가능하게끔 수정 http://192.168.20.207:8080/
 	    } else {
