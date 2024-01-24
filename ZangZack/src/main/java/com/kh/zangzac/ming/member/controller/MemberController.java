@@ -315,7 +315,7 @@ public class MemberController {
 		int result = mService.deleteMember(memberId);
 		
 		if(result > 0) {
-			return "redirect:/";
+			return "redirect:logout.me";
 		}else {
 			model.addAttribute("msg","회원탈퇴실패");
 			return "views/ming/member/myPage";
