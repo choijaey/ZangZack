@@ -14,10 +14,11 @@
     		vertical-align: middle;
     	}
     </style>
+    <link rel="stylesheet" href="css/seongun/common/recipemodal.css">
 </head>
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
-    <a id="back-to-top"><img src='image/topBtn.png' style='width:38px; height:38px;'></a>
+    <a id="back-to-top"><img src='image/seongun/topBtn.png' style='width:38px; height:38px;'></a>
     <div id="content">
         <div id="space_zone">
             <p>
@@ -42,7 +43,7 @@
 				<!-- 카드 반복 -->
 				<th:block th:if="${!list.isEmpty}">
 					<th:block th:each="l : ${list}">
-						<div class="card">
+						<div class="card" style="float: left;">
 							<input type="hidden" th:value="${l.recipeNo}">
 							<div class="">
 							    <button class="update-btn" th:if="${session.loginUser != null && session.loginUser.memberIsAdmin == 'Y'}">
@@ -70,8 +71,8 @@
 			                    		<td class="info-title">조리도구</td>
 			                  		</tr>
 			                  		<tr>
-			                    		<td class="info-content" style="max-width:138.08px;">[[${l.recipeIngredients}]]</td>
-			                    		<td class="info-content" style="max-width:138.08px;">[[${#strings.arrayJoin(l.cookCategoryName, ', ')}]]</td>
+			                    		<td class="info-content">[[${l.recipeIngredients}]]</td>
+			                    		<td class="info-content">[[${#strings.arrayJoin(l.cookCategoryName, ', ')}]]</td>
 			                  		</tr>
 			                  	</table>
 			                	<span class="card-text">[[${l.recipeContent}]]</span>
@@ -79,6 +80,13 @@
 		              	</div>
 					</th:block>
               	</th:block>
+              	
+              	<div id="recipeModal" class="modal">
+				    <div class="modal-content">
+				        <span class="close">&times;</span>
+				        <!-- 모달 내용은 여기에 들어갑니다. -->
+				    </div>
+				</div>
 				<!-- 카드 반복 끝 -->
 			</div>
             <div class="border-bottom-div"></div>
@@ -89,6 +97,7 @@
     </div>
     <script th:inline="javascript">
 		/*<![CDATA[*/
+		var modal;
         document.addEventListener('DOMContentLoaded', function() {
             // 스크롤이 끝으로 이동 시 이벤트 발생
             window.addEventListener('scroll', function() {
@@ -123,6 +132,9 @@
         
         document.addEventListener('DOMContentLoaded', function() {
             var cards = document.querySelectorAll('.card');
+            modal = document.getElementById('recipeModal');
+            var span = document.getElementsByClassName('close')[0];
+            
             cards.forEach(function(card) {
                 card.addEventListener('click', function(event) {
                     if (event.target.closest('.update-btn') || event.target.closest('.editDropMenu')) {
@@ -130,11 +142,25 @@
                     }
                     var boardId = card.querySelector('input[type="hidden"]:first-child').value;
                     if (boardId) {
-                        location.href="selectRecipe.su?recipeNo="+boardId;
+                        $.ajax({
+                            url: 'selectRecipe.su',
+                            method: 'GET',
+                            data: { recipeNo: boardId },
+                            success: function(response) {
+                                $('.modal-content').html(response);
+                                modal.style.display = 'block';
+                                initializeSlider(); // 슬라이더 초기화 함수 호출
+                            }
+                        });
                     }
                 });
             });
-
+			
+            window.onclick = function(event) {
+    		    if (event.target == modal) {
+    		        modal.style.display = 'none';
+    		    }
+    		}
             var editButtons = document.querySelectorAll('.update-btn');
             editButtons.forEach(function(btn) {
                 btn.addEventListener('click', function(event) {
@@ -198,8 +224,57 @@
             event.stopPropagation(); 
         }
         
-        
+        function initializeSlider() {
+            let sliderImages = document.querySelectorAll('.image-container img');
+            let currentImageIdx = 0;
+            let imageContainer = document.querySelector('.image-container');
+            let paginationContainer = document.querySelector('.slider-pagination');
 
+            // 기존에 생성된 페이징 버튼을 모두 제거
+            while (paginationContainer.firstChild) {
+                paginationContainer.removeChild(paginationContainer.firstChild);
+            }
+
+            // 새로운 페이징 버튼 생성
+            sliderImages.forEach((_, idx) => {
+                let btn = document.createElement('span');
+                btn.classList.add('pagination-btn');
+                btn.addEventListener('click', () => {
+                    currentImageIdx = idx;
+                    updateSliderPosition();
+                    updatePaginationButtons();
+                });
+                paginationContainer.appendChild(btn);
+            });
+
+            function updateSliderPosition() {
+                let sliderWidth = document.querySelector('.image-slider').clientWidth;
+                imageContainer.style.transform = `translateX(${-currentImageIdx * sliderWidth}px)`;
+            }
+
+            function updatePaginationButtons() {
+                let buttons = document.querySelectorAll('.pagination-btn');
+                buttons.forEach((btn, idx) => {
+                    btn.classList.toggle('active', idx === currentImageIdx);
+                });
+            }
+
+            document.querySelector('.prev-btn').addEventListener('click', () => {
+                currentImageIdx = currentImageIdx > 0 ? currentImageIdx - 1 : sliderImages.length - 1;
+                updateSliderPosition();
+                updatePaginationButtons();
+            });
+
+            document.querySelector('.next-btn').addEventListener('click', () => {
+                currentImageIdx = (currentImageIdx + 1) % sliderImages.length;
+                updateSliderPosition();
+                updatePaginationButtons();
+            });
+
+            updateSliderPosition();
+            updatePaginationButtons(); // 초기 페이징 버튼 설정
+        }
+		
         /*]]>*/
     </script>
 </body>
