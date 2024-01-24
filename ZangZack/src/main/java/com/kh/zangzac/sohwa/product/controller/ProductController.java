@@ -974,7 +974,7 @@ public class ProductController {
    public String myOrderPageView(Model model){
 	   String id = ((Member)model.getAttribute("loginUser")).getMemberId();
 	   ArrayList<Payment> paList = pService.selectMyOrder(id);
-	   ArrayList<Integer> orderNos = pService.selectOrderNo();
+	   ArrayList<Integer> orderNos = pService.selectOrderNo(id);
 	   ArrayList<Product> pList = pService.selectAllProduct();
 	   ArrayList<Attachment> aList = pService.selectAllPhoto();
 	   
@@ -1128,7 +1128,6 @@ public class ProductController {
 	   Payment pa = pService.selectOrderDetail(orderKeyNo);
 	   ArrayList<Attachment> aList = pService.selectAllPhoto();
 	   ArrayList<Product> pList = pService.selectAllProduct();
-	   
 	   model.addAttribute("pList", pList);
 	   model.addAttribute("aList", aList);
 	   model.addAttribute("pa", pa);

@@ -844,6 +844,7 @@
 	<select id="selectOrderNo" resultType="_int">
 		SELECT MAX(order_no) AS order_no
 		FROM payment
+		where member_id = #{id}
 		GROUP BY order_no
 		ORDER BY MAX(order_key_no) DESC
 	</select>

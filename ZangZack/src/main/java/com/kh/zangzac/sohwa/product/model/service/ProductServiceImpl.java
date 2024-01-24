@@ -364,8 +364,8 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public ArrayList<Integer> selectOrderNo() {
-		return pDAO.selectOrderNo();
+	public ArrayList<Integer> selectOrderNo(String id) {
+		return pDAO.selectOrderNo(id);
 	}
 
 	@Override
