@@ -12,20 +12,13 @@ import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.model.vo.SelectCondition;
 import com.kh.zangzac.common.photo.model.service.PhotoService;
 import com.kh.zangzac.common.photo.model.vo.Photo;
-<<<<<<< HEAD
 import com.kh.zangzac.jaeyoung.campingReview.model.service.CampingReviewService;
 import com.kh.zangzac.jaeyoung.campingReview.model.vo.CampingReview;
-=======
-
-import com.kh.zangzac.yoonahrim.spBoard.model.service.secondHandService;
-import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
-
->>>>>>> branch 'main' of https://github.com/choijaey/ZangZack.git
 import com.kh.zangzac.jaeyoung.eventBoard.model.service.EventBoardService;
 import com.kh.zangzac.jaeyoung.eventBoard.model.vo.EventBoard;
 import com.kh.zangzac.seongun.campboard.model.service.CampBoardService;
 import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
-
+import com.kh.zangzac.yoonahrim.spBoard.model.service.secondHandService;
 import com.kh.zangzac.yoonseo.camp.model.service.CampService;
 import com.kh.zangzac.yoonseo.camp.model.vo.CampingGround;
 
@@ -45,13 +38,12 @@ public class BoardCondition {
 	private PhotoService pService;
 	
 	@Autowired
-<<<<<<< HEAD
 	private CampingReviewService crService;
 	
-=======
+	@Autowired
 	private CampBoardService cbService;
 
->>>>>>> branch 'main' of https://github.com/choijaey/ZangZack.git
+
 	public SelectCondition selectBoard(int x, int y) {
 		SelectCondition b = new SelectCondition();
 		b.setBoardNo(x);
