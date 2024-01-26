@@ -81,7 +81,6 @@ public class ReplyController {
    @ResponseBody
    public int updateReply(@ModelAttribute Reply r){
       int result = rService.updateReply(r);
-      System.out.println(123);
       int maxPage = -1;
       if(result > 0) {
          maxPage = maxPage(r);

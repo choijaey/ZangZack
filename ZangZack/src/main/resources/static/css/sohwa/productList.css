@@ -549,15 +549,44 @@ input[type='radio']:checked {
 
 
 
-img:hover {
-	transform: scale(1.2, 1.2); 
-	transition-duration: 0.5s;
+/* img:hover { */
+/* 	transform: scale(1.2, 1.2);  */
+/* 	transition-duration: 0.5s; */
+/* } */
+
+
+
+.thumbnails figure {
+  position: relative;
 }
-
-
-
-
-
+.thumbnails figure::before {
+  position: absolute;
+  top: 0;
+  left: -35%;
+  z-index: 2;
+  display: block;
+  content: '';
+  width: 20%;
+  height: 100%;
+  background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,.3) 100%);
+  background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,.3) 100%);
+  -webkit-transform: skewX(-0deg);
+  transform: skewX(-0deg);
+}
+.thumbnails figure:hover::before {
+  -webkit-animation: shine .75s;
+  animation: shine .75s;
+}
+@-webkit-keyframes shine {
+  100% {
+    left: 100%;
+  }
+}
+@keyframes shine {
+  100% {
+    left: 100%;
+  }
+}
 
 
 

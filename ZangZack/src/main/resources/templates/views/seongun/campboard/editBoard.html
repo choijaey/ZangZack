@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>게시판 수정</title>
-<link href="css/seongun/campboard/editboard.css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>캠핑 게시판</title>
+	<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
+	<link href="css/seongun/campboard/editboard.css" rel="stylesheet">
+	<style>
+    	img{
+    		vertical-align: middle;
+    	}
+    </style>
 </head>
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
@@ -33,7 +39,6 @@
 				<textarea id="content" name="cbContent" th:text="${bList.cbContent}"></textarea>
 			</div>
 			<!-- 파일 첨부 -->
-			<!-- th:id="|delete-${p.photo_rename }/${p.photo_level}|"  -->
 			<th:block th:if="${not #lists.isEmpty(pList)}">
 				<th:block th:each="p : ${pList}">
 					<input type="hidden" name="deletePhoto"
@@ -65,6 +70,29 @@
 					</div>
 				</th:block>
 			</th:block>
+			<th:block th:unless="${not #lists.isEmpty(pList)}">
+    <!-- pList가 비어 있을 때 출력할 내용 -->
+    <div class="upload-container">
+    	<input type="hidden" name="deletePhoto"  value="none#is">
+        <div class="upload-top-area">
+            <label class="upload-label">등록한 사진</label>
+            <button type="button" id="add-upload-container">파일 추가</button>
+        </div>
+        <label class="upload-box">
+            <input type="file" name="file" class="file-input" accept="image/*" onchange="sumviewImage(event)" />
+            <div class="upload-area">
+                <div class="upload-content" id="uploadContent">
+                    <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    <p class="upload-text">대표사진</p>
+                </div>
+                <!-- Image Preview -->
+                <img id="imagePreview" class="image-preview" />
+            </div>
+        </label>
+    </div>
+</th:block>
 			<div class="write-row">
 				<button type="submit" class="submit-btn">수정</button>
 			</div>

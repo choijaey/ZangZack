@@ -34,7 +34,7 @@ public interface CampDAO {
 
 	int getRecomendationCount(String recomendation);
 
-	ArrayList<CampingGround> selectRecomendationList(String recomendation);
+	ArrayList<CampingGround> selectRecomendationList(RowBounds row, String recomendation);
 
 	ArrayList<Photo> selectOnePhoto(int i);
 
@@ -56,7 +56,7 @@ public interface CampDAO {
 
 	int searchCampCount(HashMap<String, String> map);
 
-	ArrayList<CampingGround> searchCampList(HashMap<String, String> map);
+	ArrayList<CampingGround> searchCampList(RowBounds row, HashMap<String, String> map);
 
 	ArrayList<CampingGround> getMainList(String recomendation);
 

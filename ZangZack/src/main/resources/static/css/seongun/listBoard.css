@@ -80,6 +80,10 @@ td {
 	right: 10px;
 }
 
+#board_list_table tbody tr {
+    cursor: pointer;
+}
+
 #write_btn  {
 	display: inline-block;
 	min-width: 50px;

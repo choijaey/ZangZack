@@ -6,7 +6,8 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 <link href="css/sohwa/productDetail.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-<title>Insert title here</title>
+<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
+<title>판매상품상세 페이지</title>
 </head>
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
@@ -283,7 +284,6 @@
 												                    		<img th:each="a:${aList}" th:if="${a.boardNo == r.reviewNo && a.boardType==6}" style="width:200px; height:200px;" th:src="${a.photoPath}">
 													                    </div>
 													                    <div class="updateReviewDiv" style="text-align:center;">
-													                    	<button type="button" style="background-color:white; border:1px solid red; width:100px; color:red; margin-top:10px;">취소</button>
 													                    </div>
 													                    <br>
 													                    <div class="updatePhoto" onclick="openFileUploadModal()">
@@ -981,13 +981,32 @@
 	    document.getElementById("reviewForm").addEventListener("submit", function(event) {
         // 세션에 저장된 loginUser 객체 확인
 	        var loginUser = document.getElementById('loginUser').value;
-	
+			var productNo = document.getElementById('productNo').value;
 	        // 만약 loginUser가 없다면
 	        if (loginUser=="") {
 	            event.preventDefault();
 	            alert("로그인 후 이용해주세요.");
+	        }else {
+	            $.ajax({
+	                url: 'purchaseYN.so',
+	                data: {productNo:productNo},
+	                success: function (data) {
+	                    if (data == "no") {
+	                        alert("이 상품의 구매자만 리뷰를 작성하실 수 있습니다.");
+	                        // Ajax 요청이 완료된 후 form을 제출
+	                    } else {
+	                        document.getElementById("reviewForm").submit();
+	                    }
+	                },
+	                error: function (data) {
+	                    console.log(data);
+	                }
+	            });
+
+	            // Ajax 요청의 결과를 기다리지 않고 바로 다음 코드로 진행되는 것을 방지하기 위해
+	            event.preventDefault();
 	        }
-    });
+    	});
 	    
 	    
 	    

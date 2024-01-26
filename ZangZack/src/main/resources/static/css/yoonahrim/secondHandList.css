@@ -185,7 +185,9 @@ p {
 }
 
 #pagenation {
-	text-align: center;
+	display: flex;
+	justify-content: center;
+	text-align:center;
 }
 
 #pagenation ul {
@@ -253,6 +255,7 @@ p {
 .search_button:hover {
 	background-color: #363D0F;
 }
+
 /*-- 게시판 네비 바 끝---*/
 
 .col{
@@ -316,14 +319,14 @@ select{
     font-weight: 600;
     color: #fff; 
     cursor: pointer;
-    margin: 20px;
+    margin-bottom: 50px;
     height: 45px;
     text-align:center;
     border: none;
     background-size: 300% 100%;
     position: relative;
     left: 960px;
-    top: 0px;
+    bottom: 40px;
 
     border-radius: 50px;
     -moz-transition: all .4s ease-in-out;
@@ -384,7 +387,7 @@ select{
 
 #pagenation ul li a {
    text-decoration: none;
-   color: #464D0F;
+   color: #363D0F;
    font-size: 14px;
    padding: 5px 10px;
    border-radius: 5px; /* 모서리를 둥글게 */
@@ -392,12 +395,12 @@ select{
 }
 
 #pagenation ul li a:hover {
-   background-color: #464D0F;
+   background-color: #5cb85c;
    color: #e6e6e6;
 }
 
 #pagenation ul li a#check_page {
-   background-color: #464D0F;
+   background-color: #5cb85c;
    color: #e6e6e6;
 }
 
@@ -412,13 +415,13 @@ select{
    padding: 5px 5px;
    margin-right: 70px;
    margin-bottom: 120px;
-   border: 1px solid #ccc;
+   border: 1px solid #5cb85c;
    border-radius: 5px;
 }
 
 .search_input {
    padding: 5px 10px;
-   border: 1px solid #ccc;
+   border: 1px solid #5cb85c;
    border-radius: 5px;
    width: 300px;
    margin-right: 10px;
@@ -427,7 +430,7 @@ select{
 .search_button {
    padding: 5px 15px;
    border: none;
-   background-color: #464D0F;
+   background-color: #5cb85c;
    color: white;
    border-radius: 5px;
    cursor: pointer;
@@ -435,4 +438,12 @@ select{
 
 .search_button:hover {
    background-color: #363D0F;
+}
+
+#searchBtn{
+	margin-left:240px;
+	margin-top: 32px;
+	height: 30px;
+	text-align:center;
+	justify-content: center;
 }

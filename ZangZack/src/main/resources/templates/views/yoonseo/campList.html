@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>추천 캠핑장</title>
+<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/seongun/b9045bb4-dad6-4ab1-b9fa-4841e6716aed">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
@@ -89,12 +90,12 @@
 			        <div>
 			          <h5 class="card-title" style="float: left;" th:text="|[${list.cgRegion}]|"></h5>
 			          <h5 class="card-title" style="float: left; margin-left: 10px;">[[${list.cgName}]]</h5>
-			          <span style="float: left; margin-left: 30%;">조회수 [[${list.cgCount}]]</span>
 			          <div class="score" style="margin-left: 80%;">  
 			            <div class="foreground" style="float: left;">
 			               <span class="background" th:style="'width: ' + ${list.point} + '%;'"></span><!-- 4.8 x 100 / 5 = 96 퍼센트 계산 식.-->
 			            </div>
-			          <p>[[${list.cgStarPoint}]]</p>  
+			            <p style="margin-bottom: 0;">[[${list.cgStarPoint}]]</p>
+			            <span style="font-size: 15px; margin-left: 50%;">조회수 [[${list.cgCount}]]</span>
 			          </div>
 			        </div>
 			        <div >
@@ -184,6 +185,12 @@
 						   	  <div style="display: inline-block;  margin-left: 10px; margin-right:10px;">
 						   	 	 <img src="https://storage.googleapis.com/zangzac/image/yoonseo/%EC%A3%BC%EC%B0%A8%EC%9E%A5.png" style="width:40px; margin-top: 10px;">  
 						    	 <div style="text-align: center;" th:text="주차장"></div>
+						      </div>
+						   </th:block>
+						   <th:block th:if="${#strings.contains(list.cgImgInfo,'바베큐')}" >
+						   	  <div style="display: inline-block;  margin-left: 10px; margin-right:10px;">
+						   	 	 <img src="https://storage.googleapis.com/zangzac/image/yoonseo/%EB%B0%94%EB%B2%A0%ED%81%90.png" style="width:40px; margin-top: 10px;">  
+						    	 <div style="text-align: center;" th:text="바베큐"></div>
 						      </div>
 						   </th:block>
 						 </div>

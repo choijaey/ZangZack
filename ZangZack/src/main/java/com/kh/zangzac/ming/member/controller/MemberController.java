@@ -81,7 +81,7 @@ public class MemberController {
 	}
 	
 	//회원가입
-	@PostMapping("/insertMember.me")
+	@PostMapping("insertMember.me")
 	public String insertMember(@ModelAttribute Member m, @RequestParam("sample6_postcode") String sample6_postcode,
 								@RequestParam("sample6_address") String sample6_address,@RequestParam("sample6_detailAddress") String sample6_detailAddress,
 								@RequestParam("sample6_extraAddress") String sample6_extraAddress, @RequestParam("existingNickname") String existingNickname, Model model) {
@@ -90,6 +90,7 @@ public class MemberController {
 		if(!sample6_postcode.trim().equals("")) {
 			 address = sample6_postcode + "@" + sample6_address + "@" + sample6_detailAddress + "@" + sample6_extraAddress;
 		}
+		
 		m.setMemberAddress(address);
 		
 		m.setMemberNickName(existingNickname + "#" + generateRandomNumbers()); // 랜덤닉네임
@@ -100,9 +101,9 @@ public class MemberController {
 		
 		int result = mService.insertMember(m);
 		if(result > 0) {
-		   return "index";
+		   return "redirect:/";
 	    } else {
-	    	model.addAttribute("msg", "회원가입에 실패하였습니다.\n인증코드를 확인해주세요");
+	    	model.addAttribute("msg", "회원가입에 실패하였습니다.");
 			return "views/ming/member/sign";
 	    }
 	}
@@ -118,15 +119,26 @@ public class MemberController {
 		return result;
 	}
 	
+	
 	//이메일 중복체크
-	@RequestMapping(value ="checkEmail.me")
+	@RequestMapping(value = "checkEmail.me")
 	@ResponseBody
 	public String checkEmail(@RequestParam("memberEmail") String memberEmail) {
-		
-		int count = mService.checkEmail(memberEmail);
-		String result = count == 0 ? "yes" : "no";
-		
-		return result;
+	    int count = mService.checkEmail(memberEmail);
+
+	    if (count == 0) {
+	        return "yes";
+	    } else {
+	        Member result = mService.getMemberLoginType(memberEmail);
+	        
+	        if (result != null) {
+	            System.out.println("kakao");
+	            return "kakao";
+	        } else {
+	            System.out.println("no");
+	            return "no";
+	        }
+	    }
 	}
 	
 	
@@ -152,9 +164,11 @@ public class MemberController {
 			if(bcrypt.matches(m.getMemberPwd(), loginUser.getMemberPwd())) {
 				model.addAttribute("loginUser",loginUser);
 				
-				if(!beforeURL.equals("http://localhost:8080/logout.me") && !beforeURL.equals("http://localhost:8080/signUp.me"))
-				{
+				if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me") ||
+										beforeURL.equals("http://192.168.20.207:8080/logout.me") || beforeURL.equals("http://192.168.20.207:8080/signUp.me"))){
 					return "redirect:" + beforeURL;
+				}else if(beforeURL.equals(beforeURL.equals("http://192.168.20.207:8080/login.me") || beforeURL.equals("http://localhost:8080/login.me")) ) {
+					return "redirect:/";
 				}else {
 					return "redirect:/";
 				}
@@ -176,7 +190,7 @@ public class MemberController {
 	@GetMapping("logout.me")
 	public String logout(SessionStatus status) {
 		status.setComplete();
-		return "index";
+		return "redirect:/";
 	}
 	
 	//아이디 / 비밀번호 화면
@@ -190,7 +204,6 @@ public class MemberController {
 	@ResponseBody
 	public String selectId(@ModelAttribute Member m, Model model) {
 		
-		System.out.println(m);
 		ArrayList<Member> list = mService.selectId(m);
 		JSONArray jArr = new JSONArray();
 		
@@ -213,8 +226,7 @@ public class MemberController {
 	         
 	       String subject = "[ZangZac]인증코드";                   // 제목
 	       String content = "인증코드 ["+checkNum+"] 입니다.";    // 내용
-	       String from = "gah_yn@naver.com";
-	       System.out.println(to);
+	       String from = "park718513@naver.com";
 	       
 	       try {
 	    	   MimeMessage mail = mailSender.createMimeMessage();
@@ -260,7 +272,7 @@ public class MemberController {
         
         String subject = "[ZangZac]임시 비밀번호";		// 제목
 		String content = "임시비밀번호는 [ "+str+" ] 입니다.";    // 내용
-		String from = "gah_yn@naver.com";
+		String from = "park718513@naver.com";
 		 
 		 try {
 	    	   MimeMessage mail = mailSender.createMimeMessage();
@@ -281,7 +293,6 @@ public class MemberController {
         
         
         if (result > 0) {
-            return "index";
         } else {
         }
          
@@ -295,22 +306,21 @@ public class MemberController {
 		return "views/ming/member/myPage";
 	}
 	
-	//회원탈퇴
 	@GetMapping("deleteMember.me")
-	public String deleteMember(Model model) {
-		Member m = (Member)model.getAttribute("loginUser");
-		
-		String memberId = m.getMemberId();
-		int result = mService.deleteMember(memberId);
-		
-		if(result > 0) {
-			return "index";
-		}else {
-			model.addAttribute("msg","회원탈퇴실패");
-			return "views/ming/member/myPage";
-		}
-		
-	}
+	   public String deleteMember(Model model) {
+	      Member m = (Member)model.getAttribute("loginUser");
+	      
+	      String memberId = m.getMemberId();
+	      int result = mService.deleteMember(memberId);
+	      
+	      if(result > 0) {
+	         return "redirect:logout.me";
+	      }else {
+	         model.addAttribute("msg","회원탈퇴실패");
+	         return "views/ming/member/myPage";
+	      }
+	      
+	   }
 	
 	
 	//비밀번호 변경
@@ -332,11 +342,9 @@ public class MemberController {
 			 
 			 
 			 int result = mService.changePwd(map);
-			 System.out.println("test1 : " +map);
 			 
 			 if(result > 0) {
 				 model.addAttribute("loginUser", mService.login(m));
-				 System.out.println("test2 : " + m);
 				 return "redirect:myPage.me";
 			 } else {
 				 model.addAttribute("msg", "비밀번호 수정에 실패하였습니다.\n비밀번호를 다시 확인해주세요.");
@@ -507,16 +515,23 @@ public class MemberController {
 	}
 	
 	//관리자 페이지
-	@GetMapping("/adminPage.me")
-	public String adminPage(Model model, HttpServletRequest request, @RequestParam(value="page", defaultValue="1") int page) {
+	@GetMapping("adminPage.me")
+	public String adminPage(Model model, HttpServletRequest request, @RequestParam(value="page", defaultValue="1") int page,
+							@RequestParam(value = "searchType", defaultValue = "") String searchType,
+							@RequestParam(value = "keyword", defaultValue = "")String keyword,@ModelAttribute Member m) {
 		
-		int listCount = mService.getListCount();
+		HashMap<String, String>map = new HashMap<>();
+		map.put("keyword", keyword);
+		map.put("searchType", searchType);
+
 		int currentPage = page;
+		int listCount = mService.searchList(map);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
-		ArrayList<Member> list = mService.selectMembers(1, pi);
+		ArrayList<Member> list = mService.searchtNoticeList(pi, map);
 		
-		System.out.println(list);
 		if(list != null) {
+			model.addAttribute("searchType",searchType);
+			model.addAttribute("keyword",keyword);
 			model.addAttribute("pi", pi);
 			model.addAttribute("list", list);
 			model.addAttribute("loc", request.getRequestURI()); // url 다 가져옴 / uri 뒤에만 가져옴
@@ -525,6 +540,7 @@ public class MemberController {
 			throw new MemberException("게시글 목록 조회에 실패하였습니다.");
 		}
 	}
+	
 	
 	@GetMapping("selectMemberList.me")
 	@ResponseBody
@@ -558,17 +574,11 @@ public class MemberController {
 	public String adminUpdateNickName(@ModelAttribute Member m) {
 		String memberNickName = null;
 		memberNickName = m.getMemberNickName() + "#" + generateRandomNumbers();
-		System.out.println(memberNickName);
 		
 		
 		m.setMemberNickName(memberNickName);
-		/*
-		 * HashMap<String,String>map = new HashMap<String, String>();
-		 * map.put("memberId", memberId); map.put("memberNickName", memberNickName);
-		 */
 		
 		int result = mService.adminUpdateNickName(m);
-		System.out.println(result);
 		
 		return result == 1? "success" : "fail";
 	}
@@ -577,39 +587,12 @@ public class MemberController {
 	@ResponseBody
 	public String adminUpdateName(@ModelAttribute Member m) {
 		String memberName = m.getMemberName();
-		System.out.println(memberName);
 		
 		int result = mService.adminUpdateName(m);
 		return result == 1? "success" : "fail";
 	}
 	
 	
-	//회원 검색
-	@PostMapping("search.me")
-	public String searchId(@RequestParam(value = "page", defaultValue = "1") int page,
-							@RequestParam(value = "searchType", defaultValue = "") String searchType,
-							@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
-							HttpServletRequest request) {
-		
-		HashMap<String, String>map = new HashMap<>();
-		map.put("keyword", keyword);
-		map.put("searchType", searchType);
-		
-		int currentPage = page;
-		int listCount = mService.searchList(map);
-		
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
-		ArrayList<Member> list = mService.searchtNoticeList(pi, map);
-		
-		if(list != null) {
-			model.addAttribute("pi", pi);
-			model.addAttribute("list", list);
-			model.addAttribute("loc", request.getRequestURI()); // url 다 가져옴 / uri 뒤에만 가져옴
-			return "views/ming/admin/allMemberList";
-		} else {
-			throw new MemberException("게시글 목록 조회에 실패하였습니다.");
-		}
-	}
 	//카카오로그인
 	@GetMapping("kakaoLogin")
 	public String kakaoLogin(
@@ -631,24 +614,21 @@ public class MemberController {
 	        // 중복된 이메일이 있는 경우
 	    	session.setAttribute("loginUser", loginUser);
 	    	session.setAttribute("msg", "중복되는 이메일이 있습니다.");
-	        if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me"))) {
-	            return "redirect:" + beforeURL;
-	        } else {
 	            return "redirect:/";
-	        }
 	        // 여기서 로그인 처리 등을 수행
-	        // 로그인만 가능하게끔 수정
+	        // 로그인만 가능하게끔 수정 http://192.168.20.207:8080/
 	    } else {
 	        // 중복된 이메일이 없는 경우
 	        int result = mService.kakaoLogin(kakaoMemberInfo);
 	        if (result > 0) {
 	            // 로그인 성공
-	        	System.out.println("로그인성공: " + kakaoMemberInfo);
 	            session.setAttribute("loginUser", kakaoMemberInfo);
-	            if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me"))) {
+	            if (beforeURL != null && (beforeURL.equals("http://localhost:8080/logout.me") || beforeURL.equals("http://localhost:8080/signUp.me") ||
+											beforeURL.equals("http://192.168.20.207:8080/logout.me") || beforeURL.equals("http://192.168.20.207:8080/signUp.me"))) {
 	                return "redirect:" + beforeURL;
 	            } else {
-	                return "redirect:/";
+
+	            	return "redirect:/";
 	            }
 	        } else {
 	        	System.out.println("로그인 실패");
@@ -689,13 +669,13 @@ public class MemberController {
 	}
 	
 	//리뷰삭제
-	   @PostMapping("deleteReview.me")
+	   @GetMapping("deleteReview.me")
+	   @ResponseBody
 	   public String deleteReview(@RequestParam("reviewNo") int reviewNo) {
 	      
 	      String name="sohwa";
 	      int result = mService.deleteReview(reviewNo);
 	      String deleteRename = mService.deleteSelectReview(reviewNo);
-	      System.out.println("deleteRename" + deleteRename);
 	      
 	      if(deleteRename != null) {
 	    	  Boolean sf = imageStorage.deleteImage(deleteRename, name);
@@ -709,41 +689,19 @@ public class MemberController {
 	      }
 	   }
 	   
-	   // 게시글 가져오기
 	   @GetMapping("myBoardList.me")
-	   public String myBoardList(@RequestParam(value = "page", defaultValue = "1") int page, Model model,
-									 @ModelAttribute CampBoard cb, HttpServletRequest request) {
-		   
+	   public String searchSpList(@RequestParam(value = "page", defaultValue = "1") int page,
+									@RequestParam(value = "searchType", defaultValue = "") String searchType,
+									@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
+									HttpServletRequest request, @ModelAttribute CampBoard cb){
 		   Member loginUser = (Member) model.getAttribute("loginUser");
 		   String memberId = loginUser.getMemberId();
 		   
-		   Map<String, Object> paramMap = new HashMap<>();
-		   paramMap.put("memberId", memberId);
-		   paramMap.put("1", 1);
-		   int listCount = mService.getmyBoardListCount(paramMap);
-
-		   PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
-		   
-		   ArrayList<CampBoard> cbList = mService.selectCampBoard(memberId,pi); 
-		   if(cbList != null) {
-			   model.addAttribute("cbList",cbList);
-			   model.addAttribute("pi",pi);
-			   model.addAttribute("memberId", memberId);
-			   model.addAttribute("loc", request.getRequestURI());
-		   }
-		   
-		   return "views/ming/member/myBoardList";
-	   }
-	   
-	   //게시글 검색
-	   @GetMapping("searchCbList.me")
-	   public String searchCbList(@RequestParam(value = "page", defaultValue = "1") int page,
-									@RequestParam(value = "searchType", defaultValue = "") String searchType,
-									@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
-									HttpServletRequest request){
-		    HashMap<String, String>map = new HashMap<>();
+		   HashMap<String, Object>map = new HashMap<>();
 			map.put("keyword", keyword);
 			map.put("searchType", searchType);
+			map.put("memberId", memberId);
+			map.put("1", 1);
 			
 			int currentPage = page;
 			int listCount = mService.searchCbListCount(map);
@@ -753,48 +711,33 @@ public class MemberController {
 			
 			if(cbList != null) {
 				model.addAttribute("pi", pi);
-				model.addAttribute("cbList",cbList);
-				model.addAttribute("loc", request.getRequestURI());
+				model.addAttribute("cbList", cbList);
+				model.addAttribute("loc", request.getRequestURI());// url 다 가져옴 / uri 뒤에만 가져옴
+				model.addAttribute("searchType",searchType);
+				model.addAttribute("keyword",keyword);
+				model.addAttribute("memberId", memberId);
 				return "views/ming/member/myBoardList";
 			} else {
 				throw new MemberException("게시글 목록 조회에 실패하였습니다.");
 			}
 		}
 	   
-	   //중고게시글 가져오기
-	   @GetMapping("mySecondHandProductList.me")
-	   public String secondHandProductList(@RequestParam(value = "page", defaultValue = "1") int page, Model model,
-			   								@ModelAttribute secondHandProduct sp,HttpServletRequest request) {
-		   Member loginUser = (Member) model.getAttribute("loginUser");
-		   String memberId = loginUser.getMemberId();
-		   
-		   Map<String, Object> paramMap = new HashMap<>();
-		   paramMap.put("memberId", memberId);
-		   paramMap.put("4", 4);
-		   int listCount = mService.getmySecondHandProductListCount(paramMap);
-		   System.out.println(listCount);
-		   
-		   PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
-		   ArrayList<secondHandProduct> spList = mService.selectsecondHandProduct(memberId,pi); 
-		   
-		   if(spList != null) {
-			   model.addAttribute("spList",spList);
-			   model.addAttribute("pi",pi);
-			   model.addAttribute("memberId", memberId);
-			   model.addAttribute("loc", request.getRequestURI());
-		   }
-		   return "views/ming/member/mySecondHandProductList";
-	   }
-	   
+
 	   //중고 검색
-	   @GetMapping("searchSpList.me")
+	   @GetMapping("mySecondHandProductList.me")
 	   public String searchSpList(@RequestParam(value = "page", defaultValue = "1") int page,
 									@RequestParam(value = "searchType", defaultValue = "") String searchType,
 									@RequestParam(value = "keyword", defaultValue = "")String keyword, Model model,
-									HttpServletRequest request){
-		    HashMap<String, String>map = new HashMap<>();
+									HttpServletRequest request,@ModelAttribute secondHandProduct sp){
+		   
+		   Member loginUser = (Member) model.getAttribute("loginUser");
+		   String memberId = loginUser.getMemberId();
+		   
+		   HashMap<String, Object>map = new HashMap<>();
 			map.put("keyword", keyword);
 			map.put("searchType", searchType);
+			map.put("memberId", memberId);
+			map.put("4", 4);
 			
 			int currentPage = page;
 			int listCount = mService.searchSPListCount(map);
@@ -802,11 +745,14 @@ public class MemberController {
 			PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
 			ArrayList<secondHandProduct> spList = mService.searchSpList(pi, map);
 			
+			
 			if(spList != null) {
 				model.addAttribute("pi", pi);
 				model.addAttribute("spList", spList);
-				model.addAttribute("loc", request.getRequestURI()); // url 다 가져옴 / uri 뒤에만 가져옴
-				System.out.println("spList: " + spList);
+				model.addAttribute("loc", request.getRequestURI());// url 다 가져옴 / uri 뒤에만 가져옴
+				model.addAttribute("searchType",searchType);
+				model.addAttribute("keyword",keyword);
+				model.addAttribute("memberId", memberId);
 				return "views/ming/member/mySecondHandProductList";
 			} else {
 				throw new MemberException("게시글 목록 조회에 실패하였습니다.");

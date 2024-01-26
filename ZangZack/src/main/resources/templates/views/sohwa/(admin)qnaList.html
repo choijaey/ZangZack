@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
+<title>관리자 문의관리 목록페이지</title>
 <link href="css/sohwa/(admin)qnaList.css" rel="stylesheet">
 </head>
 <body>
@@ -88,7 +89,7 @@
 		                            <h1 class="text-2xl font-bold mb-4" style="margin-left:15px;">문의 등록</h1>
 		                            <div class="bg-white shadow-md rounded-lg overflow-hidden mb-4">
 		                                <div class="p-4 flex" style="display:inline-flex; justify-content: center; align-content: center;">
-		                                    <img th:each="a:${aList}" th:if="${q.productNo == a.boardNo && a.photoLevel==0}" th:src="${a.photoPath}" class="w-20 h-20 object-cover rounded-full" alt="Product">
+		                                    <img th:each="a:${aList}" th:if="${q.productNo == a.boardNo && a.photoLevel==0 && a.boardType==5}" th:src="${a.photoPath}" class="w-20 h-20 object-cover rounded-full" alt="Product">
 		                                    <div class="ml-4" th:each="p:${pList}" th:if="${p.productNo eq q.productNo}" style="margin-left:20px; display:inline-block;">
 		                                        <p class="text-sm text-gray-600">[[${p.productName}]]</p>
 		                                        <p>[[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]</p>

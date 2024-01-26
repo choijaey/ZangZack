@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
+<title>관리자 결제관리 목록페이지</title>
 <link href="css/sohwa/(admin)orderList.css" rel="stylesheet">
 </head>
 <body>
@@ -51,7 +52,7 @@
 				<th class="td6" style="text-align:center;">배송상태</th>
 			</tr>
 			
-			<tr class="trs" th:each="pa:${paList}">
+			<tr class="trs" th:each="pa:${paList}" style="border-bottom:1px solid lightgray;">
 <!-- 				<td class="td1"><input type="checkbox"></td> -->
 				<input type="hidden" class="td1" th:value="${pa.orderKeyNo}">
 				<td class="td2">[[${pa.orderNo}]]</td>

@@ -41,29 +41,25 @@ table{
 }
 
 .td1{
-	width:2%;
-}
-
-.td2{
 	width:7%;
 }
 
-.td3{
+.td2{
 	width: 7%;
 }
 
-.td4{
+.td3{
 	width: 20%;
 }
-.td5{
+.td4{
 	width: 7%;
 }
 
-.td6{
+.td5{
 	width: 10%;
 }
 
-.td7,.td8,.td9,.td10{
+.td6,.td7,.td8,.td9{
 	width: 6%;
 }
 
@@ -124,4 +120,11 @@ td {
 
 .dropdown{
    display: inline-block;
+}
+
+#identify{
+	position:relative;
+	top: 55px;
+	width: 1635px;
+	border: 2px solid
 }

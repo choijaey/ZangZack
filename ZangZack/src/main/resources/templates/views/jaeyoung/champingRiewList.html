@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo Gallery</title>
+    <title>캠핑 리뷰</title>
+	<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
@@ -178,7 +179,11 @@
             </div>
 		    <div class="grid grid-cols-1 gap-4">
 		       	<div class="flex gap-2 divClick" th:each="cr:${list}" th:id="${cr.crNo}" th:onclick="|campingReviewDetail(${cr.crNo})|">
+<<<<<<< HEAD
 		       		<img th:src="${cr.thumnail.photoPath}" class="rounded-lg" style="width: 180px; ">
+=======
+		       		<img th:src="${cr.thumnail.photoPath}" class="rounded-lg " style="width: 190px;">
+>>>>>>> branch 'main' of https://github.com/choijaey/ZangZack.git
 				    <div>
 				        <span class="oval-tag mb-4">[[${cr.categoryName}]]</span>
 				        <h2 class="text-lg font-semibold mb-2">[[${cr.crTitle}]]</h2>

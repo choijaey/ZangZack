@@ -151,7 +151,7 @@ public interface ProductDAO {
 
 	ArrayList<Payment> selectMyOrder(String id);
 
-	ArrayList<Integer> selectOrderNo();
+	ArrayList<Integer> selectOrderNo(String id);
 
 	ArrayList<Payment> selectPayment(int orderNo);
 
@@ -169,7 +169,7 @@ public interface ProductDAO {
 
 	ArrayList<Product> selectAdminProduct(HashMap<String, String> map, RowBounds rowBounds);
 
-	int refundOrder(int orderKeyNo);
+	int refundOrder(int orderNo);
 
 	ArrayList<Payment> selectNPayment();
 
@@ -188,6 +188,10 @@ public interface ProductDAO {
 	ArrayList<Attachment> selectPhotoTHMap(HashMap<String, String> map);
 
 	ArrayList<Product> selectRecommendProduct();
+
+	int purchaseYN(Payment p);
+
+	String selectPaymentKey(int orderKeyNo);
 
 
 

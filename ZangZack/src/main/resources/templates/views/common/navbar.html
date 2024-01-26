@@ -24,6 +24,8 @@
       <!-- height="111~120px" -->
       <div id="my_menu" >
          <ul th:if="${session.loginUser == null}">
+         	<li><a href="centerView.so">고객센터</a></li>
+         	<li><span>/</span></li>
             <li><a href="signIn.me">아이디찾기</a></li>
             <li><span>/</span></li>
             <li><a href="signUp.me">로그인</a></li>
@@ -34,7 +36,7 @@
             <li><a href="logout.me">로그아웃</a></li>
             <li><span>/</span></li>
             <th:block th:if="${session.loginUser.memberIsAdmin == 'N'}"><li><a href="myPage.me">마이페이지</a></li></th:block>
-            <th:block th:unless="${session.loginUser.memberIsAdmin == 'N'}"><li><a href="myPage.me">관리자페이지</a></li></th:block>
+            <th:block th:unless="${session.loginUser.memberIsAdmin == 'N'}"><li><a href="adminPage.me">관리자페이지</a></li></th:block>
          </ul>
       </div>
    </div>
@@ -49,7 +51,7 @@
                      </a>
                   </li>
                   <li class="sub-menu-1">
-                     <a  href="campList.ys" class="sub-menu-name">캠핑장 추천<span class="gt"></span> 
+                     <a  href="campList.ys" class="sub-menu-name">추천 캠핑장<span class="gt"></span> 
                      </a>
                   </li>
                </ul>
@@ -69,41 +71,37 @@
                         
                      </a>
                   </li>
-                  <li class="sub-menu-1">
-                     <a href="eventBoardListView.jy" class="sub-menu-name">행사정보<span class="gt"></span> 
-                     </a>
-                  </li>
                </ul>
             </li>
             <li class="main-menu"><a  href="productListView.so" class="main-menu-name">캠핑물품판매</a>
                <ul>
                   <li class="sub-menu-1">
-                     <a href="adminProductEnroll.so" class="sub-menu-name">텐트<span class="gt"></span> 
+                     <a href="productListView.so?categoryNo=11&keyword=&standard=1" class="sub-menu-name">텐트<span class="gt"></span> 
                         
                      </a>
                   </li>
                   <li class="sub-menu-1">
-                     <a href="#" class="sub-menu-name">취침용품<span class="gt"></span> 
+                     <a href="productListView.so?categoryNo=12&keyword=&standard=1" class="sub-menu-name">취침용품<span class="gt"></span> 
                         
                      </a>
                   </li>
                   <li class="sub-menu-1">
-                     <a href="#" class="sub-menu-name">조리도구<span class="gt"></span> 
+                     <a href="productListView.so?categoryNo=13&keyword=&standard=1" class="sub-menu-name">조리도구<span class="gt"></span> 
                         
                      </a>
                   </li>
                   <li class="sub-menu-1">
-                     <a  href="#" class="sub-menu-name">발화용품<span class="gt"></span> 
+                     <a  href="productListView.so?categoryNo=14&keyword=&standard=1" class="sub-menu-name">발화용품<span class="gt"></span> 
                         
                      </a>
                   </li>
                   <li class="sub-menu-1">
-                     <a href="#" class="sub-menu-name">배낭<span class="gt"></span> 
+                     <a href="productListView.so?categoryNo=15&keyword=&standard=1" class="sub-menu-name">배낭<span class="gt"></span> 
                         
                      </a>
                   </li>
                   <li class="sub-menu-1">
-                     <a  href="#" class="sub-menu-name">기타<span class="gt"></span> 
+                     <a  href="productListView.so?categoryNo=16&keyword=&standard=1" class="sub-menu-name">기타<span class="gt"></span> 
                         
                      </a>
                   </li>
@@ -112,17 +110,18 @@
             <li class="main-menu"><a  href="#" class="main-menu-name">마니또</a>
                <ul>
                   <li class="sub-menu-1">
-                     <a href="#" class="sub-menu-name">심리테스트<span class="gt"></span> 
+                     <a href="psychologicalTestMain.me" class="sub-menu-name">심리테스트<span class="gt"></span> 
                         
                      </a>   
                   </li>
                   <li class="sub-menu-1">
-                     <a th:href="@{/selectCategory.do}" class="sub-menu-name">체크리스트<span class="gt"></span> 
+
+                     <a th:href="@{/selectCategory.ah}" class="sub-menu-name">체크리스트<span class="gt"></span> 
                         
                      </a>
                   </li>
                   <li class="sub-menu-1">
-                     <a href="#" class="sub-menu-name">행사정보<span class="gt"></span> 
+                     <a href="eventBoardListView.jy" class="sub-menu-name">행사정보<span class="gt"></span> 
                         
                      </a>
                   </li>

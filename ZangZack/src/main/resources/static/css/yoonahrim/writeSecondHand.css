@@ -56,7 +56,8 @@
     text-align:center;
     border: none;
     background-size: 300% 100%;
-
+	position: absolute;
+	bottom: 190px;
     border-radius: 50px;
     -moz-transition: all .4s ease-in-out;
     -o-transition: all .4s ease-in-out;

@@ -12,10 +12,20 @@ import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.model.vo.SelectCondition;
 import com.kh.zangzac.common.photo.model.service.PhotoService;
 import com.kh.zangzac.common.photo.model.vo.Photo;
+<<<<<<< HEAD
 import com.kh.zangzac.jaeyoung.campingReview.model.service.CampingReviewService;
 import com.kh.zangzac.jaeyoung.campingReview.model.vo.CampingReview;
+=======
+
+import com.kh.zangzac.yoonahrim.spBoard.model.service.secondHandService;
+import com.kh.zangzac.yoonahrim.spBoard.model.vo.secondHandProduct;
+
+>>>>>>> branch 'main' of https://github.com/choijaey/ZangZack.git
 import com.kh.zangzac.jaeyoung.eventBoard.model.service.EventBoardService;
 import com.kh.zangzac.jaeyoung.eventBoard.model.vo.EventBoard;
+import com.kh.zangzac.seongun.campboard.model.service.CampBoardService;
+import com.kh.zangzac.seongun.campboard.model.vo.CampBoard;
+
 import com.kh.zangzac.yoonseo.camp.model.service.CampService;
 import com.kh.zangzac.yoonseo.camp.model.vo.CampingGround;
 
@@ -26,14 +36,22 @@ public class BoardCondition {
 	private CampService cService;
 	
 	@Autowired
+	private secondHandService spService;
+	
+	@Autowired
 	private EventBoardService ebService;
 	
 	@Autowired
 	private PhotoService pService;
 	
 	@Autowired
+<<<<<<< HEAD
 	private CampingReviewService crService;
 	
+=======
+	private CampBoardService cbService;
+
+>>>>>>> branch 'main' of https://github.com/choijaey/ZangZack.git
 	public SelectCondition selectBoard(int x, int y) {
 		SelectCondition b = new SelectCondition();
 		b.setBoardNo(x);
@@ -43,7 +61,7 @@ public class BoardCondition {
 	
 	@GetMapping("/")
 	public String main(Model model) {
-		
+		//yoonseo
 		String recomendation = "Y";
 		ArrayList<CampingGround> list = cService.getMainList(recomendation);
 		
@@ -52,6 +70,7 @@ public class BoardCondition {
 		for (CampingGround cg : list) {
 		    intArrayList.add(cg.getCgNo());
 		}
+
 		
  		ArrayList<CampingGround> photoList = cService.selectMainPhoto(intArrayList);
  		
@@ -93,14 +112,25 @@ public class BoardCondition {
 		
 		
  		
+		
+		//seongun
+		
+		int cbCount = cbService.listCount();
+		PageInfo cbPi = Pagination.getPageInfo(currentPage, cbCount, 5);
+		ArrayList<CampBoard> cbList = cbService.popularList(cbPi);
+		
 		if(list != null) {
 			model.addAttribute("photoList", photoList);
+
 			model.addAttribute("ebList", eblist);
-			model.addAttribute("crList", crlist);
+
+			model.addAttribute("cbList", cbList);
+
 			return"index";
 		}else {
 			return"index";
 		}
-	
+
 	}
+	
 }

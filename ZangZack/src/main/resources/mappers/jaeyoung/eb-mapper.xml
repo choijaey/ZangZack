@@ -17,10 +17,10 @@
 	</select>
 	
 	<select id="selectEventBoardList">
-		SELECT *
-		FROM event_board
-		WHERE eb_status = 'N'
-		ORDER BY eb_no desc
+		select *
+		from event_board
+		where eb_status='N'
+		order by eb_no desc
 	</select>
 	
 	<select id="selectEventBoard">

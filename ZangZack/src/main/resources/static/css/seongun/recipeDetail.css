@@ -51,12 +51,12 @@ body {
 
 .prev-btn {
     left: 10px;
-    background-image: url('../../image/back.png'); /* 이전 버튼 이미지 */
+    background-image: url('../../image/seongun/back.png'); /* 이전 버튼 이미지 */
 }
 
 .next-btn {
     right: 10px;
-    background-image: url('../../image/next.png'); /* 다음 버튼 이미지 */
+    background-image: url('../../image/seongun/next.png'); /* 다음 버튼 이미지 */
 }
 
 .slider-pagination {

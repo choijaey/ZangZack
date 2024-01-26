@@ -3,11 +3,16 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>게시글 상세보기</title>
-	<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/seongun/b9045bb4-dad6-4ab1-b9fa-4841e6716aed">
+	<title>캠핑 게시판</title>
+	<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
 	<link rel="stylesheet" href="css/seongun/boardDetail.css">
 	<link rel="stylesheet" href="css/seongun/common/paging.css">
 	<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+	<style>
+    	img{
+    		vertical-align: middle;
+    	}
+    </style>
 </head>
 <link rel="shortcut icon">
 <body>
@@ -15,18 +20,18 @@
 	<div class="container">
 		<div class="article_header">
 			<span class="boardCategory">[[${bList.categoryName}]]</span>
-			<div id="boardEditContainer" th:style="${session.loginUser != null && session.loginUser.memberId == bList.memberId ? '' : 'display:none;'}">
+			<div th:style="${session.loginUser != null ? (session.loginUser.memberId == bList.memberId || session.loginUser.memberIsAdmin == 'Y' ? '' : 'display:none;') : 'display:none;'}">
 			    <button id="boardEditBtn">
 			        <img id="settingBtn" src="image/seongun/boardAdd.png" alt="게시판 설정 버튼">
 			    </button>
 			    <ul id="editDropDown">
-			        <li>
-			            <button class="editDropMenu" id="boardEditBtn" onclick="boardEditBtn()">수정</button>
-			        </li>
-			        <li>
-			            <button class="editDropMenu" id="boardEditBtn" onclick="baordDeleteBtn()">삭제</button>
-			        </li>
-			    </ul>
+				    <li>
+				        <button class="editDropMenu" id="boardUpdateBtn" onclick="boardEditBtn()">수정</button>
+				    </li>
+				    <li>
+				        <button class="editDropMenu" id="boardDeleteBtn" onclick="baordDeleteBtn()">삭제</button>
+				    </li>
+				</ul>
 			</div>
 
 			<div class="post-header">
@@ -35,7 +40,7 @@
 					<img class="author-profile" th:src="${bList.memberProfilePath}"
 						alt="작성자 프로필 이미지" />
 					<div class="profile_area">
-						<span class="author-name">[[${bList.memberName}]]</span>
+						<span class="author-name">[[${bList.memberNickname}]]</span>
 						<div class="article_info">
 							<span class="post-date">[[${bList.formatDate}]]</span> 
 							<span class="post-views">조회수: [[${bList.cbCount}]]</span>
@@ -45,9 +50,9 @@
 			</div>
 		</div>
 		<div class="post-content">
-			<p>[[${bList.cbContent}]]</p>
+			<p id="campBoardContent">[[${bList.cbContent}]]</p>
 			<th:block th:if="${!pList.isEmpty}">
-				<img style="max-width:100%;"th:src="${p.photoPath}" alt="게시글 이미지" th:each="p : ${pList}">
+				<img style="max-width:100%; margin-bottom: 10px;"th:src="${p.photoPath}" alt="게시글 이미지" th:each="p : ${pList}">
 			</th:block>
 		</div>
 		<div class="comments-section">
@@ -57,7 +62,7 @@
 					<span class="like-text">좋아요</span>
 					<span class="like-count" id="like-count">[[${bList.heartCount}]]</span> 
 					<span class="comment-text">댓글</span>
-					<span class="comment-count">[[${bList.replyCount}]]</span>
+					<span class="comment-count" id="replyCount">[[${bList.replyCount}]]</span>
 				</div>
 			</div>
 
@@ -80,6 +85,9 @@
 		let heart = /*[[${bList.heartCheck}]]*/true;
 		let heartCountNum = /*[[${bList.heartCount}]]*/1;
 		let boardId = /*[[${bList.cbNo}]]*/1;
+		let replyCount = document.getElementById('replyCount');
+		let replyNum = replyCount.innerHTML;
+		let bReplyCount = /*[[${bList.replyCount}]]*/1;
 		
 		let memberId = null;
 
@@ -98,7 +106,7 @@
 		            insertHeart();
 		        }
 		    } else {
-		        alert("로그인하고 누르삼");
+		        alert("권한이 없습니다.");
 		    }
 		};
 		
@@ -160,7 +168,7 @@
 		        error: data => console.log(data)
 		    });
 		};
-		// 페이지 로드 시 댓글 목록 및 좋아요 상태 불러오기
+		
 		window.onload = function() {
 		    loadCommentList(/*[[${maxPage}]]*/);
 		};
@@ -168,7 +176,7 @@
 		// 댓글 목록 불러오는 함수
 		function loadCommentList(replyPage) {
 		    $.ajax({
-		        url: 'replyLimitList.rep', // 서버의 댓글 목록 불러오기 URL
+		        url: 'replyLimitList.rep',
 		        method: 'GET',
 		        data: { 
 		        	page: replyPage,
@@ -193,7 +201,7 @@
 		    
 		    commentInput.addEventListener('keypress', function(event) {
 		        if (event.key === 'Enter') {
-		            event.preventDefault(); // 텍스트 영역에서 엔터를 누를 때의 기본 동작을 방지합니다.
+		            event.preventDefault();
 		            const replyContent = commentInput.value.trim();
 
 		            if (replyContent === '') {
@@ -201,7 +209,7 @@
 		                return;
 		            }
 
-		            insertReplyButton.click(); // 'insertReply' 버튼의 클릭 이벤트를 실행합니다.
+		            insertReplyButton.click(); 
 		        }
 		    });
 		    
@@ -212,21 +220,27 @@
 		                alert('댓글을 입력해주세요!');
 		                return;
 		            }
+		            
+		            if (getByteSize(replyContent) > 500) {
+		                alert('댓글을 200자 이내로 입력해주세요!'); 
+		                return; 
+		            }
 		
 		            $.ajax({
 		                url: 'insertReply.rep',
 		                method: 'POST',
 		                data: {
 		                    replyContent: replyContent,
-		                    boardNo: /*[[${bList.cbNo}]]*/1, // 예시로 1을 사용, 실제로는 동적으로 설정해야 함
+		                    boardNo: /*[[${bList.cbNo}]]*/1, 
 		                    boardType: 1 
 		                },
 		                success: function(data) {
 		                    loadCommentList(data.maxPage);
 		                    document.getElementById('replyContent').value = '';
+		                    replyCount.innerText = bReplyCount += 1;
 		                },
 		                error: function(error) {
-		                	alert("댓글을 500자 이내로 입력해주세요!");
+		                	alert("댓글을 200자 이내로 입력해주세요!");
 		                }
 		            });
 		        });
@@ -249,7 +263,7 @@
 		        commentItem.classList.add('comment-item');
 		
 		        const imgContainer = document.createElement('div');
-		        imgContainer.classList.add('img-container'); // 클래스 추가
+		        imgContainer.classList.add('img-container');
 		
 		        // 이미지 요소 생성
 		        const img = document.createElement('img');
@@ -266,7 +280,7 @@
 		
 		        const authorDiv = document.createElement('div');
 		        authorDiv.classList.add('comment-author');
-		        authorDiv.textContent = comment.memberName;
+		        authorDiv.textContent = comment.memberNickname;
 		        contentDiv.appendChild(authorDiv);
 		
 		        const messageDiv = document.createElement('div');
@@ -285,7 +299,7 @@
 				
 				    const commentButton = document.createElement('button');
 				    commentButton.classList.add('comment-action-button');
-				    commentButton.style.backgroundImage = 'url("image/seongun/replyButton.svg")'; // 가정한 경로입니다.
+				    commentButton.style.backgroundImage = 'url("image/seongun/replyButton.svg")';
 				
 				    const dropdownMenu = document.createElement('ul');
 				    dropdownMenu.classList.add('dropdown-menu');
@@ -308,14 +322,22 @@
 				    	const buttonsContainer = document.createElement('div');
 				    	buttonsContainer.classList.add('buttons-container');
 				
-				    	// '수정' 버튼 생성
 				    	const submitButton = document.createElement('button');
 				    	submitButton.type = 'button';
 				    	submitButton.classList.add('update-submit');
 				    	submitButton.textContent = '수정';
 				    	submitButton.onclick = function() {
 
-				    		let text = textarea.value
+				    		let text = textarea.value;
+							if (text === '') {
+								alert('수정 내용을 입력해주세요.'); 
+								return; // 함수 실행 중단
+							}
+							
+							if (getByteSize(text) > 500) {
+						        alert('댓글을 200자 이내로 작성해주세요.'); // 사용자에게 알림 표시
+						        return; // 함수 실행 중단
+						    }
 				    	    updateReply(text, comment);
 
 				    	    messageDiv.textContent = textarea.value;
@@ -333,8 +355,8 @@
 				    	
 				    	textarea.addEventListener('keypress', function(event) {
 				            if (event.key === 'Enter') {
-				                event.preventDefault(); // 기본 동작 방지 (텍스트 영역에서 새 줄 추가 방지)
-				                submitButton.click(); // '수정' 버튼의 클릭 이벤트 실행
+				                event.preventDefault(); 
+				                submitButton.click();
 				            }
 				        });
 						
@@ -397,68 +419,61 @@
 		        paginationDiv.style.display = 'none';
 		        return;
 		    } else {
-		        paginationDiv.style.display = 'block';
+		        paginationDiv.style.display = 'flex';
+		        paginationDiv.justifyContent = 'center';
 		    }
 		
-		    const prevGroupDiv = document.createElement('div');
-		    prevGroupDiv.className = 'page-nav-buttons';
-		    paginationDiv.appendChild(prevGroupDiv);
+		    // "이전" 페이지 그룹 링크
+		    if (rPi.currentPage > 1) {
+		        const prevLink = document.createElement('a');
+		        prevLink.href = '#';
+		        prevLink.textContent = '< 이전';
+		        prevLink.className = "pagingBtn";
+		        prevLink.onclick = function(event) {
+		            event.preventDefault();
+		            loadCommentList(rPi.currentPage - 1);
+		        };
+		        paginationDiv.appendChild(prevLink);
+		    }
 		
 		    const ul = document.createElement('ul');
 		    ul.className = 'page-numbers';
-		    paginationDiv.appendChild(ul);
-		
-		    const nextGroupDiv = document.createElement('div');
-		    nextGroupDiv.className = 'page-nav-buttons';
-		    paginationDiv.appendChild(nextGroupDiv);
-		
-		    const pageLimit = rPi.pageLimit;
-		    const totalPageGroups = Math.ceil(rPi.maxPage / pageLimit);
-		    const currentPageGroup = Math.ceil(rPi.currentPage / pageLimit);
-		
-		    if (currentPageGroup > 1) {
-		        const prevGroupLink = document.createElement('a');
-		        prevGroupLink.href = '#';
-		        prevGroupLink.innerHTML = '&lt; 이전';
-		        prevGroupLink.onclick = function(event) {
-		            event.preventDefault();
-		            const prevPage = (currentPageGroup - 1) * pageLimit - (pageLimit - 1);
-		            loadCommentList(prevPage);
-		        };
-		        prevGroupDiv.appendChild(prevGroupLink);
-		    }
-		
-		    // 페이지 번호
-		    let startPage = (currentPageGroup - 1) * pageLimit + 1;
-		    let endPage = startPage + pageLimit - 1;
-		    endPage = endPage > rPi.maxPage ? rPi.maxPage : endPage;
-		
-		    for (let i = startPage; i <= endPage; i++) {
-		        const pageLi = document.createElement('li');
-		        const pageLink = document.createElement('a');
-		        pageLink.href = '#';
-		        pageLink.textContent = i;
-		        if (i === rPi.currentPage) {
-		            pageLink.id = 'check_page';
-		        }
-		        pageLink.onclick = function(event) {
+		    
+		    // 페이지 번호 생성
+		    for (let i = rPi.startPage; i <= rPi.endPage; i++) {
+		        const li = document.createElement('li');
+		        li.style.display = 'inline';
+		        
+		        const a = document.createElement('a');
+		        a.href = '#';
+		        a.textContent = i;
+		        a.onclick = function(event) {
 		            event.preventDefault();
 		            loadCommentList(i);
 		        };
-		        pageLi.appendChild(pageLink);
-		        ul.appendChild(pageLi);
+		        
+		        if (i === rPi.currentPage) {
+		            a.style.backgroundColor = '#5cb85c';
+		            a.style.color = '#ffffff';
+		        }
+		        
+		        li.appendChild(a);
+		        ul.appendChild(li);
 		    }
+		    
+		    paginationDiv.appendChild(ul);
 		
-		    if (currentPageGroup < totalPageGroups) {
-		        const nextGroupLink = document.createElement('a');
-		        nextGroupLink.href = '#';
-		        nextGroupLink.innerHTML = '다음 &gt;';
-		        nextGroupLink.onclick = function(event) {
+		    // "다음" 페이지 그룹 링크
+		    if (rPi.currentPage < rPi.maxPage) {
+		        const nextLink = document.createElement('a');
+		        nextLink.href = '#';
+		        nextLink.textContent = '다음 >';
+		        nextLink.className = "pagingBtn";
+		        nextLink.onclick = function(event) {
 		            event.preventDefault();
-		            const nextPage = currentPageGroup * pageLimit + 1;
-		            loadCommentList(nextPage);
+		            loadCommentList(rPi.currentPage + 1);
 		        };
-		        nextGroupDiv.appendChild(nextGroupLink);
+		        paginationDiv.appendChild(nextLink);
 		    }
 		}
 		
@@ -480,7 +495,7 @@
 					}
 				},
 				error: function(error) {
-					alert("댓글을 500자 이내로 입력해주세요!");
+					alert("댓글을 200자 이내로 입력해주세요!");
 				}
 			});
 		}
@@ -498,6 +513,7 @@
 					if(data >= 0){
 						alert("댓글이 삭제되었습니다.")
 						loadCommentList(data);
+						replyCount.innerText = bReplyCount -= 1;
 					}else{
 						alert("댓글 삭제를 실패했습니다. 다시 시도해주세요.");
 					}
@@ -534,6 +550,15 @@
 		        editDropDown.style.display = "none";
 		    });
 		});
+		
+		//byte 단위 계산
+	    function getByteSize(str) {
+	        let size = 0;
+	        for (let i = 0; i < str.length; i++) {
+	            size += (str.charCodeAt(i) > 127) ? 2 : 1;
+	        }
+	        return size;
+	    }
 		/*]]>*/
 	</script>
 </body>

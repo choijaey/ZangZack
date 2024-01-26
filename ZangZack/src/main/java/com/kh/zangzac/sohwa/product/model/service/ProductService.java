@@ -147,7 +147,7 @@ public interface ProductService {
 
 	ArrayList<Payment> selectMyOrder(String id);
 
-	ArrayList<Integer> selectOrderNo();
+	ArrayList<Integer> selectOrderNo(String id);
 
 	ArrayList<Payment> selectPayment(int orderNo);
 
@@ -163,7 +163,7 @@ public interface ProductService {
 
 	ArrayList<Product> selectAdminProduct(HashMap<String, String> map, PageInfo pi);
 
-	int refundOrder(int orderKeyNo);
+	int refundOrder(int orderNo);
 
 	ArrayList<Payment> selectAllPayment(HashMap<String, String> map, PageInfo pi);
 	
@@ -182,6 +182,10 @@ public interface ProductService {
 	ArrayList<Attachment> selectPhotoTHMap(HashMap<String, String> map);
 
 	ArrayList<Product> selectRecommendProduct();
+
+	int purchaseYN(Payment p);
+
+	String selectPaymentKey(int orderKeyNo);
 
 
 

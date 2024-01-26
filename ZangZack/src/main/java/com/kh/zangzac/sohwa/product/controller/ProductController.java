@@ -7,6 +7,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -139,6 +140,7 @@ public class ProductController {
       
    }
    
+  
    
    //관리자 상품 목록페이지 view
    @GetMapping("adminProductList.so")
@@ -177,7 +179,6 @@ public class ProductController {
    
    @GetMapping("productListView.so")
    public String productListView(@RequestParam(value="keyword", defaultValue="") String keyword, @RequestParam(value="standard", defaultValue="1") String standard, @RequestParam(value="categoryNo", defaultValue="0") String categoryNo, @RequestParam(value="page", defaultValue="1") int page, Model model, HttpServletRequest request) {
-      
       
       
       HashMap<String, String> map = new HashMap<>();
@@ -461,7 +462,7 @@ public class ProductController {
       
       
       if(result0 + result1 + result2 + result3 == options.length + coreList.size()+detailList.size()+1) {
-         return "redirect:productListView.so";
+         return "redirect:adminProductList.so";
       }else {
          throw new ProductException("상품 등록 실패");
       }
@@ -470,8 +471,25 @@ public class ProductController {
    
    
    @GetMapping("refundOrder.so")
-   public String refundOrder(@RequestParam("orderKeyNo") int orderKeyNo, Model model) {
-	   int result = pService.refundOrder(orderKeyNo);
+   public String refundOrder(@RequestParam("orderNo") int orderNo, Model model) {
+	   String paymentKey = pService.selectPaymentKey(orderNo);
+	   String token = "test_sk_24xLea5zVAjM2olw4v70rQAMYNwW:";
+	   String base64EncodedToken = Base64.getEncoder().encodeToString(token.getBytes());
+	   HttpRequest request = HttpRequest.newBuilder()
+		    .uri(URI.create("https://api.tosspayments.com/v1/payments/" + paymentKey + "/cancel"))
+		    .header("Authorization", "Basic " + base64EncodedToken)
+		    .header("Content-Type", "application/json")
+		    .method("POST", HttpRequest.BodyPublishers.ofString("{\"cancelReason\":\"고객이 취소를 원함\"}"))
+		    .build();
+		HttpResponse<String> response;
+		
+		try {
+			response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+			System.out.println(response.body());
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
+	   int result = pService.refundOrder(orderNo);
 	   
 	   if(result > 0) {
 		   return "redirect:myOrderPageView.so";
@@ -956,7 +974,7 @@ public class ProductController {
    public String myOrderPageView(Model model){
 	   String id = ((Member)model.getAttribute("loginUser")).getMemberId();
 	   ArrayList<Payment> paList = pService.selectMyOrder(id);
-	   ArrayList<Integer> orderNos = pService.selectOrderNo();
+	   ArrayList<Integer> orderNos = pService.selectOrderNo(id);
 	   ArrayList<Product> pList = pService.selectAllProduct();
 	   ArrayList<Attachment> aList = pService.selectAllPhoto();
 	   
@@ -1041,7 +1059,9 @@ public class ProductController {
             pa.setOrderName(name);
             pa.setOrderContent(required);
             pa.setOrderNo(Integer.parseInt(orderId));
+            pa.setPaymentKey(paymentKey);
             paList.add(pa);
+            
         }
       System.out.println(paList);
       //[Payment(orderKeyNo=0, orderPrice=38600, orderDate=null, orderContent=test2, orderNo=320746, orderMethod=null, orderCard=null, orderStatus=null, memberId=ming11, orderAddress=12066@경기 남양주시 진접읍 해밀예당1로 40@1층 LG유플러스, orderProductEno=1, deliveryStatus=결제완료, productOption=하양, productNo=202, orderPhone=01073558749, orderName=민경), 
@@ -1108,7 +1128,6 @@ public class ProductController {
 	   Payment pa = pService.selectOrderDetail(orderKeyNo);
 	   ArrayList<Attachment> aList = pService.selectAllPhoto();
 	   ArrayList<Product> pList = pService.selectAllProduct();
-	   
 	   model.addAttribute("pList", pList);
 	   model.addAttribute("aList", aList);
 	   model.addAttribute("pa", pa);
@@ -1156,13 +1175,7 @@ public class ProductController {
       int optionResult = pService.insertOption(oList);
       
       
-      //deleteAttm이 비워져있고, coreFiles와 detailFiles도 비워져있을 때
-      //deleteAttm이 비워져있고, coreFiles만 비워져있고, detailFiles는 존재
-      //deleteAttm이 비워져있고, coreFiles는 존재하고, detailFiles는 비워져있을 때
       //deleteAttm이 비워져있고, coreFiles와 detailFiles 둘 다 존재
-      //deleteAttm이 채워져있고, coreFiles와 detailFiles는 비워져있을 때
-      //deleteAttm이 채워져있고, coreFiles만 비워져있고, detailFiles는 존재
-      //deleteAttm이 채워져있고, coreFiles는 존재하고, detailFiles는 비워져있을 때
       //deleteAttm이 채워져있고, coreFiles와 detailFiles 둘 다 존재
             
       
@@ -1198,14 +1211,6 @@ public class ProductController {
           }
        }
       
-//      if(!delRename.isEmpty()) {
-//         deleteResult = pService.deleteProductPhoto(delRename);
-//         if(deleteResult > 0) {
-//            for(String rename : delRename) {
-//               imageStorage.deleteImage(rename, name);
-//            }
-//         }
-//      }
       
       //이전의 첨부파일이 존재했는지에 대한 boolean값
       boolean existBeforeAttm = true;
@@ -1238,7 +1243,6 @@ public class ProductController {
                }
             }
          }
-         
       }
       
       for(int i=0; i<coreList.size(); i++) {
@@ -1261,16 +1265,6 @@ public class ProductController {
       
       
       
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
       for(int i=0; i<detailFiles.size(); i++) {
          MultipartFile detailUpload = detailFiles.get(i);
          
@@ -1290,9 +1284,6 @@ public class ProductController {
          }
       }
       
-      
-      
-      
       if(!coreList.isEmpty()) {
          coreResult = pService.insertProductPhoto(coreList);
       }
@@ -1305,8 +1296,6 @@ public class ProductController {
       }else {
          throw new ProductException("상품수정실패");
       }
-   
-   
    }
    
    
@@ -1326,9 +1315,28 @@ public class ProductController {
    
    
    
+   @GetMapping("purchaseYN.so")
+   @ResponseBody
+   public String purchaseYN(Model model, @RequestParam("productNo") int productNo) {
+	   String id = ((Member)model.getAttribute("loginUser")).getMemberId();
+	   Payment p = new Payment();
+	   p.setMemberId(id);
+	   p.setProductNo(productNo);
+	   int result = pService.purchaseYN(p);
+	   
+	   if(result == 0) {
+		   return "no";
+	   }else {
+		   return "yes";
+	   }
+	  
+   }
    
    
-   
+   @GetMapping("sohwa.so")
+   public String test() {
+	   return "views/sohwa/sohwa";
+   }
    
    
    

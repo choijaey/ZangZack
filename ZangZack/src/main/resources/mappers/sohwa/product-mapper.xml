@@ -582,6 +582,7 @@
 				and category_no = 16
 			</if>
 		</if>
+		order by product_no desc
 	</select>
 
 	
@@ -828,7 +829,7 @@
 		
 		<foreach collection="list" item="item">
 			into payment
-			values (order_aid,  #{ item.orderPrice }, sysdate,  #{item.orderNo}, default, #{item.memberId}, #{item.orderAddress}, #{item.orderProductEno},#{item.deliveryStatus},#{item.productOption}, #{item.productNo}, #{item.orderPhone}, #{item.orderName}, sysdate + 3, #{item.orderContent})
+			values (order_aid,  #{ item.orderPrice }, sysdate,  #{item.orderNo}, default, #{item.memberId}, #{item.orderAddress}, #{item.orderProductEno},#{item.deliveryStatus},#{item.productOption}, #{item.productNo}, #{item.orderPhone}, #{item.orderName}, sysdate + 3, #{item.orderContent}, #{item.paymentKey})
 		</foreach>
 		select * from dual
 	</insert>
@@ -836,12 +837,14 @@
 	<select id="selectMyOrder" resultType="Payment">
 		select *
 		from payment
+		where order_status = 'N' and member_id = #{id}
 		order by order_key_no
 	</select>
 	
 	<select id="selectOrderNo" resultType="_int">
 		SELECT MAX(order_no) AS order_no
 		FROM payment
+		where member_id = #{id}
 		GROUP BY order_no
 		ORDER BY MAX(order_key_no) DESC
 	</select>
@@ -881,8 +884,8 @@
 	
 	<update id="refundOrder">
 		update payment
-		set order_status = 'Y' , delivery_status = '환불요청'
-		where order_key_no = #{orderKeyNo}
+		set delivery_status = '환불요청'
+		where order_no = #{orderNo}
 	</update>
 	
 	<select id="getListCountOrder" resultType="_int">
@@ -902,7 +905,7 @@
 	<select id="getListCountOrderN" resultType="_int">
 		select count(*)
 		from payment
-		where order_status='Y'
+		where delivery_status = '환불요청'
 		<if test="searchType==1">
 			and order_no like '%${keyword}%'
 		</if>
@@ -933,7 +936,7 @@
 	<select id="selectNPayment" resultType="Payment">
 		select *
 		from payment
-		where order_status = 'Y'
+		where delivery_status = '환불요청'
 		<if test="searchType==1">
 			and order_no like '%${keyword}%'
 		</if>
@@ -955,5 +958,17 @@
 			)
 			WHERE ROWNUM <= 8
 		]]>
+	</select>
+	
+	<select id="purchaseYN" resultType="_int">
+		select count(*)
+		from payment
+		where member_id = #{memberId} and product_no = #{productNo}
+	</select>
+	
+	<select id="selectPaymentKey" resultType="string">
+		select distinct paymentKey
+		from payment
+		where order_no = #{orderNo}
 	</select>
 </mapper>

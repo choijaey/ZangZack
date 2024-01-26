@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>레시피 작성</title>
+    <title>캠핑 레시피</title>
+    <link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
     <link href="css/seongun/writeboard.css" rel="stylesheet">
+    <style>
+    	img{
+    		vertical-align: middle;
+    	}
+    </style>
 </head>
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
@@ -25,11 +31,14 @@
 				    <label><input type="checkbox" name="cookCategoryNo" value="2"> 가위</label>
 				    <label><input type="checkbox" name="cookCategoryNo" value="3"> 칼</label>
 				    <label><input type="checkbox" name="cookCategoryNo" value="4"> 버너</label>
-				    <label><input type="checkbox" name="cookCategoryNo" value="5"> 버너</label>
+				    <label><input type="checkbox" name="cookCategoryNo" value="5"> 에어프라이어</label>
 				    <label><input type="checkbox" name="cookCategoryNo" value="6"> 그릴</label>
+				    <label><input type="checkbox" name="cookCategoryNo" value="7"> 찜기</label>
+				    <label><input type="checkbox" name="cookCategoryNo" value="8"> 토치</label>
+				    
 				</div>
             </div>
-            <input type="text" name="recipeTaste"/>
+            <input type="text" name="recipeTaste" placeholder="메인 맛!"/>
             <!-- 내용 입력 -->
             <div class="write-row">
                 <textarea id="content" name="recipeIngredients" placeholder="요리 재료를 입력하세요."></textarea>

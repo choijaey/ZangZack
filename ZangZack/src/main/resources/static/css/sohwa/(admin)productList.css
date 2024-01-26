@@ -334,3 +334,36 @@ a:hover{
 	transform:scale(1.1);
 }
 
+
+
+
+.btn2 {
+
+  
+
+/* 상자 디자인 큰틀*/
+border: 0px;
+background-color: #E4EBF5;
+    
+/* 그림자 */
+border-radius: 10px;
+box-shadow:.8rem .5rem 1.4rem  #BEC5D0, -.3rem -.4rem .8rem #FBFBFB;
+/* box-shadow:-.2rem -.2rem 1.8rem white, .8rem .8rem 1.4rem  #AAB7CB; */
+
+/* 글씨 */
+color: #333333;
+font-size: 17px;
+font-weight: bold;
+
+animation-name: keybtn-language;
+animation-duration: .2s;
+
+}
+
+/*버튼 눌리는 효과*/
+.btn2:active {
+
+    box-shadow: inset -.3rem -.1rem 1.4rem  #FBFBFB, inset .3rem .4rem .8rem #BEC5D0; 
+    cursor: pointer;
+
+}
