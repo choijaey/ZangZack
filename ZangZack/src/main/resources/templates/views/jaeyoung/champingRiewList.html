@@ -179,11 +179,9 @@
             </div>
 		    <div class="grid grid-cols-1 gap-4">
 		       	<div class="flex gap-2 divClick" th:each="cr:${list}" th:id="${cr.crNo}" th:onclick="|campingReviewDetail(${cr.crNo})|">
-<<<<<<< HEAD
-		       		<img th:src="${cr.thumnail.photoPath}" class="rounded-lg" style="width: 180px; ">
-=======
+
 		       		<img th:src="${cr.thumnail.photoPath}" class="rounded-lg " style="width: 190px;">
->>>>>>> branch 'main' of https://github.com/choijaey/ZangZack.git
+
 				    <div>
 				        <span class="oval-tag mb-4">[[${cr.categoryName}]]</span>
 				        <h2 class="text-lg font-semibold mb-2">[[${cr.crTitle}]]</h2>

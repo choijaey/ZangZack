@@ -113,7 +113,7 @@ public class FriendController {
 	      }
 	      
 
-	      
+
 	      
 	      model.addAttribute("list", list);
 	      model.addAttribute("maxPage", pi.getMaxPage());
