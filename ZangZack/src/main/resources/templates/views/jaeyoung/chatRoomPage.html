@@ -350,7 +350,7 @@ a {
 			//웹소켓 전송시 현재 방의 번호를 넘겨서 보낸다.
 			let id =$("#memberId").val();
 			let roomName = $("#roomName").val();
-			ws = new WebSocket("ws://" + location.host + "/chating/"+id+"/"+roomName+"/1");
+			ws = new WebSocket("wss://" + location.host + "/chating/"+id+"/"+roomName+"/1");
 			wsEvt();
 		}
 		

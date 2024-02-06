@@ -101,10 +101,6 @@ public class BoardCondition {
 		}
 		
 		
-		
-		
- 		
-		
 		//seongun
 		
 		int cbCount = cbService.listCount();
