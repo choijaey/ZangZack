@@ -15,23 +15,23 @@
 	
 	<div id="wrapper">
 		<div class="slider-container">
-		<div class="slider">
-	      <div class="inner-container">
-	        <div class="slider__wrraper flex-column">
-	          <div class="flex-column slider__content"></div>
-	          <div class="slider__footer">
-	            <div class="slider__btns justify-between">
-	              <button class="slider__btn-buy">buy</button>
-	              <div class="flex-center">
-	                <button data-type="prev" class="slider__btn-switch slider__btn-switch--dark flex-center"></button>
-	                <button data-type="next" class="slider__btn-switch slider__btn-switch--light flex-center"></button>
-	              </div>
-	            </div>
-	            <div class="slider__index"></div>
-	          </div>
-	        </div>
-	      </div>
-	    </div>
+			<div class="slider">
+		      <div class="inner-container">
+		        <div class="slider__wrraper flex-column">
+		          <div class="flex-column slider__content"></div>
+		          <div class="slider__footer">
+		            <div class="slider__btns justify-between">
+		              <button class="slider__btn-buy">buy</button>
+		              <div class="flex-center">
+		                <button data-type="prev" class="slider__btn-switch slider__btn-switch--dark flex-center"></button>
+		                <button data-type="next" class="slider__btn-switch slider__btn-switch--light flex-center"></button>
+		              </div>
+		            </div>
+		            <div class="slider__index"></div>
+		          </div>
+		        </div>
+		      </div>
+		    </div>
 	  	
 	    
 	     <div class="additional-section">
@@ -115,7 +115,7 @@
 	        var scrollPosition = wrapper.scrollTop;
 		if(scrollflag){
 			// 스크롤이 80% 이상인 경우
-	        if (scrollPosition >= 0.8 * (wrapper.scrollHeight - wrapper.clientHeight)) {
+	        if (scrollPosition >= 0.4 * (wrapper.scrollHeight - wrapper.clientHeight)) {
 	            loadMoreItems();
 	            scrollflag = false;
 	            console.log(currentPage, maxPages);
@@ -314,32 +314,37 @@
 		
 		const items = [
 		{
-		    img: "image/sohwa/cook3core1-removebg-preview.png",
+			img: "image/sohwa/화면_캡처_2024-02-19_165046-removebg-preview.png",
 		    category: "cooking utensils",
-		    title: "cold pack",
-		    price: "\\16,910",
-		    bgColor: "#dedede",
+		    title: "mini burner",
+		    price: "\\19,800",
+		    bgColor: "#f3c3be",
+		    url: "http://localhost:8081/productDetail.so?productNo=341"
 		  },
 		  {
 		    img: "image/sohwa/대표1-removebg-preview (2).png",
 		    category: "Other products",
 		    title: "dear shaped lights",
-		    price: "\\ 17,000",
+		    price: "\\ 19,900",
 		    bgColor: "#ffe474",
+		    url: "http://localhost:8081/productDetail.so?productNo=221"
 		  },
 		  {
-		    img: "image/sohwa/대표2-removebg-preview.png",
+			  img: "image/sohwa/화면_캡처_2024-02-19_163316-removebg-preview.png",
+			  category: "Other products",
+			  title: "christmas blanket",
+			  price: "\\9,900",
+			  bgColor: "#dedede",
+			  url: "http://localhost:8081/productDetail.so?productNo=227"
+		    
+		  },
+		  {
+			img: "image/sohwa/화면_캡처_2024-02-19_170023-removebg-preview.png",
 		    category: "Other products",
 		    title: "camping chair",
-		    price: "\\20,100",
-		    bgColor: "#d2e2d7",
-		  },
-		  {
-		    img: "image/sohwa/cook2Detail2-removebg-preview.png",
-		    category: "cooking utensils",
-		    title: "mini brazier",
 		    price: "\\19,800",
-		    bgColor: "#f3c3be",
+		    bgColor: "#d2e2d7",
+		    url: "http://localhost:8081/productDetail.so?productNo=284"
 		  },
 		  
 		];
@@ -358,10 +363,10 @@
 		  }
 		
 		  renderItem() {
-		    const { img, category, title, price } = this.items[this.active];
-		
+		    const { img, category, title, price, url } = this.items[this.active];
+
 		    const sliderContent = `
-		      <img class="slider__img" src="${img}" alt="${title}" />
+		      <img class="slider__img" src="${img}" alt="${title}" onclick="window.location.href='${url}'" /> <!-- 슬라이드를 클릭하면 해당 URL로 이동하도록 설정 -->
 		      <div class="slider__context flex-column">
 		        <h3 class="slider__category">${category}</h3>
 		        <strong class="slider__title">${title}</strong>
@@ -376,7 +381,7 @@
 		        this.items.length < 10 ? "0" + this.items.length : this.items.length
 		      }</span>
 		    `;
-		
+
 		    document.querySelector(".slider__content").innerHTML = sliderContent;
 		    document.querySelector(".slider__index").innerHTML = sliderIndex;
 		  }
@@ -446,7 +451,7 @@
 		      {
 		        x: -100 * dir,
 		        opacity: 0,
-		        duration: 0.7,
+		        duration: 1.0,
 		        stagger: 0.15,
 		        ease: "power2.inOut",
 		      },
@@ -519,7 +524,6 @@
 	        window.location.href = 'productDetail.so?productNo=' + productNo;
 	    }
 
-		
 		
 		
 		

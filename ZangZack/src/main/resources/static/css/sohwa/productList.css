@@ -145,7 +145,7 @@ button {
   /* Your Slider Styles */
   /* Add styles for your slider here */
   overflow-y: auto; /* Enable vertical scrollbar for the slider */
- height: 400px; /* Set a maximum height for the slider */
+ height: 550px; /* Set a maximum height for the slider */
 }
 
 .additional-section {
@@ -156,7 +156,7 @@ button {
 
 .slider__img {
   width:350px;  /* 이미지가 부모 요소 내에서 최대 너비를 차지하도록 설정합니다. */
-  height: 370px;/* 이미지의 가로세로 비율을 유지하면서 크기가 조정되도록 합니다. */
+  height: 500px;/* 이미지의 가로세로 비율을 유지하면서 크기가 조정되도록 합니다. */
 }
 
 
