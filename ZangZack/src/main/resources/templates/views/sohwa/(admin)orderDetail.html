@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
+<title>관리자 결제관리 상세페이지</title>
 <link href="css/sohwa/(admin)orderDetail.css" rel="stylesheet">
 </head>
 <body>
@@ -18,48 +19,32 @@
         
         <!--같은 날짜 일때 반복-->
             <div class="products">
-                <div class="left">
+                <div class="left" style="width:100%; margin-right:20px;">
                 <!-- 왼쪽 컨테이너 내용 -->
-                <table>
-                    <tr class="cart-row">
-						
-                        <td class="td1">
-                       	 	<img src="image/sohwa/tent1core1.png">
-                            <div th:each="p:${pList}" th:if="${pa.productNo == p.productNo}">
-                                <div>[[${p.productCompany}]]</div>
-                                [[${p.productName}]]<br>
-                                [[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]
-                                <div style="margin-top:0px;">상품번호 : [[${p.productNo}]]</div>
-                            </div>
-                        </td>
-                        <td class="td2">
-                            <div class="quantity-input">&nbsp;&nbsp;&nbsp;
-                            	<input type="hidden" class="productPrice" th:each="p:${pList}" th:if="${pa.productNo == p.productNo}" th:value="${p.productPrice}">
-                                <input type="text" class="quantity" th:value="${pa.orderProductEno}" min="1" readonly>개
-                            </div>
-                        </td>
-                        <td style="width:150px; text-align:center;">[[${pa.productOption}]]</td>
-                        <td class="td3">
-                            
-                        </td>
-                    </tr>   
-                </table>
-                </div>
-                
-                <div class="line"></div>
-                
-                <div class="right">
-                <!-- 오른쪽 컨테이너 내용 -->
-                    <div class="enoDiv">
-                        <div class="quantity-input2">&nbsp;&nbsp;&nbsp;
-                            <button class="quantity-btn decrementBtn">-</button>
-                            
-                            <input type="text" class="quantity2" value="0" min="0">
-                            <button class="quantity-btn incrementBtn">+</button>
-                        </div>
-                    </div>
-                    <div class="resultDiv" style="margin-right:130px; text-align:center;"></div>
-                    <button>환불처리</button><br>
+	                <table>
+	                    <tr class="cart-row">
+							
+	                        <td class="td1" style="width:500px;">
+	                       	 	<img src="image/sohwa/tent1core1.png">
+	                            <div th:each="p:${pList}" th:if="${pa.productNo == p.productNo}" style="width:500px;">
+	                                <div>[[${p.productCompany}]]</div>
+	                                [[${p.productName}]]<br>
+	                                [[|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|]]
+	                                <div style="margin-top:0px;">상품번호 : [[${p.productNo}]]</div>
+	                            </div>
+	                        </td>
+	                        <td class="td2">
+	                            <div class="quantity-input">&nbsp;&nbsp;&nbsp;
+	                            	<input type="hidden" class="productPrice" th:each="p:${pList}" th:if="${pa.productNo == p.productNo}" th:value="${p.productPrice}">
+	                                <input type="text" class="quantity" th:value="${pa.orderProductEno}" min="1" readonly>개
+	                            </div>
+	                        </td>
+	                        <td style="width:150px; text-align:center;">[[${pa.productOption}]]</td>
+	                        <td class="td3">
+	                            
+	                        </td>
+	                    </tr>   
+	                </table>
                 </div>
             </div>
             
@@ -93,8 +78,8 @@
 		                </button>
 		                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 		                    <li><a class="dropdown-item" th:href="'updateDeliveryStatus.so?orderKeyNo=' + ${pa.orderKeyNo} +'&orderNo=' + ${pa.orderNo} +'&deliveryStatus=결제완료'" onclick="showSearch('결제완료')">결제완료</a></li>
-		                    <li><a class="dropdown-item" th:href="'updateDeliveryStatus.so?orderNo=' + ${pa.orderNo} +'&deliveryStatus=배송중'" onclick="showSearch('배송중')">배송중</a></li>
-		                    <li><a class="dropdown-item" th:href="'updateDeliveryStatus.so?orderNo=' + ${pa.orderNo} +'&deliveryStatus=배송완료'" onclick="showSearch('배송완료')">배송완료</a></li>
+		                    <li><a class="dropdown-item" th:href="'updateDeliveryStatus.so?orderKeyNo=' + ${pa.orderKeyNo} +'&orderNo=' + ${pa.orderNo} +'&deliveryStatus=배송중'" onclick="showSearch('배송중')">배송중</a></li>
+		                    <li><a class="dropdown-item" th:href="'updateDeliveryStatus.so?orderKeyNo=' + ${pa.orderKeyNo} +'&orderNo=' + ${pa.orderNo} +'&deliveryStatus=배송완료'" onclick="showSearch('배송완료')">배송완료</a></li>
 		                </ul>
 		            </div>
 				</span>
@@ -118,8 +103,8 @@
             <br><br>
             
             <div id="underBtns">
-                <button>< 결제목록 돌아가기</button> 
-                <button style="float:right;">결제내역 삭제</button>
+                <button type="button" onclick="goBack()">< 결제목록 돌아가기</button> 
+                <a id="refundButton" th:href="'refundOrder2.so?orderNo='+${pa.orderNo} + '&orderKeyNo=' + ${pa.orderKeyNo}"><button style="float:right;">결제내역 환불</button></a>
             </div>
             
     </div>
@@ -128,7 +113,20 @@
     <br><br><br><br><!--footer--><br><br><br><br>
     
     
-    <script>
+    <script th:inline="javascript">
+    
+    	document.getElementById("refundButton").addEventListener("click", function(event) {
+    	    event.preventDefault(); // 기본 이벤트(링크 이동) 방지
+
+    	    var confirmRefund = confirm("정말 환불처리하시겠습니까?");
+    	    if (confirmRefund) {
+    	    	var href = event.currentTarget.getAttribute("href");
+    	        window.location.href = href; // 확인을 누르면 해당 URL로 이동
+    	    }
+    	});
+    
+    
+    
         document.addEventListener('DOMContentLoaded', function () {
         const decrementButtons = document.querySelectorAll('.decrementBtn');
         const incrementButtons = document.querySelectorAll('.incrementBtn');
@@ -190,6 +188,10 @@
 		function showSearch(dropdownText) {
             document.getElementById('dropdownMenuButton').innerText = dropdownText;
         }
+    	
+    	function goBack(){
+    		window.history.back();
+    	}
     	
     	
     	

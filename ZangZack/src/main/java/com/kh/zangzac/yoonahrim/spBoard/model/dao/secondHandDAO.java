@@ -36,8 +36,6 @@ public interface secondHandDAO {
 
 	ArrayList<secondHandProduct> selectSeconHand(secondHandProduct sp);
 
-	ArrayList<Reply> selectReply(int spNo);
-
 	ArrayList<Photo> selectPhotoSeconHand(Integer spNo);
 
 	int updateAttmSecondHand(ArrayList<Photo> detailList);
@@ -69,6 +67,10 @@ public interface secondHandDAO {
 	int updateCount(int spNo);
 
 	ArrayList<Chatter> chatterList(String roomName);
+
+	ArrayList<secondHandProduct> getSpList(String recomendation);
+
+	ArrayList<secondHandProduct> selectSpPhoto(ArrayList<Integer> spArrayList);
 
 
 	

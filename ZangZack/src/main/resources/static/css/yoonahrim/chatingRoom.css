@@ -51,12 +51,13 @@
 .chat-content{
 	width: 400px;
 	height: 65px;
-	border: 1px solid lightgray;
+	border: 1px solid black;
 	border-radius: 30px;
 	display:inline-block;
 	position: relative;
 	left: 50px;
-	background-color: #FFC8C3;
+	margin-top: 20px;
+	background-color: white;
 }
 
 .chat-content-image>img{
@@ -67,21 +68,21 @@
 	
 	position: relative;
 	right: 5px;
-	bottom: 30px;
+	bottom: 12px;
 	display:inline-block;
 }
 
 .p-line{
-	text-align: left;
+	text-align: center;
 	margin: 20px;
 	
 	position: relative;
-	bottom: 15px;
+	bottom: 10px;
 }
 
 .p-line p {
     line-height: 1;
-    margin: 10px;
+    margin: 15px;
 }
 
 .chating{
@@ -116,9 +117,9 @@
 	margin: 30px;
 	width: 200px;
 	height: auto;
-	background-color: #FFC8C3;
+	background-color: lightgray;
 	border-radius: 5px;
-	margin-left: auto; /* 왼쪽 마진을 자동으로 설정하여 오른쪽으로 이동 */
+	margin-left: auto;
 	text-align: right;
 }
 
@@ -142,8 +143,8 @@
     border: none;
     background-size: 300% 100%;
 	position: relative;
-	top: 15px;
-	
+	top: -55px;
+	left: 400px;
     border-radius: 50px;
     -moz-transition: all .4s ease-in-out;
     -o-transition: all .4s ease-in-out;
@@ -175,9 +176,9 @@
 }
 
 #button-addon2{
-	position:relative;
-	top: -50px;
-	left: 400px;
+	position:absolute;
+	top: 50px;
+	left: 800px;
 	height: 35px;
 }
 

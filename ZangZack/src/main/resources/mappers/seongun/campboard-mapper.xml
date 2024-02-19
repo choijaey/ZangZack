@@ -5,22 +5,10 @@
 		SELECT count(*) 
 		FROM camp_board_view
 		<where>
-			<if test="i != 0">
-				and category_no = #{i}
+			<if test="categoryNo != 0">
+				and category_no = #{categoryNo}
 			</if>
 		</where>
-	</select>
-	
-	<select id="selectBoardList" resultType="CampBoard">
-		select * 	
-		from camp_board_view
-		<where> 
-			cb_status = 'N'
-			<if test="i != 0">
-	            and category_no = #{i}
-	        </if> 
-        </where>
-		order by cb_no desc
 	</select>
 	
 	<insert id="insertCampBoard">
@@ -29,15 +17,6 @@
 		</selectKey>
 		insert into camp_board
 		values(#{cbNo}, #{cbTitle}, #{cbContent},default, default, default, default, #{memberId}, #{categoryNo})
-	</insert>
-	
-	<insert id="insertAttmCampBoard">
-		insert all<!-- insert all 안에서는 nextval이라고 적어놓고 여러번 들어간다하더라도 딱 1번 nextval이 되고 나머지는 같은 값이 들어간다 -->
-		<foreach collection="list" item="item">
-			into photo
-			values (new_aid, #{item.photoRename}, #{item.photoPath}, #{item.photoLevel}, 1, #{item.boardNo}, default)
-		</foreach>
-		select * from dual
 	</insert>
 	
 	<select id="selectBoard" resultType="CampBoard">
@@ -60,7 +39,7 @@
 		    <if test="searchText != null and searchText != ''">
 		        <choose>
 		            <when test="searchCategory == 0">
-		                and (cb_title like #{searchText} or cb_content like #{searchText} or member_Name like #{searchText})
+		                and (cb_title like #{searchText} or cb_content like #{searchText} or member_nickname like #{searchText})
 		            </when>
 		            <when test="searchCategory == 1">
 		                and cb_title like #{searchText}
@@ -69,12 +48,12 @@
 		                and cb_content like #{searchText}
 		            </when>
 		            <when test="searchCategory == 3">
-		                and member_Name like #{searchText}
+		                and member_nickName like #{searchText}
 		            </when>
 		        </choose>
 	    	</if>
-	    	<if test="searchCategoryNo != 0">
-	            and category_no = #{searchCategoryNo}
+	    	<if test="categoryNo != 0">
+	            and category_no = #{categoryNo}
 	        </if>
     	</where>
 	</select>
@@ -87,7 +66,7 @@
 		    <if test="searchText != null and searchText != ''">
 		        <choose>
 		            <when test="searchCategory == 0">
-		                and (cb_title like #{searchText} or cb_content like #{searchText} or member_Name like #{searchText})
+		                and (cb_title like #{searchText} or cb_content like #{searchText} or member_nickname like #{searchText})
 		            </when>
 		            <when test="searchCategory == 1">
 		                and cb_title like #{searchText}
@@ -96,12 +75,12 @@
 		                and cb_content like #{searchText}
 		            </when>
 		            <when test="searchCategory == 3">
-		                and member_Name like #{searchText}
+		                and member_nickName like #{searchText}
 		            </when>
 		        </choose>
 	    	</if>
-	    	<if test="searchCategoryNo != 0">
-	            and category_no = #{searchCategoryNo}
+	    	<if test="categoryNo != 0">
+	            and category_no = #{categoryNo}
 	        </if>
     	</where>
 	    order by cb_no desc
@@ -115,7 +94,20 @@
 	
 	<update id="updateCampBoard">
 		update camp_board
-		set cb_title = #{cbTitle}, category_no=#{categoryNo}, cb_content=#{cbContent}
+		set cb_title = #{cbTitle}, category_no=#{categoryNo}, cb_content=#{cbContent}, CB_MODIFY_DATE = sysdate
 		where cb_no = #{cbNo}
 	</update>
+	
+	<select id="listCount" resultType="_int">
+		SELECT count(*) 
+		FROM camp_board_view
+		WHERE cb_status = 'N'
+	</select>
+	
+	<select id="popularList" resultType="CampBoard">
+		SELECT *
+		FROM CAMP_BOARD_VIEW
+		WHERE cb_status = 'N'
+		ORDER BY heart_count DESC,CB_COUNT DESC,reply_count DESC
+	</select>
 </mapper>

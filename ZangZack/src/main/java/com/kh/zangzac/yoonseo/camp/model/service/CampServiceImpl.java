@@ -8,6 +8,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.photo.model.vo.Photo;
 import com.kh.zangzac.yoonseo.camp.model.dao.CampDAO;
@@ -72,7 +73,12 @@ public class CampServiceImpl implements CampService {
 
 	@Override
 	public ArrayList<CampingGround> selectRecomendationList(PageInfo pi, String recomendation) {
-		return cDAO.selectRecomendationList(recomendation);
+		
+		int offSet = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+		RowBounds row = new RowBounds(offSet, pi.getBoardLimit());
+		
+		return cDAO.selectRecomendationList(row,recomendation);
+
 	}
 
 	@Override
@@ -139,15 +145,19 @@ public class CampServiceImpl implements CampService {
 		
 		return cDAO.searchCampCount(map);
 	}
-
+	
 	@Override
-	public ArrayList<CampingGround> searchCampList(String keyword, String city, String type) {
+	public ArrayList<CampingGround> searchCampList(PageInfo pi, String keyword, String city, String type) {
 		
 		HashMap<String,String> map = new HashMap<>();
 		map.put("keyword", keyword);
 		map.put("city", city);
 		map.put("type", type);
-		return cDAO.searchCampList(map);
+		
+		int offSet = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+		RowBounds row = new RowBounds(offSet, pi.getBoardLimit());
+		
+		return cDAO.searchCampList(row,map);
 	}
 
 	@Override
@@ -164,6 +174,8 @@ public class CampServiceImpl implements CampService {
 	public int updateCount(int no) {
 		return cDAO.updateCount(no);
 	}
+
+	
 
 	/*
 	 * @Override public int updateLike(HashMap<String, Object> like, String check) {

@@ -2,7 +2,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>아이디 & 비밀번호 찾기</title>
+<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
 <link href="../css/ming/member/find.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <style>
@@ -60,7 +61,7 @@
 	              <button type="button" id="send-code" style="width: 100px; display: inline-block; background-color: rgb(251, 125, 83); color: white;">코드전송</button></td>
 	            </div>
 	            <p style="text-align: center;">
-	              <a href="home.me" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.5em;">
+	              <a href="/" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.5em;">
 					HOME으로 돌아가기
 				  </a>
 	            </p>
@@ -98,7 +99,7 @@
 	              아이디 찾기
 	            </button>
 	            <p style="text-align: center;">
-	              <a href="home.me" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.5em;">
+	              <a href="/" style="display: inline-block;  margin: 0 10px; text-decoration: none; color: black; font-weight: bold; font-size: 1.5em;">
 					HOME으로 돌아가기
 				  </a>
 	            </p>
@@ -122,7 +123,7 @@
 	      <div class="col align-items-center flex-col">
 	        <div class="text sign-in">
 	          <h2>
-	           <a href="home.me">
+	           <a href="/">
 	            	<img src="image/ming/member/logo.png" style="width: 300px;">
 	            </a>
 	            <p style="font-size: 0.5em; margin-top: -50px; color: black;">아이디 찾기</p>
@@ -140,7 +141,7 @@
 	        </div>
 	        <div class="text sign-up">
 	          <h2>
-	          	<a href="home.me">
+	          	<a href="/">
 	            	<img src="image/ming/member/logo.png" style="width: 300px;">
 	            </a>
 	            <p style="font-size: 0.5em; margin-top: -50px; color: black;">비밀번호찾기</p>
@@ -212,9 +213,7 @@
         			console.log("data : " +  data);
                     code =data;
                     alert('임시 비밀번호를 발송했습니다. 메일이 오지 않으면 입력하신 정보가 회원정보와 일치하는지 확인해 주세요.')
-                    if(data=="index") {
-    					location.href = "home.me";
-					}
+   					location.href = "/";
                     
                     
         		},
@@ -247,7 +246,8 @@
 	                    	const modalContent = document.querySelector('.modal-content');
 	                    	const spanContainer = modalContent.querySelector('span');
 	                    	spanContainer.innerHTML = ''; 
-	                    	if(data != null){
+	                    	if(data.length !== 0){
+	                    		console.log(data);
 		                    	for (const item of data) {
 		                    	    const ulItem = document.createElement('ul'); 
 		                    	    const liItem = document.createElement('li'); 
@@ -260,6 +260,27 @@
 		
 		                    	    spanContainer.appendChild(ulItem); 
 		                    	}
+	                    		for (const item of data) {
+	                    		    const ulItem = document.createElement('ul'); 
+	                    		    const liItem = document.createElement('li'); 
+	                    		    const spanItem = document.createElement('span'); 
+	                    		    const memberId = item.memberId;
+
+	                    		    if (/^\d+$/.test(memberId)) {
+	                    		        // 숫자로만 이뤄진 경우
+	                    		        spanItem.textContent = '카카오 간편 로그인 회원입니다.';
+	                    		    } else {
+	                    		        // 영어 및 숫자가 섞인 경우
+	                    		        spanItem.textContent = '아이디: ' + memberId;
+	                    		    }
+
+	                    		    liItem.appendChild(spanItem); 
+	                    		    ulItem.appendChild(liItem); 
+	                    		    ulItem.style.padding = '8px 0';
+	                    		    ulItem.style.listStyle = 'none'; 
+
+	                    		    spanContainer.appendChild(ulItem); 
+	                    		}
 	                    	}else{
 	                    		modalContent.textContent = memberName + '님은 등록된 아이디가 없습니다!';
 	                    	}
@@ -268,7 +289,7 @@
 	                        homepageButton.textContent = '홈페이지';
 	                        homepageButton.className = 'homepage-btn';
 	                        homepageButton.addEventListener('click', function() {
-                            window.location.href = 'home.me';
+                            window.location.href = 'http://localhost:8080';
 	                        });
 	                        
 	                        

@@ -3,9 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>캠핑 게시판</title>
+    <link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
     <link rel="stylesheet" href="css/seongun/commonBoard.css">
     <link rel="stylesheet" href="css/seongun/albumBoard.css">
+    <style>
+    	img{
+    		vertical-align: middle;
+    	}
+    </style>
 </head>
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
@@ -20,7 +26,7 @@
             <div id="snb_zone">
                 <ul>
                     <li>
-                        <a id="check_snb">캠핑게시시판</a>
+                        <a id="check_snb">캠핑게시판</a>
                     </li>
                     <li>
                         <a href="recipe.su">캠핑레시피</a>
@@ -32,14 +38,15 @@
             </div>
             <div id="point_zone">
                 <div id="category">
-                    <form method="post">
-                        <input type="hidden" name="boardId" value="free">
-                        <input type="hidden" name="category_no" value="">
-                        <a href="#none" onclick="setCategory('')" class="on" id="select-category">전체보기</a>
-                        <a href="#none" onclick="setCategory('백패킹')" class="on">백패킹</a>
-                        <a href="#none" onclick="setCategory('오토캠핑')" class="on">오토캠핑</a>
-                        <a href="#none" onclick="setCategory('장박')" class="on">장박</a>
-                        <a href="#none" onclick="setCategory('글램핑')" class="on">글램핑</a>
+                    <form method="get">
+                        <input type="hidden" name="categoryNo" value="">
+                        <input type="hidden" name="searchText" th:value="${b.searchText == null ? null : b.searchText}">
+                        <input type="hidden" name="searchCategory" th:value="${b.searchText == null ? 0 : b.searchCategory}">
+                        <a onclick="setCategory('0')" class="on" th:id="${b.categoryNo == 0 ? 'select-category' : ''}">전체보기</a>
+                        <a onclick="setCategory('1')" class="on" th:id="${b.categoryNo == 1 ? 'select-category' : ''}">백패킹</a>
+                        <a onclick="setCategory('2')" class="on" th:id="${b.categoryNo == 2 ? 'select-category' : ''}">오토캠핑</a>
+                        <a onclick="setCategory('3')" class="on" th:id="${b.categoryNo == 3 ? 'select-category' : ''}">장박</a>
+                        <a onclick="setCategory('4')" class="on" th:id="${b.categoryNo == 4 ? 'select-category' : ''}">글램핑</a>
                     </form>
                 </div>
 				<div id="boardType-area">
@@ -51,7 +58,7 @@
             <div class="board-container" th:if="${!list.isEmpty}">
                 <!-- 카드 반복 -->
                 <th:block th:each="b : ${list}">
-	                <div class="card">
+	                <div class="card" style="float: left;">
 	                	<input type="hidden" th:value="${b.cbNo}">
 	                    <div class="card-image">
 	                    	<th:block th:if="${b.photoPath != null}">
@@ -66,7 +73,7 @@
 	                            <span class="title-text">[[${b.cbTitle}]]</span>
 	                            <span class="card-category">[[${b.categoryName}]]</span>
 	                        </div>
-	                        <div class="card-author">[[${b.memberName}]]</div>
+	                        <div class="card-author">[[${b.memberNickname.split('#')[0]}]]</div>
 	                        <div class="card-info">
 	                            <table>
 	                                <tr>
@@ -106,17 +113,17 @@
 						</li>
 		                <!-- 페이지 번호 -->
 		                <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
-		                	<th:block th:if="${search.searchText == null}">
-								<a th:href="@{${loc}(page=${p})}" th:id="${p == pi.currentPage} ? 'check_page'">
-							        [[${p}]] 
-							    </a>
-						    </th:block>
-						    <th:block th:if="${search.searchText != null}">
-							    <a th:href="@{${loc}(page=${p}, searchCategory=${search.searchCategory}, searchText=${search.searchText})}" th:id="${p == pi.currentPage} ? 'check_page'">
-								    [[${p}]]
-								</a>
-						    </th:block>
-						</li>
+				            <th:block th:if="${b.searchText == null}">
+				                <a th:href="@{${loc}(page=${p})}" th:id="${p == pi.currentPage} ? 'check_page'" >
+				                    [[${p}]] 
+				                </a>
+				            </th:block>
+				            <th:block th:if="${b.searchText != null && b.searchText.trim != ''}">
+				                <a th:href="@{${loc}(page=${p}, searchCategory=${b.searchCategory}, searchText=${b.searchText != null ? b.searchText : ''})}" th:id="${p == pi.currentPage} ? 'check_page'" >
+				                    [[${p}]]
+				                </a>
+				            </th:block>
+				        </li>
 		                <!-- 다음 버튼 -->
 		                <li th:if="${pi.maxPage >= 10 && pi.maxPage - pi.currentPage > 10}">
 		                	<a th:href="@{${loc}(page=${pi.currentPage+10})}">다음 &gt;</a>
@@ -148,46 +155,51 @@
         </div>
     </div>
     <script th:inline="javascript">
-		/*<![CDATA[*/
-    	let member = /*[[${session.loginUser}]]*/
-        document.addEventListener('DOMContentLoaded', function() {
-            // 스크롤이 끝으로 이동 시 이벤트 발생
-            window.addEventListener('scroll', function() {
-                if (window.pageYOffset <= 0) {
-                    document.getElementById('back-to-top').classList.remove('show');
-                } else {
-                    document.getElementById('back-to-top').classList.add('show');
-                }
-            });
-
-            window.addEventListener('touchmove', function() {
-                if (window.pageYOffset <= 0) {
-                    document.getElementById('back-to-top').classList.remove('show');
-                } else {
-                    document.getElementById('back-to-top').classList.add('show');
-                }
-            });
-
-            document.getElementById('back-to-top').addEventListener('click', function() {
-                // 페이지 맨 위로 스크롤하는 애니메이션
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-                document.getElementById('back-to-top').classList.remove('show');
-            });
-        });
-        
-        function writeBtn(){
-        	if(member != null){
-        		window.location.href="writeCampBoard.su";
-        	}else{
-        		alert("로그인 후 이용해주세요.");
-        		window.location.href="signUp.me";
-        	}
-        }
-        
-        document.addEventListener('DOMContentLoaded', function() {
+	    /*<![CDATA[*/
+	    let member = /*[[${session.loginUser}]]*/ 'null';
+	    let categoryNo = /*[[${selectedCategory}]]*/ '0';
+	    let list = /*[[${list}]]*/ 'null';
+	
+	    // 문서 로드 시 실행되는 함수들
+	    document.addEventListener('DOMContentLoaded', function() {
+	        setupScrollEvent();
+	        setupBackToTopButton();
+	        setupBoardListClickEvent();
+	    });
+	
+	    // 스크롤 이벤트 설정 함수
+	    function setupScrollEvent() {
+	        window.addEventListener('scroll', toggleBackToTopButton);
+	        window.addEventListener('touchmove', toggleBackToTopButton);
+	    }
+	
+	    // 맨 위로 가기 버튼 설정 함수
+	    function setupBackToTopButton() {
+	        document.getElementById('back-to-top').addEventListener('click', scrollToTop);
+	    }
+	
+	    // 맨 위로 가기 버튼 표시/숨김 함수
+	    function toggleBackToTopButton() {
+	        let backToTopButton = document.getElementById('back-to-top');
+	        backToTopButton.classList.toggle('show', window.pageYOffset > 0);
+	    }
+	
+	    // 맨 위로 스크롤하는 함수
+	    function scrollToTop() {
+	        window.scrollTo({ top: 0, behavior: 'smooth' });
+	        toggleBackToTopButton();
+	    }
+	
+	    // 게시글 목록 클릭 이벤트 설정 함수
+	    function setupBoardListClickEvent() {
+	        const tbody = document.querySelector('tbody');
+	        if (tbody) {
+	            tbody.addEventListener('click', navigateToBoard);
+	        }
+	    }
+	
+		// 카드 클릭 이벤트 설정 함수
+	    document.addEventListener('DOMContentLoaded', function() {
             // 모든 card 클래스를 가진 요소에 대한 클릭 이벤트 리스너 추가
             document.querySelectorAll('.card').forEach(function(card) {
                 card.addEventListener('click', function() {
@@ -197,7 +209,42 @@
                 });
             });
         });
-        /*]]>*/
-    </script>
+		
+	    // 글쓰기 버튼 클릭 이벤트
+	    function writeBtn() {
+	        if (member !== 'null') {
+	            window.location.href = "writeCampBoard.su";
+	        } else {
+	            alert("로그인 후 이용해주세요.");
+	            window.location.href = "signUp.me";
+	        }
+	    }
+	
+	    // 카테고리 설정 및 폼 제출 함수
+	    function setCategory(category) {
+	        document.querySelector('input[name="categoryNo"]').value = category;
+	        document.querySelector('form').submit();
+	    }
+	
+	    // 페이지 로드 시 실행되는 함수
+	    window.onload = function() {
+	        let msg = /*[[${msg}]]*/'null';
+	        if (msg != null && msg.trim().length > 0) {
+	            alert(msg);
+	        }
+	
+	        highlightSelectedCategory();
+	    };
+	
+	    // 선택된 카테고리 하이라이트 함수
+	    function highlightSelectedCategory() {
+	        let categoryValue = document.querySelector('input[name="categoryNo"]').value;
+	        if (categoryValue) {
+	            let selectedLink = document.querySelector(`a[onclick="setCategory('${categoryValue}')"]`);
+	            if (selectedLink) selectedLink.id = 'select-category';
+	        }
+	    }
+	    /*]]>*/
+	</script>
 </body>
 </html>

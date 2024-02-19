@@ -6,7 +6,8 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 <link href="css/sohwa/productDetail.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-<title>Insert title here</title>
+<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
+<title>판매상품상세 페이지</title>
 </head>
 <body>
 	<div th:replace="~{common/navbar :: navbar}"></div>
@@ -980,7 +981,7 @@
 	    document.getElementById("reviewForm").addEventListener("submit", function(event) {
         // 세션에 저장된 loginUser 객체 확인
 	        var loginUser = document.getElementById('loginUser').value;
-	
+			var productNo = document.getElementById('productNo').value;
 	        // 만약 loginUser가 없다면
 	        if (loginUser=="") {
 	            event.preventDefault();
@@ -988,7 +989,7 @@
 	        }else {
 	            $.ajax({
 	                url: 'purchaseYN.so',
-	                data: {},
+	                data: {productNo:productNo},
 	                success: function (data) {
 	                    if (data == "no") {
 	                        alert("이 상품의 구매자만 리뷰를 작성하실 수 있습니다.");

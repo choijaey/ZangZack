@@ -829,7 +829,7 @@
 		
 		<foreach collection="list" item="item">
 			into payment
-			values (order_aid,  #{ item.orderPrice }, sysdate,  #{item.orderNo}, default, #{item.memberId}, #{item.orderAddress}, #{item.orderProductEno},#{item.deliveryStatus},#{item.productOption}, #{item.productNo}, #{item.orderPhone}, #{item.orderName}, sysdate + 3, #{item.orderContent})
+			values (order_aid,  #{ item.orderPrice }, sysdate,  #{item.orderNo}, default, #{item.memberId}, #{item.orderAddress}, #{item.orderProductEno},#{item.deliveryStatus},#{item.productOption}, #{item.productNo}, #{item.orderPhone}, #{item.orderName}, sysdate + 3, #{item.orderContent}, #{item.paymentKey})
 		</foreach>
 		select * from dual
 	</insert>
@@ -844,6 +844,7 @@
 	<select id="selectOrderNo" resultType="_int">
 		SELECT MAX(order_no) AS order_no
 		FROM payment
+		where member_id = #{id}
 		GROUP BY order_no
 		ORDER BY MAX(order_key_no) DESC
 	</select>
@@ -884,7 +885,7 @@
 	<update id="refundOrder">
 		update payment
 		set delivery_status = '환불요청'
-		where order_key_no = #{orderKeyNo}
+		where order_no = #{orderNo}
 	</update>
 	
 	<select id="getListCountOrder" resultType="_int">
@@ -962,6 +963,12 @@
 	<select id="purchaseYN" resultType="_int">
 		select count(*)
 		from payment
-		where member_id = #{id}
+		where member_id = #{memberId} and product_no = #{productNo}
+	</select>
+	
+	<select id="selectPaymentKey" resultType="string">
+		select distinct paymentKey
+		from payment
+		where order_no = #{orderNo}
 	</select>
 </mapper>

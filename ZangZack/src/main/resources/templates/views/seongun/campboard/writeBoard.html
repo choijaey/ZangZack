@@ -1,12 +1,19 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>글쓰기 페이지</title>
+    <title>캠핑 게시판</title>
+    <link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
     <link href="css/seongun/writeboard.css" rel="stylesheet">
+    <style>
+    	img{
+    		vertical-align: middle;
+    	}
+    </style>
 </head>
 <body>
+	<div th:replace="~{common/navbar :: navbar}"></div>
     <div class="head-container">
         <h1>캠핑게시판 등록</h1>
     </div>

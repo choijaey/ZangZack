@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
+<title>관리자 상품관리 목록페이지</title>
 <link href="css/sohwa/(admin)productList.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
@@ -66,7 +67,7 @@
 					<td>[[${p.productName}]]</td>
 					<td th:text="|${#numbers.formatDecimal(p.productPrice, 0, 'COMMA', 0, 'POINT')}원|"></td>
 					<td>
-						<th:block th:if="${pageStatus=='Y'}"><button style="margin-bottom:5px;" th:onclick="productDetail([[${p.productNo}]])">상품페이지로 이동</button><br><button th:onclick="productUpdate([[${p.productNo}]])">상품 수정</button></th:block>
+						<th:block th:if="${pageStatus=='Y'}"><button style="margin-bottom:5px;" th:onclick="productDetail([[${p.productNo}]])" class="btn2">상품페이지로 이동</button><br><button th:onclick="productUpdate([[${p.productNo}]])" class="btn2">상품 수정</button></th:block>
 						
 					</td>
 				</tr>

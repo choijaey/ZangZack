@@ -364,8 +364,8 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public ArrayList<Integer> selectOrderNo() {
-		return pDAO.selectOrderNo();
+	public ArrayList<Integer> selectOrderNo(String id) {
+		return pDAO.selectOrderNo(id);
 	}
 
 	@Override
@@ -407,8 +407,8 @@ public class ProductServiceImpl implements ProductService{
 	}
 	
 	@Override
-	public int refundOrder(int orderKeyNo) {
-		return pDAO.refundOrder(orderKeyNo);
+	public int refundOrder(int orderNo) {
+		return pDAO.refundOrder(orderNo);
 	}
 	
 	
@@ -469,8 +469,13 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public int purchaseYN(String id) {
-		return pDAO.purchaseYN(id);
+	public int purchaseYN(Payment p) {
+		return pDAO.purchaseYN(p);
+	}
+
+	@Override
+	public String selectPaymentKey(int orderKeyNo) {
+		return pDAO.selectPaymentKey(orderKeyNo);
 	}
 
 

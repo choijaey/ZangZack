@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>채팅방</title>
+<link rel="shortcut icon" href="https://storage.googleapis.com/zangzac/image/common/icons8-camping-16.png">
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <style>
 *{
@@ -349,7 +350,7 @@ a {
 			//웹소켓 전송시 현재 방의 번호를 넘겨서 보낸다.
 			let id =$("#memberId").val();
 			let roomName = $("#roomName").val();
-			ws = new WebSocket("ws://" + location.host + "/chating/"+id+"/"+roomName+"/1");
+			ws = new WebSocket("wss://" + location.host + "/chating/"+id+"/"+roomName+"/1");
 			wsEvt();
 		}
 		

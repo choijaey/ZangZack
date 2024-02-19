@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 
+import com.kh.zangzac.common.Pagination;
 import com.kh.zangzac.common.model.vo.Attachment;
 import com.kh.zangzac.common.model.vo.PageInfo;
 import com.kh.zangzac.common.photo.model.vo.Photo;
@@ -52,7 +53,7 @@ public interface CampService {
 
 	int searchCampCount(String keyword, String city, String type);
 
-	ArrayList<CampingGround> searchCampList(String keyword, String city, String type);
+	ArrayList<CampingGround> searchCampList(PageInfo pi, String keyword, String city, String type);
 
 	ArrayList<CampingGround> getMainList(String recomendation);
 
@@ -60,7 +61,6 @@ public interface CampService {
 
 	int updateCount(int no);
 
-	/* int updateLike(HashMap<String, Object> like, String check); */
 
 	
 }

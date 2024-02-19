@@ -25,6 +25,7 @@ public class CampBoard {
 	private String memberProfilePath;
 	private int categoryNo;
 	private String memberName;
+	private String memberNickname;
 	private String categoryName;
 	private int heartCount;
 	private boolean heartCheck;
@@ -32,4 +33,7 @@ public class CampBoard {
 	private String photoRename;
 	private int replyCount;
 	private String formatDate;
+	private String searchText;
+	private int searchCategory;
+	
 }

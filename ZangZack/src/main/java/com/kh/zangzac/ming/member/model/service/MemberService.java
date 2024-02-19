@@ -45,7 +45,6 @@ public interface MemberService {
 	int updateMemberProfile(Member m);
 	
 	//관리자페이지
-	ArrayList<Member> selectMembers(int i, PageInfo pi);
 
 	int updateInfo(Properties prop);
 
@@ -79,21 +78,24 @@ public interface MemberService {
 
 	String deleteSelectReview(int reviewNo);
 
-	int getmySecondHandProductListCount(Map<String, Object> paramMap);
+	//int getmySecondHandProductListCount(Map<String, Object> paramMap);
 
-	ArrayList<secondHandProduct> selectsecondHandProduct(String memberId, PageInfo pi);
-
-	ArrayList<secondHandProduct> searchSpList(PageInfo pi, HashMap<String, String> map);
+	//ArrayList<secondHandProduct> selectsecondHandProduct(String memberId, PageInfo pi);
 
 	ArrayList<CampBoard> selectCampBoard(String memberId, PageInfo pi);
 
-	ArrayList<CampBoard> searchCbList(PageInfo pi, HashMap<String, String> map);
+	ArrayList<CampBoard> searchCbList(PageInfo pi, HashMap<String, Object> map);
 
-	int searchSPListCount(HashMap<String, String> map);
+	int searchSPListCount(HashMap<String, Object> map);
 
-	int searchCbListCount(HashMap<String, String> map);
+	int searchCbListCount(HashMap<String, Object> map);
 
 	int getmyBoardListCount(Map<String, Object> paramMap);
+
+	ArrayList<secondHandProduct> searchSpList(PageInfo pi, HashMap<String, Object> map);
+
+	Member getMemberLoginType(String memberEmail);
+
 
 
 
