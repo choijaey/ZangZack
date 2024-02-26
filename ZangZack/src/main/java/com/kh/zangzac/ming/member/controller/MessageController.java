@@ -19,8 +19,7 @@ public class MessageController {
 final DefaultMessageService messageService;
 	
 	public MessageController() {
-        // 반드시 계정 내 등록된 유효한 API 키, API Secret Key를 입력해주셔야 합니다!
-        this.messageService = NurigoApp.INSTANCE.initialize("NCSNP3PM6OCZLCNA", "QNUF6LIQCBDLLYTYFYUVJUEKIIXPEFMN", "https://api.coolsms.co.kr");
+        this.messageService = NurigoApp.INSTANCE.initialize("NCSNP3CNA", "QNUF6LIQCBDLLYMN", "https://api.coolsms.co.kr");
     }
 	
 	@GetMapping("/send-one")
@@ -30,7 +29,7 @@ final DefaultMessageService messageService;
 	    int checkNum = r.nextInt(888888) + 111111;
         Message message = new Message();
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
-        message.setFrom("01057410416");
+        message.setFrom("010");
         message.setTo(phone);
         String msg="[ZangZac]본인확인을 위해 인증번호 ["+checkNum + "]를 입력해주세요.";
         
