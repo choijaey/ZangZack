@@ -8,3 +8,12 @@
 + 캠핑 자유 게시판
 + 캠핑용품 쇼핑몰 
 + 커뮤니티 게시판(캠핑 후기, 채팅방, 행사 정보 공유 등)
+
+# 기술 스펙
++ 1. HTML5
+  2. CSS3
+  3. JavaScript
+  4. jQuery
+  5. Java
+  6. SpringBoot
+  7. BootStrap
